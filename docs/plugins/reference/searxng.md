@@ -11,8 +11,8 @@ Adds web search provider support.
 
 ## Distribution
 
-- Package: `@natesclaw/searxng-plugin`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/searxng-plugin`
+- Package: `@openclaw/searxng-plugin`
+- Install route: npm; ClawHub: `clawhub:@openclaw/searxng-plugin`
 
 ## Surface
 

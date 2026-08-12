@@ -11,7 +11,7 @@ Adds Ollama, Ollama Cloud model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/ollama-provider`
+- Package: `@openclaw/ollama-provider`
 - Install route: included in Natesclaw
 
 ## Surface

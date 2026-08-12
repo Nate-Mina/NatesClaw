@@ -1,4 +1,4 @@
-import { asNullableRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
 import { canonicalizePath } from "../../agents/utils/paths.js";
 import {
   executeSqliteQuerySync,

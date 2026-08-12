@@ -39,7 +39,7 @@ bundled, official external, and source-only plugins, see
 
     ClawHub is the primary discovery surface for community plugins. During the
     launch cutover, ordinary bare package specs still install from npm unless
-    they match an official plugin id. Raw `@natesclaw/*` specs that match a
+    they match an official plugin id. Raw `@openclaw/*` specs that match a
     bundled plugin resolve to that bundled copy. Use an explicit source prefix
     when you need one source specifically.
 
@@ -127,16 +127,16 @@ bundled, official external, and source-only plugins, see
 Bare package specs have special compatibility behavior: a bare name that
 matches a bundled plugin id uses that bundled source; a bare name that matches
 an official external plugin id uses the official package catalog; any other
-bare spec installs through npm during the launch cutover. Raw `@natesclaw/*`
+bare spec installs through npm during the launch cutover. Raw `@openclaw/*`
 specs that match bundled plugins also resolve to the bundled copy before npm
-fallback. Use `npm:@natesclaw/<plugin>@<version>` to deliberately install the
+fallback. Use `npm:@openclaw/<plugin>@<version>` to deliberately install the
 external npm package instead of the bundled copy. Use `clawhub:`, `npm:`,
 `git:`, or `npm-pack:` for deterministic source selection. See
 [`natesclaw plugins`](/cli/plugins#install) for the full command contract.
 
 For npm installs, unpinned specs and `@latest` choose the newest stable
 package that advertises compatibility with this Natesclaw build. If npm's
-current latest release declares a newer `natesclaw.compat.pluginApi` or
+current latest release declares a newer `openclaw.compat.pluginApi` or
 `natesclaw.install.minHostVersion` than this build supports, Natesclaw scans
 older stable versions and installs the newest one that fits. Exact versions
 and explicit channel tags such as `@beta` stay pinned to the selected package

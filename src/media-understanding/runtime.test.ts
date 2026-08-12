@@ -1,7 +1,7 @@
 // Media-understanding runtime tests cover file APIs, provider dispatch, disabled
 // state, cleanup, remote references, and direct model-backed image calls.
-import { expectDefined } from "@natesclaw/normalization-core";
-import { MAX_TIMER_TIMEOUT_MS } from "@natesclaw/normalization-core/number-coercion";
+import { expectDefined } from "@openclaw/normalization-core";
+import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
 import type { NatesclawConfig } from "../config/types.js";

@@ -1,5 +1,5 @@
 // Video live test helpers resolve live provider test settings from environment.
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../config/types.js";
 import {
   parseLiveCsvFilter,

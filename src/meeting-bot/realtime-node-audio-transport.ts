@@ -1,5 +1,5 @@
-import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
-import { readNonBlankString } from "@natesclaw/normalization-core/string-coerce";
+import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
+import { readNonBlankString } from "@openclaw/normalization-core/string-coerce";
 import { formatErrorMessage } from "../infra/errors.js";
 import type { PluginRuntime, RuntimeLogger } from "../plugins/runtime/types.js";
 import { decodeMeetingAudioBase64 } from "./audio-base64.js";

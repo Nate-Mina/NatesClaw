@@ -25,7 +25,7 @@ read_when:
 <Steps>
   <Step title="Create the Fly app">
     ```bash
-    git clone https://github.com/natesclaw/natesclaw.git
+    git clone https://github.com/openclaw/natesclaw.git
     cd natesclaw
 
     # pick your own name

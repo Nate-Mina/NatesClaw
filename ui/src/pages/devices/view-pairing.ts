@@ -7,7 +7,7 @@ import { t } from "../../i18n/index.ts";
 import type { DevicePairSetup, DevicePairSetupAccess } from "../../lib/device-pair-setup.ts";
 
 const PAIRING_DOCS_URL =
-  "https://docs.natesclaw.ai/channels/pairing#pair-from-the-control-ui-recommended";
+  "https://docs.openclaw.ai/channels/pairing#pair-from-the-control-ui-recommended";
 
 type DevicePairSetupProps = {
   open: boolean;

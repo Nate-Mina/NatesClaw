@@ -1,5 +1,5 @@
 // Commander registration for gateway status, health, diagnostics, discovery, and run commands.
-import { formatByteSize } from "@natesclaw/normalization-core";
+import { formatByteSize } from "@openclaw/normalization-core";
 import type { Command } from "commander";
 import { formatDocsLink } from "../../../packages/terminal-core/src/links.js";
 import { colorize, isRich, theme } from "../../../packages/terminal-core/src/theme.js";
@@ -536,7 +536,7 @@ export function registerGatewayCli(program: Command, deps: GatewayCliDependencie
             ["natesclaw gateway discover", "Find local and wide-area gateway beacons."],
             ["natesclaw gateway stability", "Show recent stability diagnostics."],
             ["natesclaw gateway call health", "Call a gateway RPC method directly."],
-          ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/gateway", "docs.natesclaw.ai/cli/gateway")}\n`,
+          ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/gateway", "docs.openclaw.ai/cli/gateway")}\n`,
       ),
   );
 

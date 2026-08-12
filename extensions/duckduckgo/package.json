@@ -1,22 +1,22 @@
 {
-  "name": "@natesclaw/duckduckgo-plugin",
+  "name": "@openclaw/duckduckgo-plugin",
   "version": "2026.8.1",
   "description": "Natesclaw DuckDuckGo plugin.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/duckduckgo-plugin",
-      "npmSpec": "@natesclaw/duckduckgo-plugin",
+      "clawhubSpec": "clawhub:@openclaw/duckduckgo-plugin",
+      "npmSpec": "@openclaw/duckduckgo-plugin",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.7.2"
     },

@@ -1,6 +1,6 @@
 import type { DatabaseSync } from "node:sqlite";
-import { asOptionalRecord, isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeNullableString } from "@natesclaw/normalization-core/string-coerce";
+import { asOptionalRecord, isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeNullableString } from "@openclaw/normalization-core/string-coerce";
 
 function readMigratedEntry(value: unknown): Record<string, unknown> | undefined {
   if (typeof value === "string") {

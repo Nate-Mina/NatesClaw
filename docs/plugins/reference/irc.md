@@ -11,8 +11,8 @@ Adds the IRC channel surface for sending and receiving Natesclaw messages.
 
 ## Distribution
 
-- Package: `@natesclaw/irc`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/irc`
+- Package: `@openclaw/irc`
+- Install route: npm; ClawHub: `clawhub:@openclaw/irc`
 
 ## Surface
 

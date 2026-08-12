@@ -1,10 +1,10 @@
 {
-  "name": "@natesclaw/anthropic-vertex-provider",
+  "name": "@openclaw/anthropic-vertex-provider",
   "version": "2026.8.1",
   "description": "Natesclaw Anthropic Vertex provider plugin for Claude models on Google Vertex AI.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -13,14 +13,14 @@
     "undici": "8.9.0"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@natesclaw/anthropic-vertex-provider",
+      "npmSpec": "@openclaw/anthropic-vertex-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.12-beta.1"
     },

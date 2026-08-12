@@ -1,4 +1,4 @@
-# @natesclaw/acpx
+# @openclaw/acpx
 
 Official ACP runtime backend for Natesclaw.
 
@@ -7,7 +7,7 @@ ACPx lets Natesclaw run external coding harnesses through the Agent Client Proto
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/acpx
+natesclaw plugins install @openclaw/acpx
 ```
 
 Restart the Gateway after installing or updating the plugin.
@@ -23,11 +23,11 @@ Restart the Gateway after installing or updating the plugin.
 
 Use the ACP docs for harness-specific setup, permission modes, and model/runtime selection:
 
-- https://docs.natesclaw.ai/tools/acp-agents-setup
-- https://docs.natesclaw.ai/tools/acp-agents
+- https://docs.openclaw.ai/tools/acp-agents-setup
+- https://docs.openclaw.ai/tools/acp-agents
 
 ## Package
 
 - Plugin id: `acpx`
-- Package: `@natesclaw/acpx`
+- Package: `@openclaw/acpx`
 - Minimum Natesclaw host: `2026.4.25`

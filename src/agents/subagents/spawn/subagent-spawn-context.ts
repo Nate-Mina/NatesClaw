@@ -1,4 +1,4 @@
-import { finiteSecondsToTimerSafeMilliseconds } from "@natesclaw/normalization-core/number-coercion";
+import { finiteSecondsToTimerSafeMilliseconds } from "@openclaw/normalization-core/number-coercion";
 import { resolveThreadBindingSpawnPolicy } from "../../../channels/thread-bindings-policy.js";
 import type { SessionEntry } from "../../../config/sessions/types.js";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";

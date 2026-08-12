@@ -11,7 +11,7 @@ Adds the natesclaw path CLI for oc:// workspace file addressing.
 
 ## Distribution
 
-- Package: `@natesclaw/oc-path`
+- Package: `@openclaw/oc-path`
 - Install route: included in Natesclaw
 
 ## Surface

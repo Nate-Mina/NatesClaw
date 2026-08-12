@@ -6,11 +6,11 @@
 import {
   findNormalizedProviderValue,
   normalizeProviderId,
-} from "@natesclaw/model-catalog-core/provider-id";
+} from "@openclaw/model-catalog-core/provider-id";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../config/config.js";
 import { extractModelCompat } from "../plugins/provider-model-compat.js";
 import type { ProviderRuntimeModel } from "../plugins/provider-runtime-model.types.js";

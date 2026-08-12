@@ -11,8 +11,8 @@ Twilio SMS/MMS channel plugin for Natesclaw messages.
 
 ## Distribution
 
-- Package: `@natesclaw/sms`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/sms`
+- Package: `@openclaw/sms`
+- Install route: npm; ClawHub: `clawhub:@openclaw/sms`
 
 ## Surface
 

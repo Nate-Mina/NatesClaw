@@ -1,6 +1,6 @@
 // Persists managed task-flow records through the Natesclaw SQLite state database.
 import type { DatabaseSync } from "node:sqlite";
-import { safeParseJson } from "@natesclaw/normalization-core";
+import { safeParseJson } from "@openclaw/normalization-core";
 import type { Insertable, Selectable } from "kysely";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../infra/kysely-sync.js";
 import { normalizeSqliteNumber } from "../infra/sqlite-number.js";

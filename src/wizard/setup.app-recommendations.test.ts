@@ -502,7 +502,7 @@ describe("setupAppRecommendations", () => {
         resolveOfficialEntry: (pluginId) => ({
           pluginId,
           label: "Chat plugin",
-          install: { npmSpec: "@natesclaw/chat-plugin" },
+          install: { npmSpec: "@openclaw/chat-plugin" },
         }),
       },
     });

@@ -5,7 +5,7 @@ External Natesclaw plugin that registers a `copilot` agent harness backed by `@g
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/copilot
+natesclaw plugins install @openclaw/copilot
 ```
 
 Restart the Gateway after installing or updating the plugin.
@@ -23,5 +23,5 @@ questions, replay, and the supported-surface contract.
 ## Package
 
 - Plugin id: `copilot`
-- Package: `@natesclaw/copilot`
+- Package: `@openclaw/copilot`
 - Minimum Natesclaw host: `2026.5.28`

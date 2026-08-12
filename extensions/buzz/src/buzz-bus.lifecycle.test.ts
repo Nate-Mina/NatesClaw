@@ -815,7 +815,7 @@ describe("Buzz bus lifecycle", () => {
       content: "@@ -1 +1 @@\n-old\n+new",
       tags: [
         ["h", CHANNEL_ID],
-        ["repo", "https://github.com/natesclaw/natesclaw"],
+        ["repo", "https://github.com/openclaw/natesclaw"],
         ["commit", "abcdef1"],
       ],
     });

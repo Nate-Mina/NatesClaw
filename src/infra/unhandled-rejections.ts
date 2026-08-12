@@ -1,6 +1,6 @@
 // Installs fatal and transient unhandled rejection/exception handlers.
 import process from "node:process";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import { restoreRuntimeTerminalState } from "../runtime.js";
 import { isAbortError } from "./abort-signal.js";
 import { collectNestedErrorCandidates, extractErrorCodeOrErrno } from "./error-graph-internal.js";

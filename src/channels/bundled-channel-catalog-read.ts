@@ -5,8 +5,8 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import { tryReadJsonSync } from "../infra/json-files.js";
 import { resolveNatesclawPackageRootSync } from "../infra/natesclaw-root.js";
 import { resolveBundledPluginsDir } from "../plugins/bundled-dir.js";

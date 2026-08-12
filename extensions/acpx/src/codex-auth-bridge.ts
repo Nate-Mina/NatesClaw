@@ -47,7 +47,7 @@ function readSelfManifest(): PackageManifest {
 function readManifestDependencyVersion(packageName: string): string {
   const version = readSelfManifest().dependencies?.[packageName];
   if (typeof version !== "string" || version.trim() === "") {
-    throw new Error(`Missing ${packageName} dependency version in @natesclaw/acpx manifest`);
+    throw new Error(`Missing ${packageName} dependency version in @openclaw/acpx manifest`);
   }
   return version;
 }

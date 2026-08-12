@@ -11,8 +11,8 @@ Adds Venice model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/venice-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/venice-provider`
+- Package: `@openclaw/venice-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/venice-provider`
 
 ## Surface
 

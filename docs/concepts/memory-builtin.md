@@ -47,7 +47,7 @@ To force local GGUF embeddings, install the official llama.cpp provider
 plugin, then point `local.modelPath` at a GGUF file:
 
 ```bash
-natesclaw plugins install @natesclaw/llama-cpp-provider
+natesclaw plugins install @openclaw/llama-cpp-provider
 ```
 
 ```json5
@@ -73,7 +73,7 @@ natesclaw plugins install @natesclaw/llama-cpp-provider
 | Gemini            | `gemini`            | Supports multimodal (image + audio) |
 | GitHub Copilot    | `github-copilot`    | Uses your Copilot subscription      |
 | LM Studio         | `lmstudio`          | Local/self-hosted                   |
-| Local             | `local`             | `@natesclaw/llama-cpp-provider`      |
+| Local             | `local`             | `@openclaw/llama-cpp-provider`      |
 | Mistral           | `mistral`           |                                     |
 | Ollama            | `ollama`            | Local/self-hosted                   |
 | OpenAI            | `openai`            | Default: `text-embedding-3-small`   |

@@ -4,8 +4,8 @@
 // that is dispatched against the browser plugin's control routes, either
 // locally or via a browser-capable node. This module narrows the handful of
 // routes the browser panel needs and keeps route-path knowledge in one place.
-import { asNullableRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
-import { readStringValue } from "@natesclaw/normalization-core/string-coerce";
+import { asNullableRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
+import { readStringValue } from "@openclaw/normalization-core/string-coerce";
 import type { GatewayBrowserClient } from "../../api/gateway.ts";
 import { t } from "../../i18n/index.ts";
 

@@ -2,8 +2,8 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
-import { normalizeTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
+} from "@openclaw/normalization-core/string-coerce";
+import { normalizeTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
 import { getActivePluginChannelRegistry } from "../../plugins/runtime.js";
 import {
   normalizeSessionDeliveryState,

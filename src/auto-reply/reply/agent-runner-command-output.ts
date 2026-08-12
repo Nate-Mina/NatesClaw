@@ -1,9 +1,9 @@
-import { asFiniteNumber as readFiniteNumberValue } from "@natesclaw/normalization-core/number-coercion";
-import { asOptionalRecord as readRecordValue } from "@natesclaw/normalization-core/record-coerce";
+import { asFiniteNumber as readFiniteNumberValue } from "@openclaw/normalization-core/number-coercion";
+import { asOptionalRecord as readRecordValue } from "@openclaw/normalization-core/record-coerce";
 import {
   normalizeLowercaseStringOrEmpty,
   readStringValue,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import { inferToolMetaFromArgsCore } from "../../agents/tool-display.js";
 import type { GetReplyOptions } from "../types.js";
 

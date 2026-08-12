@@ -1,5 +1,5 @@
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import {
   createAssistantMessageEventStream,
   type AssistantMessage,

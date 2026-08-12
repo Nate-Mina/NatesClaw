@@ -1,6 +1,6 @@
 /** Timeout and cleanup helpers for long-running ACP turns. */
-import type { AcpRuntimeSessionMode } from "@natesclaw/acp-core/runtime/types";
-import { clampTimerTimeoutMs } from "@natesclaw/normalization-core/number-coercion";
+import type { AcpRuntimeSessionMode } from "@openclaw/acp-core/runtime/types";
+import { clampTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
 import { resolveAgentTimeoutMs } from "../../agents/timeout.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { logVerbose } from "../../globals.js";

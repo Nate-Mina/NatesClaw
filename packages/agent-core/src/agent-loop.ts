@@ -1,14 +1,14 @@
 // Keep the runtime class on the public package specifier so Natesclaw and
 // external consumers share one constructor identity.
-import { EventStream as LlmEventStream } from "@natesclaw/ai/event-stream";
+import { EventStream as LlmEventStream } from "@openclaw/ai/event-stream";
 import type {
   AssistantMessage,
   AssistantMessageEvent,
   Context,
   EventStream,
   ToolResultMessage,
-} from "@natesclaw/llm-core";
-import type { EventStream as SourceEventStream } from "@natesclaw/llm-core";
+} from "@openclaw/llm-core";
+import type { EventStream as SourceEventStream } from "@openclaw/llm-core";
 import { TranscriptNotContinuableError } from "./errors.js";
 import { uuidv7 } from "./harness/session/uuid.js";
 import {

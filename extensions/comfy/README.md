@@ -1,4 +1,4 @@
-# @natesclaw/comfy-provider
+# @openclaw/comfy-provider
 
 Official ComfyUI image, video, and music generation provider plugin for
 Natesclaw.
@@ -6,7 +6,7 @@ Natesclaw.
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/comfy-provider
+natesclaw plugins install @openclaw/comfy-provider
 natesclaw gateway restart
 ```
 
@@ -17,10 +17,10 @@ Local ComfyUI workflows do not require credentials. Comfy Cloud workflows use
 
 Full workflow, model, and provider configuration:
 
-- https://docs.natesclaw.ai/providers/comfy
+- https://docs.openclaw.ai/providers/comfy
 
 ## Package
 
 - Plugin id: `comfy`
-- Package: `@natesclaw/comfy-provider`
+- Package: `@openclaw/comfy-provider`
 - Minimum Natesclaw host: `2026.7.2`

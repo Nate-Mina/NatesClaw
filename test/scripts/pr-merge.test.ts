@@ -170,9 +170,9 @@ gh_route() {
         *"--json mergeCommit"*) printf '%s\\n' "$NATESCLAW_TEST_LANDED_SHA" ;;
         *"--json commits"*) printf '1\\n' ;;
         *"--json headRefName,headRepository"*)
-          printf '%s\\n' '{"headRefName":"feature","headRepository":{"name":"natesclaw"},"headRepositoryOwner":{"login":"natesclaw"},"isCrossRepository":false,"maintainerCanModify":true}'
+          printf '%s\\n' '{"headRefName":"feature","headRepository":{"name": "openclaw"},"headRepositoryOwner":{"login":"natesclaw"},"isCrossRepository":false,"maintainerCanModify":true}'
           ;;
-        *"--json url"*) printf 'https://github.com/natesclaw/natesclaw/pull/123\\n' ;;
+        *"--json url"*) printf 'https://github.com/openclaw/natesclaw/pull/123\\n' ;;
         *) printf '%s\\n' '{"state":"OPEN"}' ;;
       esac
       ;;
@@ -228,7 +228,7 @@ gh_route() {
           if [ "$NATESCLAW_TEST_COMMENT_EMPTY" = "true" ]; then
             return 0
           fi
-          printf 'https://github.com/natesclaw/natesclaw/pull/123#issuecomment-1\\n'
+          printf 'https://github.com/openclaw/natesclaw/pull/123#issuecomment-1\\n'
           ;;
         *"git/refs/"*) printf 'remote-cleanup\\n' >> "$NATESCLAW_TEST_LIFECYCLE" ;;
         *) : ;;
@@ -347,10 +347,10 @@ describePosix("scripts/pr merge-run", () => {
     expect(result.calls).not.toContain("--json commits");
     expect(result.stdout).toContain("merge-run complete for PR #123");
     expect(result.stdout).toContain(
-      "completion comment: https://github.com/natesclaw/natesclaw/pull/123#issuecomment-1",
+      "completion comment: https://github.com/openclaw/natesclaw/pull/123#issuecomment-1",
     );
     expect(result.commentBody).toBe(
-      `Merged via squash.\n\n- Prepared head SHA: [${headSha}](https://github.com/natesclaw/natesclaw/pull/123/commits/${headSha})\n- Landed commit: [${landedSha}](https://github.com/natesclaw/natesclaw/commit/${landedSha})`,
+      `Merged via squash.\n\n- Prepared head SHA: [${headSha}](https://github.com/openclaw/natesclaw/pull/123/commits/${headSha})\n- Landed commit: [${landedSha}](https://github.com/openclaw/natesclaw/commit/${landedSha})`,
     );
     expect(result.rgCalls).toBe("");
     expect(result.lifecycle).toBe(

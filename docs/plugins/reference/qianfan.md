@@ -11,8 +11,8 @@ Adds Qianfan model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/qianfan-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/qianfan-provider`
+- Package: `@openclaw/qianfan-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/qianfan-provider`
 
 ## Surface
 

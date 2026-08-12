@@ -1,6 +1,6 @@
 // Gateway handlers expose reviewed, memory-only migration plans to trusted operators.
 import crypto from "node:crypto";
-import { stableStringify } from "@natesclaw/normalization-core";
+import { stableStringify } from "@openclaw/normalization-core";
 import {
   ErrorCodes,
   errorShape,

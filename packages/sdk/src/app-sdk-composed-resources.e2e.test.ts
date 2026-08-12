@@ -3,7 +3,7 @@ import fs from "node:fs/promises";
 import type { AddressInfo } from "node:net";
 import os from "node:os";
 import path from "node:path";
-import { rawDataToString } from "@natesclaw/gateway-client/websocket-data";
+import { rawDataToString } from "@openclaw/gateway-client/websocket-data";
 import type { TSchema } from "typebox";
 import { Value } from "typebox/value";
 import { afterEach, describe, expect, it, vi } from "vitest";

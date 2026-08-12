@@ -11,8 +11,8 @@ Adds ComfyUI model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/comfy-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/comfy-provider`
+- Package: `@openclaw/comfy-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/comfy-provider`
 
 ## Surface
 

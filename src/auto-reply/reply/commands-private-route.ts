@@ -1,9 +1,9 @@
 /** Private command reply routing for sensitive owner-only command output. */
-import { resolveExpiresAtMsFromDurationMs } from "@natesclaw/normalization-core/number-coercion";
+import { resolveExpiresAtMsFromDurationMs } from "@openclaw/normalization-core/number-coercion";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import {
   getLoadedChannelPlugin,
   listChannelPlugins,

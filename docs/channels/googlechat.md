@@ -5,12 +5,12 @@ read_when:
 title: "Google Chat"
 ---
 
-Google Chat runs as the official `@natesclaw/googlechat` plugin: DMs and spaces through Google Chat API webhooks (HTTP endpoint only, no Pub/Sub).
+Google Chat runs as the official `@openclaw/googlechat` plugin: DMs and spaces through Google Chat API webhooks (HTTP endpoint only, no Pub/Sub).
 
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/googlechat
+natesclaw plugins install @openclaw/googlechat
 ```
 
 Local checkout (when running from a git repo):

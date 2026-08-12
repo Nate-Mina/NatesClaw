@@ -1,4 +1,4 @@
-import { sortUniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { sortUniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveVoiceModelRefs } from "../tts/voice-models.js";
 import {

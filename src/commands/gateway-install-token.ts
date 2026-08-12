@@ -1,5 +1,5 @@
 /** Resolves the gateway token used when installing or updating the managed service. */
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { formatCliCommand } from "../cli/command-format.js";
 import type { ConfigWriteOptions } from "../config/io.js";
 import type { NatesclawConfig } from "../config/types.js";

@@ -1,6 +1,6 @@
 // TUI theme tests cover theme defaults and environment-driven variants.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import chalk from "chalk";
 import { importFreshModule } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterAll, afterEach, describe, expect, it } from "vitest";

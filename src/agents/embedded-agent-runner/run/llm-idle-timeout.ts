@@ -1,5 +1,5 @@
-import { onLlmRequestActivity } from "@natesclaw/ai/internal/runtime";
-import { isCloudModelRef } from "@natesclaw/model-catalog-core/model-catalog-refs";
+import { onLlmRequestActivity } from "@openclaw/ai/internal/runtime";
+import { isCloudModelRef } from "@openclaw/model-catalog-core/model-catalog-refs";
 /**
  * Wraps LLM streams with idle-timeout detection and diagnostics.
  */
@@ -7,7 +7,7 @@ import {
   finiteSecondsToTimerSafeMilliseconds,
   clampTimerTimeoutMs,
   MAX_TIMER_TIMEOUT_MS,
-} from "@natesclaw/normalization-core/number-coercion";
+} from "@openclaw/normalization-core/number-coercion";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { toErrorObject } from "../../../infra/errors.js";
 import type { StreamFn } from "../../runtime/index.js";

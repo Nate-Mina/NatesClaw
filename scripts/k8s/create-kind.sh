@@ -174,7 +174,7 @@ apiVersion: kind.x-k8s.io/v1alpha4
 nodes:
 - role: control-plane
   labels:
-    natesclaw.dev/role: control-plane
+    openclaw.dev/role: control-plane
   # Uncomment to expose services on host ports:
   # extraPortMappings:
   # - containerPort: 30080

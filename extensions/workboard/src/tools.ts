@@ -1,4 +1,4 @@
-import type { WorkboardCard } from "@natesclaw/workboard-contract";
+import type { WorkboardCard } from "@openclaw/workboard-contract";
 // Workboard plugin module implements tools behavior.
 import { jsonResult, readStringParam } from "natesclaw/plugin-sdk/core";
 import type { AnyAgentTool, NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";

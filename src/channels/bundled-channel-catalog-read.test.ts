@@ -101,7 +101,7 @@ function seedChannelPkg(
   const pluginDir = path.dirname(pkgJsonPath);
   const pluginId = opts.pluginId ?? opts.id;
   writeJsonFile(pkgJsonPath, {
-    name: `@natesclaw/${pluginId}`,
+    name: `@openclaw/${pluginId}`,
     natesclaw: {
       channel: {
         id: opts.id,
@@ -217,7 +217,7 @@ describe("listBundledChannelCatalogEntries", () => {
       label: "Telegram",
     });
     seedGeneratedChannelCatalog(root, {
-      packageName: "@natesclaw/qqbot",
+      packageName: "@openclaw/qqbot",
       id: "qqbot",
       label: "QQ Bot",
       docsPath: "/channels/qqbot",
@@ -235,7 +235,7 @@ describe("listBundledChannelCatalogEntries", () => {
     const root = seedRoot("bcr-generated-doctor-");
     useBundledPluginsDir(undefined);
     seedGeneratedChannelCatalog(root, {
-      packageName: "@natesclaw/discord",
+      packageName: "@openclaw/discord",
       id: "discord",
       label: "Discord",
       docsPath: "/channels/discord",
@@ -266,7 +266,7 @@ describe("listBundledChannelCatalogEntries", () => {
       markdownCapable: true,
     });
     seedGeneratedChannelCatalog(root, {
-      packageName: "@natesclaw/matrix",
+      packageName: "@openclaw/matrix",
       id: "matrix",
       label: "Matrix",
       docsPath: "/channels/matrix",
@@ -285,7 +285,7 @@ describe("listBundledChannelCatalogEntries", () => {
     // rather than report zero bundled channels.
     const root = seedRoot("bcr-fallback-undefined-");
     seedGeneratedChannelCatalog(root, {
-      packageName: "@natesclaw/fallback",
+      packageName: "@openclaw/fallback",
       id: "fallback-channel",
       label: "Fallback",
       docsPath: "/channels/fallback",
@@ -306,7 +306,7 @@ describe("listBundledChannelCatalogEntries", () => {
     const extensionsRoot = path.join(root, "dist", "extensions");
     fs.mkdirSync(extensionsRoot, { recursive: true });
     seedGeneratedChannelCatalog(root, {
-      packageName: "@natesclaw/fallback",
+      packageName: "@openclaw/fallback",
       id: "fallback-channel",
       label: "Fallback",
       docsPath: "/channels/fallback",
@@ -344,7 +344,7 @@ describe("listBundledChannelCatalogEntries", () => {
       listBundledChannelCatalogEntries().find((entry) => entry.id === "generated"),
     ).toBeUndefined();
     seedGeneratedChannelCatalog(root, {
-      packageName: "@natesclaw/generated",
+      packageName: "@openclaw/generated",
       id: "generated",
       label: "Generated after reset",
       docsPath: "/channels/generated",

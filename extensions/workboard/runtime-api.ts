@@ -7,4 +7,4 @@ export type {
   WorkboardListResult,
   WorkboardPriority,
   WorkboardStatus,
-} from "@natesclaw/workboard-contract";
+} from "@openclaw/workboard-contract";

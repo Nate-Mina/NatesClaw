@@ -1,4 +1,4 @@
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { AssistantMessage } from "../../llm/types.js";
 import { createSubsystemLogger } from "../../logging/subsystem.js";

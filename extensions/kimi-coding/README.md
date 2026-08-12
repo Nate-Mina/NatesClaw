@@ -5,11 +5,11 @@ Official Natesclaw provider plugin for Kimi Coding.
 Install from Natesclaw:
 
 ```bash
-natesclaw plugins install @natesclaw/kimi-provider
+natesclaw plugins install @openclaw/kimi-provider
 natesclaw gateway restart
 ```
 
-See <https://docs.natesclaw.ai/providers/moonshot> for setup and configuration.
+See <https://docs.openclaw.ai/providers/moonshot> for setup and configuration.
 
 ## Catalog notes
 

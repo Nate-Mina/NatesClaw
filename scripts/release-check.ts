@@ -460,13 +460,13 @@ export function resolveReleaseCheckLocalPackageTarballs(
     .map((entry) => resolve(resolvedDir, entry.name))
     .toSorted((left, right) => left.localeCompare(right));
   const aiTarballs = tarballs.filter(
-    (tarballPath) => localPackageNameForTarball(tarballPath) === "@natesclaw/ai",
+    (tarballPath) => localPackageNameForTarball(tarballPath) === "@openclaw/ai",
   );
   const gatewayProtocolTarballs = tarballs.filter(
-    (tarballPath) => localPackageNameForTarball(tarballPath) === "@natesclaw/gateway-protocol",
+    (tarballPath) => localPackageNameForTarball(tarballPath) === "@openclaw/gateway-protocol",
   );
   const gatewayClientTarballs = tarballs.filter(
-    (tarballPath) => localPackageNameForTarball(tarballPath) === "@natesclaw/gateway-client",
+    (tarballPath) => localPackageNameForTarball(tarballPath) === "@openclaw/gateway-client",
   );
   const recognizedTarballs =
     aiTarballs.length + gatewayProtocolTarballs.length + gatewayClientTarballs.length;
@@ -477,15 +477,15 @@ export function resolveReleaseCheckLocalPackageTarballs(
   }
   const expectedAiTarballs = requiresAi ? 1 : 0;
   const aiTarballRequirement = requiresAi
-    ? "exactly one @natesclaw/ai tarball"
-    : "no @natesclaw/ai tarballs";
+    ? "exactly one @openclaw/ai tarball"
+    : "no @openclaw/ai tarballs";
   if (
     aiTarballs.length !== expectedAiTarballs ||
     gatewayProtocolTarballs.length > 1 ||
     gatewayClientTarballs.length > 1
   ) {
     throw new Error(
-      `release-check: ${RELEASE_CHECK_LOCAL_PACKAGE_TARBALL_DIR_ENV} must contain ${aiTarballRequirement}, at most one @natesclaw/gateway-protocol tarball, and at most one @natesclaw/gateway-client tarball; found ${aiTarballs.length}, ${gatewayProtocolTarballs.length}, and ${gatewayClientTarballs.length}.`,
+      `release-check: ${RELEASE_CHECK_LOCAL_PACKAGE_TARBALL_DIR_ENV} must contain ${aiTarballRequirement}, at most one @openclaw/gateway-protocol tarball, and at most one @openclaw/gateway-client tarball; found ${aiTarballs.length}, ${gatewayProtocolTarballs.length}, and ${gatewayClientTarballs.length}.`,
     );
   }
   return tarballs;
@@ -495,19 +495,19 @@ function rootPackageRequiresLocalAiTarball(): boolean {
   const packageJson = JSON.parse(readFileSync(resolve("package.json"), "utf8")) as {
     dependencies?: Record<string, unknown>;
   };
-  return typeof packageJson.dependencies?.["@natesclaw/ai"] === "string";
+  return typeof packageJson.dependencies?.["@openclaw/ai"] === "string";
 }
 
 function localPackageNameForTarball(tarballPath: string): string | undefined {
   const filename = basename(tarballPath);
   if (/^natesclaw-ai(?:-.+)?\.tgz$/.test(filename)) {
-    return "@natesclaw/ai";
+    return "@openclaw/ai";
   }
   if (/^natesclaw-gateway-protocol(?:-.+)?\.tgz$/.test(filename)) {
-    return "@natesclaw/gateway-protocol";
+    return "@openclaw/gateway-protocol";
   }
   if (/^natesclaw-gateway-client(?:-.+)?\.tgz$/.test(filename)) {
-    return "@natesclaw/gateway-client";
+    return "@openclaw/gateway-client";
   }
   return undefined;
 }
@@ -545,11 +545,11 @@ export function writePackedTarballInstallManifest(
     packageName: localPackageNameForTarball(localPackageTarballPath),
     tarballPath: localPackageTarballPath,
   }));
-  const aiTarballs = localPackages.filter(({ packageName }) => packageName === "@natesclaw/ai");
+  const aiTarballs = localPackages.filter(({ packageName }) => packageName === "@openclaw/ai");
   const expectedAiTarballs = requiresAi ? 1 : 0;
   const aiTarballRequirement = requiresAi
-    ? "exactly one @natesclaw/ai tarball"
-    : "no @natesclaw/ai tarballs";
+    ? "exactly one @openclaw/ai tarball"
+    : "no @openclaw/ai tarballs";
   if (aiTarballs.length !== expectedAiTarballs) {
     throw new Error(
       `release-check: packed install requires ${aiTarballRequirement}; found ${aiTarballs.length}.`,
@@ -772,7 +772,7 @@ export function createPackedPluginSdkTypescriptSmokeProject(params: {
     natesclaw: params.packageSpec,
   };
   if (params.aiPackageSpec) {
-    dependencies["@natesclaw/ai"] = params.aiPackageSpec;
+    dependencies["@openclaw/ai"] = params.aiPackageSpec;
   }
   mkdirSync(join(params.consumerDir, "src"), { recursive: true });
   writeFileSync(
@@ -821,7 +821,7 @@ function runPackedPluginSdkTypescriptSmoke(
 ): void {
   const consumerDir = join(tmpRoot, "plugin-sdk-type-consumer");
   const aiTarball = localPackageTarballs.find(
-    (localPackageTarball) => localPackageNameForTarball(localPackageTarball) === "@natesclaw/ai",
+    (localPackageTarball) => localPackageNameForTarball(localPackageTarball) === "@openclaw/ai",
   );
   createPackedPluginSdkTypescriptSmokeProject({
     consumerDir,

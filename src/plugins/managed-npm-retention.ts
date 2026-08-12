@@ -1,7 +1,7 @@
 // Marks managed npm packages excluded from recovery and classifies cleanup eligibility.
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { safePathSegmentHashed } from "../infra/install-safe-path.js";
 import { resolveDefaultPluginNpmDir, resolvePluginNpmProjectsDir } from "./install-paths.js";
 import { RETAINED_MANAGED_NPM_KEEP_FILES_REASON } from "./managed-npm-retention-contract.js";

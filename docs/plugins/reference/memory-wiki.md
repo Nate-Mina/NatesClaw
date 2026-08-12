@@ -11,7 +11,7 @@ Persistent wiki compiler and Obsidian-friendly knowledge vault for Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/memory-wiki`
+- Package: `@openclaw/memory-wiki`
 - Install route: included in Natesclaw
 
 ## Surface

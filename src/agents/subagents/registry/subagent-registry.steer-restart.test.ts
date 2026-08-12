@@ -1,7 +1,7 @@
 // Subagent registry steer-restart tests cover replacing child runs after steer
 // commands while preserving lifecycle hooks and completion delivery.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ContextEngine } from "../../../context-engine/types.js";

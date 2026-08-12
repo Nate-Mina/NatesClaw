@@ -613,17 +613,17 @@ const writeCases: WriteCase[] = [
   },
   {
     name: "preserves root $schema during unrelated partial writes",
-    current: { $schema: "https://natesclaw.ai/config.json", gateway: { mode: "local" } },
+    current: { $schema: "https://openclaw.ai/config.json", gateway: { mode: "local" } },
     next: { gateway: { mode: "local", port: 18789 } },
     expected: {
-      $schema: "https://natesclaw.ai/config.json",
+      $schema: "https://openclaw.ai/config.json",
       gateway: { mode: "local", port: 18789 },
     },
   },
   {
     name: "rejects writes that would flatten a root include",
     current: {
-      $schema: "https://natesclaw.ai/config-from-include.json",
+      $schema: "https://openclaw.ai/config-from-include.json",
       gateway: { mode: "local" },
     },
     authored: { $include: "./extra.json5", gateway: { mode: "local" } },
@@ -632,13 +632,13 @@ const writeCases: WriteCase[] = [
   },
   {
     name: "does not restore root $schema when the next config explicitly clears it",
-    current: { $schema: "https://natesclaw.ai/config.json", gateway: { mode: "local" } },
+    current: { $schema: "https://openclaw.ai/config.json", gateway: { mode: "local" } },
     next: { $schema: null, gateway: { mode: "local", port: 18789 } },
     expected: { gateway: { mode: "local", port: 18789 } },
   },
   {
     name: "does not restore root $schema when the next config sets an invalid value",
-    current: { $schema: "https://natesclaw.ai/config.json", gateway: { mode: "local" } },
+    current: { $schema: "https://openclaw.ai/config.json", gateway: { mode: "local" } },
     next: { $schema: 123, gateway: { mode: "local", port: 18789 } },
     expected: { $schema: 123, gateway: { mode: "local", port: 18789 } },
   },

@@ -1,10 +1,10 @@
 {
-  "name": "@natesclaw/twitch",
+  "name": "@openclaw/twitch",
   "version": "2026.8.1",
   "description": "Natesclaw Twitch channel plugin for chat and moderation workflows.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -14,7 +14,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
@@ -25,7 +25,7 @@
       "configPromotion": true
     },
     "install": {
-      "npmSpec": "@natesclaw/twitch",
+      "npmSpec": "@openclaw/twitch",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     },

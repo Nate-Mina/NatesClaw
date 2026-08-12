@@ -1,4 +1,4 @@
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import { isHeartbeatContentEffectivelyEmpty } from "../auto-reply/heartbeat.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { readHeartbeatMonitorScratch } from "../cron/scratch-store.js";

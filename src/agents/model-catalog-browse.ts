@@ -4,7 +4,7 @@
 import {
   clampTimerTimeoutMs,
   resolveTimerTimeoutMs,
-} from "@natesclaw/normalization-core/number-coercion";
+} from "@openclaw/normalization-core/number-coercion";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { ModelCatalogEntry, ModelCatalogSnapshot } from "./model-catalog.types.js";
 import {

@@ -11,7 +11,7 @@ Natesclaw Zalo Personal Account plugin via native zca-js integration.
 
 ## Distribution
 
-- Package: `@natesclaw/zalouser`
+- Package: `@openclaw/zalouser`
 - Install route: npm; ClawHub
 
 ## Surface

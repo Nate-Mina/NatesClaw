@@ -1,7 +1,7 @@
 /** Builds installed-index records from normalized plugin manifest registry entries. */
 import path from "node:path";
-import { normalizeOptionalString as normalizeStringField } from "@natesclaw/normalization-core/string-coerce";
-import { normalizeSortedUniqueStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeOptionalString as normalizeStringField } from "@openclaw/normalization-core/string-coerce";
+import { normalizeSortedUniqueStringEntries } from "@openclaw/normalization-core/string-normalization";
 import { getPluginInstallRecordMapEntry } from "../config/plugin-install-record-map.js";
 import type { NatesclawConfig } from "../config/types.js";
 import type { PluginCompatCode } from "./compat/registry.js";

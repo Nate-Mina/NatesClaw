@@ -1,5 +1,5 @@
 // Generates short labels for sessions from conversation context.
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import { resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { splitTrailingAuthProfile } from "../../agents/model-ref-profile.js";
 import {

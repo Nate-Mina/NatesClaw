@@ -11,7 +11,7 @@ Natesclaw LINE channel plugin for LINE Bot API chats.
 
 ## Distribution
 
-- Package: `@natesclaw/line`
+- Package: `@openclaw/line`
 - Install route: npm; ClawHub
 
 ## Surface

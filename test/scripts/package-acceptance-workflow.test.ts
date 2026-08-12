@@ -465,7 +465,7 @@ fs.appendFileSync(env.MOCK_GH_CALLS, JSON.stringify({
 }) + "\\n");
 const jobs = JSON.parse(env.MOCK_GH_JOBS);
 const conclusion = env.MOCK_GH_CONCLUSION;
-const url = "https://github.com/natesclaw/natesclaw/actions/runs/101";
+const url = "https://github.com/openclaw/natesclaw/actions/runs/101";
 function nextStatus() {
   const statuses = JSON.parse(env.MOCK_GH_STATUSES);
   let index = 0;
@@ -556,10 +556,10 @@ exit 0
   const defaultJobs = [
     {
       conclusion: "success",
-      html_url: "https://github.com/natesclaw/natesclaw/actions/runs/101/job/201",
+      html_url: "https://github.com/openclaw/natesclaw/actions/runs/101/job/201",
       name: "Verify release checks",
       status: "completed",
-      url: "https://github.com/natesclaw/natesclaw/actions/runs/101/job/201",
+      url: "https://github.com/openclaw/natesclaw/actions/runs/101/job/201",
     },
   ];
   const stepValues: Record<string, string> = {
@@ -1046,7 +1046,7 @@ describe("package acceptance workflow", () => {
     const selected = runReleasePublishInputValidation({
       FULL_RELEASE_VALIDATION_RUN_ATTEMPT: "",
       FULL_RELEASE_VALIDATION_RUN_ID: "",
-      PLUGINS: "@natesclaw/meta",
+      PLUGINS: "@openclaw/meta",
       PLUGIN_PUBLISH_SCOPE: "selected",
       PREFLIGHT_RUN_ID: "",
       PUBLISH_NATESCLAW_NPM: "false",
@@ -1076,7 +1076,7 @@ describe("package acceptance workflow", () => {
     const partialEvidence = runReleasePublishInputValidation({
       FULL_RELEASE_VALIDATION_RUN_ATTEMPT: "",
       FULL_RELEASE_VALIDATION_RUN_ID: "",
-      PLUGINS: "@natesclaw/meta",
+      PLUGINS: "@openclaw/meta",
       PLUGIN_PUBLISH_SCOPE: "selected",
       PUBLISH_NATESCLAW_NPM: "false",
     });
@@ -1947,7 +1947,7 @@ describe("package acceptance workflow", () => {
     expect(workflow).toContain("codex_plugin_spec:");
     expect(workflow).toContain('args+=(-f codex_plugin_spec="$CODEX_PLUGIN_SPEC")');
     expect(releaseChecksWorkflow).toContain(
-      'codex_plugin_spec="npm:@natesclaw/codex@${BASH_REMATCH[1]}"',
+      'codex_plugin_spec="npm:@openclaw/codex@${BASH_REMATCH[1]}"',
     );
     expect(releaseChecksWorkflow.match(/run: pnpm build qaRuntime/gu)).toHaveLength(6);
     expect(releaseChecksWorkflow).not.toContain(
@@ -2174,7 +2174,7 @@ describe("package acceptance workflow", () => {
     "adopts and validates the run URL returned for $jobName without listing runs",
     (child) => {
       const { calls, result } = runFullReleaseChildDispatch(child, {
-        MOCK_GH_DISPATCH_OUTPUT: "https://github.com/natesclaw/natesclaw/actions/runs/101",
+        MOCK_GH_DISPATCH_OUTPUT: "https://github.com/openclaw/natesclaw/actions/runs/101",
       });
 
       expect(result.status, `${result.stdout}\n${result.stderr}`).toBe(0);
@@ -2212,7 +2212,7 @@ describe("package acceptance workflow", () => {
     ["event", { MOCK_GH_RUN_EVENT: "push" }],
   ] as const)("refuses a returned run URL with the wrong %s", (label, overrides) => {
     const { calls, result } = runFullReleaseChildDispatch(FULL_RELEASE_CHILD_DISPATCHES[0], {
-      MOCK_GH_DISPATCH_OUTPUT: "https://github.com/natesclaw/natesclaw/actions/runs/101",
+      MOCK_GH_DISPATCH_OUTPUT: "https://github.com/openclaw/natesclaw/actions/runs/101",
       ...overrides,
     });
 
@@ -2332,7 +2332,7 @@ describe("package acceptance workflow", () => {
     (child) => {
       const { calls, result } = runFullReleaseChildDispatch(child, {
         MOCK_GH_CHILD_SHA: "c".repeat(40),
-        MOCK_GH_DISPATCH_OUTPUT: "https://github.com/natesclaw/natesclaw/actions/runs/101",
+        MOCK_GH_DISPATCH_OUTPUT: "https://github.com/openclaw/natesclaw/actions/runs/101",
       });
 
       expect(result.status).toBe(1);
@@ -2367,10 +2367,10 @@ describe("package acceptance workflow", () => {
         MOCK_GH_JOBS: JSON.stringify([
           {
             conclusion: "failure",
-            html_url: "https://github.com/natesclaw/natesclaw/actions/runs/101/job/201",
+            html_url: "https://github.com/openclaw/natesclaw/actions/runs/101/job/201",
             name: "Run package acceptance",
             status: "completed",
-            url: "https://github.com/natesclaw/natesclaw/actions/runs/101/job/201",
+            url: "https://github.com/openclaw/natesclaw/actions/runs/101/job/201",
           },
         ]),
         MOCK_GH_STATUSES: JSON.stringify([
@@ -2432,7 +2432,7 @@ describe("package acceptance workflow", () => {
       MOCK_GH_JOBS: JSON.stringify([
         {
           conclusion: "failure",
-          html_url: "https://github.com/natesclaw/natesclaw/actions/runs/101/job/201",
+          html_url: "https://github.com/openclaw/natesclaw/actions/runs/101/job/201",
           name: jobName,
           status: "completed",
         },
@@ -2485,13 +2485,13 @@ describe("package acceptance workflow", () => {
       MOCK_GH_JOBS: JSON.stringify([
         {
           conclusion: "success",
-          html_url: "https://github.com/natesclaw/natesclaw/actions/runs/101/job/201",
+          html_url: "https://github.com/openclaw/natesclaw/actions/runs/101/job/201",
           name: "Verify release checks",
           status: "completed",
         },
         {
           conclusion: "failure",
-          html_url: "https://github.com/natesclaw/natesclaw/actions/runs/101/job/202",
+          html_url: "https://github.com/openclaw/natesclaw/actions/runs/101/job/202",
           name: failingJob,
           status: "completed",
         },
@@ -5815,7 +5815,7 @@ describe("package artifact reuse", () => {
     expect(promoteAndroidCall).toBeGreaterThan(createDraftCall);
     expect(releaseWorkflow).toContain("finalize_github_release:");
 
-    expect(androidDocs).toContain("github.com/natesclaw/natesclaw/releases");
+    expect(androidDocs).toContain("github.com/openclaw/natesclaw/releases");
     expect(androidDocs).not.toContain("releases/latest/download/Natesclaw-Android.apk");
     expect(androidDocs).toContain("gh attestation verify Natesclaw-Android.apk");
     expect(androidDocs).toContain('--source-ref "refs/tags/${release_tag}"');

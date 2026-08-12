@@ -1,4 +1,4 @@
-import { normalizeOptionalString as readLogString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString as readLogString } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { RuntimeLogger } from "../plugins/runtime/types.js";
 import type {

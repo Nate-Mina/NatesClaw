@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/session-url-contract",
+  "name": "@openclaw/session-url-contract",
   "version": "0.0.0-private",
   "private": true,
   "type": "module",
@@ -8,6 +8,6 @@
     "./parse": "./src/parse.ts"
   },
   "dependencies": {
-    "@natesclaw/normalization-core": "workspace:*"
+    "@openclaw/normalization-core": "workspace:*"
   }
 }

@@ -17,7 +17,7 @@ Natesclaw connects to Zalo ClawBot through the catalog-listed external `@zalo-pl
 ## Prerequisites
 
 - Node.js >= 22
-- [Natesclaw](https://docs.natesclaw.ai/install) installed (`natesclaw` CLI available)
+- [Natesclaw](https://docs.openclaw.ai/install) installed (`natesclaw` CLI available)
 - A Zalo account on a mobile device to scan the login QR code
 
 ## Install with onboard (recommended)

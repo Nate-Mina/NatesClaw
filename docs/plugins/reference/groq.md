@@ -11,8 +11,8 @@ Adds Groq model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/groq-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/groq-provider`
+- Package: `@openclaw/groq-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/groq-provider`
 
 ## Surface
 

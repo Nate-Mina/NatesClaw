@@ -11,7 +11,7 @@ Adds xAI model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/xai-plugin`
+- Package: `@openclaw/xai-plugin`
 - Install route: included in Natesclaw
 
 ## Surface

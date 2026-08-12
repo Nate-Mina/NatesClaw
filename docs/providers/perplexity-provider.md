@@ -26,7 +26,7 @@ This page covers the Perplexity **provider** setup. For the Perplexity **tool** 
 ## Install plugin
 
 ```bash
-natesclaw plugins install @natesclaw/perplexity-plugin
+natesclaw plugins install @openclaw/perplexity-plugin
 natesclaw gateway restart
 ```
 

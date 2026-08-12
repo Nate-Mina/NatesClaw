@@ -11,7 +11,7 @@ Natesclaw Nextcloud Talk channel plugin for conversations.
 
 ## Distribution
 
-- Package: `@natesclaw/nextcloud-talk`
+- Package: `@openclaw/nextcloud-talk`
 - Install route: npm; ClawHub
 
 ## Surface

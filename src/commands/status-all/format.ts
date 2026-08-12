@@ -1,7 +1,7 @@
 // Shared formatting helpers for status overview, gateway summaries, and JSON payloads.
 // These functions keep text and JSON status surfaces aligned without pulling in command orchestration.
 
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { resolveGatewayPort } from "../../config/config.js";
 import type { NatesclawConfig } from "../../config/types.js";
 import { projectGatewayUrlForDiagnostics } from "../../gateway/connection-details.js";

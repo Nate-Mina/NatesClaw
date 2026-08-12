@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import fs from "node:fs/promises";
-import { stableStringify } from "@natesclaw/normalization-core";
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { stableStringify } from "@openclaw/normalization-core";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import {
   listAgentIds,
   resolveAgentDir,

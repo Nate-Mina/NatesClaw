@@ -1,6 +1,6 @@
 // Gateway RPC handlers for cron job CRUD, run logs, wake, and delivery previews.
-import { parseBoolean } from "@natesclaw/normalization-core/boolean-coercion";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { parseBoolean } from "@openclaw/normalization-core/boolean-coercion";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,

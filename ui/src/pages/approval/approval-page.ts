@@ -1,6 +1,6 @@
 import "../../styles/approval.css";
 import { consume } from "@lit/context";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { html, nothing, type PropertyValues } from "lit";
 import { property, state } from "lit/decorators.js";
 import {

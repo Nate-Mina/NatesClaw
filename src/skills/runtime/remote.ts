@@ -1,5 +1,5 @@
 // Remote skill runtime helpers send skill refresh and snapshot state across remotes.
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import { listAgentWorkspaceDirs } from "../../agents/workspace-dirs.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { NodeRegistry, NodeSession } from "../../gateway/node-registry.js";

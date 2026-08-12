@@ -1,5 +1,5 @@
 // Control UI controller manages form utils gateway state.
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 
 export function cloneConfigObject<T>(value: T): T {
   return structuredClone(value);

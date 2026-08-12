@@ -13,7 +13,7 @@ it("preserves package files retained by plugin uninstall", async () => {
   await withNatesclawTestState({ label: "gateway-retained-plugin-cleanup" }, async (state) => {
     const packageDir = writeManagedNpmPlugin({
       stateDir: state.stateDir,
-      packageName: "@natesclaw/kept-plugin",
+      packageName: "@openclaw/kept-plugin",
       pluginId: "kept-plugin",
       version: "1.0.0",
     });

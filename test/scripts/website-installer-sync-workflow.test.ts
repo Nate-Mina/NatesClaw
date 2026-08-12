@@ -38,18 +38,18 @@ describe("website installer sync workflow", () => {
     expect(workflow).not.toContain(".\\scripts\\install.cmd");
   });
 
-  it("syncs verified scripts to natesclaw.ai only after all installer checks pass", () => {
+  it("syncs verified scripts to openclaw.ai only after all installer checks pass", () => {
     expect(workflow).toContain("needs: [static, linux-docker, macos-installer, windows-installer]");
-    expect(workflow).toContain("repository: natesclaw/natesclaw.ai");
+    expect(workflow).toContain("repository: natesclaw/openclaw.ai");
     expect(workflow).toContain("NATESCLAW_GH_TOKEN: ${{ secrets.NATESCLAW_GH_TOKEN }}");
     expect(workflow).toContain("NATESCLAW_GH_TOKEN is not configured");
     expect(workflow).toContain("token: ${{ env.NATESCLAW_GH_TOKEN }}");
-    expect(workflow).toContain("cp natesclaw/scripts/install.sh natesclaw.ai/public/install.sh");
+    expect(workflow).toContain("cp natesclaw/scripts/install.sh openclaw.ai/public/install.sh");
     expect(workflow).toContain(
-      "cp natesclaw/scripts/install-cli.sh natesclaw.ai/public/install-cli.sh",
+      "cp natesclaw/scripts/install-cli.sh openclaw.ai/public/install-cli.sh",
     );
-    expect(workflow).toContain("cp natesclaw/scripts/install.ps1 natesclaw.ai/public/install.ps1");
-    expect(workflow).toContain("rm -f natesclaw.ai/public/install.cmd");
+    expect(workflow).toContain("cp natesclaw/scripts/install.ps1 openclaw.ai/public/install.ps1");
+    expect(workflow).toContain("rm -f openclaw.ai/public/install.cmd");
     expect(workflow).toContain("bun run build");
     expect(workflow).toContain("git push origin HEAD:main");
   });

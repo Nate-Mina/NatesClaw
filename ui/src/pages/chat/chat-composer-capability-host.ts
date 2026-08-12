@@ -1,4 +1,4 @@
-import { asNullableRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asNullableRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
 import { html, nothing } from "lit";
 import type { GatewayBrowserClient } from "../../api/gateway.ts";
 import type {

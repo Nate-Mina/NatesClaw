@@ -1,6 +1,6 @@
 // Plugin state store E2E tests cover persisted plugin state across runtime calls.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { withNatesclawTestState } from "../test-utils/natesclaw-test-state.js";
 import {

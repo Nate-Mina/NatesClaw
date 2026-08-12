@@ -1,5 +1,5 @@
 // Control UI controller manages skill workshop gateway state.
-import { parseDateStringTimestampMs } from "@natesclaw/normalization-core/number-coercion";
+import { parseDateStringTimestampMs } from "@openclaw/normalization-core/number-coercion";
 import type { AgentSelectionCapability } from "../../app/agent-selection.ts";
 import type { ApplicationGateway } from "../../app/context.ts";
 import { t } from "../../i18n/index.ts";

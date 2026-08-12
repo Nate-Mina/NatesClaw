@@ -76,7 +76,7 @@ describe("bundled plugin postinstall", () => {
     await fs.mkdir(externalModulesDir, { recursive: true });
     await fs.writeFile(
       path.join(packageRoot, "package.json"),
-      '{"name":"natesclaw","type":"module","version":"2026.7.2"}\n',
+      '{"name": "openclaw","type":"module","version":"2026.7.2"}\n',
     );
     for (const relativePath of [
       "scripts/postinstall-bundled-plugins.mjs",
@@ -148,7 +148,7 @@ describe("bundled plugin postinstall", () => {
       await fs.mkdir(path.join(packageRoot, "home"), { recursive: true });
       await fs.writeFile(
         path.join(packageRoot, "package.json"),
-        '{"name":"natesclaw","type":"module","version":"2026.7.2"}\n',
+        '{"name": "openclaw","type":"module","version":"2026.7.2"}\n',
       );
       await fs.copyFile(
         fileURLToPath(new URL("../../scripts/postinstall-bundled-plugins.mjs", import.meta.url)),
@@ -1178,7 +1178,7 @@ describe("bundled plugin postinstall", () => {
     await fs.mkdir(path.join(extensionsDir, "fixtures", "node_modules"), { recursive: true });
     await fs.writeFile(
       path.join(extensionsDir, "acpx", "package.json"),
-      JSON.stringify({ name: "@natesclaw/acpx" }),
+      JSON.stringify({ name: "@openclaw/acpx" }),
     );
 
     pruneBundledPluginSourceNodeModules({ extensionsDir });

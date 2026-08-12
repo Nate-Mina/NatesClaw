@@ -5,7 +5,7 @@ import {
   isCrablineServerChannel,
   NATESCLAW_CRABLINE_DEFAULT_CHANNEL,
   resolveNatesclawCrablineChannelDriverSelection,
-} from "@natesclaw/crabline";
+} from "@openclaw/crabline";
 import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import { parseStrictPositiveInteger } from "natesclaw/plugin-sdk/number-runtime";
 import { uniqueStrings } from "natesclaw/plugin-sdk/string-coerce-runtime";

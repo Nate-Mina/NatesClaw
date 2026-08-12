@@ -1,8 +1,8 @@
 /**
  * Resolves bundled static catalog rows for embedded-agent model selection.
  */
-import type { NormalizedModelCatalogRow } from "@natesclaw/model-catalog-core/model-catalog-types";
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import type { NormalizedModelCatalogRow } from "@openclaw/model-catalog-core/model-catalog-types";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 import type { ModelProviderConfig } from "../../config/types.models.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { planEffectiveModelCatalogRows } from "../../model-catalog/index.js";

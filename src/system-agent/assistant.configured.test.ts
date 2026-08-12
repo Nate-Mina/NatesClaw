@@ -87,8 +87,8 @@ function overview(defaultModel?: string): SystemAgentOverview {
     },
     gateway: { url: "ws://127.0.0.1:18789", source: "local loopback", reachable: false },
     references: {
-      docsUrl: "https://docs.natesclaw.ai",
-      sourceUrl: "https://github.com/natesclaw/natesclaw",
+      docsUrl: "https://docs.openclaw.ai",
+      sourceUrl: "https://github.com/openclaw/natesclaw",
     },
   };
 }

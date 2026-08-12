@@ -300,11 +300,11 @@ describe("model provider localService config", () => {
 describe("$schema key in config (#14998)", () => {
   it("accepts config with $schema string", () => {
     const result = NatesclawSchema.safeParse({
-      $schema: "https://natesclaw.ai/config.json",
+      $schema: "https://openclaw.ai/config.json",
     });
     expect(result.success).toBe(true);
     if (result.success) {
-      expect(result.data.$schema).toBe("https://natesclaw.ai/config.json");
+      expect(result.data.$schema).toBe("https://openclaw.ai/config.json");
     }
   });
 
@@ -328,11 +328,11 @@ describe("$schema key in config (#14998)", () => {
 
   it("preserves $schema through validateConfigObject round-trip", () => {
     const res = validateConfigObject({
-      $schema: "https://natesclaw.ai/config.json",
+      $schema: "https://openclaw.ai/config.json",
     });
     expect(res.ok).toBe(true);
     if (res.ok) {
-      expect(res.config.$schema).toBe("https://natesclaw.ai/config.json");
+      expect(res.config.$schema).toBe("https://openclaw.ai/config.json");
     }
   });
 });

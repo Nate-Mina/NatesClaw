@@ -29,7 +29,7 @@ Xiaomi MiMo is the API platform for **MiMo** models. The official external
 <Steps>
   <Step title="Install the plugin">
     ```bash
-    natesclaw plugins install @natesclaw/xiaomi-provider
+    natesclaw plugins install @openclaw/xiaomi-provider
     natesclaw gateway restart
     ```
   </Step>

@@ -9,12 +9,12 @@ read_when:
 The [threat model](/security/THREAT-MODEL-ATLAS) is a living document. Contributions are welcome from anyone; you do not need security or MITRE ATLAS background.
 
 <Note>
-This is for adding to the threat model, not reporting live vulnerabilities. If you found an exploitable vulnerability, follow the responsible-disclosure instructions on the [Trust page](https://trust.natesclaw.ai) instead.
+This is for adding to the threat model, not reporting live vulnerabilities. If you found an exploitable vulnerability, follow the responsible-disclosure instructions on the [Trust page](https://trust.openclaw.ai) instead.
 </Note>
 
 ## Ways to contribute
 
-**Add a threat.** Open a [documentation issue](https://github.com/natesclaw/natesclaw/issues/new?template=docs_bug_report.yml) describing the attack scenario in your own words. Helpful but not required:
+**Add a threat.** Open a [documentation issue](https://github.com/openclaw/natesclaw/issues/new?template=docs_bug_report.yml) describing the attack scenario in your own words. Helpful but not required:
 
 - The attack scenario and how it could be exploited.
 - Which components are affected (CLI, gateway, channels, ClawHub, MCP servers, etc.).
@@ -69,8 +69,8 @@ Threats are mapped to [MITRE ATLAS](https://atlas.mitre.org/) (Adversarial Threa
 
 ## Contact
 
-- **Security vulnerabilities:** [Trust page](https://trust.natesclaw.ai) for reporting instructions, or `security@natesclaw.ai`.
-- **Threat model questions:** open a [documentation issue](https://github.com/natesclaw/natesclaw/issues/new?template=docs_bug_report.yml).
+- **Security vulnerabilities:** [Trust page](https://trust.openclaw.ai) for reporting instructions, or `security@openclaw.ai`.
+- **Threat model questions:** open a [documentation issue](https://github.com/openclaw/natesclaw/issues/new?template=docs_bug_report.yml).
 - **General chat:** Discord `#security` channel.
 
 ## Recognition

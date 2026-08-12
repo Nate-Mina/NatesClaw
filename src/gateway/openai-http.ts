@@ -2,13 +2,13 @@
 // Translates OpenAI chat requests to Natesclaw agent runs and SSE/JSON responses.
 import { randomUUID } from "node:crypto";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { estimateBase64DecodedBytes } from "@natesclaw/media-core/base64";
-import { asPositiveSafeInteger } from "@natesclaw/normalization-core/number-coercion";
+import { estimateBase64DecodedBytes } from "@openclaw/media-core/base64";
+import { asPositiveSafeInteger } from "@openclaw/normalization-core/number-coercion";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
-import { avoidTrailingHighSurrogateBreak } from "@natesclaw/normalization-core/utf16-slice";
+} from "@openclaw/normalization-core/string-coerce";
+import { avoidTrailingHighSurrogateBreak } from "@openclaw/normalization-core/utf16-slice";
 import { isClientToolNameConflictError } from "../agents/agent-tool-definition-adapter.js";
 import type { AgentStreamParams, ClientToolDefinition } from "../agents/command/shared-types.js";
 import type { ImageContent } from "../agents/command/types.js";

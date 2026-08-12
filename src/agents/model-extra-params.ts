@@ -1,4 +1,4 @@
-import { normalizeFastMode } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeFastMode } from "@openclaw/normalization-core/string-coerce";
 import { normalizeThinkLevel } from "../auto-reply/thinking.shared.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { modelKey } from "../shared/model-key.js";

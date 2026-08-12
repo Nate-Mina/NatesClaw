@@ -1,7 +1,7 @@
 // Persists the root ownership record for one Claw-created agent and workspace.
 import { createHash } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
-import { stableStringify } from "@natesclaw/normalization-core";
+import { stableStringify } from "@openclaw/normalization-core";
 import {
   openNatesclawStateDatabase,
   runNatesclawStateWriteTransaction,

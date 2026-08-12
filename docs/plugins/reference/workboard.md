@@ -11,7 +11,7 @@ Dashboard workboard for agent-owned issues and sessions.
 
 ## Distribution
 
-- Package: `@natesclaw/workboard`
+- Package: `@openclaw/workboard`
 - Install route: included in Natesclaw
 
 ## Surface

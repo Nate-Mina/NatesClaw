@@ -681,14 +681,14 @@ two-party event loops that do not go through the shared inbound reply runner.
     const isVoice = api.runtime.media.isVoiceCompatibleAudio(filePath);
     const metadata = await api.runtime.media.getImageMetadata(filePath);
     const resized = await api.runtime.media.resizeToJpeg(buffer, { maxWidth: 800 });
-    const terminalQr = await api.runtime.media.renderQrTerminal("https://natesclaw.ai");
-    const pngQr = await api.runtime.media.renderQrPngBase64("https://natesclaw.ai", {
+    const terminalQr = await api.runtime.media.renderQrTerminal("https://openclaw.ai");
+    const pngQr = await api.runtime.media.renderQrPngBase64("https://openclaw.ai", {
       scale: 6, // 1-12
       marginModules: 4, // 0-16
     });
-    const pngQrDataUrl = await api.runtime.media.renderQrPngDataUrl("https://natesclaw.ai");
+    const pngQrDataUrl = await api.runtime.media.renderQrPngDataUrl("https://openclaw.ai");
     const tmpRoot = resolvePreferredNatesclawTmpDir();
-    const pngQrFile = await api.runtime.media.writeQrPngTempFile("https://natesclaw.ai", {
+    const pngQrFile = await api.runtime.media.writeQrPngTempFile("https://openclaw.ai", {
       tmpRoot,
       dirPrefix: "my-plugin-qr-",
       fileName: "qr.png",

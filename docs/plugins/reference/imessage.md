@@ -11,8 +11,8 @@ Adds the iMessage channel surface for sending and receiving Natesclaw messages.
 
 ## Distribution
 
-- Package: `@natesclaw/imessage`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/imessage`
+- Package: `@openclaw/imessage`
+- Install route: npm; ClawHub: `clawhub:@openclaw/imessage`
 
 ## Surface
 

@@ -11,7 +11,7 @@ Cloud worker provider backed by the Crabbox CLI.
 
 ## Distribution
 
-- Package: `@natesclaw/crabbox-provider`
+- Package: `@openclaw/crabbox-provider`
 - Install route: included in Natesclaw
 
 ## Surface

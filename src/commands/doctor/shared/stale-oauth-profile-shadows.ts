@@ -1,8 +1,8 @@
 // Doctor cleanup for per-agent OAuth profiles shadowing fresher main-agent credentials.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { expectDefined } from "@openclaw/normalization-core";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { resolveAgentDir, listAgentEntries } from "../../../agents/agent-scope.js";
 import { hasUsableOAuthCredential } from "../../../agents/auth-profiles/credential-state.js";
 import {

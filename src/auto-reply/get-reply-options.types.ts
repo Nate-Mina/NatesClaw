@@ -1,4 +1,4 @@
-import type { FastMode } from "@natesclaw/normalization-core/string-coerce";
+import type { FastMode } from "@openclaw/normalization-core/string-coerce";
 /** Public option types for reply generation callbacks, streaming, and delivery policy. */
 import type { AgentPlanStep } from "../channels/streaming.js";
 import type { ImageContent } from "../llm/types.js";

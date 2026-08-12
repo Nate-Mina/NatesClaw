@@ -1,7 +1,7 @@
 // Claw doctor diagnostics project the lifecycle ownership ledger into health findings.
 import { createHash } from "node:crypto";
 import type { DatabaseSync } from "node:sqlite";
-import { stableStringify } from "@natesclaw/normalization-core";
+import { stableStringify } from "@openclaw/normalization-core";
 import { listConfiguredMcpServers } from "../config/mcp-config.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveDefaultCronStaggerMs } from "../cron/stagger.js";

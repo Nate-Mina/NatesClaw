@@ -1,6 +1,6 @@
 import type { DatabaseSync } from "node:sqlite";
-import { asFiniteNumber } from "@natesclaw/normalization-core/number-coercion";
-import { normalizeNullableString as migratedText } from "@natesclaw/normalization-core/string-coerce";
+import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
+import { normalizeNullableString as migratedText } from "@openclaw/normalization-core/string-coerce";
 import type { SessionRunStatus } from "../../packages/gateway-protocol/src/schema/sessions-row.js";
 import {
   ensureMemoryChunkProvenance,

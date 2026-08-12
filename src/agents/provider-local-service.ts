@@ -5,12 +5,12 @@
 import { spawn, type ChildProcess } from "node:child_process";
 import { createHash } from "node:crypto";
 import path from "node:path";
-import { isCanonicalDottedDecimalIPv4, isLoopbackIpAddress } from "@natesclaw/net-policy/ip";
+import { isCanonicalDottedDecimalIPv4, isLoopbackIpAddress } from "@openclaw/net-policy/ip";
 import {
   clampPositiveTimerTimeoutMs,
   resolvePositiveTimerTimeoutMs,
-} from "@natesclaw/normalization-core/number-coercion";
-import { sleepWithAbort } from "@natesclaw/retry";
+} from "@openclaw/normalization-core/number-coercion";
+import { sleepWithAbort } from "@openclaw/retry";
 import type { ModelProviderLocalServiceConfig } from "../config/types.models.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { toErrorObject } from "../infra/errors.js";

@@ -1,9 +1,9 @@
 // Gateway logs CLI with RPC tailing, local file fallback, and systemd journal fallback.
 import { setTimeout as delay } from "node:timers/promises";
-import { redactSensitiveUrlLikeString } from "@natesclaw/net-policy/redact-sensitive-url";
-import { coerceErrorMessage as normalizeErrorMessage } from "@natesclaw/normalization-core/error-coercion";
-import { resolveIntegerOption } from "@natesclaw/normalization-core/number-coercion";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { redactSensitiveUrlLikeString } from "@openclaw/net-policy/redact-sensitive-url";
+import { coerceErrorMessage as normalizeErrorMessage } from "@openclaw/normalization-core/error-coercion";
+import { resolveIntegerOption } from "@openclaw/normalization-core/number-coercion";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import type { Command } from "commander";
 import {
   GATEWAY_CLIENT_MODES,
@@ -538,7 +538,7 @@ export function registerLogsCli(program: Command) {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/logs", "docs.natesclaw.ai/cli/logs")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/logs", "docs.openclaw.ai/cli/logs")}\n`,
     );
 
   addGatewayClientOptions(logs);

@@ -170,24 +170,24 @@ describe("resolveVitestIsolation", () => {
         },
       );
       expect(() =>
-        findAlias(sharedVitestConfig.resolve.alias, `@natesclaw/plugin-sdk/${subpath}`),
-      ).toThrow(`missing alias @natesclaw/plugin-sdk/${subpath}`);
+        findAlias(sharedVitestConfig.resolve.alias, `@openclaw/plugin-sdk/${subpath}`),
+      ).toThrow(`missing alias @openclaw/plugin-sdk/${subpath}`);
     }
   });
 
   it("aliases private core packages to source for clean checkout tests", () => {
-    expect(findAlias(sharedVitestConfig.resolve.alias, "@natesclaw/media-core/mime")).toEqual({
-      find: "@natesclaw/media-core/mime",
+    expect(findAlias(sharedVitestConfig.resolve.alias, "@openclaw/media-core/mime")).toEqual({
+      find: "@openclaw/media-core/mime",
       replacement: path.join(process.cwd(), "packages", "media-core", "src", "mime.ts"),
     });
-    expect(findAlias(sharedVitestConfig.resolve.alias, "@natesclaw/acp-core/runtime/types")).toEqual(
+    expect(findAlias(sharedVitestConfig.resolve.alias, "@openclaw/acp-core/runtime/types")).toEqual(
       {
-        find: "@natesclaw/acp-core/runtime/types",
+        find: "@openclaw/acp-core/runtime/types",
         replacement: path.join(process.cwd(), "packages", "acp-core", "src", "runtime", "types.ts"),
       },
     );
-    expect(findAlias(sharedVitestConfig.resolve.alias, "@natesclaw/retry")).toEqual({
-      find: "@natesclaw/retry",
+    expect(findAlias(sharedVitestConfig.resolve.alias, "@openclaw/retry")).toEqual({
+      find: "@openclaw/retry",
       replacement: path.join(process.cwd(), "packages", "retry", "src", "index.ts"),
     });
   });

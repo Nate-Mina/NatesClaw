@@ -1,8 +1,8 @@
 // Structured plugin catalog and lifecycle operations shared by Gateway-facing surfaces.
 import path from "node:path";
-import { asSafeIntegerInRange } from "@natesclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { asSafeIntegerInRange } from "@openclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope-config.js";
 import { MANIFEST_KEY } from "../compat/legacy-names.js";
 import { collectChangedPaths } from "../config/config-change-paths.js";

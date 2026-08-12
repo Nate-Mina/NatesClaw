@@ -4,7 +4,7 @@ import type {
   WorkerDesktopAppId,
   WorkerDesktopLaunchResult,
   WorkerDesktopObserveResult,
-} from "@natesclaw/gateway-protocol";
+} from "@openclaw/gateway-protocol";
 import { css, html, nothing, svg } from "lit";
 import { property, state } from "lit/decorators.js";
 import type { GatewayBrowserClient } from "../../api/gateway.ts";

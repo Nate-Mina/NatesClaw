@@ -47,7 +47,7 @@ function countMatching<T>(items: readonly T[], predicate: (item: T) => boolean):
 
 function withNatesclawPackageArgv<T>(packageRoot: string, fn: () => T): T {
   mkdirSafe(path.join(packageRoot, "bin"));
-  fs.writeFileSync(path.join(packageRoot, "package.json"), '{"name":"natesclaw"}\n', "utf-8");
+  fs.writeFileSync(path.join(packageRoot, "package.json"), '{"name": "openclaw"}\n', "utf-8");
   const originalArgv = process.argv;
   process.argv = [originalArgv[0] ?? "node", path.join(packageRoot, "bin", "natesclaw")];
   try {
@@ -479,12 +479,12 @@ describe("discoverNatesclawPlugins", () => {
 
     createPackagePluginWithEntry({
       packageDir: path.join(stateDir, "extensions", "alpha"),
-      packageName: "@natesclaw/alpha",
+      packageName: "@openclaw/alpha",
       pluginId: "alpha",
     });
     createPackagePluginWithEntry({
       packageDir: path.join(workspaceDir, ".natesclaw", "extensions", "beta"),
-      packageName: "@natesclaw/beta",
+      packageName: "@openclaw/beta",
       pluginId: "beta",
     });
 
@@ -537,7 +537,7 @@ describe("discoverNatesclawPlugins", () => {
     const pluginDir = path.join(stateDir, "extensions", "diffs-language-pack");
     createPackagePluginWithEntry({
       packageDir: pluginDir,
-      packageName: "@natesclaw/diffs-language-pack",
+      packageName: "@openclaw/diffs-language-pack",
       pluginId: "diffs-language-pack",
     });
     writePluginManifest({
@@ -563,7 +563,7 @@ describe("discoverNatesclawPlugins", () => {
     const languagePackDir = path.join(extensionsDir, "diffs-language-pack");
     createPackagePluginWithEntry({
       packageDir: languagePackDir,
-      packageName: "@natesclaw/diffs-language-pack",
+      packageName: "@openclaw/diffs-language-pack",
       pluginId: "diffs-language-pack",
     });
     writePluginManifest({
@@ -573,7 +573,7 @@ describe("discoverNatesclawPlugins", () => {
     });
     createPackagePluginWithEntry({
       packageDir: path.join(extensionsDir, "diffs"),
-      packageName: "@natesclaw/diffs",
+      packageName: "@openclaw/diffs",
       pluginId: "diffs",
     });
 
@@ -630,7 +630,7 @@ describe("discoverNatesclawPlugins", () => {
       const linkedPluginDir = path.join(stateDir, "linked-plugin-src");
       createPackagePluginWithEntry({
         packageDir: linkedPluginDir,
-        packageName: "@natesclaw/linked-plugin",
+        packageName: "@openclaw/linked-plugin",
         pluginId: "linked-plugin",
       });
 
@@ -656,7 +656,7 @@ describe("discoverNatesclawPlugins", () => {
       const linkedPluginDir = path.join(stateDir, "workspace-linked-plugin-src");
       createPackagePluginWithEntry({
         packageDir: linkedPluginDir,
-        packageName: "@natesclaw/workspace-linked-plugin",
+        packageName: "@openclaw/workspace-linked-plugin",
         pluginId: "workspace-linked-plugin",
       });
 
@@ -694,14 +694,14 @@ describe("discoverNatesclawPlugins", () => {
     const expectedWorkspacePluginDir = path.join(workspaceExt, "workspace-plugin");
     createPackagePluginWithEntry({
       packageDir: expectedWorkspacePluginDir,
-      packageName: "@natesclaw/workspace-plugin",
+      packageName: "@openclaw/workspace-plugin",
       pluginId: "workspace-plugin",
     });
 
     const unrelatedWorkspaceDir = path.join(workspaceDir, "lobster-integrations", "bin");
     createPackagePluginWithEntry({
       packageDir: unrelatedWorkspaceDir,
-      packageName: "@natesclaw/stray-workspace-plugin",
+      packageName: "@openclaw/stray-workspace-plugin",
     });
 
     const result = discoverNatesclawPlugins({
@@ -722,7 +722,7 @@ describe("discoverNatesclawPlugins", () => {
     const workspaceRoot = path.join(homeDir, "workspace");
     createPackagePluginWithEntry({
       packageDir: path.join(workspaceRoot, ".natesclaw", "extensions", "tilde-workspace"),
-      packageName: "@natesclaw/tilde-workspace",
+      packageName: "@openclaw/tilde-workspace",
       pluginId: "tilde-workspace",
     });
 
@@ -779,7 +779,7 @@ describe("discoverNatesclawPlugins", () => {
     );
     fs.writeFileSync(
       path.join(extensionDir, "package.json"),
-      '{"name":"@natesclaw/twitch"}\n',
+      '{"name":"@openclaw/twitch"}\n',
       "utf-8",
     );
     fs.writeFileSync(path.join(extensionDir, "natesclaw.plugin.json"), '{"id":"twitch"}\n', "utf-8");
@@ -809,7 +809,7 @@ describe("discoverNatesclawPlugins", () => {
     );
     createPackagePluginWithEntry({
       packageDir: path.join(bundledDir, "real-plugin"),
-      packageName: "@natesclaw/real-plugin",
+      packageName: "@openclaw/real-plugin",
       pluginId: "real-plugin",
     });
 
@@ -835,13 +835,13 @@ describe("discoverNatesclawPlugins", () => {
     const sourcePluginDir = path.join(packageRoot, "extensions", "synology-chat");
     createPackagePluginWithEntry({
       packageDir: bundledPluginDir,
-      packageName: "@natesclaw/synology-chat",
+      packageName: "@openclaw/synology-chat",
       pluginId: "synology-chat",
       entryPath: "index.js",
     });
     createPackagePluginWithEntry({
       packageDir: sourcePluginDir,
-      packageName: "@natesclaw/synology-chat",
+      packageName: "@openclaw/synology-chat",
       pluginId: "synology-chat",
     });
     mockLinuxMountInfo([sourcePluginDir]);
@@ -889,13 +889,13 @@ describe("discoverNatesclawPlugins", () => {
     const sourcePluginDir = path.join(packageRoot, "extensions", "synology-chat");
     createPackagePluginWithEntry({
       packageDir: bundledPluginDir,
-      packageName: "@natesclaw/synology-chat",
+      packageName: "@openclaw/synology-chat",
       pluginId: "synology-chat",
       entryPath: "index.js",
     });
     createPackagePluginWithEntry({
       packageDir: sourcePluginDir,
-      packageName: "@natesclaw/synology-chat",
+      packageName: "@openclaw/synology-chat",
       pluginId: "synology-chat",
     });
     mockLinuxMountInfo([]);
@@ -982,7 +982,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/local-source-pack",
+      packageName: "@openclaw/local-source-pack",
       extensions: ["./index.ts"],
     });
     writePluginManifest({ pluginDir, id: "local-source-pack" });
@@ -1009,7 +1009,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/linked-source-pack",
+      packageName: "@openclaw/linked-source-pack",
       extensions: ["./src/index.ts"],
       setupEntry: "./src/setup-entry.ts",
     });
@@ -1048,7 +1048,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/source-only-pack",
+      packageName: "@openclaw/source-only-pack",
       extensions: ["./src/index.ts"],
     });
     writePluginEntry(path.join(pluginDir, "src", "index.ts"));
@@ -1091,7 +1091,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: sourceDir,
-      packageName: "@natesclaw/source-path-pack",
+      packageName: "@openclaw/source-path-pack",
       extensions: ["./src/index.ts"],
     });
     writePluginEntry(path.join(sourceDir, "src", "index.ts"));
@@ -1130,7 +1130,7 @@ describe("discoverNatesclawPlugins", () => {
 
       writePluginPackageManifest({
         packageDir: actualSourceDir,
-        packageName: "@natesclaw/source-path-symlink-pack",
+        packageName: "@openclaw/source-path-symlink-pack",
         extensions: ["./src/index.ts"],
       });
       writePluginEntry(path.join(actualSourceDir, "src", "index.ts"));
@@ -1163,7 +1163,7 @@ describe("discoverNatesclawPlugins", () => {
     mkdirSafe(pluginDir);
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
-      JSON.stringify({ name: "@natesclaw/metadata-only-pack", version: "0.0.1" }),
+      JSON.stringify({ name: "@openclaw/metadata-only-pack", version: "0.0.1" }),
       "utf-8",
     );
     writePluginManifest({ pluginDir, id: "metadata-only-pack" });
@@ -1211,7 +1211,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/missing-runtime-pack",
+      packageName: "@openclaw/missing-runtime-pack",
       extensions: ["./index.ts"],
       runtimeExtensions: ["./dist/index.js"],
     });
@@ -1239,7 +1239,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: bundledPluginDir,
-      packageName: "@natesclaw/discord",
+      packageName: "@openclaw/discord",
       extensions: ["./index.js"],
     });
     writePluginManifest({ pluginDir: bundledPluginDir, id: "discord" });
@@ -1247,7 +1247,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: installedPluginDir,
-      packageName: "@natesclaw/discord",
+      packageName: "@openclaw/discord",
       extensions: ["./src/index.ts"],
     });
     writePluginManifest({ pluginDir: installedPluginDir, id: "discord" });
@@ -1356,7 +1356,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/runtime-pack",
+      packageName: "@openclaw/runtime-pack",
       extensions: ["./src/index.ts"],
       runtimeExtensions: ["./dist/index.js"],
       setupEntry: "./src/setup-entry.ts",
@@ -1385,7 +1385,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/missing-runtime-setup-pack",
+      packageName: "@openclaw/missing-runtime-setup-pack",
       extensions: ["./dist/index.js"],
       setupEntry: "./src/setup-entry.ts",
       runtimeSetupEntry: "./dist/setup-entry.js",
@@ -1415,7 +1415,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/missing-setup-pack",
+      packageName: "@openclaw/missing-setup-pack",
       extensions: ["./dist/index.js"],
       setupEntry: "./src/setup-entry.ts",
     });
@@ -1526,7 +1526,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/runtime-mismatch-pack",
+      packageName: "@openclaw/runtime-mismatch-pack",
       extensions: ["./src/one.ts", "./src/two.ts"],
       runtimeExtensions: ["./dist/one.js"],
     });
@@ -1555,7 +1555,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/runtime-blank-pack",
+      packageName: "@openclaw/runtime-blank-pack",
       extensions: ["./src/index.ts"],
       runtimeExtensions: [" "],
     });
@@ -1582,7 +1582,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/extension-blank-pack",
+      packageName: "@openclaw/extension-blank-pack",
       extensions: ["./dist/index.js", " "],
     });
     writePluginEntry(path.join(pluginDir, "dist", "index.js"));
@@ -1687,7 +1687,7 @@ describe("discoverNatesclawPlugins", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/package-name-owner",
+        name: "@openclaw/package-name-owner",
         natesclaw: { extensions: ["./index.js"], plugin: { id: "metadata-plugin-owner" } },
       }),
       "utf-8",
@@ -1707,7 +1707,7 @@ describe("discoverNatesclawPlugins", () => {
   });
 
   it.each([
-    { packageName: "@natesclaw/package-plugin-owner", candidateId: "package-plugin-owner" },
+    { packageName: "@openclaw/package-plugin-owner", candidateId: "package-plugin-owner" },
     { packageName: "@scope/", candidateId: "channel-package-root" },
     { packageName: "/", candidateId: "channel-package-root" },
     { packageName: 42, candidateId: "channel-package-root" },
@@ -1746,11 +1746,11 @@ describe("discoverNatesclawPlugins", () => {
   it("retains every owner when invalid package extension diagnostics are deduplicated", async () => {
     const stateDir = makeTempDir();
     for (const [packageName, pluginId, explicitOwner] of [
-      ["@natesclaw/first-blank-pack", "first-blank-pack", undefined],
-      ["@natesclaw/second-blank-pack", "second-blank-pack", undefined],
-      ["@natesclaw/example-plugin", "example", undefined],
-      ["@natesclaw/manifest-derived-package", "manifest-owner", "manifest"],
-      ["@natesclaw/channel-derived-package", "channel-owner", "channel"],
+      ["@openclaw/first-blank-pack", "first-blank-pack", undefined],
+      ["@openclaw/second-blank-pack", "second-blank-pack", undefined],
+      ["@openclaw/example-plugin", "example", undefined],
+      ["@openclaw/manifest-derived-package", "manifest-owner", "manifest"],
+      ["@openclaw/channel-derived-package", "channel-owner", "channel"],
     ] as const) {
       const pluginDir = path.join(stateDir, "extensions", pluginId);
       mkdirSafe(path.join(pluginDir, "dist"));
@@ -1797,7 +1797,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/built-peer-pack",
+      packageName: "@openclaw/built-peer-pack",
       extensions: ["src/index.ts"],
       setupEntry: "src/setup-entry.ts",
     });
@@ -1826,7 +1826,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/nested-pack",
+      packageName: "@openclaw/nested-pack",
       extensions: ["./plugin/index.ts"],
     });
     writePluginEntry(path.join(pluginDir, "plugin", "index.ts"));
@@ -1848,7 +1848,7 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/workspace-pack",
+      packageName: "@openclaw/workspace-pack",
       extensions: ["./src/index.ts"],
     });
     writePluginEntry(path.join(pluginDir, "src", "index.ts"));
@@ -1869,7 +1869,7 @@ describe("discoverNatesclawPlugins", () => {
     const pluginDir = path.join(globalExt, "future-channel");
     createPackagePluginWithEntry({
       packageDir: pluginDir,
-      packageName: "@natesclaw/future-channel",
+      packageName: "@openclaw/future-channel",
       pluginId: "future-channel",
       compatPluginApi: ">=2026.5.27-beta.2",
     });
@@ -1899,7 +1899,7 @@ describe("discoverNatesclawPlugins", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/malformed-channel",
+        name: "@openclaw/malformed-channel",
         natesclaw: {
           extensions: ["./index.js"],
           plugin: { id: "malformed-channel" },
@@ -1923,14 +1923,14 @@ describe("discoverNatesclawPlugins", () => {
       pluginId: "malformed-channel",
       source: path.join(pluginDir, "package.json"),
       messageIncludes:
-        "invalid package plugin API metadata: package.json natesclaw.compat.pluginApi must be a string; skipping discovery (check package.json natesclaw.compat.pluginApi)",
+        "invalid package plugin API metadata: package.json openclaw.compat.pluginApi must be a string; skipping discovery (check package.json openclaw.compat.pluginApi)",
     });
   });
 
   it.each([
     {
       name: "manifest owner wins for incompatible API ranges",
-      packageName: "@natesclaw/package-owner",
+      packageName: "@openclaw/package-owner",
       manifestId: "manifest-owner",
       packagePluginId: "package-plugin-owner",
       packageChannelId: "package-channel-owner",
@@ -1939,7 +1939,7 @@ describe("discoverNatesclawPlugins", () => {
     },
     {
       name: "channel owner wins for malformed API ranges",
-      packageName: "@natesclaw/package-owner",
+      packageName: "@openclaw/package-owner",
       manifestId: undefined,
       packagePluginId: 42,
       packageChannelId: "package-channel-owner",
@@ -2003,7 +2003,7 @@ describe("discoverNatesclawPlugins", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/future-shape",
+        name: "@openclaw/future-shape",
         natesclaw: {
           extensions: { runtime: "./src/index.ts" },
           compat: { pluginApi: ">=2026.5.27-beta.2" },
@@ -2035,7 +2035,7 @@ describe("discoverNatesclawPlugins", () => {
     const globalExt = path.join(stateDir, "extensions");
     createPackagePluginWithEntry({
       packageDir: path.join(globalExt, "current-channel"),
-      packageName: "@natesclaw/current-channel",
+      packageName: "@openclaw/current-channel",
       pluginId: "current-channel",
       compatPluginApi: ">=2026.5.27-beta.1",
     });
@@ -2058,7 +2058,7 @@ describe("discoverNatesclawPlugins", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/downloadable",
+        name: "@openclaw/downloadable",
         natesclaw: {
           extensions: ["./index.ts"],
           compat: { pluginApi: ">=2099.1.1" },
@@ -2086,7 +2086,7 @@ describe("discoverNatesclawPlugins", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/downloadable",
+        name: "@openclaw/downloadable",
         natesclaw: {
           extensions: ["./index.ts"],
         },
@@ -2127,14 +2127,14 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: builtPluginDir,
-      packageName: "@natesclaw/shipped",
+      packageName: "@openclaw/shipped",
       extensions: ["./index.js"],
     });
     writePluginManifest({ pluginDir: builtPluginDir, id: "shipped" });
     writePluginEntry(path.join(builtPluginDir, "index.js"));
     writePluginPackageManifest({
       packageDir: sourceBuiltPluginDir,
-      packageName: "@natesclaw/shipped",
+      packageName: "@openclaw/shipped",
       extensions: ["./index.ts"],
     });
     writePluginManifest({ pluginDir: sourceBuiltPluginDir, id: "shipped" });
@@ -2142,7 +2142,7 @@ describe("discoverNatesclawPlugins", () => {
     fs.writeFileSync(
       path.join(sourceOnlyPluginDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/downloadable",
+        name: "@openclaw/downloadable",
         natesclaw: {
           extensions: ["./index.ts"],
         },
@@ -2228,7 +2228,7 @@ describe("discoverNatesclawPlugins", () => {
 
     createPackagePluginWithEntry({
       packageDir: workspacePluginDir,
-      packageName: "@natesclaw/workspace-plugin",
+      packageName: "@openclaw/workspace-plugin",
       pluginId: "workspace-plugin",
     });
 
@@ -2260,7 +2260,7 @@ describe("discoverNatesclawPlugins", () => {
         const packageDir = path.join(stateDir, "extensions", "voice-call-pack");
         createPackagePluginWithEntry({
           packageDir,
-          packageName: "@natesclaw/voice-call",
+          packageName: "@openclaw/voice-call",
           entryPath: "src/index.ts",
         });
         return {};
@@ -2300,8 +2300,8 @@ describe("discoverNatesclawPlugins", () => {
       name: "normalizes bundled speech package ids to canonical plugin ids",
       setup: (stateDir: string) => {
         for (const [dirName, packageName, pluginId] of [
-          ["elevenlabs-speech-pack", "@natesclaw/elevenlabs-speech", "elevenlabs"],
-          ["microsoft-speech-pack", "@natesclaw/microsoft-speech", "microsoft"],
+          ["elevenlabs-speech-pack", "@openclaw/elevenlabs-speech", "elevenlabs"],
+          ["microsoft-speech-pack", "@openclaw/microsoft-speech", "microsoft"],
         ] as const) {
           const packageDir = path.join(stateDir, "extensions", dirName);
           createPackagePluginWithEntry({
@@ -2322,7 +2322,7 @@ describe("discoverNatesclawPlugins", () => {
         const packageDir = path.join(stateDir, "packs", "demo-plugin-dir");
         createPackagePluginWithEntry({
           packageDir,
-          packageName: "@natesclaw/demo-plugin-dir",
+          packageName: "@openclaw/demo-plugin-dir",
           entryPath: "index.js",
         });
         return { extraPaths: [packageDir] };
@@ -2451,7 +2451,7 @@ describe("discoverNatesclawPlugins", () => {
         mkdirSafe(globalExt);
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@natesclaw/escape-pack",
+          packageName: "@openclaw/escape-pack",
           extensions: ["../../outside.js"],
         });
         fs.writeFileSync(outside, "export default function () {}", "utf-8");
@@ -2465,7 +2465,7 @@ describe("discoverNatesclawPlugins", () => {
         mkdirSafe(path.join(globalExt, "src"));
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@natesclaw/escape-pack",
+          packageName: "@openclaw/escape-pack",
           extensions: ["../src/index.ts"],
         });
         fs.writeFileSync(path.join(globalExt, "src", "index.js"), "export default {}", "utf-8");
@@ -2479,7 +2479,7 @@ describe("discoverNatesclawPlugins", () => {
         mkdirSafe(path.join(globalExt, "dist"));
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@natesclaw/escape-pack",
+          packageName: "@openclaw/escape-pack",
           extensions: ["../src/index.ts"],
           runtimeExtensions: ["./dist/index.js"],
         });
@@ -2494,7 +2494,7 @@ describe("discoverNatesclawPlugins", () => {
         mkdirSafe(globalExt);
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@natesclaw/missing-entry-pack",
+          packageName: "@openclaw/missing-entry-pack",
           extensions: ["./missing.ts"],
         });
         return true;
@@ -2518,7 +2518,7 @@ describe("discoverNatesclawPlugins", () => {
         }
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@natesclaw/pack",
+          packageName: "@openclaw/pack",
           extensions: ["./linked/escape.ts"],
         });
         return true;
@@ -2550,7 +2550,7 @@ describe("discoverNatesclawPlugins", () => {
         }
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@natesclaw/pack",
+          packageName: "@openclaw/pack",
           extensions: ["./escape.ts"],
         });
         return true;
@@ -2582,7 +2582,7 @@ describe("discoverNatesclawPlugins", () => {
         }
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@natesclaw/pack",
+          packageName: "@openclaw/pack",
           extensions: ["./escape.ts"],
         });
         return true;
@@ -2615,7 +2615,7 @@ describe("discoverNatesclawPlugins", () => {
         }
         writePluginPackageManifest({
           packageDir: globalExt,
-          packageName: "@natesclaw/pack",
+          packageName: "@openclaw/pack",
           extensions: ["./src/index.ts"],
         });
         return true;
@@ -2637,7 +2637,7 @@ describe("discoverNatesclawPlugins", () => {
     mkdirSafe(path.join(globalExt, "dist"));
     writePluginPackageManifest({
       packageDir: globalExt,
-      packageName: "@natesclaw/escape-pack",
+      packageName: "@openclaw/escape-pack",
       extensions: ["./dist/index.js"],
       setupEntry: "../src/setup-entry.ts",
       runtimeSetupEntry: "./dist/setup-entry.js",
@@ -2667,7 +2667,7 @@ describe("discoverNatesclawPlugins", () => {
     fs.writeFileSync(
       outsideManifest,
       JSON.stringify({
-        name: "@natesclaw/pack",
+        name: "@openclaw/pack",
         natesclaw: { extensions: ["./entry.ts"] },
       }),
       "utf-8",
@@ -2691,7 +2691,7 @@ describe("discoverNatesclawPlugins", () => {
     const pluginDir = path.join(stateDir, "extensions", "world-open");
     createPackagePluginWithEntry({
       packageDir: pluginDir,
-      packageName: "@natesclaw/world-open",
+      packageName: "@openclaw/world-open",
       pluginId: "world-open",
     });
     fs.chmodSync(pluginDir, 0o777);
@@ -2738,7 +2738,7 @@ describe("discoverNatesclawPlugins", () => {
       const stateDir = makeTempDir();
       createPackagePluginWithEntry({
         packageDir: path.join(stateDir, "extensions", "owner-mismatch"),
-        packageName: "@natesclaw/owner-mismatch",
+        packageName: "@openclaw/owner-mismatch",
         pluginId: "owner-mismatch",
       });
 
@@ -2826,7 +2826,7 @@ describe("discoverNatesclawPlugins", () => {
     const pluginDir = path.join(bundledDir, "cached-bundle");
     createPackagePluginWithEntry({
       packageDir: pluginDir,
-      packageName: "@natesclaw/cached-bundle",
+      packageName: "@openclaw/cached-bundle",
       pluginId: "cached-bundle",
       entryPath: "index.js",
     });
@@ -2860,7 +2860,7 @@ describe("discoverNatesclawPlugins", () => {
     const pluginDir = path.join(bundledDir, "cached-bundle");
     createPackagePluginWithEntry({
       packageDir: pluginDir,
-      packageName: "@natesclaw/cache-one",
+      packageName: "@openclaw/cache-one",
       pluginId: "cached-bundle",
       entryPath: "index.js",
     });
@@ -2873,12 +2873,12 @@ describe("discoverNatesclawPlugins", () => {
 
     const first = discoverWithEnv({ env });
     expect(requireCandidateById(first.candidates, "cached-bundle").packageName).toBe(
-      "@natesclaw/cache-one",
+      "@openclaw/cache-one",
     );
     const originalStat = fs.statSync(packageManifestPath);
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/cache-two",
+      packageName: "@openclaw/cache-two",
       extensions: ["./index.js"],
     });
     fs.utimesSync(packageManifestPath, unchangedTimestamp, unchangedTimestamp);
@@ -2888,14 +2888,14 @@ describe("discoverNatesclawPlugins", () => {
 
     const beforeReload = discoverWithEnv({ env });
     expect(requireCandidateById(beforeReload.candidates, "cached-bundle").packageName).toBe(
-      "@natesclaw/cache-one",
+      "@openclaw/cache-one",
     );
 
     clearPluginMetadataLifecycleCaches();
 
     const afterReload = discoverWithEnv({ env });
     expect(requireCandidateById(afterReload.candidates, "cached-bundle").packageName).toBe(
-      "@natesclaw/cache-two",
+      "@openclaw/cache-two",
     );
   });
 
@@ -2904,7 +2904,7 @@ describe("discoverNatesclawPlugins", () => {
     const pluginDir = path.join(stateDir, "extensions", "fresh-package");
     createPackagePluginWithEntry({
       packageDir: pluginDir,
-      packageName: "@natesclaw/cache-one",
+      packageName: "@openclaw/cache-one",
       pluginId: "fresh-package",
       entryPath: "index.js",
     });
@@ -2915,12 +2915,12 @@ describe("discoverNatesclawPlugins", () => {
 
     const first = discoverWithEnv({ env });
     expect(requireCandidateById(first.candidates, "fresh-package").packageName).toBe(
-      "@natesclaw/cache-one",
+      "@openclaw/cache-one",
     );
     const originalStat = fs.statSync(packageManifestPath);
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/cache-two",
+      packageName: "@openclaw/cache-two",
       extensions: ["./index.js"],
     });
     fs.utimesSync(packageManifestPath, unchangedTimestamp, unchangedTimestamp);
@@ -2930,7 +2930,7 @@ describe("discoverNatesclawPlugins", () => {
 
     const second = discoverWithEnv({ env });
     expect(requireCandidateById(second.candidates, "fresh-package").packageName).toBe(
-      "@natesclaw/cache-two",
+      "@openclaw/cache-two",
     );
   });
 
@@ -2948,13 +2948,13 @@ describe("discoverNatesclawPlugins", () => {
 
     writePluginPackageManifest({
       packageDir: pluginDir,
-      packageName: "@natesclaw/fresh-package",
+      packageName: "@openclaw/fresh-package",
       extensions: ["./index.js"],
     });
 
     const second = discoverWithEnv({ env });
     expect(requireCandidateById(second.candidates, "fresh-package").packageName).toBe(
-      "@natesclaw/fresh-package",
+      "@openclaw/fresh-package",
     );
   });
 
@@ -2963,7 +2963,7 @@ describe("discoverNatesclawPlugins", () => {
     const pluginDir = path.join(stateDir, "extensions", "fresh");
     createPackagePluginWithEntry({
       packageDir: pluginDir,
-      packageName: "@natesclaw/fresh",
+      packageName: "@openclaw/fresh",
       pluginId: "fresh",
     });
 
@@ -2987,22 +2987,22 @@ describe("discoverNatesclawPlugins", () => {
 
     createPackagePluginWithEntry({
       packageDir: path.join(bundledDir, "bundled-plugin"),
-      packageName: "@natesclaw/bundled-plugin",
+      packageName: "@openclaw/bundled-plugin",
       pluginId: "bundled-plugin",
     });
     createPackagePluginWithEntry({
       packageDir: path.join(globalExt, "global-plugin"),
-      packageName: "@natesclaw/global-plugin",
+      packageName: "@openclaw/global-plugin",
       pluginId: "global-plugin",
     });
     createPackagePluginWithEntry({
       packageDir: path.join(workspaceA, ".natesclaw", "extensions", "workspace-a-plugin"),
-      packageName: "@natesclaw/workspace-a-plugin",
+      packageName: "@openclaw/workspace-a-plugin",
       pluginId: "workspace-a-plugin",
     });
     createPackagePluginWithEntry({
       packageDir: path.join(workspaceB, ".natesclaw", "extensions", "workspace-b-plugin"),
-      packageName: "@natesclaw/workspace-b-plugin",
+      packageName: "@openclaw/workspace-b-plugin",
       pluginId: "workspace-b-plugin",
     });
 
@@ -3036,12 +3036,12 @@ describe("discoverNatesclawPlugins", () => {
         const stateDirB = makeTempDir();
         createPackagePluginWithEntry({
           packageDir: path.join(stateDirA, "extensions", "alpha"),
-          packageName: "@natesclaw/alpha",
+          packageName: "@openclaw/alpha",
           pluginId: "alpha",
         });
         createPackagePluginWithEntry({
           packageDir: path.join(stateDirB, "extensions", "beta"),
-          packageName: "@natesclaw/beta",
+          packageName: "@openclaw/beta",
           pluginId: "beta",
         });
         return {

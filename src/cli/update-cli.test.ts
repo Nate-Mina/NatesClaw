@@ -4,7 +4,7 @@ import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { Command } from "commander";
 import { afterAll, afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { writePackageDistInventory } from "../../scripts/lib/package-dist-inventory.ts";
@@ -126,7 +126,7 @@ vi.mock("../infra/update-runner.js", async (importOriginal) => ({
 }));
 
 vi.mock("../state/natesclaw-database-preflight.js", () => ({
-  NATESCLAW_DATABASE_SCHEMA_DOCS_URL: "https://docs.natesclaw.ai/reference/database-schemas",
+  NATESCLAW_DATABASE_SCHEMA_DOCS_URL: "https://docs.openclaw.ai/reference/database-schemas",
   preflightNatesclawDatabaseSchemas: databasePreflightMocks.preflightNatesclawDatabaseSchemas,
 }));
 
@@ -150,8 +150,8 @@ vi.mock("../config/config.js", () => ({
         [
           "Config is managed by Nix (`NATESCLAW_NIX_MODE=1`), so Natesclaw treats natesclaw.json as immutable.",
           "Do not run setup, onboarding, natesclaw update, plugin install/update/uninstall/enable, doctor repair/token-generation, or config set against this file.",
-          "Agent-first Nix setup: https://github.com/natesclaw/nix-natesclaw#quick-start",
-          "Natesclaw Nix overview: https://docs.natesclaw.ai/install/nix",
+          "Agent-first Nix setup: https://github.com/openclaw/nix-natesclaw#quick-start",
+          "Natesclaw Nix overview: https://docs.openclaw.ai/install/nix",
         ].join("\n"),
       );
     }
@@ -1642,7 +1642,7 @@ describe("update-cli", () => {
       runtimeConfig: managedConfig,
     };
     const managedRecords = {
-      telegram: { source: "npm", spec: "@natesclaw/telegram@beta" },
+      telegram: { source: "npm", spec: "@openclaw/telegram@beta" },
     } satisfies Record<string, PluginInstallRecord>;
     serviceReadCommand.mockResolvedValue({
       programArguments: ["node", path.join(process.cwd(), "dist", "index.js"), "gateway", "run"],
@@ -2013,7 +2013,7 @@ describe("update-cli", () => {
     const pluginInstallRecords = {
       demo: {
         source: "npm",
-        spec: "@natesclaw/demo@1.0.0",
+        spec: "@openclaw/demo@1.0.0",
         installPath: "/tmp/natesclaw-demo-plugin",
       },
     } as const;
@@ -2089,12 +2089,12 @@ describe("update-cli", () => {
     const pluginInstallRecords = {
       msteams: {
         source: "npm",
-        spec: "@natesclaw/msteams",
+        spec: "@openclaw/msteams",
         installPath: "/tmp/natesclaw-msteams-plugin",
         version: "1.0.0",
-        resolvedName: "@natesclaw/msteams",
+        resolvedName: "@openclaw/msteams",
         resolvedVersion: "1.0.0",
-        resolvedSpec: "@natesclaw/msteams@1.0.0",
+        resolvedSpec: "@openclaw/msteams@1.0.0",
         integrity: "sha512-newer",
       },
     } as const;
@@ -2121,10 +2121,10 @@ describe("update-cli", () => {
     expect(capturedRecords).toEqual({
       msteams: {
         source: "npm",
-        spec: "@natesclaw/msteams",
+        spec: "@openclaw/msteams",
         installPath: "/tmp/natesclaw-msteams-plugin",
         version: "1.0.0",
-        resolvedName: "@natesclaw/msteams",
+        resolvedName: "@openclaw/msteams",
         integrity: "sha512-newer",
       },
     });
@@ -2148,7 +2148,7 @@ describe("update-cli", () => {
       installRecords: {
         msteams: {
           source: "npm",
-          spec: "@natesclaw/msteams",
+          spec: "@openclaw/msteams",
           resolvedVersion: "1.0.0",
         },
       } satisfies Record<string, PluginInstallRecord>,
@@ -2186,7 +2186,7 @@ describe("update-cli", () => {
       installRecords: {
         msteams: {
           source: "npm",
-          spec: "@natesclaw/msteams",
+          spec: "@openclaw/msteams",
           resolvedVersion: "1.0.0",
         },
       } satisfies Record<string, PluginInstallRecord>,
@@ -2662,7 +2662,7 @@ describe("update-cli", () => {
       `${JSON.stringify({
         demo: {
           source: "npm",
-          spec: "@natesclaw/demo@1.0.0",
+          spec: "@openclaw/demo@1.0.0",
           installPath,
         },
       })}\n`,
@@ -2693,7 +2693,7 @@ describe("update-cli", () => {
       `${JSON.stringify({
         stale: {
           source: "npm",
-          spec: "@natesclaw/stale@1.0.0",
+          spec: "@openclaw/stale@1.0.0",
           installPath: "/tmp/stale-plugin",
         },
       })}\n`,
@@ -2702,7 +2702,7 @@ describe("update-cli", () => {
     const postDoctorRecords = {
       codex: {
         source: "npm",
-        spec: "@natesclaw/codex@2026.5.17",
+        spec: "@openclaw/codex@2026.5.17",
         installPath: "/tmp/codex-plugin",
       },
     } satisfies Record<string, PluginInstallRecord>;
@@ -2856,8 +2856,8 @@ describe("update-cli", () => {
     await expect(
       onIntegrityDrift({
         pluginId: "demo",
-        spec: "@natesclaw/demo@1.0.0",
-        resolvedSpec: "@natesclaw/demo@1.0.0",
+        spec: "@openclaw/demo@1.0.0",
+        resolvedSpec: "@openclaw/demo@1.0.0",
         expectedIntegrity: "sha512-old",
         actualIntegrity: "sha512-new",
       }),
@@ -2881,8 +2881,8 @@ describe("update-cli", () => {
       }) => {
         const proceed = await params.onIntegrityDrift?.({
           pluginId: "demo",
-          spec: "@natesclaw/demo@1.0.0",
-          resolvedSpec: "@natesclaw/demo@1.0.0",
+          spec: "@openclaw/demo@1.0.0",
+          resolvedSpec: "@openclaw/demo@1.0.0",
           resolvedVersion: "1.0.0",
           expectedIntegrity: "sha512-old",
           actualIntegrity: "sha512-new",
@@ -2897,7 +2897,7 @@ describe("update-cli", () => {
               status: "error",
               message:
                 proceed === false
-                  ? "Failed to update demo: aborted: npm package integrity drift detected for @natesclaw/demo@1.0.0"
+                  ? "Failed to update demo: aborted: npm package integrity drift detected for @openclaw/demo@1.0.0"
                   : "unexpected drift continuation",
             },
           ],
@@ -2915,8 +2915,8 @@ describe("update-cli", () => {
     expect(jsonOutput?.postUpdate?.plugins?.integrityDrifts).toEqual([
       {
         pluginId: "demo",
-        spec: "@natesclaw/demo@1.0.0",
-        resolvedSpec: "@natesclaw/demo@1.0.0",
+        spec: "@openclaw/demo@1.0.0",
+        resolvedSpec: "@openclaw/demo@1.0.0",
         resolvedVersion: "1.0.0",
         expectedIntegrity: "sha512-old",
         actualIntegrity: "sha512-new",
@@ -3097,7 +3097,7 @@ describe("update-cli", () => {
     loadInstalledPluginIndexInstallRecords.mockResolvedValueOnce({
       demo: {
         source: "npm",
-        spec: "@natesclaw/demo@1.0.0",
+        spec: "@openclaw/demo@1.0.0",
         installPath,
       },
     });
@@ -3545,7 +3545,7 @@ describe("update-cli", () => {
 
     const logs = getLogOutput();
     expect(logs).toContain("Would refuse update: state database");
-    expect(logs).toContain("https://docs.natesclaw.ai/reference/database-schemas");
+    expect(logs).toContain("https://docs.openclaw.ai/reference/database-schemas");
     expect(serviceStop).not.toHaveBeenCalled();
     expect(packageInstallCommandCall()).toBeUndefined();
     expect(defaultRuntime.exit).not.toHaveBeenCalledWith(1);
@@ -4286,21 +4286,21 @@ describe("update-cli", () => {
     },
     {
       name: "full git URL package spec",
-      options: { yes: true, tag: "https://github.com/natesclaw/natesclaw.git#main" },
+      options: { yes: true, tag: "https://github.com/openclaw/natesclaw.git#main" },
       packageSpec: undefined,
-      expectedSpec: "https://github.com/natesclaw/natesclaw.git#main",
+      expectedSpec: "https://github.com/openclaw/natesclaw.git#main",
     },
     {
       name: "hosted GitHub URL package spec without git suffix",
-      options: { yes: true, tag: "https://github.com/natesclaw/natesclaw#main" },
+      options: { yes: true, tag: "https://github.com/openclaw/natesclaw#main" },
       packageSpec: undefined,
-      expectedSpec: "https://github.com/natesclaw/natesclaw#main",
+      expectedSpec: "https://github.com/openclaw/natesclaw#main",
     },
     {
       name: "aliased hosted GitHub URL package spec without git suffix",
-      options: { yes: true, tag: "natesclaw@https://github.com/natesclaw/natesclaw#main" },
+      options: { yes: true, tag: "natesclaw@https://github.com/openclaw/natesclaw#main" },
       packageSpec: undefined,
-      expectedSpec: "https://github.com/natesclaw/natesclaw#main",
+      expectedSpec: "https://github.com/openclaw/natesclaw#main",
     },
     {
       name: "GitHub shorthand package spec",
@@ -7835,7 +7835,7 @@ describe("update-cli", () => {
       "git",
       "clone",
       "--filter=blob:none",
-      "https://github.com/natesclaw/natesclaw.git",
+      "https://github.com/openclaw/natesclaw.git",
       checkoutDir,
     ]);
   });

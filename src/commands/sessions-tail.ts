@@ -4,7 +4,7 @@
  * It selects active or requested sessions, renders recent trajectory events,
  * and can follow newly appended SQLite trajectory rows.
  */
-import { normalizeOptionalString as toOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString as toOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { readAcpSessionMeta } from "../acp/runtime/session-meta.js";
 import { getRuntimeConfig } from "../config/config.js";
 import { listSessionEntriesReadOnly } from "../config/sessions/session-accessor.js";

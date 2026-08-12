@@ -1,5 +1,5 @@
 /** Shared runtime helpers for embedding provider lookup across core and plugin capabilities. */
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   resolvePluginCapabilityProvider,

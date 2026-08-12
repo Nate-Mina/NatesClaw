@@ -16,16 +16,16 @@ let cacheEpochMs = Date.now();
 describe("parseGitHubRemoteUrl", () => {
   it("parses https, scp-like, and ssh remotes", () => {
     const expected = { owner: "natesclaw", repo: "natesclaw" };
-    expect(parseGitHubRemoteUrl("https://github.com/natesclaw/natesclaw.git")).toEqual(expected);
-    expect(parseGitHubRemoteUrl("https://github.com/natesclaw/natesclaw")).toEqual(expected);
+    expect(parseGitHubRemoteUrl("https://github.com/openclaw/natesclaw.git")).toEqual(expected);
+    expect(parseGitHubRemoteUrl("https://github.com/openclaw/natesclaw")).toEqual(expected);
     expect(parseGitHubRemoteUrl("git@github.com:natesclaw/natesclaw.git")).toEqual(expected);
-    expect(parseGitHubRemoteUrl("ssh://git@github.com/natesclaw/natesclaw.git")).toEqual(expected);
+    expect(parseGitHubRemoteUrl("ssh://git@github.com/openclaw/natesclaw.git")).toEqual(expected);
   });
 
   it("rejects non-GitHub and malformed remotes", () => {
     expect(parseGitHubRemoteUrl("https://gitlab.com/natesclaw/natesclaw.git")).toBeNull();
     expect(parseGitHubRemoteUrl("git@github.com:natesclaw")).toBeNull();
-    expect(parseGitHubRemoteUrl("https://github.com/natesclaw/natesclaw/extra")).toBeNull();
+    expect(parseGitHubRemoteUrl("https://github.com/openclaw/natesclaw/extra")).toBeNull();
     expect(parseGitHubRemoteUrl("/local/path/repo.git")).toBeNull();
   });
 });
@@ -77,12 +77,12 @@ describe("loadControlUiSessionPullRequests", () => {
           repo: "natesclaw",
           branch: context.branch,
           title: "fix(macos): tighten the link-browser tab header",
-          url: "https://github.com/natesclaw/natesclaw/pull/103469",
+          url: "https://github.com/openclaw/natesclaw/pull/103469",
           state: "open",
           additions: 4,
           deletions: 3,
           checks: { state: "passing", passed: 1, failed: 0, skipped: 1, running: 0 },
-          checksUrl: "https://github.com/natesclaw/natesclaw/pull/103469/checks",
+          checksUrl: "https://github.com/openclaw/natesclaw/pull/103469/checks",
         },
       ],
       branch: {
@@ -90,7 +90,7 @@ describe("loadControlUiSessionPullRequests", () => {
         repo: "natesclaw",
         branch: context.branch,
         createUrl:
-          "https://github.com/natesclaw/natesclaw/pull/new/claude/browser-tabs-tighter-header",
+          "https://github.com/openclaw/natesclaw/pull/new/claude/browser-tabs-tighter-header",
       },
       rateLimited: false,
     });
@@ -138,7 +138,7 @@ describe("loadControlUiSessionPullRequests", () => {
         repo: "natesclaw",
         branch: context.branch,
         title: "fix(macos): tighten the link-browser tab header",
-        url: "https://github.com/natesclaw/natesclaw/pull/103469",
+        url: "https://github.com/openclaw/natesclaw/pull/103469",
         state: "merged",
       },
     ]);
@@ -551,7 +551,7 @@ describe("loadControlUiSessionPullRequests", () => {
         repo: "natesclaw",
         branch: context.branch,
         createUrl:
-          "https://github.com/natesclaw/natesclaw/pull/new/claude/browser-tabs-tighter-header",
+          "https://github.com/openclaw/natesclaw/pull/new/claude/browser-tabs-tighter-header",
       },
       rateLimited: true,
     });
@@ -586,7 +586,7 @@ describe("loadControlUiSessionPullRequests", () => {
         repo: "natesclaw",
         branch: context.branch,
         title: "fix(macos): tighten the link-browser tab header",
-        url: "https://github.com/natesclaw/natesclaw/pull/103469",
+        url: "https://github.com/openclaw/natesclaw/pull/103469",
         state: "open",
       },
     ]);
@@ -618,7 +618,7 @@ describe("loadControlUiSessionPullRequests", () => {
       },
     );
     expect(result.branch?.createUrl).toBe(
-      "https://github.com/natesclaw/natesclaw/pull/new/claude/fix%20%231",
+      "https://github.com/openclaw/natesclaw/pull/new/claude/fix%20%231",
     );
   });
 });

@@ -3,8 +3,8 @@ import {
   findNormalizedProviderValue,
   normalizeProviderId,
   normalizeProviderIdForAuth,
-} from "@natesclaw/model-catalog-core/provider-id";
-import { hasNonEmptyString as hasSecret } from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/model-catalog-core/provider-id";
+import { hasNonEmptyString as hasSecret } from "@openclaw/normalization-core/string-coerce";
 import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
 import { resolveMergedModelProviderConfig } from "../config/model-provider-config.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

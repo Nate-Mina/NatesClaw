@@ -7,7 +7,7 @@
 
 import fs from "node:fs";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { describe, expect, it } from "vitest";
 
 const ENGINE_DIR = path.resolve(import.meta.dirname);

@@ -2,7 +2,7 @@
 import {
   normalizeConfiguredProviderCatalogModelId,
   type ManifestModelIdNormalizationProvider,
-} from "@natesclaw/model-catalog-core/provider-model-id-normalization";
+} from "@openclaw/model-catalog-core/provider-model-id-normalization";
 import { isRecord } from "../utils.js";
 import { normalizeAgentModelMapForConfig, normalizeAgentModelRefForConfig } from "./model-input.js";
 import type { NatesclawConfig } from "./types.natesclaw.js";

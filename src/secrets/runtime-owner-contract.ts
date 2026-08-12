@@ -1,6 +1,6 @@
 /** Process-local identity for the non-secret config that an owner may use with a credential. */
 import { createHash } from "node:crypto";
-import { stableStringify } from "@natesclaw/normalization-core";
+import { stableStringify } from "@openclaw/normalization-core";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { coerceSecretRef } from "../config/types.secrets.js";
 import { secretRefKey } from "./ref-contract.js";

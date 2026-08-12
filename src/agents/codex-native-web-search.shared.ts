@@ -1,7 +1,7 @@
 /**
  * Shared config normalization for Codex native web search.
  */
-import { normalizeUniqueTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeUniqueTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { isRecord } from "../utils.js";
 

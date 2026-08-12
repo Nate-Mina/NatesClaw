@@ -43,7 +43,7 @@ async function productionImportsPackage(packageName: string): Promise<boolean> {
   return false;
 }
 
-describe("@natesclaw/ai source dependency contract", () => {
+describe("@openclaw/ai source dependency contract", () => {
   it("declares normalization-core while production source imports it", async () => {
     const manifest = JSON.parse(
       await fs.readFile(path.join(PACKAGE_ROOT, "package.json"), "utf8"),
@@ -52,7 +52,7 @@ describe("@natesclaw/ai source dependency contract", () => {
       devDependencies?: Record<string, string>;
     };
 
-    expect(await productionImportsPackage("@natesclaw/normalization-core")).toBe(true);
-    expect(manifest.dependencies?.["@natesclaw/normalization-core"]).toBe("workspace:*");
+    expect(await productionImportsPackage("@openclaw/normalization-core")).toBe(true);
+    expect(manifest.dependencies?.["@openclaw/normalization-core"]).toBe("workspace:*");
   });
 });

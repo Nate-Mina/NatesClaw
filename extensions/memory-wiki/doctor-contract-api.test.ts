@@ -1,7 +1,7 @@
 // Memory Wiki tests cover doctor migration of legacy source sync state.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type {
   OpenBlobStoreOptions,
   OpenKeyedStoreOptions,

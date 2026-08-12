@@ -1,5 +1,5 @@
 // Doctor workspace status tests cover workspace inspection and status output.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { describe, expect, it, vi } from "vitest";
 import * as noteModule from "../../packages/terminal-core/src/note.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
@@ -358,8 +358,8 @@ describe("noteWorkspaceStatus", () => {
               installedVersion: "2026.6.9",
               gatewayVersion: "2026.6.10-beta.1",
               source: "npm",
-              packageName: "@natesclaw/brave-plugin",
-              spec: "@natesclaw/brave-plugin@2026.6.9",
+              packageName: "@openclaw/brave-plugin",
+              spec: "@openclaw/brave-plugin@2026.6.9",
             },
           ],
         },
@@ -369,7 +369,7 @@ describe("noteWorkspaceStatus", () => {
       const driftCalls = noteSpy.mock.calls.filter(([, title]) => title === "Plugin version drift");
       expect(driftCalls).toHaveLength(1);
       const [body] = expectDefined(driftCalls[0], "(driftCalls)[0] test invariant");
-      expect(body).toContain("natesclaw plugins update @natesclaw/brave-plugin@2026.6.10-beta.1");
+      expect(body).toContain("natesclaw plugins update @openclaw/brave-plugin@2026.6.10-beta.1");
       expect(body).not.toContain("natesclaw plugins update brave");
       expect(body).toContain("natesclaw gateway restart");
     } finally {

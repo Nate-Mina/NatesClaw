@@ -1,5 +1,5 @@
 import path from "node:path";
-import { registerSessionResourceCleanup } from "@natesclaw/ai/internal/runtime";
+import { registerSessionResourceCleanup } from "@openclaw/ai/internal/runtime";
 import { createAssistantMessageEventStream, type AssistantMessage } from "natesclaw/plugin-sdk/llm";
 // Agent session SDK tests cover default tool wiring, prompt preservation, and
 // session write-settlement behavior.
@@ -539,12 +539,12 @@ describe("createAgentSession attribution headers", () => {
     });
 
     expect(providerOptions.headers).toMatchObject({
-      "HTTP-Referer": "https://natesclaw.ai",
+      "HTTP-Referer": "https://openclaw.ai",
       "X-OpenRouter-Title": "Natesclaw",
       "X-OpenRouter-Categories": "cli-agent",
     });
     expect(endpointOptions.headers).toMatchObject({
-      "HTTP-Referer": "https://natesclaw.ai",
+      "HTTP-Referer": "https://openclaw.ai",
       "X-OpenRouter-Title": "Natesclaw",
       "X-OpenRouter-Categories": "cli-agent",
     });

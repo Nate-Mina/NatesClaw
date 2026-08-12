@@ -1,5 +1,5 @@
 // Signal tests cover event handler.mention gating plugin behavior.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { buildDispatchInboundCaptureMock } from "natesclaw/plugin-sdk/channel-contract-testing";
 import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type { HistoryMediaEntry } from "natesclaw/plugin-sdk/reply-history";

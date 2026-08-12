@@ -233,7 +233,7 @@ base URLs or request headers, and a catalog older than the installed release's
 build stamp is ignored.
 
 The hosted file is published from the public
-[`natesclaw/catalog`](https://github.com/natesclaw/catalog) GitHub repository.
+[`natesclaw/catalog`](https://github.com/openclaw/catalog) GitHub repository.
 Its scheduled workflow refreshes from Natesclaw's shipped plugin manifests and
 pricing sources; every catalog content change is preserved as a public commit.
 

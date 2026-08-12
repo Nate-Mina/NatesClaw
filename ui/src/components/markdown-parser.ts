@@ -248,7 +248,7 @@ export function createMarkdownParser(): MarkdownIt {
           continue;
         }
         // Only trim linkify-generated autolinks, not explicit markdown links
-        // like [Natesclaw中文](https://docs.natesclaw.ai) where CJK in display
+        // like [Natesclaw中文](https://docs.openclaw.ai) where CJK in display
         // text is intentional and href must not be rewritten.
         if (token.markup !== "linkify") {
           continue;

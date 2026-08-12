@@ -1,4 +1,4 @@
-import { GatewayErrorDetailCodes } from "@natesclaw/gateway-protocol";
+import { GatewayErrorDetailCodes } from "@openclaw/gateway-protocol";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { i18n } from "../i18n/index.ts";
 import {

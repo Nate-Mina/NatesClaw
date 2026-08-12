@@ -1,10 +1,10 @@
 {
-  "name": "@natesclaw/buzz",
+  "name": "@openclaw/buzz",
   "version": "2026.8.1",
   "description": "Connect Natesclaw agents to Buzz rooms",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -12,7 +12,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*",
+    "@openclaw/plugin-sdk": "workspace:*",
     "natesclaw": "workspace:*"
   },
   "peerDependencies": {
@@ -76,8 +76,8 @@
       }
     },
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/buzz",
-      "npmSpec": "@natesclaw/buzz",
+      "clawhubSpec": "clawhub:@openclaw/buzz",
+      "npmSpec": "@openclaw/buzz",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.7.2"
     },

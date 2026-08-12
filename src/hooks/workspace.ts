@@ -1,8 +1,8 @@
 // Hook workspace helpers resolve hook roots and workspace-local hook files.
 import fs from "node:fs";
 import path from "node:path";
-import { safeParseJson } from "@natesclaw/normalization-core";
-import { normalizeTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
+import { safeParseJson } from "@openclaw/normalization-core";
+import { normalizeTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
 import { MANIFEST_KEY } from "../compat/legacy-names.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { openRootFileSync } from "../infra/boundary-file-read.js";

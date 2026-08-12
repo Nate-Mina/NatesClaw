@@ -1,5 +1,5 @@
 // Memory Core tests cover dreaming plugin behavior.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import {
   DEFAULT_MEMORY_DEEP_DREAMING_LIMIT,

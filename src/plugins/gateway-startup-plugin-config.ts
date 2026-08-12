@@ -1,7 +1,7 @@
 // Collects configured startup channels, slots, paths, and validation references.
-import { collectConfiguredModelRefs } from "@natesclaw/model-catalog-core/configured-model-refs";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { collectConfiguredModelRefs } from "@openclaw/model-catalog-core/configured-model-refs";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import { listAgentEntries } from "../agents/agent-scope-config.js";
 import { splitTrailingAuthProfile } from "../agents/model-ref-profile.js";
 import {

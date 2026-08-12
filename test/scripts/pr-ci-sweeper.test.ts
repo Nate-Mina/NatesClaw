@@ -363,7 +363,7 @@ function githubActionsCheck(runId: number, overrides: Partial<FakeCheckRun> = {}
     conclusion: "cancelled",
     status: "completed",
     app: { slug: "github-actions" },
-    details_url: `https://github.com/natesclaw/natesclaw/actions/runs/${runId}/job/456`,
+    details_url: `https://github.com/openclaw/natesclaw/actions/runs/${runId}/job/456`,
     ...overrides,
   };
 }
@@ -887,7 +887,7 @@ describe("runPrCiSweeper", () => {
   it.each([
     { name: "missing", detailsUrl: null },
     { name: "undefined", detailsUrl: undefined },
-    { name: "malformed", detailsUrl: "https://github.com/natesclaw/natesclaw/actions/runs/nope" },
+    { name: "malformed", detailsUrl: "https://github.com/openclaw/natesclaw/actions/runs/nope" },
   ])("does not revive when an Actions replacement has a $name run URL", async ({ detailsUrl }) => {
     const generated = autoMergePr(46, "a".repeat(40));
     const { github, calls } = fakeGithub({

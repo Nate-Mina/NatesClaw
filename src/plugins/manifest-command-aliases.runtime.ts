@@ -1,5 +1,5 @@
 /** Resolves manifest-declared command and tool ownership at runtime. */
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveManifestActivationPluginIds } from "./activation-planner.js";
 import {

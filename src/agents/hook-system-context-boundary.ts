@@ -1,7 +1,7 @@
 /**
  * Wraps plugin-provided system context in stable prompt-cache boundaries.
  */
-import { normalizeStructuredPromptSection } from "@natesclaw/ai/internal/shared";
+import { normalizeStructuredPromptSection } from "@openclaw/ai/internal/shared";
 
 // Labels plugin-provided system context so harness prompt compaction and user-facing
 // transcript views can distinguish it from real workspace files or chat content.

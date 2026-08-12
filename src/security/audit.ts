@@ -1,9 +1,9 @@
 // Orchestrates security audit collection and report formatting.
 import path from "node:path";
-import { redactSensitiveUrlLikeString } from "@natesclaw/net-policy/redact-sensitive-url";
-import { asNullableRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { redactSensitiveUrlLikeString } from "@openclaw/net-policy/redact-sensitive-url";
+import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
 import { hasAgentRosterProperty, listAgentEntries } from "../agents/agent-scope-config.js";
 import { resolveAgentWorkspaceDir, tryResolveDefaultAgentId } from "../agents/agent-scope.js";
 import { resolveExecDefaults } from "../agents/exec-defaults.js";

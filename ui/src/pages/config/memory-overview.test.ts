@@ -1,6 +1,6 @@
 /* @vitest-environment jsdom */
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { render } from "lit";
 import { describe, expect, it, vi } from "vitest";
 import type { DoctorMemoryStatusPayload } from "../../../../src/gateway/server-methods/doctor.ts";
@@ -195,7 +195,7 @@ describe("renderMemoryOverview", () => {
     expect(phaseRows.every((row) => row.textContent?.includes("0 3 * * *"))).toBe(true);
 
     const docs = container.querySelector<HTMLAnchorElement>(
-      'a[href="https://docs.natesclaw.ai/concepts/dreaming"]',
+      'a[href="https://docs.openclaw.ai/concepts/dreaming"]',
     );
     expect(docs?.textContent).toContain("Open dreaming guide");
     expect(docs?.target).toBe("_blank");

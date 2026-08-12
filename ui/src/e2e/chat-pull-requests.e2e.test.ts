@@ -104,12 +104,12 @@ describeControlUiE2e("session pull request chips", () => {
               repo: "natesclaw",
               branch: "claude/browser-tabs-tighter-header",
               title: "fix(macos): tighten the link-browser tab header",
-              url: "https://github.com/natesclaw/natesclaw/pull/103469",
+              url: "https://github.com/openclaw/natesclaw/pull/103469",
               state: "open",
               additions: 4,
               deletions: 3,
               checks: { state: "passing", passed: 65, failed: 0, skipped: 31, running: 0 },
-              checksUrl: "https://github.com/natesclaw/natesclaw/pull/103469/checks",
+              checksUrl: "https://github.com/openclaw/natesclaw/pull/103469/checks",
             },
             {
               number: 103438,
@@ -117,7 +117,7 @@ describeControlUiE2e("session pull request chips", () => {
               repo: "natesclaw",
               branch: "claude/browser-tabs-web-ui-756a64",
               title: "feat(ui): link browser tabs into the web UI",
-              url: "https://github.com/natesclaw/natesclaw/pull/103438",
+              url: "https://github.com/openclaw/natesclaw/pull/103438",
               state: "merged",
             },
             {
@@ -126,7 +126,7 @@ describeControlUiE2e("session pull request chips", () => {
               repo: "natesclaw",
               branch: "claude/browser-tabs-web-ui-756a64",
               title: "feat(ui): earlier landing on the same branch",
-              url: "https://github.com/natesclaw/natesclaw/pull/103200",
+              url: "https://github.com/openclaw/natesclaw/pull/103200",
               state: "merged",
             },
           ],
@@ -166,7 +166,7 @@ describeControlUiE2e("session pull request chips", () => {
       .toContain("31");
     await expect
       .poll(() => menu.locator("a").getAttribute("href"))
-      .toBe("https://github.com/natesclaw/natesclaw/pull/103469/checks");
+      .toBe("https://github.com/openclaw/natesclaw/pull/103469/checks");
     // Clicking outside light-dismisses the popover.
     await page.locator(".chat-prs").click({ position: { x: 4, y: 4 } });
     await expect.poll(() => openChip.locator(".chat-pr__checks[open]").count()).toBe(0);
@@ -222,7 +222,7 @@ describeControlUiE2e("session pull request chips", () => {
             additions: 2819,
             deletions: 205,
             createUrl:
-              "https://github.com/natesclaw/natesclaw/pull/new/claude/cloud-workers-live-events",
+              "https://github.com/openclaw/natesclaw/pull/new/claude/cloud-workers-live-events",
           },
           rateLimited: true,
           status: "rate-limited",
@@ -245,7 +245,7 @@ describeControlUiE2e("session pull request chips", () => {
     await expect.poll(() => create.textContent()).toContain("Create PR");
     await expect
       .poll(() => create.getAttribute("href"))
-      .toBe("https://github.com/natesclaw/natesclaw/pull/new/claude/cloud-workers-live-events");
+      .toBe("https://github.com/openclaw/natesclaw/pull/new/claude/cloud-workers-live-events");
     // No dismiss control: the row reflects the checkout itself.
     await expect.poll(() => row.locator(".chat-pr__dismiss").count()).toBe(0);
 

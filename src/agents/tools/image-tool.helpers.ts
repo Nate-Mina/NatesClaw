@@ -3,8 +3,8 @@
  *
  * Handles model config, data URL decoding, provider lookup, and reasoning-only response validation.
  */
-import { estimateBase64DecodedBytes } from "@natesclaw/media-core/base64";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { estimateBase64DecodedBytes } from "@openclaw/media-core/base64";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { AssistantMessage } from "../../llm/types.js";
 import { extractEmbeddedAssistantText } from "../embedded-agent-utils.js";

@@ -1,6 +1,6 @@
 // Plans first-start plugin convergence without loading the repair/catalog runtime.
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import { listAgentEntries } from "../../../agents/agent-scope.js";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../../../config/types.plugins.js";

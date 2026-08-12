@@ -3,7 +3,7 @@ run_plugins_clawhub_scenario() {
     echo "Skipping ClawHub plugin install and uninstall (NATESCLAW_PLUGINS_E2E_CLAWHUB=0)."
   else
     echo "Testing ClawHub plugin install and uninstall..."
-    CLAWHUB_PLUGIN_SPEC="${NATESCLAW_PLUGINS_E2E_CLAWHUB_SPEC:-clawhub:@natesclaw/kitchen-sink}"
+    CLAWHUB_PLUGIN_SPEC="${NATESCLAW_PLUGINS_E2E_CLAWHUB_SPEC:-clawhub:@openclaw/kitchen-sink}"
     CLAWHUB_PLUGIN_ID="${NATESCLAW_PLUGINS_E2E_CLAWHUB_ID:-natesclaw-kitchen-sink-fixture}"
     export CLAWHUB_PLUGIN_SPEC CLAWHUB_PLUGIN_ID
 

@@ -11,7 +11,7 @@ Natesclaw Zalo channel plugin for bot and webhook chats.
 
 ## Distribution
 
-- Package: `@natesclaw/zalo`
+- Package: `@openclaw/zalo`
 - Install route: npm; ClawHub
 
 ## Surface

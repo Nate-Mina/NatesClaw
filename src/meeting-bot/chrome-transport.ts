@@ -1,4 +1,4 @@
-import { addTimerTimeoutGraceMs } from "@natesclaw/normalization-core/number-coercion";
+import { addTimerTimeoutGraceMs } from "@openclaw/normalization-core/number-coercion";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginRuntime, RuntimeLogger } from "../plugins/runtime/types.js";
 import { resolveTranscriptsConfig } from "../transcripts/config.js";

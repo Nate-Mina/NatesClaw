@@ -1,5 +1,5 @@
 /** Runs music generation, persistence, and detached completion. */
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import { Type } from "typebox";
 import { getRuntimeConfig } from "../../config/config.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";

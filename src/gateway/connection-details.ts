@@ -1,6 +1,6 @@
 // Gateway connection detail builder for CLI/user-facing target diagnostics.
-import { redactSensitiveUrlLikeString } from "@natesclaw/net-policy/redact-sensitive-url";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { redactSensitiveUrlLikeString } from "@openclaw/net-policy/redact-sensitive-url";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { resolveConfigPath, resolveGatewayPort } from "../config/paths.js";
 import type { NatesclawConfig } from "../config/types.js";
 import { isSecureWebSocketUrl } from "./net.js";
@@ -105,7 +105,7 @@ export function buildGatewayConnectionDetailsWithResolvers(
           ? undefined
           : "Break-glass (trusted private networks only): set NATESCLAW_ALLOW_INSECURE_PRIVATE_WS=1",
         "Doctor: natesclaw doctor --fix",
-        "Docs: https://docs.natesclaw.ai/gateway/remote",
+        "Docs: https://docs.openclaw.ai/gateway/remote",
       ].join("\n"),
     );
   }

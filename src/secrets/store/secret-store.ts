@@ -1,4 +1,4 @@
-import { err, ok, type Result } from "@natesclaw/normalization-core/result";
+import { err, ok, type Result } from "@openclaw/normalization-core/result";
 import type { Selectable } from "kysely";
 import { ENV_SECRET_REF_ID_RE } from "../../config/types.secrets.js";
 import {

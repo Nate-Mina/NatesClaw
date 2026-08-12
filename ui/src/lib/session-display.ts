@@ -1,5 +1,5 @@
 // Control UI module implements session display behavior.
-import { sliceUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { sliceUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import { t } from "../i18n/index.ts";
 import { normalizeLowercaseStringOrEmpty, normalizeOptionalString } from "./string-coerce.ts";
 

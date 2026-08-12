@@ -15,7 +15,7 @@ fs.writeFileSync(
   path.join(dir, "package.json"),
   `${JSON.stringify(
     {
-      name: `@natesclaw/${id}`,
+      name: `@openclaw/${id}`,
       version,
       natesclaw: { extensions: ["./index.js"] },
     },

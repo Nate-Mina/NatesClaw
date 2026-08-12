@@ -1,11 +1,11 @@
 // Media utility adapters for node CLI commands and temporary media outputs.
 import { randomUUID } from "node:crypto";
 import fs from "node:fs";
-import { extnameFromAnyPath } from "@natesclaw/media-core/file-name";
+import { extnameFromAnyPath } from "@openclaw/media-core/file-name";
 import { resolvePreferredNatesclawTmpDir } from "../infra/tmp-natesclaw-dir.js";
-export { asFiniteNumber as asNumber } from "@natesclaw/normalization-core/number-coercion";
-export { asRecord } from "@natesclaw/normalization-core/record-coerce";
-export { readStringValue } from "@natesclaw/normalization-core/string-coerce";
+export { asFiniteNumber as asNumber } from "@openclaw/normalization-core/number-coercion";
+export { asRecord } from "@openclaw/normalization-core/record-coerce";
+export { readStringValue } from "@openclaw/normalization-core/string-coerce";
 export { asBoolean } from "../utils/boolean.js";
 
 function normalizeMediaExtension(value: string): string | undefined {

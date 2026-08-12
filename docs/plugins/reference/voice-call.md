@@ -11,7 +11,7 @@ Natesclaw voice-call plugin for Twilio, Telnyx, and Plivo phone calls.
 
 ## Distribution
 
-- Package: `@natesclaw/voice-call`
+- Package: `@openclaw/voice-call`
 - Install route: npm; ClawHub
 
 ## Surface

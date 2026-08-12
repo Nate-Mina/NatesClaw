@@ -1,13 +1,13 @@
 /** Sanitizes, extracts, and classifies embedded-agent tool execution results. */
-import { estimateBase64DecodedBytes } from "@natesclaw/media-core/base64";
-import { asOptionalRecord as readRecord } from "@natesclaw/normalization-core/record-coerce";
+import { estimateBase64DecodedBytes } from "@openclaw/media-core/base64";
+import { asOptionalRecord as readRecord } from "@openclaw/normalization-core/record-coerce";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
   normalizeOptionalStringifiedId,
   readStringValue,
-} from "@natesclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+} from "@openclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import { getChannelPlugin, normalizeChannelId } from "../channels/plugins/index.js";
 import type { ChannelMessageActionName } from "../channels/plugins/types.public.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

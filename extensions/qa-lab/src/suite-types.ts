@@ -1,4 +1,4 @@
-import type { NatesclawCrablineChannelDriverSelection } from "@natesclaw/crabline";
+import type { NatesclawCrablineChannelDriverSelection } from "@openclaw/crabline";
 import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type { QaEvidenceTiming, QaEvidenceSummaryJson } from "./evidence-summary.js";
 import type { QaCliBackendAuthMode, QaGatewayChildCommand } from "./gateway-child.js";

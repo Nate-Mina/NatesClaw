@@ -6,7 +6,7 @@
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import { listConfiguredBindings } from "../../config/bindings.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { pickFirstExistingAgentId } from "../../routing/resolve-route.js";

@@ -6,9 +6,9 @@
 import {
   findNormalizedProviderValue,
   normalizeProviderId,
-} from "@natesclaw/model-catalog-core/provider-id";
-import { asDateTimestampMs } from "@natesclaw/normalization-core/number-coercion";
-import { normalizeUniqueStringEntries } from "@natesclaw/normalization-core/string-normalization";
+} from "@openclaw/model-catalog-core/provider-id";
+import { asDateTimestampMs } from "@openclaw/normalization-core/number-coercion";
+import { normalizeUniqueStringEntries } from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   DEFAULT_OAUTH_REFRESH_MARGIN_MS,

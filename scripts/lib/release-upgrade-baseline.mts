@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import { normalizeStringifiedOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeStringifiedOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { parseReleaseVersion } from "./release-version.mjs";
 
 function parseVersion(version: unknown) {

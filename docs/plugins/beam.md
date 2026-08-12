@@ -57,7 +57,7 @@ cloudflared access curl https://gateway.example.com/api/v1/beam/sessions \
   --data-binary @sanitized-beam.json
 ```
 
-The `beam` skill in [natesclaw/agent-skills](https://github.com/natesclaw/agent-skills) handles local transcript discovery, redaction, Cloudflare Access login, and upload for Claude Code and Codex.
+The `beam` skill in [natesclaw/agent-skills](https://github.com/openclaw/agent-skills) handles local transcript discovery, redaction, Cloudflare Access login, and upload for Claude Code and Codex.
 
 ## Request
 

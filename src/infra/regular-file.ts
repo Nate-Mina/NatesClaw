@@ -8,4 +8,4 @@ export {
   appendRegularFileSync,
   readRegularFile,
   readRegularFileSync,
-} from "@natesclaw/fs-safe/advanced";
+} from "@openclaw/fs-safe/advanced";

@@ -1,5 +1,5 @@
 /** Rewrites transcript entries by branching and re-appending the active suffix. */
-import { stripOpenAIResponsesCompactionReplayCheckpoint } from "@natesclaw/ai/transports";
+import { stripOpenAIResponsesCompactionReplayCheckpoint } from "@openclaw/ai/transports";
 import type {
   TranscriptRewriteReplacement,
   TranscriptRewriteResult,

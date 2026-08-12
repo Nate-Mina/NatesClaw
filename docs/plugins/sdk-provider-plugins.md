@@ -96,9 +96,9 @@ catalog, API-key auth, and dynamic model resolution.
     loading your plugin runtime. Add `providerAuthAliases` when a provider
     variant should reuse another provider id's auth. `modelSupport` is
     optional and lets Natesclaw auto-load your provider plugin from shorthand
-    model ids like `acme-large` before runtime hooks exist. `natesclaw.compat`
+    model ids like `acme-large` before runtime hooks exist. `openclaw.compat`
     and `natesclaw.build` in `package.json` are required for ClawHub
-    publishing (`natesclaw.compat.pluginApi` and `natesclaw.build.natesclawVersion`
+    publishing (`openclaw.compat.pluginApi` and `natesclaw.build.natesclawVersion`
     are the two required fields; `minGatewayVersion` falls back to
     `natesclaw.install.minHostVersion` when omitted).
 
@@ -553,9 +553,9 @@ catalog, API-key auth, and dynamic model resolution.
       backends that parse a final JSON/text response can keep the shared
       `google-gemini` tagged contract.
 
-      Some stream helpers stay provider-local on purpose. `@natesclaw/anthropic-provider` keeps `wrapAnthropicProviderStream`, `resolveAnthropicBetas`, `resolveAnthropicFastMode`, `resolveAnthropicServiceTier`, and the lower-level Anthropic wrapper builders in its own public `api.ts` / `contract-api.ts` seam because they encode Claude OAuth beta handling and `context1m` gating. The xAI plugin similarly keeps native xAI Responses shaping in its own `wrapStreamFn` (`/fast` aliases, default `tool_stream`, unsupported strict-tool cleanup, xAI-specific reasoning-payload removal).
+      Some stream helpers stay provider-local on purpose. `@openclaw/anthropic-provider` keeps `wrapAnthropicProviderStream`, `resolveAnthropicBetas`, `resolveAnthropicFastMode`, `resolveAnthropicServiceTier`, and the lower-level Anthropic wrapper builders in its own public `api.ts` / `contract-api.ts` seam because they encode Claude OAuth beta handling and `context1m` gating. The xAI plugin similarly keeps native xAI Responses shaping in its own `wrapStreamFn` (`/fast` aliases, default `tool_stream`, unsupported strict-tool cleanup, xAI-specific reasoning-payload removal).
 
-      The same package-root pattern also backs `@natesclaw/openai-provider` (provider builders, default-model helpers, realtime provider builders) and `@natesclaw/openrouter-provider` (provider builder plus onboarding/config helpers).
+      The same package-root pattern also backs `@openclaw/openai-provider` (provider builders, default-model helpers, realtime provider builders) and `@openclaw/openrouter-provider` (provider builder plus onboarding/config helpers).
     </Accordion>
 
     <Tabs>

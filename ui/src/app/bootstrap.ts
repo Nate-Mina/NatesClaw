@@ -1,4 +1,4 @@
-import type { RouteLocation } from "@natesclaw/uirouter";
+import type { RouteLocation } from "@openclaw/uirouter";
 import type { GatewayBrowserClient } from "../api/gateway.ts";
 import { sessionRouteNamespaceFromPath } from "../app-route-paths.ts";
 import {
@@ -270,7 +270,7 @@ export function bootstrapApplication(
     dependencies.sessionPathBuilderReady ??
     (documentMode
       ? Promise.resolve()
-      : import("@natesclaw/session-url-contract").then((contract) => {
+      : import("@openclaw/session-url-contract").then((contract) => {
           setSessionPathBuilder(contract.buildControlUiSessionPath);
         }));
 

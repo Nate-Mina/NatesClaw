@@ -1,10 +1,10 @@
-import { supportsOpenAIReasoningEffort } from "@natesclaw/ai/internal/openai";
-import { defaultApiRegistry } from "@natesclaw/ai/internal/runtime";
-import { prepareModelForSimpleCompletion } from "@natesclaw/ai/transports";
+import { supportsOpenAIReasoningEffort } from "@openclaw/ai/internal/openai";
+import { defaultApiRegistry } from "@openclaw/ai/internal/runtime";
+import { prepareModelForSimpleCompletion } from "@openclaw/ai/transports";
 import {
   resolveClaudeOpus5ModelIdentity,
   resolveClaudeSonnet5ModelIdentity,
-} from "@natesclaw/llm-core";
+} from "@openclaw/llm-core";
 /**
  * Simple completion runtime preparation.
  *

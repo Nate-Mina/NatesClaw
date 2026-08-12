@@ -1,5 +1,5 @@
-import { expectDefined } from "@natesclaw/normalization-core";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { expectDefined } from "@openclaw/normalization-core";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { normalizeSkillIndexName } from "../discovery/skill-index.js";
 import {

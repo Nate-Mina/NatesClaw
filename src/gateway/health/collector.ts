@@ -1,5 +1,5 @@
-import { expectDefined } from "@natesclaw/normalization-core";
-import { resolveTimerTimeoutMs } from "@natesclaw/normalization-core/number-coercion";
+import { expectDefined } from "@openclaw/normalization-core";
+import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
 import { listAgentEntries, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import { redactChannelStatusSummaryBaseUrl } from "../../channels/account-snapshot-fields.js";
 import { resolveChannelDefaultAccountId } from "../../channels/plugins/helpers.js";

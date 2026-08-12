@@ -20,7 +20,7 @@ Access Arcee models directly through the Arcee platform or through [OpenRouter](
 ## Install plugin
 
 ```bash
-natesclaw plugins install @natesclaw/arcee-provider
+natesclaw plugins install @openclaw/arcee-provider
 natesclaw gateway restart
 ```
 

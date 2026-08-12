@@ -1,4 +1,4 @@
-import type { WorkboardChange } from "@natesclaw/workboard-contract";
+import type { WorkboardChange } from "@openclaw/workboard-contract";
 import type { NatesclawPluginService } from "../api.js";
 import type { WorkboardStore } from "./store.js";
 

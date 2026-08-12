@@ -243,10 +243,10 @@ describe("Plugin SDK API baseline", () => {
     );
 
     expect(normalizePluginSdkApiSourcePath(repoRoot, linkedDependencyPath)).toBe(
-      "node_modules/@natesclaw/fs-safe/dist/secret-file.d.ts",
+      "node_modules/@openclaw/fs-safe/dist/secret-file.d.ts",
     );
     expect(normalizePluginSdkApiSourcePath(repoRoot, pnpmDependencyPath)).toBe(
-      "node_modules/@natesclaw/fs-safe/dist/secret-file.d.ts",
+      "node_modules/@openclaw/fs-safe/dist/secret-file.d.ts",
     );
   });
 

@@ -1,5 +1,5 @@
 // Normalizes system-run metadata and string-array inputs.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { mapAllowFromEntries } from "natesclaw/plugin-sdk/channel-config-helpers";
 
 /** Normalizes unknown system-run metadata to a trimmed non-empty string. */

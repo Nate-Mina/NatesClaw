@@ -2,7 +2,7 @@
  * Provider behavior helpers shared by reply runners, embedded agents, and provider plugins.
  * Keep policy here generic; provider-specific reasoning rules belong in provider runtime hooks.
  */
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { ProviderRuntimePluginHandle } from "../plugins/provider-hook-runtime.js";
 import type { ProviderRuntimeModel } from "../plugins/provider-runtime-model.types.js";

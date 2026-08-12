@@ -1,7 +1,7 @@
 import { isQQBotTokenAuthenticationFailure } from "../api/auth-errors.js";
 import { DEFAULT_ACCOUNT_ID } from "./resolve.js";
 
-const QQBOT_DOCS_URL = "https://docs.natesclaw.ai/channels/qqbot";
+const QQBOT_DOCS_URL = "https://docs.openclaw.ai/channels/qqbot";
 const QQBOT_OPEN_PLATFORM_URL = "https://q.qq.com/";
 
 function qqbotAuthGuidance(): string {

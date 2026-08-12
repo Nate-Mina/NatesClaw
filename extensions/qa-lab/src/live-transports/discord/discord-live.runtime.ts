@@ -7,7 +7,7 @@ import {
   DiscordApiError,
   handleDiscordMessageAction,
   requestDiscord,
-} from "@natesclaw/discord/api.js";
+} from "@openclaw/discord/api.js";
 import { DEFAULT_EMOJIS } from "natesclaw/plugin-sdk/channel-feedback";
 import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";

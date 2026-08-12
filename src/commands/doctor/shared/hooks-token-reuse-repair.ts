@@ -1,5 +1,5 @@
 // Doctor repair for configs that reuse Gateway shared-secret auth as hooks.token.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import {
   canMaterializeGatewayAuthSecretRefsWithoutExec,

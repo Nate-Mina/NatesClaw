@@ -1,7 +1,7 @@
 /** Converts cron jobs between public store shape and normalized SQLite rows. */
 import type { DatabaseSync } from "node:sqlite";
-import { safeParseJson } from "@natesclaw/normalization-core";
-import { asOptionalObjectRecord, isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { safeParseJson } from "@openclaw/normalization-core";
+import { asOptionalObjectRecord, isRecord } from "@openclaw/normalization-core/record-coerce";
 import { executeSqliteQuerySync } from "../../infra/kysely-sync.js";
 import { normalizeOptionalAccountId } from "../../routing/account-id.js";
 import { normalizeCronJobIdentityFields } from "../normalize-job-identity.js";

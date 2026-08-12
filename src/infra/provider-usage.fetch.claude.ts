@@ -1,7 +1,7 @@
 // Fetches Claude provider usage windows.
-import { asFiniteNumber } from "@natesclaw/normalization-core/number-coercion";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { readProviderJsonResponse } from "../agents/provider-http-errors.js";
 import { cancelUnreadResponseBody } from "./http-body.js";
 import {

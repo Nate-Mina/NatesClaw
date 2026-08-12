@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import type { DocumentExtractedImage } from "../plugins/document-extractor-types.js";
 import { wrapExternalContent } from "../security/external-content.js";
 

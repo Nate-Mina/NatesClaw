@@ -2,7 +2,7 @@ import fs from "node:fs";
 // Resolves agent-specific config and workspace directories.
 import os from "node:os";
 import path from "node:path";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import { listAgentEntries, resolveAgentConfig } from "../agents/agent-scope-config.js";
 import { resolveRequiredHomeDir } from "../infra/home-dir.js";
 import { isPathCaseInsensitive } from "../infra/path-case.js";

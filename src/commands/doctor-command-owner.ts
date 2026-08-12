@@ -1,6 +1,6 @@
 /** Doctor warning for missing command owners on privileged channel commands. */
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { formatCliCommand } from "../cli/command-format.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

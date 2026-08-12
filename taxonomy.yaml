@@ -4795,9 +4795,9 @@ surfaces:
       - name: Compatibility and Trust
         id: compatibility-and-trust
         features:
-          - name: natesclaw.compat.pluginApi
+          - name: openclaw.compat.pluginApi
             coverageIds: [clawhub.natesclaw-compat-pluginapi]
-            description: natesclaw.compat.pluginApi, build metadata, and host/gateway minimums
+            description: openclaw.compat.pluginApi, build metadata, and host/gateway minimums
           - name: ClawHub package compatibility validation
             coverageIds: [clawhub.clawhub-package-compatibility-validation]
             description: Evidence scope for ClawHub package compatibility validation.
@@ -4968,7 +4968,7 @@ surfaces:
     family: core
     level: alpha
     level_code: M2
-    rationale: Natesclaw App SDK is a distinct external app contract separate from Gateway runtime and Plugin SDK. Current scoring shows a real `@natesclaw/sdk` path with gaps around public packaging, auto-discovery, approvals, helpers, and compatibility.
+    rationale: Natesclaw App SDK is a distinct external app contract separate from Gateway runtime and Plugin SDK. Current scoring shows a real `@openclaw/sdk` path with gaps around public packaging, auto-discovery, approvals, helpers, and compatibility.
     completeness_instructions: references/completeness/natesclaw-app-sdk.md
     categories:
       - name: Client API
@@ -8130,9 +8130,9 @@ surfaces:
       - name: Channel Setup and Operations
         id: channel-setup-and-operations
         features:
-          - name: Official @natesclaw/whatsapp plugin metadata
+          - name: Official @openclaw/whatsapp plugin metadata
             coverageIds: [whatsapp.official-natesclaw-whatsapp-plugin-metadata]
-            description: Official @natesclaw/whatsapp plugin metadata, package entrypoints, and setup discovery.
+            description: Official @openclaw/whatsapp plugin metadata, package entrypoints, and setup discovery.
           - name: natesclaw plugin install whatsapp
             coverageIds: [whatsapp.natesclaw-plugin-install-whatsapp]
             description: natesclaw plugin install whatsapp and config-first setup guidance
@@ -8279,16 +8279,16 @@ surfaces:
         features:
           - name: App Install
             coverageIds: [slack.app-install]
-            description: Covers App Install across installing `@natesclaw/slack`, creating the Slack app, choosing recommended/minimal manifests, bot/app/user/signing-secret credential handling, and related app install, auth, manifest, and scopes behavior.
+            description: Covers App Install across installing `@openclaw/slack`, creating the Slack app, choosing recommended/minimal manifests, bot/app/user/signing-secret credential handling, and related app install, auth, manifest, and scopes behavior.
           - name: Slack app credentials
             coverageIds: [slack.slack-app-credentials]
             description: Covers bot/app/user tokens, signing-secret handling, and Slack credential setup for app authentication.
           - name: Manifest
             coverageIds: [slack.manifest]
-            description: Covers Manifest across installing `@natesclaw/slack`, creating the Slack app, choosing recommended/minimal manifests, bot/app/user/signing-secret credential handling, and related app install, auth, manifest, and scopes behavior.
+            description: Covers Manifest across installing `@openclaw/slack`, creating the Slack app, choosing recommended/minimal manifests, bot/app/user/signing-secret credential handling, and related app install, auth, manifest, and scopes behavior.
           - name: Scopes
             coverageIds: [slack.scopes]
-            description: Covers Scopes across installing `@natesclaw/slack`, creating the Slack app, choosing recommended/minimal manifests, bot/app/user/signing-secret credential handling, and related app install, auth, manifest, and scopes behavior.
+            description: Covers Scopes across installing `@openclaw/slack`, creating the Slack app, choosing recommended/minimal manifests, bot/app/user/signing-secret credential handling, and related app install, auth, manifest, and scopes behavior.
           - name: Channel status diagnostics
             coverageIds: [slack.channel-status-diagnostics]
             description: Covers `natesclaw channels status --probe`, account snapshots, token source/status fields, capability and scope diagnostics, and Slack repair guidance.
@@ -10271,19 +10271,19 @@ surfaces:
         features:
           - name: Bundled plugin distribution
             coverageIds: [google-ai.bundled-plugin-distribution]
-            description: Covers Bundled plugin distribution across bundled `@natesclaw/google-plugin` package, plugin manifest distribution, auto-enable metadata, capability-provider registration, and related google plugin adapters behavior.
+            description: Covers Bundled plugin distribution across bundled `@openclaw/google-plugin` package, plugin manifest distribution, auto-enable metadata, capability-provider registration, and related google plugin adapters behavior.
           - name: Provider auto-enable metadata
             coverageIds: [google-ai.provider-auto-enable-metadata]
-            description: Covers Provider auto-enable metadata across bundled `@natesclaw/google-plugin` package, plugin manifest distribution, auto-enable metadata, capability-provider registration, and related google plugin adapters behavior.
+            description: Covers Provider auto-enable metadata across bundled `@openclaw/google-plugin` package, plugin manifest distribution, auto-enable metadata, capability-provider registration, and related google plugin adapters behavior.
           - name: Image and media adapters
             coverageIds: [google-ai.image-and-media-adapters]
-            description: Covers Image and media adapters across bundled `@natesclaw/google-plugin` package, plugin manifest distribution, auto-enable metadata, capability-provider registration, and related google plugin adapters behavior.
+            description: Covers Image and media adapters across bundled `@openclaw/google-plugin` package, plugin manifest distribution, auto-enable metadata, capability-provider registration, and related google plugin adapters behavior.
           - name: Speech and realtime adapters
             coverageIds: [google-ai.speech-and-realtime-adapters]
-            description: Covers Speech and realtime adapters across bundled `@natesclaw/google-plugin` package, plugin manifest distribution, auto-enable metadata, capability-provider registration, and related google plugin adapters behavior.
+            description: Covers Speech and realtime adapters across bundled `@openclaw/google-plugin` package, plugin manifest distribution, auto-enable metadata, capability-provider registration, and related google plugin adapters behavior.
           - name: Search and generation tools
             coverageIds: [google-ai.search-and-generation-tools]
-            description: Covers Search and generation tools across bundled `@natesclaw/google-plugin` package, plugin manifest distribution, auto-enable metadata, capability-provider registration, and related google plugin adapters behavior.
+            description: Covers Search and generation tools across bundled `@openclaw/google-plugin` package, plugin manifest distribution, auto-enable metadata, capability-provider registration, and related google plugin adapters behavior.
           - name: Realtime voice sessions
             coverageIds: [google-ai.realtime-voice-sessions]
             description: Covers Realtime voice sessions across Gemini Live realtime voice provider behavior, Talk relay integration, constrained browser websocket tokens, audio queueing, and related gemini live talk behavior.

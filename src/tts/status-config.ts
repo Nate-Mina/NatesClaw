@@ -1,6 +1,6 @@
 // TTS status config helpers resolve status output paths for speech generation.
-import { isRecord as isObjectRecord } from "@natesclaw/normalization-core/record-coerce";
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { isRecord as isObjectRecord } from "@openclaw/normalization-core/record-coerce";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import type { NatesclawConfig } from "../config/types.js";
 import type { TtsAutoMode, TtsConfig, TtsProvider } from "../config/types.tts.js";
 import { resolveTtsSettingsSnapshot } from "./tts-settings.js";

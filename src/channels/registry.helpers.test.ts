@@ -1,6 +1,6 @@
 // Registry helper tests cover channel registry fixtures and lookup helpers.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, describe, expect, it } from "vitest";
 import { createEmptyPluginRegistry } from "../plugins/registry-empty.js";
 import {
@@ -60,7 +60,7 @@ describe("channel registry helpers", () => {
     const line = formatChannelSelectionLine(telegram, formatTestLink);
     expect(line).not.toContain("Docs:");
     expect(line).toContain("/channels/telegram");
-    expect(line).toContain("https://natesclaw.ai");
+    expect(line).toContain("https://openclaw.ai");
   });
 
   it("prefers an exact channel id over an earlier plugin alias", () => {

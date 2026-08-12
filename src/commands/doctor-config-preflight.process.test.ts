@@ -282,7 +282,7 @@ describe("gateway startup-migration refusal", () => {
       const pluginId = "legacy-doctor-index";
       const pluginDir = writeManagedNpmPlugin({
         stateDir,
-        packageName: "@natesclaw/legacy-doctor-index",
+        packageName: "@openclaw/legacy-doctor-index",
         pluginId,
         version: "1.0.0",
       });
@@ -433,7 +433,7 @@ describe("gateway startup-migration refusal", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: `@natesclaw/${pluginId}`,
+        name: `@openclaw/${pluginId}`,
         version: "1.0.0",
         natesclaw: { extensions: ["./index.js"] },
       }),
@@ -596,7 +596,7 @@ describe("gateway startup-migration refusal", () => {
         const pluginId = `doctor-scan-${index}`;
         const pluginDir = writeManagedNpmPlugin({
           stateDir,
-          packageName: `@natesclaw/${pluginId}`,
+          packageName: `@openclaw/${pluginId}`,
           pluginId,
           version: "1.0.0",
         });

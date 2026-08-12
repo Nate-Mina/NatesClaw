@@ -1,6 +1,6 @@
 // Resolves APNs provider credentials and owns provider-token signing/cache state.
 import { createHash, createPrivateKey, sign as signJwt } from "node:crypto";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { formatErrorMessage } from "./errors.js";
 import { readSecretFile } from "./fs-safe-advanced.js";
 

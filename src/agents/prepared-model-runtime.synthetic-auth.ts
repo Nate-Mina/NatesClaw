@@ -1,5 +1,5 @@
 /** Synthetic-auth provider ref selection and prepared-catalog resolution for model-runtime builds. */
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { ProviderPlugin } from "../plugins/types.js";
 

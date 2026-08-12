@@ -22,7 +22,7 @@ function releaseRun(overrides: Record<string, unknown> = {}) {
     event: "workflow_dispatch",
     status: "completed",
     conclusion: "success",
-    html_url: "https://github.com/natesclaw/natesclaw/actions/runs/123",
+    html_url: "https://github.com/openclaw/natesclaw/actions/runs/123",
     ...overrides,
   };
 }

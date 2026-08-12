@@ -11,7 +11,7 @@ Automatic work journal: captures periodic screen snapshots from a paired node an
 
 ## Distribution
 
-- Package: `@natesclaw/logbook`
+- Package: `@openclaw/logbook`
 - Install route: included in Natesclaw
 
 ## Surface

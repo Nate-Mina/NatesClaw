@@ -51,7 +51,7 @@ describe("legacy APNs Doctor migration", () => {
     return {
       nodeId: "legacy-direct",
       [APNS_DEVICE_FIELD]: `<${APNS_DEVICE_IDENTIFIER.toUpperCase()}>`,
-      topic: " ai.natesclaw.ios ",
+      topic: " ai.openclaw.ios ",
       environment: "invalid-old-value",
       updatedAtMs: 1_000,
       ...overrides,
@@ -65,10 +65,10 @@ describe("legacy APNs Doctor migration", () => {
       relayHandle: "relay-handle-123",
       sendGrant: "send-grant-123",
       installationId: "installation-123",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
       distribution: "official",
-      relayOrigin: "https://ios-push-relay-sandbox.natesclaw.ai/",
+      relayOrigin: "https://ios-push-relay-sandbox.openclaw.ai/",
       tokenDebugSuffix: " abcd-1234 ",
       updatedAtMs: 2_000,
       ...overrides,
@@ -133,7 +133,7 @@ describe("legacy APNs Doctor migration", () => {
       nodeId: "legacy-direct",
       transport: "direct",
       [APNS_DEVICE_FIELD]: APNS_DEVICE_IDENTIFIER,
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
       updatedAtMs: 1_000,
     });
@@ -143,10 +143,10 @@ describe("legacy APNs Doctor migration", () => {
       relayHandle: "relay-handle-123",
       sendGrant: "send-grant-123",
       installationId: "installation-123",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
       distribution: "official",
-      relayOrigin: "https://ios-push-relay-sandbox.natesclaw.ai",
+      relayOrigin: "https://ios-push-relay-sandbox.openclaw.ai",
       tokenDebugSuffix: "abcd1234",
       updatedAtMs: 2_000,
     });
@@ -180,7 +180,7 @@ describe("legacy APNs Doctor migration", () => {
       nodeId: "shared-node",
       transport: "direct",
       [APNS_DEVICE_FIELD]: APNS_DEVICE_IDENTIFIER,
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "production",
       baseDir: stateDir,
     });
@@ -212,7 +212,7 @@ describe("legacy APNs Doctor migration", () => {
       nodeId: "legacy-direct",
       transport: "direct",
       [APNS_DEVICE_FIELD]: APNS_DEVICE_IDENTIFIER,
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "production",
       baseDir: stateDir,
     });
@@ -398,7 +398,7 @@ describe("legacy APNs Doctor migration", () => {
            node_id, transport, topic, environment, updated_at_ms
          ) VALUES (?, ?, ?, ?, ?)`,
       )
-      .run(privateMarker, "unknown", "ai.natesclaw.ios", "sandbox", 1);
+      .run(privateMarker, "unknown", "ai.openclaw.ios", "sandbox", 1);
 
     const result = await migrate(stateDir);
 

@@ -1,5 +1,5 @@
 // Hook frontmatter helpers parse metadata blocks from hook files.
-import { readStringValue } from "@natesclaw/normalization-core/string-coerce";
+import { readStringValue } from "@openclaw/normalization-core/string-coerce";
 import { parseFrontmatterBlock } from "../../packages/markdown-core/src/frontmatter.js";
 import {
   applyNatesclawManifestInstallCommonFields,

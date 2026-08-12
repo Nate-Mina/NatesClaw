@@ -1,7 +1,7 @@
 // Covers session-manager guard behavior for tool-result pairing and transcript
 // redaction.
 import { readFileSync } from "node:fs";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { AgentMessage } from "natesclaw/plugin-sdk/agent-core";
 import { SessionManager } from "natesclaw/plugin-sdk/agent-sessions";
 import {

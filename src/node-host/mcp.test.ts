@@ -1,8 +1,8 @@
 /** Tests node-host MCP startup, descriptors, calls, and failure isolation. */
 
 import { ErrorCode, type CallToolResult, type Tool } from "@modelcontextprotocol/sdk/types.js";
-import { expectDefined } from "@natesclaw/normalization-core";
-import { MAX_TIMER_TIMEOUT_MS } from "@natesclaw/normalization-core/number-coercion";
+import { expectDefined } from "@openclaw/normalization-core";
+import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
 import { describe, expect, it, vi } from "vitest";
 import { NatesclawSchema } from "../config/zod-schema.js";
 import { useFrozenTime, useRealTime } from "../test-utils/frozen-time.js";

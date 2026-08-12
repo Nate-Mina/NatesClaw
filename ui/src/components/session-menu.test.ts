@@ -358,7 +358,7 @@ describe("session menu", () => {
   });
 
   it("dispatches open-pr with the resolved URL from click or the G shortcut", async () => {
-    const url = "https://github.com/natesclaw/natesclaw/pull/12345";
+    const url = "https://github.com/openclaw/natesclaw/pull/12345";
     const calls: SessionMenuAction[] = [];
     const menu = await mountMenu({
       work: { loading: false, pullRequestUrl: url, worktreePath: null },

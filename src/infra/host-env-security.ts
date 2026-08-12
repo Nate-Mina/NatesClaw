@@ -1,6 +1,6 @@
 // Filters host environment variables before passing them to runtimes.
 import { AsyncLocalStorage } from "node:async_hooks";
-import { sortUniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { sortUniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import { HOST_ENV_SECURITY_POLICY } from "./host-env-security-policy.js";
 import { markNatesclawExecEnv } from "./natesclaw-exec-env.js";
 

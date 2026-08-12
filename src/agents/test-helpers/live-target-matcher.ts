@@ -3,12 +3,12 @@
  * follow plugin ownership aliases so scoped live runs include equivalent
  * provider IDs.
  */
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
-import { normalizeGooglePreviewModelId } from "@natesclaw/model-catalog-core/provider-model-id-normalize";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeGooglePreviewModelId } from "@openclaw/model-catalog-core/provider-model-id-normalize";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { liveProvidersShareOwningPlugin } from "../live-provider-owner.js";
 

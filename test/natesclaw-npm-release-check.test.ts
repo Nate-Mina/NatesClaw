@@ -38,33 +38,33 @@ describe("prepared Natesclaw AI dependency", () => {
   it("requires the packed root to depend on the exact prepared AI version", () => {
     expect(() =>
       assertPreparedNatesclawAiDependency({
-        aiManifest: { name: "@natesclaw/ai", version: "2026.7.2" },
+        aiManifest: { name: "@openclaw/ai", version: "2026.7.2" },
         rootManifest: {
           name: "natesclaw",
           version: "2026.7.1",
-          dependencies: { "@natesclaw/ai": "2026.7.2" },
+          dependencies: { "@openclaw/ai": "2026.7.2" },
         },
       }),
-    ).toThrow("Prepared root and @natesclaw/ai tarballs must both be version 2026.7.2.");
+    ).toThrow("Prepared root and @openclaw/ai tarballs must both be version 2026.7.2.");
 
     expect(() =>
       assertPreparedNatesclawAiDependency({
-        aiManifest: { name: "@natesclaw/ai", version: "2026.7.2" },
+        aiManifest: { name: "@openclaw/ai", version: "2026.7.2" },
         rootManifest: {
           name: "natesclaw",
           version: "2026.7.2",
-          dependencies: { "@natesclaw/ai": "2026.7.1" },
+          dependencies: { "@openclaw/ai": "2026.7.1" },
         },
       }),
-    ).toThrow("Prepared root tarball must depend on exact @natesclaw/ai@2026.7.2.");
+    ).toThrow("Prepared root tarball must depend on exact @openclaw/ai@2026.7.2.");
 
     expect(() =>
       assertPreparedNatesclawAiDependency({
-        aiManifest: { name: "@natesclaw/ai", version: "2026.7.2" },
+        aiManifest: { name: "@openclaw/ai", version: "2026.7.2" },
         rootManifest: {
           name: "natesclaw",
           version: "2026.7.2",
-          dependencies: { "@natesclaw/ai": "2026.7.2" },
+          dependencies: { "@openclaw/ai": "2026.7.2" },
         },
       }),
     ).not.toThrow();
@@ -867,7 +867,7 @@ describe("collectReleasePackageMetadataErrors", () => {
         name: "natesclaw",
         description: "Multi-channel AI gateway with extensible messaging integrations",
         license: "MIT",
-        repository: { url: "git+https://github.com/natesclaw/natesclaw.git" },
+        repository: { url: "git+https://github.com/openclaw/natesclaw.git" },
         bin: { natesclaw: "natesclaw.mjs" },
       }),
     ).toStrictEqual([]);
@@ -879,7 +879,7 @@ describe("collectReleasePackageMetadataErrors", () => {
         name: "natesclaw",
         description: "Multi-channel AI gateway with extensible messaging integrations",
         license: "MIT",
-        repository: { url: "git+https://github.com/natesclaw/natesclaw.git" },
+        repository: { url: "git+https://github.com/openclaw/natesclaw.git" },
         bin: { natesclaw: "natesclaw.mjs" },
         peerDependencies: { "node-llama-cpp": "3.18.1" },
         peerDependenciesMeta: { "node-llama-cpp": { optional: true } },
@@ -896,7 +896,7 @@ describe("collectReleasePackageMetadataErrors", () => {
         name: "natesclaw",
         description: "Multi-channel AI gateway with extensible messaging integrations",
         license: "MIT",
-        repository: { url: "git+https://github.com/natesclaw/natesclaw.git" },
+        repository: { url: "git+https://github.com/openclaw/natesclaw.git" },
         bin: { natesclaw: "natesclaw.mjs" },
         dependencies: { "node-llama-cpp": "3.18.1" },
       }),
@@ -909,12 +909,12 @@ describe("collectReleasePackageMetadataErrors", () => {
         name: "natesclaw",
         description: "Multi-channel AI gateway with extensible messaging integrations",
         license: "MIT",
-        repository: { url: "git+https://github.com/natesclaw/natesclaw.git" },
+        repository: { url: "git+https://github.com/openclaw/natesclaw.git" },
         bin: { natesclaw: "natesclaw.mjs" },
-        dependencies: { "@natesclaw/fs-safe": "link:../fs-safe" },
+        dependencies: { "@openclaw/fs-safe": "link:../fs-safe" },
       }),
     ).toContain(
-      'package.json dependencies["@natesclaw/fs-safe"] must use a published semver range before npm release; found "link:../fs-safe".',
+      'package.json dependencies["@openclaw/fs-safe"] must use a published semver range before npm release; found "link:../fs-safe".',
     );
   });
 
@@ -924,7 +924,7 @@ describe("collectReleasePackageMetadataErrors", () => {
         name: "natesclaw",
         description: "Multi-channel AI gateway with extensible messaging integrations",
         license: "MIT",
-        repository: { url: "git+https://github.com/natesclaw/natesclaw.git" },
+        repository: { url: "git+https://github.com/openclaw/natesclaw.git" },
         bin: { natesclaw: "natesclaw.mjs" },
         optionalDependencies: { "node-llama-cpp": "3.18.1" },
       }),

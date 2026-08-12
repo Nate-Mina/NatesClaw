@@ -5,7 +5,7 @@
  * session, but the model only acts on that when the prompt names them. Prepare
  * runs before synchronous prompt assembly, mirroring prepareAgentMemoryPrompt.
  */
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import { loadExactSessionEntryReadOnly } from "../config/sessions/session-accessor.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { deriveSessionTitle } from "../gateway/session-utils.js";

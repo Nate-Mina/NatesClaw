@@ -1,5 +1,5 @@
 /** Cancellation path for active ACP turns and idle runtime handles. */
-import type { AcpRuntime, AcpRuntimeHandle } from "@natesclaw/acp-core/runtime/types";
+import type { AcpRuntime, AcpRuntimeHandle } from "@openclaw/acp-core/runtime/types";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   type AcpRuntimeError,

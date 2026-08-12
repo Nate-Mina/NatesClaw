@@ -1,4 +1,4 @@
-import { isValidWorkboardBoardId } from "@natesclaw/workboard-contract";
+import { isValidWorkboardBoardId } from "@openclaw/workboard-contract";
 // Control UI app navigation defines sidebar and settings presentation metadata.
 import type { RouteId } from "./app-route-paths.ts";
 import type { IconName } from "./components/icons.ts";

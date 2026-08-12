@@ -2,7 +2,7 @@
 import {
   normalizeStringEntries,
   sortUniqueStrings,
-} from "@natesclaw/normalization-core/string-normalization";
+} from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveEnabledBundledManifestContractPlugins } from "./bundled-manifest-contract-plugins.js";
 import { loadBundledDocumentExtractorEntriesFromDir } from "./document-extractor-public-artifacts.js";

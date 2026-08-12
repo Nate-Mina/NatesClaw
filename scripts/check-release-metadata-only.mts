@@ -3,7 +3,7 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
 import path from "node:path";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { RELEASE_METADATA_PATHS } from "./changed-lanes.mts";
 
 const DEFAULT_GIT_TIMEOUT_MS = 60_000;

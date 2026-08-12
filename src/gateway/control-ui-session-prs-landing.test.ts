@@ -12,7 +12,7 @@ describe("resolveBranchLanding", () => {
   let root: string;
 
   const git = (...args: string[]) =>
-    execFileAsync("git", ["-c", "user.email=test@natesclaw.ai", "-c", "user.name=Test", ...args], {
+    execFileAsync("git", ["-c", "user.email=test@openclaw.ai", "-c", "user.name=Test", ...args], {
       cwd: root,
     });
   const sha = async (ref: string) => (await git("rev-parse", ref)).stdout.trim();

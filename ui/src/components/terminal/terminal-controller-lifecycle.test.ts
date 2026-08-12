@@ -1,6 +1,6 @@
 /* @vitest-environment jsdom */
 
-import type { GhosttyTerminalController } from "@natesclaw/libterminal/browser";
+import type { GhosttyTerminalController } from "@openclaw/libterminal/browser";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createDeferred } from "../../../../test/helpers/promise.ts";
 import {
@@ -15,7 +15,7 @@ const runtimeMocks = vi.hoisted(() => ({
   load: vi.fn(),
 }));
 
-vi.mock("@natesclaw/libterminal/browser", () => ({
+vi.mock("@openclaw/libterminal/browser", () => ({
   createGhosttyTerminal: runtimeMocks.create,
   loadGhosttyRuntime: runtimeMocks.load,
 }));

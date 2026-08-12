@@ -1,14 +1,14 @@
 {
-  "name": "@natesclaw/mxc-sandbox",
+  "name": "@openclaw/mxc-sandbox",
   "version": "2026.8.1",
   "description": "Natesclaw MXC sandbox execution plugin for MXC-capable hosts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "dependencies": {
     "@microsoft/mxc-sdk": "0.7.0",
@@ -19,7 +19,7 @@
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@natesclaw/mxc-sandbox",
+      "npmSpec": "@openclaw/mxc-sandbox",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.11"
     },

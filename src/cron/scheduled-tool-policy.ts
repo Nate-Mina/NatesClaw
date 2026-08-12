@@ -1,5 +1,5 @@
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { normalizeOptionalAccountId } from "../routing/account-id.js";
 
 /** Server-authored provenance for a persisted scheduled tool-cap authority envelope. */

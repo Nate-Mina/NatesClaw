@@ -2,7 +2,7 @@
 import {
   reduceSessionProjection,
   type SessionProjectionScope,
-} from "@natesclaw/gateway-client/browser";
+} from "@openclaw/gateway-client/browser";
 import { describe, expect, it } from "vitest";
 import { createInitialUserMessageHandoff } from "../../app/initial-user-message-handoff.ts";
 import {

@@ -3,7 +3,7 @@ import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   buildFileEntry,
@@ -396,7 +396,7 @@ describe("memory host SDK package internals", () => {
   it("strips recall annotation carriers while preserving source line positions", () => {
     const text = [
       "- Keep the gateway local. <!-- trigger: gateway setup --> <!-- importance: 9 -->",
-      "  <!-- project: github.com/natesclaw/natesclaw -->",
+      "  <!-- project: github.com/openclaw/natesclaw -->",
       "  Keep this ordinary <!-- note: visible --> comment.",
     ].join("\n");
 

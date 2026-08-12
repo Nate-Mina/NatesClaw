@@ -1,4 +1,4 @@
-import type { Result } from "@natesclaw/normalization-core/result";
+import type { Result } from "@openclaw/normalization-core/result";
 import type { TSchema } from "typebox";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginToolMcpMeta } from "../plugins/tools.js";

@@ -1,9 +1,9 @@
 // Runtime bridge for invoking provider hooks supplied by plugins.
-import { findNormalizedProviderValue } from "@natesclaw/model-catalog-core/provider-id";
+import { findNormalizedProviderValue } from "@openclaw/model-catalog-core/provider-id";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import { resolveModelCatalogScope } from "../agents/model-discovery-context.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { getLoadedRuntimePluginRegistry } from "./active-runtime-registry.js";

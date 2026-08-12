@@ -1,5 +1,5 @@
 // Channel policy helpers evaluate plugin channel runtime policy and operator-facing warnings.
-import { asNullableRecord as asObjectRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asNullableRecord as asObjectRecord } from "@openclaw/normalization-core/record-coerce";
 import {
   normalizeStringEntries,
   uniqueStrings,

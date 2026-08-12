@@ -1,4 +1,4 @@
-import { WORKBOARD_STATUSES, type WorkboardCard } from "@natesclaw/workboard-contract";
+import { WORKBOARD_STATUSES, type WorkboardCard } from "@openclaw/workboard-contract";
 // Workboard plugin module implements shared gateway request helpers.
 import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import { parseStrictPositiveInteger } from "natesclaw/plugin-sdk/number-runtime";

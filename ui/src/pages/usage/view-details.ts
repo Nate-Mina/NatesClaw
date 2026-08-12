@@ -1,5 +1,5 @@
-import { expectDefined } from "@natesclaw/normalization-core";
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { expectDefined } from "@openclaw/normalization-core";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 // Control UI view renders usage render details screen content.
 import { html, svg, nothing } from "lit";
 import {

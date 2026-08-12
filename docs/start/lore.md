@@ -118,10 +118,10 @@ Moltbot never quite rolled off the tongue. So at 4am GMT, the team gathered agai
 
 In just 3 hours:
 
-- GitHub renamed to `github.com/natesclaw/natesclaw`
+- GitHub renamed to `github.com/openclaw/natesclaw`
 - X handle `@natesclaw` secured, with a gold checkmark
 - npm packages released under the new name
-- Docs migrated to `docs.natesclaw.ai`
+- Docs migrated to `docs.openclaw.ai`
 - 200K+ views on the announcement in 90 minutes
 
 **The Heroes:**

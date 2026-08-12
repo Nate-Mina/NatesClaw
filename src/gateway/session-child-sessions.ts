@@ -1,6 +1,6 @@
 // Gateway session child-discovery helpers.
 // Finds direct parent/child relationships across canonical and legacy fields.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { loadCombinedSessionStoreForGatewayCore } from "../config/sessions/combined-store-gateway.js";
 import type { SessionEntry } from "../config/sessions/types.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

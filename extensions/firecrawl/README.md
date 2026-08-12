@@ -5,8 +5,8 @@ Official Natesclaw plugin for Firecrawl.
 Install from Natesclaw:
 
 ```bash
-natesclaw plugins install @natesclaw/firecrawl-plugin
+natesclaw plugins install @openclaw/firecrawl-plugin
 natesclaw gateway restart
 ```
 
-See <https://docs.natesclaw.ai/tools/firecrawl> for setup and configuration.
+See <https://docs.openclaw.ai/tools/firecrawl> for setup and configuration.

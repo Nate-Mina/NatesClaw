@@ -1,8 +1,8 @@
 // Attachment normalization converts message context media fields into typed
 // attachment records and classifies media kind from MIME or filename.
-import type { MediaKind } from "@natesclaw/media-core/constants";
-import { kindFromMime, mimeTypeFromFilePath, normalizeMimeType } from "@natesclaw/media-core/mime";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import type { MediaKind } from "@openclaw/media-core/constants";
+import { kindFromMime, mimeTypeFromFilePath, normalizeMimeType } from "@openclaw/media-core/mime";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import type { RuntimeMsgContext as MsgContext } from "../auto-reply/templating.js";
 import { assertNoWindowsNetworkPath, safeFileURLToPath } from "../infra/local-file-access.js";
 import {

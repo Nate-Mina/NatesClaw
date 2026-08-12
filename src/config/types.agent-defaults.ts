@@ -1,5 +1,5 @@
 // Defines agent default configuration types shared by runtime schemas.
-import type { FastMode } from "@natesclaw/normalization-core/string-coerce";
+import type { FastMode } from "@openclaw/normalization-core/string-coerce";
 import type { SilentReplyPolicyShape } from "../shared/silent-reply-policy.js";
 import type {
   AgentModelConfig,

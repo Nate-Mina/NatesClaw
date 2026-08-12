@@ -1,8 +1,8 @@
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 // Gateway node command policy.
 // Computes per-platform allowlists from built-in, plugin, runtime, and config inputs.
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
-import { normalizeUniqueStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeUniqueStringEntries } from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   NODE_AGENT_CLI_CLAUDE_RUN_COMMAND,

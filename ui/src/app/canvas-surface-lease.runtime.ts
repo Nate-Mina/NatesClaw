@@ -1,5 +1,5 @@
 // Loaded after hello so capability renewal does not inflate the startup chunk.
-import { resolveSafeTimeoutDelayMs } from "@natesclaw/gateway-client/browser";
+import { resolveSafeTimeoutDelayMs } from "@openclaw/gateway-client/browser";
 
 const RENEWAL_LEAD_MS = 15_000;
 const MIN_RENEWAL_DELAY_MS = 1_000;

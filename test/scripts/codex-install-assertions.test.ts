@@ -186,7 +186,7 @@ function runCodexNpmPluginLiveConfigure(root: string) {
 function runCodexNpmPluginLivePluginAssertions(root: string) {
   return spawnSync(
     process.execPath,
-    [CODEX_NPM_PLUGIN_LIVE_ASSERTIONS_SCRIPT, "assert-plugin", "npm:@natesclaw/codex"],
+    [CODEX_NPM_PLUGIN_LIVE_ASSERTIONS_SCRIPT, "assert-plugin", "npm:@openclaw/codex"],
     {
       encoding: "utf8",
       env: {
@@ -534,8 +534,8 @@ function createCodexInstallFixture(root: string) {
   const stateDir = path.join(root, "state");
   const npmRoot = path.join(stateDir, "npm");
   const installPath = path.join(npmRoot, "projects", "codex", "node_modules", "@natesclaw", "codex");
-  const projectRoot = npmProjectRootForInstalledPackage(installPath, "@natesclaw/codex");
-  writeJson(path.join(installPath, "package.json"), { name: "@natesclaw/codex" });
+  const projectRoot = npmProjectRootForInstalledPackage(installPath, "@openclaw/codex");
+  writeJson(path.join(installPath, "package.json"), { name: "@openclaw/codex" });
   const openAiCodexRoot = path.join(projectRoot, "node_modules", "@openai", "codex");
   writeJson(path.join(openAiCodexRoot, "package.json"), {
     name: "@openai/codex",
@@ -557,7 +557,7 @@ function createCodexInstallFixture(root: string) {
         codex: {
           installPath,
           source: "npm",
-          spec: "npm:@natesclaw/codex",
+          spec: "npm:@openclaw/codex",
         },
       },
     },
@@ -623,9 +623,9 @@ describe("Codex install helpers", () => {
           codex: {
             installPath,
             source: "npm",
-            spec: "@natesclaw/codex",
+            spec: "@openclaw/codex",
             resolvedVersion: "2026.7.2",
-            resolvedSpec: "@natesclaw/codex@2026.7.2",
+            resolvedSpec: "@openclaw/codex@2026.7.2",
           },
         },
       },
@@ -664,7 +664,7 @@ describe("Codex install helpers", () => {
       "@natesclaw",
       "codex",
     );
-    const projectRoot = npmProjectRootForInstalledPackage(packageRoot, "@natesclaw/codex");
+    const projectRoot = npmProjectRootForInstalledPackage(packageRoot, "@openclaw/codex");
     const dependencyPackage = path.join(
       projectRoot,
       "node_modules",

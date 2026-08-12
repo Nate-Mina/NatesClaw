@@ -49,7 +49,7 @@ function runStandaloneBundledChannelSmoke(entrySource: string) {
   writeFileSync(
     path.join(extensionRoot, "package.json"),
     `${JSON.stringify({
-      name: "@natesclaw/fixture-channel",
+      name: "@openclaw/fixture-channel",
       natesclaw: { channel: true, extensions: ["./index.ts"] },
     })}\n`,
   );
@@ -98,14 +98,14 @@ describe("standalone bundled channel smoke", () => {
 });
 
 describe("collectSourcePackWorkspaceDependencyErrors", () => {
-  it("rejects the plain source pack that pnpm rewrites without bundling @natesclaw/ai", () => {
+  it("rejects the plain source pack that pnpm rewrites without bundling @openclaw/ai", () => {
     const rootDir = tempDirs.make("natesclaw-source-pack-workspace-");
     const aiDir = path.join(rootDir, "packages", "ai");
     const packDir = path.join(rootDir, "pack");
     const extractDir = path.join(rootDir, "extract");
     const version = "2099.1.2-test.0";
     const rootPackageJson = {
-      dependencies: { "@natesclaw/ai": "workspace:*" },
+      dependencies: { "@openclaw/ai": "workspace:*" },
       name: "natesclaw-source-pack-regression",
       version,
     };
@@ -119,7 +119,7 @@ describe("collectSourcePackWorkspaceDependencyErrors", () => {
     writeFileSync(path.join(rootDir, "pnpm-workspace.yaml"), 'packages:\n  - "packages/*"\n');
     writeFileSync(
       path.join(aiDir, "package.json"),
-      `${JSON.stringify({ name: "@natesclaw/ai", version }, null, 2)}\n`,
+      `${JSON.stringify({ name: "@openclaw/ai", version }, null, 2)}\n`,
     );
 
     const install = spawnSync(
@@ -158,7 +158,7 @@ describe("collectSourcePackWorkspaceDependencyErrors", () => {
       bundleDependencies?: string[];
       dependencies?: Record<string, string>;
     };
-    expect(packedPackageJson.dependencies?.["@natesclaw/ai"]).toBe(version);
+    expect(packedPackageJson.dependencies?.["@openclaw/ai"]).toBe(version);
     expect(packedPackageJson.bundleDependencies).toBeUndefined();
     expect(existsSync(path.join(extractDir, "package", "node_modules", "@natesclaw", "ai"))).toBe(
       false,
@@ -166,8 +166,8 @@ describe("collectSourcePackWorkspaceDependencyErrors", () => {
     expect(existsSync(path.join(extractDir, "package", "npm-shrinkwrap.json"))).toBe(false);
     expect(existsSync(path.join(extractDir, "package", "package-lock.json"))).toBe(false);
     expect(collectSourcePackWorkspaceDependencyErrors(rootPackageJson, {})).toEqual([
-      "plain root packing cannot safely resolve @natesclaw/ai from workspace:*: pnpm rewrites the workspace dependency to an exact version without bundling the package",
-      "use `node scripts/package-natesclaw-for-docker.mjs --allow-unreleased-changelog` for a self-contained source package; official npm release automation prepares and publishes @natesclaw/ai separately",
+      "plain root packing cannot safely resolve @openclaw/ai from workspace:*: pnpm rewrites the workspace dependency to an exact version without bundling the package",
+      "use `node scripts/package-natesclaw-for-docker.mjs --allow-unreleased-changelog` for a self-contained source package; official npm release automation prepares and publishes @openclaw/ai separately",
     ]);
     expect(
       collectSourcePackWorkspaceDependencyErrors(rootPackageJson, {
@@ -218,7 +218,7 @@ describe("collectSourcePackWorkspaceDependencyErrors", () => {
           postpack: "node scripts/package-manifest.mjs restore",
         },
         devDependencies: {
-          "@natesclaw/session-url-contract": "workspace:*",
+          "@openclaw/session-url-contract": "workspace:*",
           vitest: "4.1.10",
         },
       },

@@ -1,5 +1,5 @@
 // TTS core coordinates text preparation, provider selection, and speech output.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import {
   buildModelAliasIndex,
   resolveDefaultModelForAgent,

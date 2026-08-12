@@ -1,7 +1,7 @@
 import { Buffer } from "node:buffer";
 import crypto from "node:crypto";
-import { responsesPromptObserver } from "@natesclaw/ai/internal/openai";
-import { stableStringify } from "@natesclaw/normalization-core";
+import { responsesPromptObserver } from "@openclaw/ai/internal/openai";
+import { stableStringify } from "@openclaw/normalization-core";
 import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
 import type { Model } from "natesclaw/plugin-sdk/llm";
 import { resolveGlobalSingleton } from "../../shared/global-singleton.js";

@@ -348,7 +348,7 @@ describe("subagent announce formatting", () => {
     // Set FAST_TEST_MODE before importing the module to ensure the module-level
     // constant picks it up. This fixes flaky Windows CI failures where the test
     // timeout budget is too tight without fast mode enabled.
-    // See: https://github.com/natesclaw/natesclaw/issues/31298
+    // See: https://github.com/openclaw/natesclaw/issues/31298
     previousFastTestEnv = process.env.NATESCLAW_TEST_FAST;
     process.env.NATESCLAW_TEST_FAST = "1";
     ({ runSubagentAnnounceFlow, testing: subagentAnnounceTesting } =

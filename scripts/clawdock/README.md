@@ -39,7 +39,7 @@ mkdir -p ~/.clawdock && curl -sL https://raw.githubusercontent.com/natesclaw/nat
 echo 'source ~/.clawdock/clawdock-helpers.sh' >> ~/.zshrc && source ~/.zshrc
 ```
 
-Canonical docs page: https://docs.natesclaw.ai/install/clawdock
+Canonical docs page: https://docs.openclaw.ai/install/clawdock
 
 If you previously installed ClawDock from `scripts/shell-helpers/clawdock-helpers.sh`, rerun the install command above. The old raw GitHub path has been removed.
 
@@ -206,7 +206,7 @@ This means:
 - Downloadable external plugin packages and install records live under the mounted Natesclaw home
 - Bundled Natesclaw channel plugins, such as Discord when present in the image,
   should normally load from the image-matched bundled copy. Avoid installing
-  pinned `@natesclaw/*` channel packages into the mounted home unless you
+  pinned `@openclaw/*` channel packages into the mounted home unless you
   deliberately want an external npm override.
 - No need to add API keys to `docker-compose.yml` or configure anything inside the container
 - Keys survive `clawdock-update`, `clawdock-rebuild`, and `clawdock-clean` because they live on the host

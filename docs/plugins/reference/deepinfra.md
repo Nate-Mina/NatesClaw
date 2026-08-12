@@ -11,8 +11,8 @@ Adds DeepInfra model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/deepinfra-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/deepinfra-provider`
+- Package: `@openclaw/deepinfra-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/deepinfra-provider`
 
 ## Surface
 

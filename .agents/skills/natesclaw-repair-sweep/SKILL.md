@@ -261,7 +261,7 @@ Parent-thread updates are concise progress plus clickable URLs:
 
 ```text
 8 agents active · 12 investigated · 3 landed · 2 already-fixed issues closed
-Landed: https://github.com/natesclaw/natesclaw/pull/123
+Landed: https://github.com/openclaw/natesclaw/pull/123
 ```
 
 Maintain a ledger per item: outcome class, assigned worker, independent

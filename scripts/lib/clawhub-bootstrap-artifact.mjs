@@ -82,7 +82,7 @@ function parsePlugins(value) {
 }
 
 function packageSlug(packageName) {
-  return packageName.slice("@natesclaw/".length);
+  return packageName.slice("@openclaw/".length);
 }
 
 function normalizePlanEntry(value, index) {

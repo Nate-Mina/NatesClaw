@@ -482,7 +482,7 @@ export function buildOpenRouterVideoGenerationProvider(): VideoGenerationProvide
           defaultHeaders: {
             Authorization: `Bearer ${auth.apiKey}`,
             "Content-Type": "application/json",
-            "HTTP-Referer": "https://natesclaw.ai",
+            "HTTP-Referer": "https://openclaw.ai",
             "X-OpenRouter-Title": "Natesclaw",
           },
           request: sanitizeConfiguredModelProviderRequest(

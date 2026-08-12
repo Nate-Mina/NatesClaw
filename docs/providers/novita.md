@@ -8,7 +8,7 @@ title: "NovitaAI"
 
 NovitaAI is a hosted AI infrastructure provider with an OpenAI-compatible API.
 Natesclaw provides NovitaAI through the official external
-`@natesclaw/novita-provider` plugin. Model refs use the
+`@openclaw/novita-provider` plugin. Model refs use the
 `novita/deepseek/deepseek-v4-pro` form.
 
 ## Setup
@@ -16,7 +16,7 @@ Natesclaw provides NovitaAI through the official external
 Install the plugin and restart the Gateway:
 
 ```bash
-natesclaw plugins install @natesclaw/novita-provider
+natesclaw plugins install @openclaw/novita-provider
 natesclaw gateway restart
 ```
 
@@ -36,7 +36,7 @@ export NOVITA_API_KEY="<your-novita-api-key>" # pragma: allowlist secret
 
 | Setting       | Value                             |
 | ------------- | --------------------------------- |
-| Plugin        | `@natesclaw/novita-provider`       |
+| Plugin        | `@openclaw/novita-provider`       |
 | Provider id   | `novita`                          |
 | Aliases       | `novita-ai`, `novitaai`           |
 | Base URL      | `https://api.novita.ai/openai/v1` |

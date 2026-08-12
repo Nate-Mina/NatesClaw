@@ -2,8 +2,8 @@
 import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { readNonBlankString as optionalNonEmptyString } from "@natesclaw/normalization-core/string-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { readNonBlankString as optionalNonEmptyString } from "@openclaw/normalization-core/string-coerce";
 import {
   managedImageRecordFromRow,
   managedImageRecordsEqual,

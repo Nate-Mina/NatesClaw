@@ -1,6 +1,6 @@
 import { AsyncLocalStorage } from "node:async_hooks";
-import { isPromiseLike } from "@natesclaw/normalization-core/promise-like";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { isPromiseLike } from "@openclaw/normalization-core/promise-like";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import {
   createCronCreatorAuthorityRunScope,
   mintCronCreatorAuthorityGrant,

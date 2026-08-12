@@ -11,8 +11,8 @@ Adds StepFun, StepFun Plan model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/stepfun-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/stepfun-provider`
+- Package: `@openclaw/stepfun-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/stepfun-provider`
 
 ## Surface
 

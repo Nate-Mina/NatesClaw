@@ -5,8 +5,8 @@ import os from "node:os";
 import path from "node:path";
 import tls from "node:tls";
 import { pathToFileURL } from "node:url";
-import { GatewayClient } from "@natesclaw/gateway-client";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { GatewayClient } from "@openclaw/gateway-client";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import {
   QA_EVIDENCE_FILENAME,
   type QaEvidenceSummaryJson,

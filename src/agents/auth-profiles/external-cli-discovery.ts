@@ -3,7 +3,7 @@
  * Converts provider/config lookup contexts into scoped discovery options for
  * auth profile store loading.
  */
-import { normalizeTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   resolveExternalCliAuthScopeFromConfig,

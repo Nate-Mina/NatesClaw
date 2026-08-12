@@ -229,7 +229,7 @@ type NpmProvenanceStatement = {
 };
 
 const NPM_PROVENANCE_PREDICATE_TYPE = "https://slsa.dev/provenance/v1";
-const NPM_PROVENANCE_REPOSITORY = "https://github.com/natesclaw/natesclaw";
+const NPM_PROVENANCE_REPOSITORY = "https://github.com/openclaw/natesclaw";
 const NPM_PROVENANCE_WORKFLOW_PATH = ".github/workflows/natesclaw-npm-release.yml";
 const NPM_PROVENANCE_CERTIFICATE_ISSUER = "https://token.actions.githubusercontent.com";
 const NPM_PROVENANCE_BUILDER_ID = "https://github.com/actions/runner/github-hosted";
@@ -707,7 +707,7 @@ export function collectInstalledPluginSdkZodArtifactErrors(packageRoot: string):
 function collectInstalledPluginSdkDeclarationErrors(packageRoot: string): string[] {
   const pluginSdkDistRoot = join(packageRoot, "dist", "plugin-sdk");
   const errors: string[] = [];
-  const forbiddenPrivateWorkspaceSpecifiers = ["@natesclaw/llm-core"];
+  const forbiddenPrivateWorkspaceSpecifiers = ["@openclaw/llm-core"];
 
   if (!existsSync(pluginSdkDistRoot)) {
     return [];

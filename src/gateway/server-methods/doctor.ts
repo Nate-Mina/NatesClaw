@@ -1,9 +1,9 @@
 // Doctor gateway methods inspect and repair memory dreaming artifacts and managed cron state.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
-import { parseDateStringTimestampMs } from "@natesclaw/normalization-core/number-coercion";
-import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
+import { expectDefined } from "@openclaw/normalization-core";
+import { parseDateStringTimestampMs } from "@openclaw/normalization-core/number-coercion";
+import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
 import { ErrorCodes, errorShape } from "../../../packages/gateway-protocol/src/index.js";
 import {
   listAgentIds,

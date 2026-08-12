@@ -2,8 +2,8 @@
 import { createHash } from "node:crypto";
 import fs, { type FileHandle } from "node:fs/promises";
 import path from "node:path";
-import { maxBytesForKind, type MediaKind } from "@natesclaw/media-core/constants";
-import { extensionForMime, normalizeMimeType } from "@natesclaw/media-core/mime";
+import { maxBytesForKind, type MediaKind } from "@openclaw/media-core/constants";
+import { extensionForMime, normalizeMimeType } from "@openclaw/media-core/mime";
 import { fileStore } from "../infra/file-store.js";
 import { openLocalFileSafely } from "../infra/fs-safe.js";
 import { pruneMapToMaxSize } from "../infra/map-size.js";

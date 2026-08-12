@@ -278,7 +278,7 @@ describe("qa suite runtime agent tools helpers", () => {
         | ((chunk: unknown) => void)
         | undefined;
       stderrListener?.(
-        Buffer.from("Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@natesclaw/example'\n"),
+        Buffer.from("Error [ERR_MODULE_NOT_FOUND]: Cannot find package '@openclaw/example'\n"),
       );
       throw new Error("MCP error -32000: Connection closed");
     });
@@ -301,7 +301,7 @@ describe("qa suite runtime agent tools helpers", () => {
     const message = error instanceof Error ? error.message : String(error);
     expect(message).toContain("MCP error -32000: Connection closed");
     expect(message).toContain("MCP stderr tail:");
-    expect(message).toContain("Cannot find package '@natesclaw/example'");
+    expect(message).toContain("Cannot find package '@openclaw/example'");
     expect(closeMock).toHaveBeenCalled();
   });
 });

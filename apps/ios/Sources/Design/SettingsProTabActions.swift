@@ -1395,7 +1395,7 @@ extension SettingsProTab {
         if PushBuildConfig.current.usesNatesclawHostedRelay {
             let host = PushBuildConfig.current.relayBaseURL.flatMap {
                 URLComponents(url: $0, resolvingAgainstBaseURL: false)?.host
-            } ?? "ios-push-relay.natesclaw.ai"
+            } ?? "ios-push-relay.openclaw.ai"
             return String(
                 format: String(
                     localized: "This build uses Natesclaw's hosted push relay at %@ for notification delivery data."),

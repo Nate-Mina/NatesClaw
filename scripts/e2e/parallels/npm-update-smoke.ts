@@ -10,9 +10,9 @@ import {
   addTimerTimeoutGraceMs,
   clampTimerTimeoutMs,
   finiteSecondsToTimerSafeMilliseconds,
-} from "@natesclaw/normalization-core/number-coercion";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { readStringValue } from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/number-coercion";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { readStringValue } from "@openclaw/normalization-core/string-coerce";
 import prettyMilliseconds from "pretty-ms";
 import {
   die,

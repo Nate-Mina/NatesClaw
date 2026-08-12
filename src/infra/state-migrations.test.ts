@@ -3063,7 +3063,7 @@ describe("state migrations", () => {
           "doctor-ios-node": {
             nodeId: "doctor-ios-node",
             [APNS_DEVICE_FIELD]: "abcd1234abcd1234abcd1234abcd1234",
-            topic: "ai.natesclaw.ios",
+            topic: "ai.openclaw.ios",
             environment: "sandbox",
             updatedAtMs: 1,
           },
@@ -3194,7 +3194,7 @@ describe("state migrations", () => {
     await fs.writeFile(
       vapidKeysPath,
       JSON.stringify(
-        createWebPushVapidKeyPair("doctor-public", "doctor-private", "https://natesclaw.ai"),
+        createWebPushVapidKeyPair("doctor-public", "doctor-private", "https://openclaw.ai"),
       ),
       "utf8",
     );
@@ -3215,7 +3215,7 @@ describe("state migrations", () => {
     expect(result.warnings).toStrictEqual([]);
     expect(listWebPushSubscriptions(stateDir)).toStrictEqual([subscription]);
     expect(readPersistedVapidKeyPair(stateDir)).toStrictEqual(
-      createWebPushVapidKeyPair("doctor-public", "doctor-private", "https://natesclaw.ai"),
+      createWebPushVapidKeyPair("doctor-public", "doctor-private", "https://openclaw.ai"),
     );
     await expectMissingPath(subscriptionsPath);
     await expectMissingPath(vapidKeysPath);

@@ -1,11 +1,11 @@
 {
-  "name": "@natesclaw/qqbot",
+  "name": "@openclaw/qqbot",
   "version": "2026.8.1",
   "private": false,
   "description": "Natesclaw QQ Bot channel plugin for group and direct-message workflows.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -18,7 +18,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*",
+    "@openclaw/plugin-sdk": "workspace:*",
     "@types/ws": "8.18.1",
     "natesclaw": "workspace:*"
   },
@@ -87,7 +87,7 @@
       }
     },
     "install": {
-      "npmSpec": "@natesclaw/qqbot",
+      "npmSpec": "@openclaw/qqbot",
       "localPath": "extensions/qqbot",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"

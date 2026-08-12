@@ -1,6 +1,6 @@
 // Gateway RPC handlers for DM sender access requests on pairing-policy channels.
-import { asOptionalRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { asOptionalRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,

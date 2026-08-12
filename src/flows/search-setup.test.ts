@@ -1,6 +1,6 @@
 // Search setup tests cover search provider setup and config changes.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createWizardPrompter } from "../../test/helpers/wizard-prompter.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
@@ -24,7 +24,7 @@ const mockGrokProvider = vi.hoisted(() => ({
   pluginId: "xai",
   label: "Grok",
   hint: "Search with xAI",
-  docsUrl: "https://docs.natesclaw.ai/tools/web",
+  docsUrl: "https://docs.openclaw.ai/tools/web",
   requiresCredential: true,
   credentialLabel: "xAI API key",
   placeholder: "xai-...",
@@ -115,7 +115,7 @@ const mockCodexProvider = vi.hoisted(() => ({
   pluginId: "codex",
   label: "Codex Hosted Search",
   hint: "Grounded answers through your Codex app-server account",
-  docsUrl: "https://docs.natesclaw.ai/tools/web",
+  docsUrl: "https://docs.openclaw.ai/tools/web",
   requiresCredential: false,
   credentialLabel: "Codex app-server account",
   placeholder: "",
@@ -434,7 +434,7 @@ describe("runSearchSetupFlow", () => {
         "Secret references enabled — Natesclaw will store a reference instead of the API key.",
         "Env var: XAI_API_KEY.",
         "Set XAI_API_KEY in the Gateway environment.",
-        "Docs: https://docs.natesclaw.ai/tools/web",
+        "Docs: https://docs.openclaw.ai/tools/web",
       ].join("\n"),
       "Web search",
     );
@@ -580,7 +580,7 @@ describe("runSearchSetupFlow", () => {
     expect(installRequest.entry?.pluginId).toBe("brave");
     expect(installRequest.entry?.label).toBe("Brave");
     expect(installRequest.entry?.trustedSourceLinkedOfficialInstall).toBe(true);
-    expect(installRequest.entry?.install?.npmSpec).toBe("@natesclaw/brave-plugin");
+    expect(installRequest.entry?.install?.npmSpec).toBe("@openclaw/brave-plugin");
     expect(installRequest.autoConfirmSingleSource).toBe(true);
     expect(next.tools?.web?.search?.provider).toBe("brave");
     expect(next.tools?.web?.search?.enabled).toBe(true);
@@ -589,7 +589,7 @@ describe("runSearchSetupFlow", () => {
       | undefined;
     expect(braveConfig?.webSearch?.apiKey).toBe("brave-test-key");
     expect(next.plugins?.installs?.brave?.source).toBe("npm");
-    expect(next.plugins?.installs?.brave?.spec).toBe("@natesclaw/brave-plugin");
+    expect(next.plugins?.installs?.brave?.spec).toBe("@openclaw/brave-plugin");
   });
 
   it("forwards the persistent-effect guard to external provider installation", async () => {
@@ -661,7 +661,7 @@ describe("runSearchSetupFlow", () => {
     expect(installRequest.entry?.pluginId).toBe("brave");
     expect(installRequest.entry?.label).toBe("Brave");
     expect(installRequest.entry?.trustedSourceLinkedOfficialInstall).toBe(true);
-    expect(installRequest.entry?.install?.npmSpec).toBe("@natesclaw/brave-plugin");
+    expect(installRequest.entry?.install?.npmSpec).toBe("@openclaw/brave-plugin");
     expect(installRequest.autoConfirmSingleSource).toBe(true);
     expect(next.tools?.web?.search?.provider).toBe("brave");
     expect(next.tools?.web?.search?.enabled).toBe(false);
@@ -671,6 +671,6 @@ describe("runSearchSetupFlow", () => {
     expect(braveConfig?.webSearch?.apiKey).toBe("brave-disabled-key");
     expect(next.plugins?.entries?.brave?.enabled).toBeUndefined();
     expect(next.plugins?.installs?.brave?.source).toBe("npm");
-    expect(next.plugins?.installs?.brave?.spec).toBe("@natesclaw/brave-plugin");
+    expect(next.plugins?.installs?.brave?.spec).toBe("@openclaw/brave-plugin");
   });
 });

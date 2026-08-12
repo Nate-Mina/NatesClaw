@@ -2,9 +2,9 @@ import fsSync from "node:fs";
 import {
   findNormalizedProviderValue,
   normalizeProviderId,
-} from "@natesclaw/model-catalog-core/provider-id";
-import { formatByteSize } from "@natesclaw/normalization-core";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/model-catalog-core/provider-id";
+import { formatByteSize } from "@openclaw/normalization-core";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { note } from "../../packages/terminal-core/src/note.js";
 import {
   listAgentIds,
@@ -667,7 +667,7 @@ async function noteMemorySearchHealthForAgent(
         gatewayDetail ? `Gateway probe: ${gatewayDetail}` : null,
         "",
         "Fix (pick one):",
-        `- Install the llama.cpp provider plugin: ${formatCliCommand("natesclaw plugins install @natesclaw/llama-cpp-provider")}`,
+        `- Install the llama.cpp provider plugin: ${formatCliCommand("natesclaw plugins install @openclaw/llama-cpp-provider")}`,
         `- Set a local GGUF model path in config`,
         suggestedRemoteProvider
           ? `- Switch to a remote provider: ${formatCliCommand(`natesclaw config set memory.search.provider ${suggestedRemoteProvider}`)}`

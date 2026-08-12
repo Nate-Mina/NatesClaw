@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/tool-call-repair",
+  "name": "@openclaw/tool-call-repair",
   "version": "0.0.0-private",
   "private": true,
   "type": "module",
@@ -7,6 +7,6 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@natesclaw/normalization-core": "workspace:*"
+    "@openclaw/normalization-core": "workspace:*"
   }
 }

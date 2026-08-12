@@ -119,7 +119,7 @@ This guide uses Debian on GCP Compute Engine. Ubuntu also works; map packages ac
 
   <Step title="Clone the Natesclaw repository">
     ```bash
-    git clone https://github.com/natesclaw/natesclaw.git
+    git clone https://github.com/openclaw/natesclaw.git
     cd natesclaw
     ```
 

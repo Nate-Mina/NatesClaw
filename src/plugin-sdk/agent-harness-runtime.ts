@@ -330,7 +330,7 @@ export async function detectAndLoadAgentHarnessPromptImages(params: {
     await Promise.all([
       import("../agents/image-sanitization.js"),
       import("../agents/embedded-agent-runner/run/images.js"),
-      import("@natesclaw/media-core/constants"),
+      import("@openclaw/media-core/constants"),
     ]);
 
   return detectAndLoadPromptImages({

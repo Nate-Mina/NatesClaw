@@ -1,5 +1,5 @@
 // Hook frontmatter tests cover hook metadata parsing from hook files.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { describe, expect, it } from "vitest";
 import {
   parseHookFrontmatter,
@@ -216,7 +216,7 @@ describe("resolveHookManifestMetadata", () => {
           events: ["command"],
           install: [
             { id: "bundled", kind: "bundled", label: "Bundled with Natesclaw" },
-            { id: "npm", kind: "npm", package: "@natesclaw/hook" },
+            { id: "npm", kind: "npm", package: "@openclaw/hook" },
           ],
         },
       }),
@@ -231,7 +231,7 @@ describe("resolveHookManifestMetadata", () => {
       "npm",
     );
     expect(expectDefined(result?.install?.[1], "result?.install?.[1] test invariant").package).toBe(
-      "@natesclaw/hook",
+      "@openclaw/hook",
     );
   });
 
@@ -254,7 +254,7 @@ describe("resolveHookManifestMetadata", () => {
     const content = `---
 name: session-memory
 description: "Save session context to memory when a session is reset"
-homepage: https://docs.natesclaw.ai/automation/hooks#session-memory
+homepage: https://docs.openclaw.ai/automation/hooks#session-memory
 metadata:
   {
     "natesclaw":

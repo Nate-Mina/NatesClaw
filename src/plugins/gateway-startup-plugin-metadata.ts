@@ -1,4 +1,4 @@
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 // Builds deterministic metadata scopes for startup and config validation.
 import type { AmbientEnvTriggerPolicy } from "../channels/config-presence.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

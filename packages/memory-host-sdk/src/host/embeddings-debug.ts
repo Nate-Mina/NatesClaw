@@ -1,6 +1,6 @@
 // Memory Host SDK module implements embeddings debug behavior.
-import { parseBoolean } from "@natesclaw/normalization-core/boolean-coercion";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { parseBoolean } from "@openclaw/normalization-core/boolean-coercion";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 
 // Lightweight debug logging for memory embedding internals.
 

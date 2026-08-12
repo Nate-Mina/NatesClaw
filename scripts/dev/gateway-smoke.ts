@@ -1,6 +1,6 @@
 // Gateway Smoke script supports Natesclaw repository automation.
 import { fileURLToPath } from "node:url";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import {
   MIN_CLIENT_PROTOCOL_VERSION,
   PROTOCOL_VERSION,

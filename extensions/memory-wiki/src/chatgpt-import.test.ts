@@ -2,7 +2,7 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { __setFsSafeTestHooksForTest } from "@natesclaw/fs-safe/test-hooks";
+import { __setFsSafeTestHooksForTest } from "@openclaw/fs-safe/test-hooks";
 import { KeyedAsyncQueue } from "natesclaw/plugin-sdk/keyed-async-queue";
 import type { OpenKeyedStoreOptions } from "natesclaw/plugin-sdk/plugin-state-runtime";
 import {

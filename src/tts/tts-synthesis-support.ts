@@ -1,4 +1,4 @@
-import { normalizeOptionalString as readTtsResultString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString as readTtsResultString } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig, ResolvedTtsPersona, TtsProvider } from "../config/types.js";
 import { logVerbose } from "../globals.js";
 import { formatErrorMessage } from "../infra/errors.js";

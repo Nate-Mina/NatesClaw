@@ -1,9 +1,9 @@
 // Loads plugin doctor contracts from manifest-owned metadata.
-import { collectConfiguredModelRefs } from "@natesclaw/model-catalog-core/configured-model-refs";
-import { parseProviderModelRef } from "@natesclaw/model-catalog-core/model-catalog-refs";
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
-import { asNullableRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
+import { collectConfiguredModelRefs } from "@openclaw/model-catalog-core/configured-model-refs";
+import { parseProviderModelRef } from "@openclaw/model-catalog-core/model-catalog-refs";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
 import { isChannelConfigMetadataKey } from "../channels/config-metadata.js";
 import { shouldIncludeChannelSetupFeatureForConfig } from "../channels/plugins/bundled-setup-policy.js";
 import type { LegacyConfigRule } from "../config/legacy.shared.js";

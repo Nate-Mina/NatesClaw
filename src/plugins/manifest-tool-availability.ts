@@ -1,6 +1,6 @@
 // Normalizes tool availability metadata from plugin manifests.
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { coerceSecretRef, type SecretRef } from "../config/types.secrets.js";
 import { resolveDefaultSecretProviderAlias } from "../secrets/ref-contract.js";

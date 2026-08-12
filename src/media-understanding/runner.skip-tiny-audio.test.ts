@@ -1,7 +1,7 @@
 // Tiny-audio runner tests cover minimum-size skip behavior before provider
 // transcription runs.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { MsgContext } from "../auto-reply/templating.js";
 import type { NatesclawConfig } from "../config/types.js";

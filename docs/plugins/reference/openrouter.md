@@ -11,7 +11,7 @@ Adds OpenRouter model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/openrouter-provider`
+- Package: `@openclaw/openrouter-provider`
 - Install route: included in Natesclaw
 
 ## Surface

@@ -1,5 +1,5 @@
 // Converts queue directives into normalized queue settings.
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import type { QueueMode } from "../../../../packages/gateway-protocol/src/schema/logs-chat.js";
 import { parseDurationMs } from "../../../cli/parse-duration.js";
 import { parseStrictPositiveInteger } from "../../../infra/parse-finite-number.js";

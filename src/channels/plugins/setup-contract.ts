@@ -1,4 +1,4 @@
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { Option } from "commander";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { parseStrictNonNegativeInteger } from "../../infra/parse-finite-number.js";

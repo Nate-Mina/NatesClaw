@@ -1,17 +1,17 @@
 {
-  "name": "@natesclaw/sms",
+  "name": "@openclaw/sms",
   "version": "2026.8.1",
   "description": "Natesclaw SMS/MMS channel plugin for Twilio messages.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
@@ -134,8 +134,8 @@
       "bundledDist": false
     },
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/sms",
-      "npmSpec": "@natesclaw/sms",
+      "clawhubSpec": "clawhub:@openclaw/sms",
+      "npmSpec": "@openclaw/sms",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.9",
       "allowInvalidConfigRecovery": true

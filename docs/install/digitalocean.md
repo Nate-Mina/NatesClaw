@@ -49,7 +49,7 @@ DigitalOcean is a straightforward paid VPS path. For cheaper or free options:
     apt install -y nodejs
 
     # Install Natesclaw
-    curl -fsSL https://natesclaw.ai/install.sh | bash
+    curl -fsSL https://openclaw.ai/install.sh | bash
 
     # Create the non-root user that will own Natesclaw state and services.
     adduser natesclaw

@@ -1,11 +1,11 @@
 {
-  "name": "@natesclaw/beam",
+  "name": "@openclaw/beam",
   "version": "2026.8.1",
   "private": true,
   "description": "Read-only coding-session Beam receiver",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

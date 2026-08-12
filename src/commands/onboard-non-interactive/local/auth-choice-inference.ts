@@ -4,7 +4,7 @@
  * This keeps setup deterministic when users provide API-key flags without also
  * passing `--auth`, including plugin-defined provider auth flags.
  */
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { resolveProviderOnboardAuthFlags } from "../../../plugins/provider-auth-choices.js";
 import { CORE_ONBOARD_AUTH_FLAGS } from "../../onboard-core-auth-flags.js";

@@ -11,7 +11,7 @@ Imports Claude Code and Claude Desktop instructions, MCP servers, skills, and sa
 
 ## Distribution
 
-- Package: `@natesclaw/migrate-claude`
+- Package: `@openclaw/migrate-claude`
 - Install route: included in Natesclaw
 
 ## Surface

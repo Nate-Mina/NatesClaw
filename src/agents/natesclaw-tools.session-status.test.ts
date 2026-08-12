@@ -1,6 +1,6 @@
 // Verifies session status output across scoped stores, tasks, and runtime hooks.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { Value } from "typebox/value";
 import { beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { resolveSessionStoreEntryCore } from "../config/sessions/store-entry.js";

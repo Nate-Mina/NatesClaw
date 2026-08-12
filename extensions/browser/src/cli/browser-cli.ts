@@ -195,7 +195,7 @@ export function registerBrowserCli(
           true,
         )}\n\n${theme.muted("Docs:")} ${formatDocsLink(
           "/cli/browser",
-          "docs.natesclaw.ai/cli/browser",
+          "docs.openclaw.ai/cli/browser",
         )}\n`,
     )
     .action(() => {

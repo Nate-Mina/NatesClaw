@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REMOTE_URL="${NATESCLAW_REF_REMOTE:-https://github.com/natesclaw/natesclaw.git}"
+REMOTE_URL="${NATESCLAW_REF_REMOTE:-https://github.com/openclaw/natesclaw.git}"
 REF=""
 EXPECTED_SHA=""
 FALLBACK_OK=0

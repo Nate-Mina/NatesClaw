@@ -1,5 +1,5 @@
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { readNonBlankString as readNonEmptyString } from "@natesclaw/normalization-core/string-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { readNonBlankString as readNonEmptyString } from "@openclaw/normalization-core/string-coerce";
 import { redactTranscriptMessage } from "../agents/transcript-redact.js";
 import {
   appendTranscriptMessage,

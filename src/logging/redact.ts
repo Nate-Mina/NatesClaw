@@ -1,8 +1,8 @@
-import { findStructuredAuthParamRanges, redactStructuredAuthHeaders } from "@natesclaw/acp-core";
-import { isSensitiveUrlQueryParamName } from "@natesclaw/net-policy/redact-sensitive-url";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { findStructuredAuthParamRanges, redactStructuredAuthHeaders } from "@openclaw/acp-core";
+import { isSensitiveUrlQueryParamName } from "@openclaw/net-policy/redact-sensitive-url";
+import { expectDefined } from "@openclaw/normalization-core";
 // Redaction helpers scrub secrets and sensitive identifiers from log output.
-import { sliceUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { sliceUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { compileConfigRegex } from "../security/config-regex.js";
 import { readLoggingConfig } from "./config.js";

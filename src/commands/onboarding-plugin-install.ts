@@ -6,9 +6,9 @@
  */
 import fs from "node:fs";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
-import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { expectDefined } from "@openclaw/normalization-core";
+import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import { sanitizeTerminalText } from "../../packages/terminal-core/src/safe-text.js";
 import { resolveBundledInstallPlanForCatalogEntry } from "../cli/plugin-install-plan.js";
 import { assertConfigWriteAllowedInCurrentMode } from "../config/nix-mode-write-guard.js";

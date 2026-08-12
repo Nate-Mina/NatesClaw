@@ -1,6 +1,6 @@
 // Cron tool tests cover schedule guidance, scoped job operations, delivery
 // context inheritance, session routing, and agent id ownership.
-import { MAX_DATE_TIMESTAMP_MS } from "@natesclaw/normalization-core/number-coercion";
+import { MAX_DATE_TIMESTAMP_MS } from "@openclaw/normalization-core/number-coercion";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { callGatewayMock, extractDeliveryInfoMock } = vi.hoisted(() => ({

@@ -11,7 +11,7 @@ Adds agent-callable tools.
 
 ## Distribution
 
-- Package: `@natesclaw/memory-core`
+- Package: `@openclaw/memory-core`
 - Install route: included in Natesclaw
 
 ## Surface

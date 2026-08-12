@@ -1,6 +1,6 @@
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { Page } from "playwright";
 import { expect } from "vitest";
 import { SESSION_DRAG_MIME } from "../lib/sessions/drag.ts";

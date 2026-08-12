@@ -290,7 +290,7 @@ describe("renderTable", () => {
   });
 
   it("does not split BEL-terminated OSC-8 links when wrapping", () => {
-    const open = "\x1b]8;;https://natesclaw.ai\x07";
+    const open = "\x1b]8;;https://openclaw.ai\x07";
     const close = "\x1b]8;;\x07";
     const out = renderTable({
       width: 24,
@@ -328,9 +328,9 @@ describe("renderTable", () => {
   });
 
   it("does not split C1 OSC-8 links when wrapping", () => {
-    const open = "\x9d8;;https://natesclaw.ai\x9c";
+    const open = "\x9d8;;https://openclaw.ai\x9c";
     const close = "\x9d8;;\x9c";
-    const canonicalOpen = "\x1b]8;;https://natesclaw.ai\x07";
+    const canonicalOpen = "\x1b]8;;https://openclaw.ai\x07";
     const canonicalClose = "\x1b]8;;\x07";
     const out = renderTable({
       width: 24,
@@ -346,7 +346,7 @@ describe("renderTable", () => {
   });
 
   it("preserves OSC-8 parameters when reopening wrapped links", () => {
-    const open = "\x1b]8;id=docs;https://natesclaw.ai\x07";
+    const open = "\x1b]8;id=docs;https://openclaw.ai\x07";
     const close = "\x1b]8;;\x07";
     const out = renderTable({
       width: 20,
@@ -376,9 +376,9 @@ describe("renderTable", () => {
   });
 
   it.each([
-    ["BEL ST", "\x1b]8;;https://natesclaw.ai\x07", "\x1b]8;;\x07"],
-    ["ESC-backslash ST", "\x1b]8;;https://natesclaw.ai\x1b\\", "\x1b]8;;\x1b\\"],
-    ["C1 ST", "\x9d8;;https://natesclaw.ai\x9c", "\x9d8;;\x9c"],
+    ["BEL ST", "\x1b]8;;https://openclaw.ai\x07", "\x1b]8;;\x07"],
+    ["ESC-backslash ST", "\x1b]8;;https://openclaw.ai\x1b\\", "\x1b]8;;\x1b\\"],
+    ["C1 ST", "\x9d8;;https://openclaw.ai\x9c", "\x9d8;;\x9c"],
   ])(
     "closes and reopens embedded OSC-8 links at wrap boundaries (%s)",
     (_label, openSeq, closeSeq) => {
@@ -417,9 +417,9 @@ describe("renderTable", () => {
   );
 
   it.each([
-    ["BEL ST", "\x1b]8;;https://natesclaw.ai\x07", "\x1b]8;;\x07"],
-    ["ESC-backslash ST", "\x1b]8;;https://natesclaw.ai\x1b\\", "\x1b]8;;\x1b\\"],
-    ["C1 ST", "\x9d8;;https://natesclaw.ai\x9c", "\x9d8;;\x9c"],
+    ["BEL ST", "\x1b]8;;https://openclaw.ai\x07", "\x1b]8;;\x07"],
+    ["ESC-backslash ST", "\x1b]8;;https://openclaw.ai\x1b\\", "\x1b]8;;\x1b\\"],
+    ["C1 ST", "\x9d8;;https://openclaw.ai\x9c", "\x9d8;;\x9c"],
   ])(
     "does not reopen a leading OSC-8 link onto wrapped suffix lines (%s)",
     (_label, openSeq, closeSeq) => {

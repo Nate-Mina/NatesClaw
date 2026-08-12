@@ -1,9 +1,9 @@
 import {
   resolveAcpSessionCwd,
   resolveAcpThreadSessionDetailLines,
-} from "@natesclaw/acp-core/runtime/session-identifiers";
-import type { AcpRuntimeSessionMode } from "@natesclaw/acp-core/runtime/types";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/acp-core/runtime/session-identifiers";
+import type { AcpRuntimeSessionMode } from "@openclaw/acp-core/runtime/types";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { getAcpSessionManager } from "../../../acp/control-plane/manager.js";
 import type { AcpSpawnRuntimeCloseHandle } from "../../../acp/control-plane/spawn.js";
 import { formatThinkingLevels } from "../../../auto-reply/thinking.js";

@@ -6,7 +6,7 @@ import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveGatewayService, type GatewayService } from "../daemon/service.js";
 import { hasEnvHttpProxyConfigured } from "../infra/net/proxy-env.js";
 
-const DIRECT_PROBE_HOST = "docs.natesclaw.ai";
+const DIRECT_PROBE_HOST = "docs.openclaw.ai";
 const DIRECT_PROBE_PORT = 443;
 const DIRECT_PROBE_TIMEOUT_MS = 3_000;
 const HTTP_PROXY_ENV_KEYS = ["HTTP_PROXY", "HTTPS_PROXY", "http_proxy", "https_proxy"] as const;

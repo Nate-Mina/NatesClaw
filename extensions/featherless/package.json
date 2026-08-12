@@ -1,22 +1,22 @@
 {
-  "name": "@natesclaw/featherless-provider",
+  "name": "@openclaw/featherless-provider",
   "version": "2026.8.1",
   "description": "Natesclaw Featherless AI provider plugin.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/featherless-provider",
-      "npmSpec": "@natesclaw/featherless-provider",
+      "clawhubSpec": "clawhub:@openclaw/featherless-provider",
+      "npmSpec": "@openclaw/featherless-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.11"
     },

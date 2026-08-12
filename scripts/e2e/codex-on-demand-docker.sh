@@ -84,7 +84,7 @@ natesclaw_e2e_install_package /tmp/natesclaw-install.log
 command -v natesclaw >/dev/null
 natesclaw_e2e_enable_natesclaw_cli_timeout
 
-natesclaw_e2e_assert_dep_absent "@natesclaw/codex" "$HOME/.natesclaw" "$NPM_CONFIG_PREFIX"
+natesclaw_e2e_assert_dep_absent "@openclaw/codex" "$HOME/.natesclaw" "$NPM_CONFIG_PREFIX"
 natesclaw_e2e_assert_dep_absent "@openai/codex" "$HOME/.natesclaw" "$NPM_CONFIG_PREFIX"
 
 echo "Running non-interactive OpenAI onboarding; Codex should install on demand..."

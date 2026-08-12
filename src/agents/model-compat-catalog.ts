@@ -1,4 +1,4 @@
-import { normalizeLowercaseStringOrEmpty as normalizeApi } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty as normalizeApi } from "@openclaw/normalization-core/string-coerce";
 import type { ModelCompatConfig } from "../config/types.models.js";
 
 type ModelTransportRoute = {

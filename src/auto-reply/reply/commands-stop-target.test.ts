@@ -1,5 +1,5 @@
 // Tests stop command target resolution across active sessions and channel routes.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { NatesclawConfig } from "../../config/config.js";
 import {

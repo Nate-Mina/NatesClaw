@@ -399,7 +399,7 @@ Default Docker image: `natesclaw-sandbox:bookworm-slim`
 <Note>
 **Source checkout vs npm install**
 
-The `scripts/sandbox-setup.sh`, `scripts/sandbox-common-setup.sh`, and `scripts/sandbox-browser-setup.sh` helper scripts are only available when running from a [source checkout](https://github.com/natesclaw/natesclaw). They are not included in the npm package.
+The `scripts/sandbox-setup.sh`, `scripts/sandbox-common-setup.sh`, and `scripts/sandbox-browser-setup.sh` helper scripts are only available when running from a [source checkout](https://github.com/openclaw/natesclaw). They are not included in the npm package.
 
 If you installed Natesclaw via `npm install -g natesclaw`, use the inline `docker build` commands shown below instead.
 </Note>
@@ -442,7 +442,7 @@ If you installed Natesclaw via `npm install -g natesclaw`, use the inline `docke
     scripts/sandbox-common-setup.sh
     ```
 
-    From an npm install, build the default image first (see above), then build the common image on top using [`scripts/docker/sandbox/Dockerfile.common`](https://github.com/natesclaw/natesclaw/blob/main/scripts/docker/sandbox/Dockerfile.common) from the repository.
+    From an npm install, build the default image first (see above), then build the common image on top using [`scripts/docker/sandbox/Dockerfile.common`](https://github.com/openclaw/natesclaw/blob/main/scripts/docker/sandbox/Dockerfile.common) from the repository.
 
     Then set `agents.defaults.sandbox.docker.image` to `natesclaw-sandbox-common:bookworm-slim`.
 

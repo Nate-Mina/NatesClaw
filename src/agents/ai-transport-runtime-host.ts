@@ -2,7 +2,7 @@ import {
   configureAiTransportHost,
   getAiTransportHost,
   type AiProviderRequestCapabilities,
-} from "@natesclaw/ai";
+} from "@openclaw/ai";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import "../llm/ai-transport-host.js";
 import { getModelProviderRuntimePluginHandle } from "../plugins/provider-hook-runtime.js";

@@ -2,8 +2,8 @@
 import {
   normalizeJsonSchemaForTypeBox,
   type JsonSchemaValue,
-} from "@natesclaw/normalization-core/json-schema";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+} from "@openclaw/normalization-core/json-schema";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { Compile } from "typebox/compile";
 import { isBlockedObjectKey } from "../infra/prototype-keys.js";
 

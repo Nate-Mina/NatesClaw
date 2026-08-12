@@ -1,5 +1,5 @@
 // Doctor repair flow builds and runs repair actions for doctor findings.
-import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { scrubDoctorErrorMessage } from "./doctor-error-message.js";
 import { normalizeHealthCheck } from "./health-check-adapter.js";

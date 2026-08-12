@@ -1,8 +1,8 @@
 // Scans plugin manifest metadata without importing runtime entrypoints.
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalString as normalizeTrimmedString } from "@natesclaw/normalization-core/string-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalString as normalizeTrimmedString } from "@openclaw/normalization-core/string-coerce";
 import { resolveRealpathOrAbsolute } from "../infra/boundary-path.js";
 import { resolveHomeRelativePath } from "../infra/home-dir.js";
 import { resolveNatesclawPackageRootSync } from "../infra/natesclaw-root.js";

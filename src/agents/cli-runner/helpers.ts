@@ -6,13 +6,13 @@ import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { stripSystemPromptCacheBoundary } from "@natesclaw/ai/internal/shared";
-import { MAX_IMAGE_BYTES } from "@natesclaw/media-core/constants";
-import { extensionForMime } from "@natesclaw/media-core/mime";
+import { stripSystemPromptCacheBoundary } from "@openclaw/ai/internal/shared";
+import { MAX_IMAGE_BYTES } from "@openclaw/media-core/constants";
+import { extensionForMime } from "@openclaw/media-core/mime";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import { isAcpRuntimeSpawnAvailable } from "../../acp/runtime/availability.js";
 import type { SourceReplyDeliveryMode } from "../../auto-reply/get-reply-options.types.js";
 import type { ThinkLevel } from "../../auto-reply/thinking.js";

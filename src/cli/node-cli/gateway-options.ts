@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import type { NodeHostConfig } from "../../node-host/config.js";
 import { parsePort } from "../daemon-cli/shared.js";
 

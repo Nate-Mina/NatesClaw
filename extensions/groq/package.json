@@ -1,22 +1,22 @@
 {
-  "name": "@natesclaw/groq-provider",
+  "name": "@openclaw/groq-provider",
   "version": "2026.8.1",
   "description": "Natesclaw Groq media-understanding provider.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/groq-provider",
-      "npmSpec": "@natesclaw/groq-provider",
+      "clawhubSpec": "clawhub:@openclaw/groq-provider",
+      "npmSpec": "@openclaw/groq-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.8"
     },

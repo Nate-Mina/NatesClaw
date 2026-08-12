@@ -99,7 +99,7 @@ for (const params of packageManifestContractTests) {
 describe("plugin package authoring metadata", () => {
   it("exposes the declared discovery and release entrypoints", () => {
     const manifest: PackageManifest = {
-      name: "@natesclaw/example",
+      name: "@openclaw/example",
       version: "1.2.3",
       natesclaw: {
         extensions: ["./src/index.ts"],
@@ -115,7 +115,7 @@ describe("plugin package authoring metadata", () => {
           minGatewayVersion: "2026.8.1",
         },
         install: {
-          npmSpec: "@natesclaw/example",
+          npmSpec: "@openclaw/example",
           minHostVersion: "2026.8.1",
         },
       },

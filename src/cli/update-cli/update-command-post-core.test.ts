@@ -48,7 +48,7 @@ describe("readPostCorePluginInstallRecordsFile", () => {
     const filePath = path.join(dir, "plugin-install-records.json");
     await fs.writeFile(
       filePath,
-      '{"demo":{"source":"npm","spec":"@natesclaw/demo@1.0.0","installPath":"/tmp/demo-plugin","futureMetadata":{"retained":true}},"constructor":{"source":"path"},"toString":{"source":"git"},"__proto__":{"source":"archive"}}\n',
+      '{"demo":{"source":"npm","spec":"@openclaw/demo@1.0.0","installPath":"/tmp/demo-plugin","futureMetadata":{"retained":true}},"constructor":{"source":"path"},"toString":{"source":"git"},"__proto__":{"source":"archive"}}\n',
       "utf-8",
     );
 
@@ -59,7 +59,7 @@ describe("readPostCorePluginInstallRecordsFile", () => {
     expect(Object.getPrototypeOf(records)).toBeNull();
     expect(getPluginInstallRecordMapEntry(records, "demo")).toEqual({
       source: "npm",
-      spec: "@natesclaw/demo@1.0.0",
+      spec: "@openclaw/demo@1.0.0",
       installPath: "/tmp/demo-plugin",
       futureMetadata: { retained: true },
     });

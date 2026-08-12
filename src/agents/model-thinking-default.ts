@@ -3,11 +3,11 @@
  * explicit per-model config, global defaults, catalog metadata, and model
  * family fallbacks.
  */
-import { resolveClaudeOpus5ModelIdentity } from "@natesclaw/llm-core";
+import { resolveClaudeOpus5ModelIdentity } from "@openclaw/llm-core";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import { resolveThinkingDefaultForModel } from "../auto-reply/thinking.js";
 import type { ThinkLevel } from "../auto-reply/thinking.shared.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

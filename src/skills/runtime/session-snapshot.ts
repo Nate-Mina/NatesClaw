@@ -1,5 +1,5 @@
 // Session snapshot helpers capture and restore runtime skill state for sessions.
-import { stableStringify } from "@natesclaw/normalization-core";
+import { stableStringify } from "@openclaw/normalization-core";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { pruneMapToMaxSize } from "../../infra/map-size.js";
 import { matchesSkillFilter } from "../discovery/filter.js";

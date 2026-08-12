@@ -157,7 +157,7 @@ export async function buildOnboardingWelcome(params: {
     "",
     "Say **yes** and I'll set all of that up now.",
     "",
-    "Heads up: your agent gets real access to this machine — https://docs.natesclaw.ai/security",
+    "Heads up: your agent gets real access to this machine — https://docs.openclaw.ai/security",
     "Afterwards: `connect discord`, `connect slack`, `connect telegram`, `connect whatsapp` (or `channels` for the full list), then `talk to agent` to meet your agent.",
   ].join("\n");
   params.engine.noteAssistantMessage(welcome);

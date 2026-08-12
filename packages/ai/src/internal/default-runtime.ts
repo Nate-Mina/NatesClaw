@@ -10,7 +10,7 @@ type DefaultRuntimeState = {
   runtime: LlmRuntime;
 };
 
-const DEFAULT_RUNTIME_KEY = Symbol.for("natesclaw.ai.defaultRuntime");
+const DEFAULT_RUNTIME_KEY = Symbol.for("openclaw.ai.defaultRuntime");
 
 function resolveDefaultRuntime(): DefaultRuntimeState {
   const globalStore = globalThis as Record<PropertyKey, unknown>;

@@ -2,7 +2,7 @@
  * Tests shared gateway auth behavior across config method updates.
  */
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { RestartSentinelPayload } from "../../infra/restart-sentinel.js";

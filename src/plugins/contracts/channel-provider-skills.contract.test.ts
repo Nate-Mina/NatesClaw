@@ -29,7 +29,7 @@ const RETIRED_SKILL_PATTERNS = [
   { pattern: /## 备用方案（直接使用 `cron` 工具）/u, replacement: "qqbot_remind only" },
   {
     pattern: /github\.com\/steipete\/wacli\/cmd\/wacli@latest/u,
-    replacement: "github.com/natesclaw/wacli/cmd/wacli@latest",
+    replacement: "github.com/openclaw/wacli/cmd/wacli@latest",
   },
 ] as const;
 

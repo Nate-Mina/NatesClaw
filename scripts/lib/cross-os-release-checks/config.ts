@@ -102,7 +102,7 @@ export type SummaryPayload = {
   };
 };
 
-export const PUBLISHED_INSTALLER_BASE_URL = "https://natesclaw.ai";
+export const PUBLISHED_INSTALLER_BASE_URL = "https://openclaw.ai";
 
 const SUPPORTED_MODES = new Set<CrossOsMode>(["fresh", "upgrade", "both"]);
 const SUPPORTED_SUITES = new Set<CrossOsSuite>([
@@ -132,7 +132,7 @@ const providerConfig = {
     secretEnv: "OPENAI_API_KEY",
     authChoice: "openai-api-key",
     model: "openai/gpt-5.6-luna",
-    requiredCompanionPackages: ["@natesclaw/codex"],
+    requiredCompanionPackages: ["@openclaw/codex"],
     baseUrl: "https://api.openai.com/v1",
     timeoutSeconds: CROSS_OS_AGENT_TURN_TIMEOUT_SECONDS,
   },

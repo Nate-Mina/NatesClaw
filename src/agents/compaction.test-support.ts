@@ -27,7 +27,7 @@ type CompactionTestApi = {
 
 function getTestApi(): CompactionTestApi {
   const api = (globalThis as Record<PropertyKey, unknown>)[
-    Symbol.for("natesclaw.compactionTestApi")
+    Symbol.for("openclaw.compactionTestApi")
   ];
   if (!api) {
     throw new Error("compaction test API is unavailable");

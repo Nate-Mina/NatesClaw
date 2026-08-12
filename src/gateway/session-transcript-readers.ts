@@ -1,5 +1,5 @@
 import path from "node:path";
-import { parseDateFirstTimestampMs } from "@natesclaw/normalization-core/number-coercion";
+import { parseDateFirstTimestampMs } from "@openclaw/normalization-core/number-coercion";
 import {
   isSessionTranscriptProjectionUnavailableError,
   readRecentSessionTranscriptMessageEvents,

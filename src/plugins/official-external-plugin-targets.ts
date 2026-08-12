@@ -1,6 +1,6 @@
 // Lightweight static projections for deciding whether plugin repair can be skipped.
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { BUNDLED_OFFICIAL_EXTERNAL_PLUGIN_CATALOG_ENTRIES } from "./official-external-plugin-bundled-catalogs.js";
 

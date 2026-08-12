@@ -1,4 +1,4 @@
-import { hasOpenAICompatibleConversationTurn } from "@natesclaw/ai/transports";
+import { hasOpenAICompatibleConversationTurn } from "@openclaw/ai/transports";
 // Verifies OpenAI-compatible payloads contain at least one sendable conversation turn.
 import { describe, expect, it } from "vitest";
 

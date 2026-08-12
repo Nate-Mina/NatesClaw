@@ -1,7 +1,7 @@
 // Missing configured plugin install tests cover doctor diagnostics for absent plugin installs.
 import fs from "node:fs";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../../../test/helpers/temp-dir.js";
 import type { NatesclawConfig, PluginsConfig } from "../../../config/types.js";
@@ -186,7 +186,7 @@ function mockBrokenBraveInstall(
   mocks.listOfficialExternalPluginCatalogEntries.mockReturnValue([
     officialWebSearchPluginEntry({
       id: "brave",
-      npmSpec: "@natesclaw/brave-plugin",
+      npmSpec: "@openclaw/brave-plugin",
       envVar: "BRAVE_API_KEY",
       label: "Brave",
       providerLabel: "Brave Search",
@@ -407,7 +407,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       clawhub: {
         source: "clawhub",
         clawhubUrl: "https://clawhub.ai",
-        clawhubPackage: "@natesclaw/plugin-matrix",
+        clawhubPackage: "@openclaw/plugin-matrix",
         clawhubFamily: "code-plugin",
         clawhubChannel: "official",
         version: "1.2.3",
@@ -425,9 +425,9 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       targetDir: "/tmp/natesclaw-plugins/matrix",
       version: "1.2.3",
       npmResolution: {
-        name: "@natesclaw/plugin-matrix",
+        name: "@openclaw/plugin-matrix",
         version: "1.2.3",
-        resolvedSpec: "@natesclaw/plugin-matrix@1.2.3",
+        resolvedSpec: "@openclaw/plugin-matrix@1.2.3",
         integrity: "sha512-test",
         resolvedAt: "2026-05-01T00:00:00.000Z",
       },
@@ -441,7 +441,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@natesclaw/plugin-matrix@1.2.3",
+          npmSpec: "@openclaw/plugin-matrix@1.2.3",
           expectedIntegrity: "sha512-test",
         },
         trustedSourceLinkedOfficialInstall: true,
@@ -468,7 +468,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     expect(issue).toEqual({
       kind: "missing-install-record",
       pluginId: "matrix",
-      installSpec: "@natesclaw/plugin-matrix@1.2.3",
+      installSpec: "@openclaw/plugin-matrix@1.2.3",
     });
     expect(
       configuredPluginInstallIssueToHealthFinding(expectDefined(issue, "issue test invariant")),
@@ -476,7 +476,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       checkId: "core/doctor/configured-plugin-installs",
       severity: "warning",
       target: "matrix",
-      fixHint: "Run `natesclaw doctor --fix` to install @natesclaw/plugin-matrix@1.2.3.",
+      fixHint: "Run `natesclaw doctor --fix` to install @openclaw/plugin-matrix@1.2.3.",
     });
     expect(
       configuredPluginInstallIssueToRepairEffect(expectDefined(issue, "issue test invariant")),
@@ -493,7 +493,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       discord: {
         source: "npm",
-        spec: "@natesclaw/discord",
+        spec: "@openclaw/discord",
         installPath: missingDiscordPath,
       },
     };
@@ -504,7 +504,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "discord",
         meta: { label: "Discord" },
         install: {
-          npmSpec: "@natesclaw/discord",
+          npmSpec: "@openclaw/discord",
         },
       },
     ]);
@@ -561,7 +561,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       discord: {
         source: "npm",
-        spec: "@natesclaw/discord",
+        spec: "@openclaw/discord",
         installPath: missingDiscordPath,
       },
     };
@@ -572,7 +572,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "discord",
         meta: { label: "Discord" },
         install: {
-          npmSpec: "@natesclaw/discord",
+          npmSpec: "@openclaw/discord",
         },
       },
     ]);
@@ -598,7 +598,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         kind: "missing-installed-payload",
         pluginId: "discord",
         installPath: missingDiscordPath,
-        installSpec: "@natesclaw/discord",
+        installSpec: "@openclaw/discord",
       },
     ]);
   });
@@ -650,7 +650,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@natesclaw/plugin-matrix@1.2.3",
+          npmSpec: "@openclaw/plugin-matrix@1.2.3",
           expectedIntegrity: "sha512-test",
         },
         trustedSourceLinkedOfficialInstall: true,
@@ -666,7 +666,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: "@natesclaw/plugin-matrix@1.2.3",
+      spec: "@openclaw/plugin-matrix@1.2.3",
       extensionsDir: "/tmp/natesclaw-plugins",
       expectedPluginId: "matrix",
       expectedIntegrity: "sha512-test",
@@ -676,7 +676,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords);
     expectRecordFields((records as Record<string, unknown>).matrix, {
       source: "npm",
-      spec: "@natesclaw/plugin-matrix@1.2.3",
+      spec: "@openclaw/plugin-matrix@1.2.3",
       installPath: "/tmp/natesclaw-plugins/matrix",
       version: "1.2.3",
     });
@@ -685,7 +685,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
     expect(result.changes).toEqual([
-      'Installed missing configured plugin "matrix" from @natesclaw/plugin-matrix@1.2.3.',
+      'Installed missing configured plugin "matrix" from @openclaw/plugin-matrix@1.2.3.',
     ]);
     expect(result.warnings).toStrictEqual([]);
   });
@@ -713,7 +713,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           clawhub: {
             source: "clawhub",
             clawhubUrl: "https://clawhub.ai",
-            clawhubPackage: "@natesclaw/plugin-matrix",
+            clawhubPackage: "@openclaw/plugin-matrix",
             clawhubFamily: "code-plugin",
             clawhubChannel: "official",
             version: "1.2.3",
@@ -733,8 +733,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          clawhubSpec: "clawhub:@natesclaw/plugin-matrix@stable",
-          npmSpec: "@natesclaw/plugin-matrix@1.2.3",
+          clawhubSpec: "clawhub:@openclaw/plugin-matrix@stable",
+          npmSpec: "@openclaw/plugin-matrix@1.2.3",
           expectedIntegrity: "sha512-test",
         },
       },
@@ -748,14 +748,14 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     const clawHubCall = expectRecordFields(mockCallArg(mocks.installPluginFromClawHub), {
-      spec: "clawhub:@natesclaw/plugin-matrix@stable",
+      spec: "clawhub:@openclaw/plugin-matrix@stable",
       expectedPluginId: "matrix",
       config: cfg,
     });
     expect(clawHubCall.logger).toEqual(expect.objectContaining({ terminalLinks: false }));
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(result.changes).toEqual([
-      'Installed missing configured plugin "matrix" from clawhub:@natesclaw/plugin-matrix@stable.',
+      'Installed missing configured plugin "matrix" from clawhub:@openclaw/plugin-matrix@stable.',
     ]);
     expect(result.notices).toContain(reviewNotice);
     expect(result.notices?.[0]).not.toContain("\u001b");
@@ -767,7 +767,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       ok: false,
       code: "clawhub_risk_acknowledgement_required",
       error:
-        'ClawHub release "@natesclaw/plugin-matrix@stable" has trust warnings. Review the package and rerun with --acknowledge-clawhub-risk to continue.',
+        'ClawHub release "@openclaw/plugin-matrix@stable" has trust warnings. Review the package and rerun with --acknowledge-clawhub-risk to continue.',
     });
     mocks.listChannelPluginCatalogEntries.mockReturnValue([
       {
@@ -775,7 +775,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          clawhubSpec: "clawhub:@natesclaw/plugin-matrix@stable",
+          clawhubSpec: "clawhub:@openclaw/plugin-matrix@stable",
         },
       },
     ]);
@@ -792,7 +792,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expect(result.warnings[0]).toContain(
-      "natesclaw plugins install clawhub:@natesclaw/plugin-matrix@stable --acknowledge-clawhub-risk",
+      "natesclaw plugins install clawhub:@openclaw/plugin-matrix@stable --acknowledge-clawhub-risk",
     );
   });
 
@@ -800,8 +800,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       demo: {
         source: "clawhub",
-        spec: "clawhub:@natesclaw/plugin-demo@stable",
-        clawhubPackage: "@natesclaw/plugin-demo",
+        spec: "clawhub:@openclaw/plugin-demo@stable",
+        clawhubPackage: "@openclaw/plugin-demo",
         installPath: "/missing/demo",
       },
     };
@@ -819,7 +819,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           status: "skipped",
           code: "clawhub_download_blocked",
           message:
-            'Skipped demo ClawHub update: ClawHub release "@natesclaw/plugin-demo@1.2.4" cannot be installed because ClawHub flagged it as blocked or malicious. Review the security details above or choose a different version. Existing installed plugin left unchanged.',
+            'Skipped demo ClawHub update: ClawHub release "@openclaw/plugin-demo@1.2.4" cannot be installed because ClawHub flagged it as blocked or malicious. Review the security details above or choose a different version. Existing installed plugin left unchanged.',
         },
       ],
     });
@@ -844,7 +844,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     );
     expect(result.changes).toStrictEqual([]);
     expect(result.warnings).toStrictEqual([
-      'Skipped demo ClawHub update: ClawHub release "@natesclaw/plugin-demo@1.2.4" cannot be installed because ClawHub flagged it as blocked or malicious. Review the security details above or choose a different version. Existing installed plugin left unchanged.',
+      'Skipped demo ClawHub update: ClawHub release "@openclaw/plugin-demo@1.2.4" cannot be installed because ClawHub flagged it as blocked or malicious. Review the security details above or choose a different version. Existing installed plugin left unchanged.',
     ]);
   });
 
@@ -853,7 +853,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       ok: false,
       code: "clawhub_risk_acknowledgement_required",
       error:
-        'ClawHub release "@natesclaw/plugin-matrix@stable" has trust warnings. Review the package and rerun with --acknowledge-clawhub-risk to continue.',
+        'ClawHub release "@openclaw/plugin-matrix@stable" has trust warnings. Review the package and rerun with --acknowledge-clawhub-risk to continue.',
     });
     mocks.listChannelPluginCatalogEntries.mockReturnValue([
       {
@@ -861,7 +861,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          clawhubSpec: "clawhub:@natesclaw/plugin-matrix\n\u001b[31m@stable;$(touch /tmp/pwned)",
+          clawhubSpec: "clawhub:@openclaw/plugin-matrix\n\u001b[31m@stable;$(touch /tmp/pwned)",
         },
       },
     ]);
@@ -879,10 +879,10 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     const warning = result.warnings[0] ?? "";
     expect(warning).toContain(
-      "natesclaw plugins install 'clawhub:@natesclaw/plugin-matrix\\n@stable;$(touch /tmp/pwned)' --acknowledge-clawhub-risk",
+      "natesclaw plugins install 'clawhub:@openclaw/plugin-matrix\\n@stable;$(touch /tmp/pwned)' --acknowledge-clawhub-risk",
     );
     expect(warning).not.toContain(
-      "natesclaw plugins install clawhub:@natesclaw/plugin-matrix\\n@stable;$(touch /tmp/pwned) --acknowledge-clawhub-risk",
+      "natesclaw plugins install clawhub:@openclaw/plugin-matrix\\n@stable;$(touch /tmp/pwned) --acknowledge-clawhub-risk",
     );
     expect(warning).not.toContain("\u001b");
     expect(warning).not.toContain("plugin-matrix\n");
@@ -892,7 +892,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "matrix",
-        npmSpec: "@natesclaw/plugin-matrix",
+        npmSpec: "@openclaw/plugin-matrix",
         version: "1.2.3",
       }),
     );
@@ -902,7 +902,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@natesclaw/plugin-matrix@1.2.3",
+          npmSpec: "@openclaw/plugin-matrix@1.2.3",
         },
         trustedSourceLinkedOfficialInstall: true,
       },
@@ -917,7 +917,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: "@natesclaw/plugin-matrix@1.2.3",
+      spec: "@openclaw/plugin-matrix@1.2.3",
       extensionsDir: "/tmp/natesclaw-plugins",
       expectedPluginId: "matrix",
       trustedSourceLinkedOfficialInstall: true,
@@ -925,7 +925,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords);
     expectRecordFields((records as Record<string, unknown>).matrix, {
       source: "npm",
-      spec: "@natesclaw/plugin-matrix@1.2.3",
+      spec: "@openclaw/plugin-matrix@1.2.3",
       installPath: "/tmp/natesclaw-plugins/matrix",
     });
     expect(mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords, 0, 1)).toEqual({
@@ -933,7 +933,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: { MATRIX_HOMESERVER: "https://matrix.example.org" },
     });
     expect(result.changes).toEqual([
-      'Installed missing configured plugin "matrix" from @natesclaw/plugin-matrix@1.2.3.',
+      'Installed missing configured plugin "matrix" from @openclaw/plugin-matrix@1.2.3.',
     ]);
     expect(result.warnings).toStrictEqual([]);
   });
@@ -950,8 +950,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          clawhubSpec: "clawhub:@natesclaw/plugin-matrix@stable",
-          npmSpec: "@natesclaw/plugin-matrix@1.2.3",
+          clawhubSpec: "clawhub:@openclaw/plugin-matrix@stable",
+          npmSpec: "@openclaw/plugin-matrix@1.2.3",
         },
         trustedSourceLinkedOfficialInstall: true,
       },
@@ -967,13 +967,13 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: "@natesclaw/plugin-matrix@1.2.3",
+      spec: "@openclaw/plugin-matrix@1.2.3",
       expectedPluginId: "matrix",
       trustedSourceLinkedOfficialInstall: true,
     });
     expect(result.changes).toEqual([
-      'ClawHub clawhub:@natesclaw/plugin-matrix@stable unavailable for "matrix"; falling back to npm @natesclaw/plugin-matrix@1.2.3.',
-      'Installed missing configured plugin "matrix" from @natesclaw/plugin-matrix@1.2.3.',
+      'ClawHub clawhub:@openclaw/plugin-matrix@stable unavailable for "matrix"; falling back to npm @openclaw/plugin-matrix@1.2.3.',
+      'Installed missing configured plugin "matrix" from @openclaw/plugin-matrix@1.2.3.',
     ]);
     expect(result.warnings).toStrictEqual([]);
   });
@@ -990,7 +990,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          clawhubSpec: "clawhub:@natesclaw/plugin-matrix@stable",
+          clawhubSpec: "clawhub:@openclaw/plugin-matrix@stable",
           npmSpec: "@someone-else/plugin-matrix@1.2.3",
         },
       },
@@ -1008,7 +1008,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(result.changes).toStrictEqual([]);
     expect(result.warnings).toEqual([
-      'Failed to install missing configured plugin "matrix" from clawhub:@natesclaw/plugin-matrix@stable: ClawHub artifact download is not available yet.',
+      'Failed to install missing configured plugin "matrix" from clawhub:@openclaw/plugin-matrix@stable: ClawHub artifact download is not available yet.',
     ]);
   });
 
@@ -1016,7 +1016,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "twitch",
-        npmSpec: "@natesclaw/twitch",
+        npmSpec: "@openclaw/twitch",
         version: "2026.5.2",
       }),
     );
@@ -1026,7 +1026,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "twitch",
         meta: { label: "Twitch" },
         install: {
-          npmSpec: "@natesclaw/twitch",
+          npmSpec: "@openclaw/twitch",
           defaultChoice: "npm",
         },
         trustedSourceLinkedOfficialInstall: true,
@@ -1044,12 +1044,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@natesclaw/twitch"),
+      spec: expectedNpmInstallSpec("@openclaw/twitch"),
       expectedPluginId: "twitch",
       trustedSourceLinkedOfficialInstall: true,
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "twitch" from ${expectedNpmInstallSpec("@natesclaw/twitch")}.`,
+      `Installed missing configured plugin "twitch" from ${expectedNpmInstallSpec("@openclaw/twitch")}.`,
     ]);
   });
 
@@ -1057,7 +1057,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "diagnostics-otel",
-        npmSpec: "@natesclaw/diagnostics-otel",
+        npmSpec: "@openclaw/diagnostics-otel",
         version: VERSION,
       }),
     );
@@ -1066,7 +1066,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "diagnostics-otel",
         label: "Diagnostics OpenTelemetry",
         install: {
-          npmSpec: "@natesclaw/diagnostics-otel",
+          npmSpec: "@openclaw/diagnostics-otel",
           defaultChoice: "npm",
         },
       },
@@ -1083,7 +1083,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: `@natesclaw/diagnostics-otel@${VERSION}`,
+      spec: `@openclaw/diagnostics-otel@${VERSION}`,
       expectedPluginId: "diagnostics-otel",
       trustedSourceLinkedOfficialInstall: true,
     });
@@ -1091,8 +1091,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       mocks.writePersistedInstalledPluginIndexInstallRecords,
     ) as Record<string, unknown>;
     expectRecordFields(persistedRecords["diagnostics-otel"], {
-      spec: "@natesclaw/diagnostics-otel",
-      resolvedSpec: `@natesclaw/diagnostics-otel@${VERSION}`,
+      spec: "@openclaw/diagnostics-otel",
+      resolvedSpec: `@openclaw/diagnostics-otel@${VERSION}`,
     });
   });
 
@@ -1102,7 +1102,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "diagnostics-otel",
         label: "Diagnostics OpenTelemetry",
         install: {
-          npmSpec: "@natesclaw/diagnostics-otel",
+          npmSpec: "@openclaw/diagnostics-otel",
           defaultChoice: "npm",
         },
       },
@@ -1156,7 +1156,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@natesclaw/plugin-matrix@1.2.3",
+          npmSpec: "@openclaw/plugin-matrix@1.2.3",
         },
       },
     ]);
@@ -1182,7 +1182,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         origin: "bundled",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@natesclaw/matrix",
+          npmSpec: "@openclaw/matrix",
         },
       },
     ]);
@@ -1191,7 +1191,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         {
           id: "matrix",
           origin: "bundled",
-          packageName: "@natesclaw/matrix",
+          packageName: "@openclaw/matrix",
           channels: ["matrix"],
         },
       ],
@@ -1225,7 +1225,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       matrix: {
         source: "npm",
-        spec: "@natesclaw/matrix",
+        spec: "@openclaw/matrix",
         installPath: "/missing/matrix",
       },
     };
@@ -1237,7 +1237,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         origin: "bundled",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@natesclaw/matrix",
+          npmSpec: "@openclaw/matrix",
         },
       },
     ]);
@@ -1246,7 +1246,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         {
           id: "matrix",
           origin: "bundled",
-          packageName: "@natesclaw/matrix",
+          packageName: "@openclaw/matrix",
           channels: ["matrix"],
         },
       ],
@@ -1296,8 +1296,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       "google-meet": {
         source: "npm",
-        spec: "@natesclaw/google-meet",
-        resolvedName: "@natesclaw/google-meet",
+        spec: "@openclaw/google-meet",
+        resolvedName: "@openclaw/google-meet",
         installPath: "/missing/google-meet",
       },
     };
@@ -1307,7 +1307,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         {
           id: "google-meet",
           origin: "npm",
-          packageName: "@natesclaw/google-meet",
+          packageName: "@openclaw/google-meet",
         },
       ],
       diagnostics: [],
@@ -1317,7 +1317,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         {
           pluginId: "google-meet",
           origin: "bundled",
-          packageName: "@natesclaw/google-meet",
+          packageName: "@openclaw/google-meet",
         },
       ],
       diagnostics: [],
@@ -1327,10 +1327,10 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       {
         id: "google-meet",
         label: "Google Meet",
-        install: { npmSpec: "@natesclaw/google-meet" },
+        install: { npmSpec: "@openclaw/google-meet" },
         natesclaw: {
           id: "google-meet",
-          install: { npmSpec: "@natesclaw/google-meet" },
+          install: { npmSpec: "@openclaw/google-meet" },
         },
       },
     ]);
@@ -1368,8 +1368,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       "google-meet": {
         source: "npm",
-        spec: "@natesclaw/google-meet",
-        resolvedName: "@natesclaw/google-meet",
+        spec: "@openclaw/google-meet",
+        resolvedName: "@openclaw/google-meet",
         installPath: "/missing/google-meet",
       },
     };
@@ -1383,7 +1383,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         {
           pluginId: "google-meet",
           origin: "bundled",
-          packageName: "@natesclaw/google-meet",
+          packageName: "@openclaw/google-meet",
         },
       ],
       diagnostics: [],
@@ -1418,9 +1418,9 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       "npm",
       {
         source: "npm",
-        spec: "@natesclaw/matrix-fork",
-        resolvedName: "@natesclaw/matrix-fork",
-        resolvedSpec: "@natesclaw/matrix-fork@1.2.3",
+        spec: "@openclaw/matrix-fork",
+        resolvedName: "@openclaw/matrix-fork",
+        resolvedSpec: "@openclaw/matrix-fork@1.2.3",
         installPath: "/missing/matrix-fork",
       },
     ],
@@ -1428,8 +1428,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       "clawhub",
       {
         source: "clawhub",
-        spec: "clawhub:@natesclaw/matrix-fork@stable",
-        clawhubPackage: "@natesclaw/matrix-fork",
+        spec: "clawhub:@openclaw/matrix-fork@stable",
+        clawhubPackage: "@openclaw/matrix-fork",
         installPath: "/missing/matrix-fork",
       },
     ],
@@ -1445,7 +1445,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           origin: "bundled",
           meta: { label: "Matrix" },
           install: {
-            npmSpec: "@natesclaw/matrix",
+            npmSpec: "@openclaw/matrix",
           },
         },
       ]);
@@ -1454,7 +1454,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           {
             id: "matrix",
             origin: "bundled",
-            packageName: "@natesclaw/matrix",
+            packageName: "@openclaw/matrix",
             channels: ["matrix"],
           },
         ],
@@ -1494,7 +1494,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       discord: {
         source: "npm",
-        spec: "@natesclaw/discord",
+        spec: "@openclaw/discord",
         installPath: "/missing/discord",
       },
     };
@@ -1505,7 +1505,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "discord",
         meta: { label: "Discord" },
         install: {
-          npmSpec: "@natesclaw/discord",
+          npmSpec: "@openclaw/discord",
         },
       },
     ]);
@@ -1556,7 +1556,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "discord",
         meta: { label: "Discord" },
         install: {
-          npmSpec: "@natesclaw/discord",
+          npmSpec: "@openclaw/discord",
         },
       },
     ]);
@@ -1566,9 +1566,9 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       targetDir: packageDir,
       version: "1.2.3",
       npmResolution: {
-        name: "@natesclaw/discord",
+        name: "@openclaw/discord",
         version: "1.2.3",
-        resolvedSpec: "@natesclaw/discord@1.2.3",
+        resolvedSpec: "@openclaw/discord@1.2.3",
         integrity: "sha512-discord",
         resolvedAt: "2026-05-01T00:00:00.000Z",
       },
@@ -1594,13 +1594,13 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@natesclaw/discord"),
+      spec: expectedNpmInstallSpec("@openclaw/discord"),
       expectedPluginId: "discord",
       npmDir: npmRoot,
       mode: "update",
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "discord" from ${expectedNpmInstallSpec("@natesclaw/discord")}.`,
+      `Installed missing configured plugin "discord" from ${expectedNpmInstallSpec("@openclaw/discord")}.`,
     ]);
     expect(result.warnings).toEqual([]);
     expect(result.records.discord?.installPath).toBe(packageDir);
@@ -1624,7 +1624,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "discord",
         meta: { label: "Discord" },
         install: {
-          npmSpec: "@natesclaw/discord",
+          npmSpec: "@openclaw/discord",
         },
       },
     ]);
@@ -1639,9 +1639,9 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         targetDir: packageDir,
         version: "1.2.3",
         npmResolution: {
-          name: "@natesclaw/discord",
+          name: "@openclaw/discord",
           version: "1.2.3",
-          resolvedSpec: "@natesclaw/discord@1.2.3",
+          resolvedSpec: "@openclaw/discord@1.2.3",
           integrity: "sha512-discord",
           resolvedAt: "2026-05-01T00:00:00.000Z",
         },
@@ -1658,13 +1658,13 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     expect(mocks.installPluginFromNpmSpec).toHaveBeenCalledTimes(2);
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec, 0), {
-      spec: expectedNpmInstallSpec("@natesclaw/discord"),
+      spec: expectedNpmInstallSpec("@openclaw/discord"),
       npmDir: npmRoot,
       mode: "install",
       config: cfg,
     });
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec, 1), {
-      spec: expectedNpmInstallSpec("@natesclaw/discord"),
+      spec: expectedNpmInstallSpec("@openclaw/discord"),
       npmDir: npmRoot,
       mode: "update",
       config: cfg,
@@ -1679,7 +1679,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     fs.mkdirSync(packageDir, { recursive: true });
     fs.writeFileSync(
       path.join(packageDir, "package.json"),
-      JSON.stringify({ name: "@natesclaw/matrix", version: "1.2.3" }),
+      JSON.stringify({ name: "@openclaw/matrix", version: "1.2.3" }),
     );
     mocks.resolveDefaultPluginNpmDir.mockReturnValue(npmRoot);
     mocks.listChannelPluginCatalogEntries.mockReturnValue([
@@ -1688,14 +1688,14 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          clawhubSpec: "clawhub:@natesclaw/matrix",
-          npmSpec: "@natesclaw/matrix",
+          clawhubSpec: "clawhub:@openclaw/matrix",
+          npmSpec: "@openclaw/matrix",
         },
       },
     ]);
     mocks.installPluginFromClawHub.mockResolvedValue({
       ok: false,
-      error: 'Plugin "@natesclaw/matrix" requires plugin API >=2026.5.18.',
+      error: 'Plugin "@openclaw/matrix" requires plugin API >=2026.5.18.',
     });
     mocks.installPluginFromNpmSpec.mockResolvedValue({
       ok: true,
@@ -1703,9 +1703,9 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       targetDir: packageDir,
       version: "1.2.3",
       npmResolution: {
-        name: "@natesclaw/matrix",
+        name: "@openclaw/matrix",
         version: "1.2.3",
-        resolvedSpec: "@natesclaw/matrix@1.2.3",
+        resolvedSpec: "@openclaw/matrix@1.2.3",
         integrity: "sha512-matrix",
         resolvedAt: "2026-05-01T00:00:00.000Z",
       },
@@ -1734,12 +1734,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     expect(result.warnings).toEqual([]);
     expectRecordFields(result.records.matrix, {
       source: "npm",
-      spec: "@natesclaw/matrix",
+      spec: "@openclaw/matrix",
       installPath: packageDir,
       version: "1.2.3",
-      resolvedName: "@natesclaw/matrix",
+      resolvedName: "@openclaw/matrix",
       resolvedVersion: "1.2.3",
-      resolvedSpec: "@natesclaw/matrix@1.2.3",
+      resolvedSpec: "@openclaw/matrix@1.2.3",
     });
   });
 
@@ -1752,8 +1752,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "whatsapp",
         meta: { label: "WhatsApp" },
         install: {
-          clawhubSpec: "clawhub:@natesclaw/whatsapp",
-          npmSpec: "@natesclaw/whatsapp",
+          clawhubSpec: "clawhub:@openclaw/whatsapp",
+          npmSpec: "@openclaw/whatsapp",
         },
       },
     ]);
@@ -1765,7 +1765,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       clawhub: {
         source: "clawhub",
         clawhubUrl: "https://clawhub.ai",
-        clawhubPackage: "@natesclaw/whatsapp",
+        clawhubPackage: "@openclaw/whatsapp",
         clawhubFamily: "code-plugin",
         clawhubChannel: "official",
         version: "1.2.3",
@@ -1798,7 +1798,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromClawHub), {
-      spec: expectedClawHubInstallSpec("clawhub:@natesclaw/whatsapp"),
+      spec: expectedClawHubInstallSpec("clawhub:@openclaw/whatsapp"),
       env: {
         NATESCLAW_COMPATIBILITY_HOST_VERSION: "2026.5.19",
         NATESCLAW_UPDATE_POST_CORE_CONVERGENCE: "1",
@@ -1809,9 +1809,9 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     expect(result.warnings).toEqual([]);
     expectRecordFields(result.records.whatsapp, {
       source: "clawhub",
-      spec: "clawhub:@natesclaw/whatsapp",
+      spec: "clawhub:@openclaw/whatsapp",
       installPath: "/tmp/natesclaw-plugins/whatsapp",
-      clawhubPackage: "@natesclaw/whatsapp",
+      clawhubPackage: "@openclaw/whatsapp",
     });
   });
 
@@ -1819,7 +1819,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       discord: {
         source: "npm",
-        spec: "@natesclaw/discord",
+        spec: "@openclaw/discord",
         installPath: "/missing/discord",
       },
     };
@@ -1829,7 +1829,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "discord",
         pluginId: "discord",
         meta: { label: "Discord" },
-        install: { npmSpec: "@natesclaw/discord" },
+        install: { npmSpec: "@openclaw/discord" },
       },
     ]);
     mocks.updateNpmInstalledPlugins.mockResolvedValue({
@@ -1872,7 +1872,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       discord: {
         source: "npm",
-        spec: "@natesclaw/discord",
+        spec: "@openclaw/discord",
         installPath: "/missing/discord",
       },
     };
@@ -1883,7 +1883,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "discord",
         meta: { label: "Discord" },
         install: {
-          npmSpec: "@natesclaw/discord",
+          npmSpec: "@openclaw/discord",
         },
       },
     ]);
@@ -1925,7 +1925,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "discord",
         meta: { label: "Discord" },
         install: {
-          npmSpec: "@natesclaw/discord",
+          npmSpec: "@openclaw/discord",
         },
       },
     ]);
@@ -1955,7 +1955,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "discord",
-        npmSpec: "@natesclaw/discord",
+        npmSpec: "@openclaw/discord",
         version: "2026.5.17",
         resolution: {
           resolvedAt: "2026-05-17T00:00:00.000Z",
@@ -1968,7 +1968,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "discord",
         meta: { label: "Discord" },
         install: {
-          npmSpec: "@natesclaw/discord",
+          npmSpec: "@openclaw/discord",
         },
       },
     ]);
@@ -1988,7 +1988,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     expect(mocks.installPluginFromNpmSpec).toHaveBeenCalledTimes(1);
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "discord" from ${expectedNpmInstallSpec("@natesclaw/discord")}.`,
+      `Installed missing configured plugin "discord" from ${expectedNpmInstallSpec("@openclaw/discord")}.`,
     ]);
     expectRecordFields(result.records.discord, {
       source: "npm",
@@ -2000,7 +2000,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "whatsapp",
-        npmSpec: "@natesclaw/whatsapp",
+        npmSpec: "@openclaw/whatsapp",
         version: "2026.5.17",
         resolution: {
           resolvedAt: "2026-05-17T00:00:00.000Z",
@@ -2013,8 +2013,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "whatsapp",
         meta: { label: "WhatsApp" },
         install: {
-          clawhubSpec: "clawhub:@natesclaw/whatsapp",
-          npmSpec: "@natesclaw/whatsapp",
+          clawhubSpec: "clawhub:@openclaw/whatsapp",
+          npmSpec: "@openclaw/whatsapp",
           defaultChoice: "clawhub",
         },
       },
@@ -2035,11 +2035,11 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     expect(mocks.installPluginFromClawHub).not.toHaveBeenCalled();
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@natesclaw/whatsapp"),
+      spec: expectedNpmInstallSpec("@openclaw/whatsapp"),
       expectedPluginId: "whatsapp",
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "whatsapp" from ${expectedNpmInstallSpec("@natesclaw/whatsapp")}.`,
+      `Installed missing configured plugin "whatsapp" from ${expectedNpmInstallSpec("@openclaw/whatsapp")}.`,
     ]);
     expectRecordFields(result.records.whatsapp, {
       source: "npm",
@@ -2054,7 +2054,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          clawhubSpec: "clawhub:@natesclaw/plugin-matrix@stable",
+          clawhubSpec: "clawhub:@openclaw/plugin-matrix@stable",
           defaultChoice: "clawhub",
         },
       },
@@ -2074,12 +2074,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromClawHub), {
-      spec: "clawhub:@natesclaw/plugin-matrix@stable",
+      spec: "clawhub:@openclaw/plugin-matrix@stable",
       expectedPluginId: "matrix",
     });
     expect(mocks.installPluginFromNpmSpec).not.toHaveBeenCalled();
     expect(result.changes).toEqual([
-      'Installed missing configured plugin "matrix" from clawhub:@natesclaw/plugin-matrix@stable.',
+      'Installed missing configured plugin "matrix" from clawhub:@openclaw/plugin-matrix@stable.',
     ]);
   });
 
@@ -2090,7 +2090,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@natesclaw/plugin-matrix@1.2.3",
+          npmSpec: "@openclaw/plugin-matrix@1.2.3",
         },
       },
     ]);
@@ -2099,7 +2099,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "codex",
         label: "Codex",
         install: {
-          npmSpec: "@natesclaw/codex",
+          npmSpec: "@openclaw/codex",
           defaultChoice: "npm",
         },
       },
@@ -2107,7 +2107,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "diagnostics-otel",
         label: "Diagnostics OpenTelemetry",
         install: {
-          npmSpec: "@natesclaw/diagnostics-otel",
+          npmSpec: "@openclaw/diagnostics-otel",
           defaultChoice: "npm",
         },
       },
@@ -2262,7 +2262,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "codex",
-        npmSpec: "@natesclaw/codex",
+        npmSpec: "@openclaw/codex",
         version: "2026.7.2",
         resolution: {
           integrity: "sha512-codex-supervisor-upgrade",
@@ -2275,7 +2275,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "codex",
         label: "Codex",
         install: {
-          npmSpec: "@natesclaw/codex",
+          npmSpec: "@openclaw/codex",
           defaultChoice: "npm",
         },
       },
@@ -2291,18 +2291,18 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@natesclaw/codex"),
+      spec: expectedNpmInstallSpec("@openclaw/codex"),
       expectedPluginId: "codex",
       trustedSourceLinkedOfficialInstall: true,
     });
     const records = mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords);
     expectRecordFields((records as Record<string, unknown>).codex, {
       source: "npm",
-      spec: "@natesclaw/codex",
+      spec: "@openclaw/codex",
       installPath: "/tmp/natesclaw-plugins/codex",
       version: "2026.7.2",
-      resolvedName: "@natesclaw/codex",
-      resolvedSpec: "@natesclaw/codex@2026.7.2",
+      resolvedName: "@openclaw/codex",
+      resolvedSpec: "@openclaw/codex@2026.7.2",
       integrity: "sha512-codex-supervisor-upgrade",
     });
     expect(mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords, 0, 1)).toEqual({
@@ -2310,7 +2310,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "codex" from ${expectedNpmInstallSpec("@natesclaw/codex")}.`,
+      `Installed missing configured plugin "codex" from ${expectedNpmInstallSpec("@openclaw/codex")}.`,
     ]);
     expect(result.warnings).toEqual([]);
     expect(result.repairedPluginIds).toEqual(["codex"]);
@@ -2321,7 +2321,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "codex",
-        npmSpec: "@natesclaw/codex",
+        npmSpec: "@openclaw/codex",
         version: "2026.5.2",
       }),
     );
@@ -2330,7 +2330,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "codex",
         label: "Codex",
         install: {
-          npmSpec: "@natesclaw/codex",
+          npmSpec: "@openclaw/codex",
           defaultChoice: "npm",
         },
       },
@@ -2353,14 +2353,14 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     expect(mocks.resolveProviderInstallCatalogEntries).toHaveBeenCalled();
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@natesclaw/codex"),
+      spec: expectedNpmInstallSpec("@openclaw/codex"),
       expectedPluginId: "codex",
       trustedSourceLinkedOfficialInstall: true,
     });
     const records = mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords);
     expectRecordFields((records as Record<string, unknown>).codex, {
       source: "npm",
-      spec: "@natesclaw/codex",
+      spec: "@openclaw/codex",
       installPath: "/tmp/natesclaw-plugins/codex",
       version: "2026.5.2",
     });
@@ -2369,7 +2369,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "codex" from ${expectedNpmInstallSpec("@natesclaw/codex")}.`,
+      `Installed missing configured plugin "codex" from ${expectedNpmInstallSpec("@openclaw/codex")}.`,
     ]);
     expect(result.warnings).toStrictEqual([]);
   });
@@ -2378,14 +2378,14 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const installDir = tempDirs.make("natesclaw-plugin-stub-repair-");
     fs.writeFileSync(
       path.join(installDir, "package.json"),
-      JSON.stringify({ name: "@natesclaw/codex", version: "2026.5.6" }),
+      JSON.stringify({ name: "@openclaw/codex", version: "2026.5.6" }),
     );
     const records = {
       codex: {
         source: "npm",
-        spec: "@natesclaw/codex",
-        resolvedName: "@natesclaw/codex",
-        resolvedSpec: "@natesclaw/codex@2026.5.6",
+        spec: "@openclaw/codex",
+        resolvedName: "@openclaw/codex",
+        resolvedSpec: "@openclaw/codex@2026.5.6",
         resolvedVersion: "2026.5.6",
         version: "2026.5.6",
         integrity: "sha512-old-codex",
@@ -2416,7 +2416,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "codex",
-        npmSpec: "@natesclaw/codex",
+        npmSpec: "@openclaw/codex",
         version: VERSION,
         resolution: {
           integrity: "sha512-new-codex",
@@ -2428,7 +2428,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "codex",
         label: "Codex",
         install: {
-          npmSpec: "@natesclaw/codex",
+          npmSpec: "@openclaw/codex",
           defaultChoice: "npm",
         },
       },
@@ -2450,22 +2450,22 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     expect(mocks.resolveDirectBundledProviderPolicySurface).toHaveBeenCalledWith("openai");
     expect(mocks.updateNpmInstalledPlugins).not.toHaveBeenCalled();
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@natesclaw/codex"),
+      spec: expectedNpmInstallSpec("@openclaw/codex"),
       expectedPluginId: "codex",
       trustedSourceLinkedOfficialInstall: true,
       mode: "update",
     });
     expect(result.changes).toEqual([
-      `Refreshed stale configured plugin "codex" from ${expectedNpmInstallSpec("@natesclaw/codex")}.`,
+      `Refreshed stale configured plugin "codex" from ${expectedNpmInstallSpec("@openclaw/codex")}.`,
     ]);
     expectRecordFields(result.records.codex, {
       source: "npm",
-      spec: "@natesclaw/codex",
+      spec: "@openclaw/codex",
       installPath: "/tmp/natesclaw-plugins/codex",
       version: VERSION,
-      resolvedName: "@natesclaw/codex",
+      resolvedName: "@openclaw/codex",
       resolvedVersion: VERSION,
-      resolvedSpec: `@natesclaw/codex@${VERSION}`,
+      resolvedSpec: `@openclaw/codex@${VERSION}`,
     });
   });
 
@@ -2474,14 +2474,14 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const installDir = tempDirs.make("natesclaw-plugin-stub-repair-");
     fs.writeFileSync(
       path.join(installDir, "package.json"),
-      JSON.stringify({ name: "@natesclaw/codex", version: "2026.5.6" }),
+      JSON.stringify({ name: "@openclaw/codex", version: "2026.5.6" }),
     );
     const records = {
       codex: {
         source: "npm",
-        spec: "@natesclaw/codex",
-        resolvedName: "@natesclaw/codex",
-        resolvedSpec: "@natesclaw/codex@2026.5.6",
+        spec: "@openclaw/codex",
+        resolvedName: "@openclaw/codex",
+        resolvedSpec: "@openclaw/codex@2026.5.6",
         resolvedVersion: "2026.5.6",
         version: "2026.5.6",
         integrity: "sha512-old-codex",
@@ -2512,7 +2512,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "codex",
-        npmSpec: "@natesclaw/codex",
+        npmSpec: "@openclaw/codex",
         targetDir: installDir,
         version: codexBetaVersion,
         resolution: {
@@ -2525,7 +2525,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "codex",
         label: "Codex",
         install: {
-          npmSpec: "@natesclaw/codex",
+          npmSpec: "@openclaw/codex",
           defaultChoice: "npm",
         },
       },
@@ -2547,22 +2547,22 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: "@natesclaw/codex@beta",
+      spec: "@openclaw/codex@beta",
       expectedPluginId: "codex",
       trustedSourceLinkedOfficialInstall: true,
       mode: "update",
     });
     expect(firstPass.changes).toEqual([
-      'Refreshed stale configured plugin "codex" from @natesclaw/codex@beta.',
+      'Refreshed stale configured plugin "codex" from @openclaw/codex@beta.',
     ]);
     expectRecordFields(firstPass.records.codex, {
       source: "npm",
-      spec: "@natesclaw/codex",
+      spec: "@openclaw/codex",
       installPath: installDir,
       version: codexBetaVersion,
-      resolvedName: "@natesclaw/codex",
+      resolvedName: "@openclaw/codex",
       resolvedVersion: codexBetaVersion,
-      resolvedSpec: `@natesclaw/codex@${codexBetaVersion}`,
+      resolvedSpec: `@openclaw/codex@${codexBetaVersion}`,
     });
 
     mocks.installPluginFromNpmSpec.mockClear();
@@ -2603,14 +2603,14 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const installDir = tempDirs.make("natesclaw-plugin-stub-repair-");
     fs.writeFileSync(
       path.join(installDir, "package.json"),
-      JSON.stringify({ name: "@natesclaw/codex", version: "9999.1.1" }),
+      JSON.stringify({ name: "@openclaw/codex", version: "9999.1.1" }),
     );
     const records = {
       codex: {
         source: "npm",
-        spec: "@natesclaw/codex",
-        resolvedName: "@natesclaw/codex",
-        resolvedSpec: "@natesclaw/codex@9999.1.1",
+        spec: "@openclaw/codex",
+        resolvedName: "@openclaw/codex",
+        resolvedSpec: "@openclaw/codex@9999.1.1",
         resolvedVersion: "9999.1.1",
         version: "9999.1.1",
         integrity: "sha512-newer-codex",
@@ -2732,7 +2732,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "codex",
-        npmSpec: "@natesclaw/codex",
+        npmSpec: "@openclaw/codex",
         version: "2026.5.2",
       }),
     );
@@ -2741,7 +2741,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "codex",
         label: "Codex",
         install: {
-          npmSpec: "@natesclaw/codex",
+          npmSpec: "@openclaw/codex",
           defaultChoice: "npm",
         },
       },
@@ -2755,14 +2755,14 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@natesclaw/codex"),
+      spec: expectedNpmInstallSpec("@openclaw/codex"),
       expectedPluginId: "codex",
       trustedSourceLinkedOfficialInstall: true,
     });
     const records = mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords);
     expectRecordFields((records as Record<string, unknown>).codex, {
       source: "npm",
-      spec: "@natesclaw/codex",
+      spec: "@openclaw/codex",
       installPath: "/tmp/natesclaw-plugins/codex",
       version: "2026.5.2",
     });
@@ -2771,17 +2771,17 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env,
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "codex" from ${expectedNpmInstallSpec("@natesclaw/codex")}.`,
+      `Installed missing configured plugin "codex" from ${expectedNpmInstallSpec("@openclaw/codex")}.`,
     ]);
     expect(result.warnings).toEqual([]);
     expect(Object.keys(result.records)).toEqual(["codex"]);
     expectRecordFields(result.records.codex, {
       source: "npm",
-      spec: "@natesclaw/codex",
+      spec: "@openclaw/codex",
       installPath: "/tmp/natesclaw-plugins/codex",
       version: "2026.5.2",
-      resolvedName: "@natesclaw/codex",
-      resolvedSpec: "@natesclaw/codex@2026.5.2",
+      resolvedName: "@openclaw/codex",
+      resolvedSpec: "@openclaw/codex@2026.5.2",
       integrity: "sha512-codex",
       resolvedAt: "2026-05-01T00:00:00.000Z",
     });
@@ -2816,7 +2816,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         id: "codex",
         label: "Codex",
         install: {
-          npmSpec: "@natesclaw/codex",
+          npmSpec: "@openclaw/codex",
           defaultChoice: "npm",
         },
       },
@@ -2841,7 +2841,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "matrix",
         meta: { label: "Matrix" },
         install: {
-          npmSpec: "@natesclaw/plugin-matrix@1.2.3",
+          npmSpec: "@openclaw/plugin-matrix@1.2.3",
         },
       },
     ]);
@@ -2909,7 +2909,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
         pluginId: "feishu",
         meta: { label: "Feishu" },
         install: {
-          npmSpec: "@natesclaw/feishu",
+          npmSpec: "@openclaw/feishu",
         },
         trustedSourceLinkedOfficialInstall: true,
       },
@@ -2918,7 +2918,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
         successfulInstall({
           pluginId: "feishu",
-          npmSpec: "@natesclaw/feishu",
+          npmSpec: "@openclaw/feishu",
           version: "2026.5.2",
         }),
       );
@@ -2944,12 +2944,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       return;
     }
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@natesclaw/feishu"),
+      spec: expectedNpmInstallSpec("@openclaw/feishu"),
       expectedPluginId: "feishu",
       trustedSourceLinkedOfficialInstall: true,
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "feishu" from ${expectedNpmInstallSpec("@natesclaw/feishu")}.`,
+      `Installed missing configured plugin "feishu" from ${expectedNpmInstallSpec("@openclaw/feishu")}.`,
     ]);
   });
 
@@ -2957,7 +2957,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       demo: {
         source: "npm",
-        spec: "@natesclaw/plugin-demo@1.0.0",
+        spec: "@openclaw/plugin-demo@1.0.0",
         installPath: "/missing/demo",
       },
     };
@@ -2969,7 +2969,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           installs: {
             demo: {
               source: "npm",
-              spec: "@natesclaw/plugin-demo@1.0.0",
+              spec: "@openclaw/plugin-demo@1.0.0",
               installPath: "/tmp/natesclaw-plugins/demo",
             },
           },
@@ -3017,8 +3017,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       demo: {
         source: "clawhub",
-        spec: "clawhub:@natesclaw/plugin-demo@1.0.0",
-        clawhubPackage: "@natesclaw/plugin-demo",
+        spec: "clawhub:@openclaw/plugin-demo@1.0.0",
+        clawhubPackage: "@openclaw/plugin-demo",
         installPath: "/missing/demo",
       },
     };
@@ -3031,7 +3031,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           installs: {
             demo: {
               source: "clawhub",
-              spec: "clawhub:@natesclaw/plugin-demo@1.0.0",
+              spec: "clawhub:@openclaw/plugin-demo@1.0.0",
               installPath: "/tmp/natesclaw-plugins/demo",
             },
           },
@@ -3075,7 +3075,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       demo: {
         source: "npm",
-        spec: "@natesclaw/plugin-demo@1.0.0",
+        spec: "@openclaw/plugin-demo@1.0.0",
         installPath: "/missing/demo",
       },
     };
@@ -3095,7 +3095,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
               installs: {
                 demo: {
                   source: "npm",
-                  spec: "@natesclaw/plugin-demo@1.0.0",
+                  spec: "@openclaw/plugin-demo@1.0.0",
                   installPath: "/tmp/natesclaw-plugins/demo",
                 },
               },
@@ -3133,8 +3133,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       demo: {
         source: "clawhub",
-        spec: "clawhub:@natesclaw/plugin-demo@1.0.0",
-        clawhubPackage: "@natesclaw/plugin-demo",
+        spec: "clawhub:@openclaw/plugin-demo@1.0.0",
+        clawhubPackage: "@openclaw/plugin-demo",
         installPath: "/missing/demo",
       },
     };
@@ -3157,7 +3157,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
               installs: {
                 demo: {
                   source: "clawhub",
-                  spec: "clawhub:@natesclaw/plugin-demo@1.0.0",
+                  spec: "clawhub:@openclaw/plugin-demo@1.0.0",
                   installPath: "/tmp/natesclaw-plugins/demo",
                 },
               },
@@ -3195,21 +3195,21 @@ describe("repairMissingConfiguredPluginInstalls", () => {
   it.each([
     {
       name: "adds actionable acknowledgement guidance for risky persisted ClawHub repair failures",
-      spec: "clawhub:@natesclaw/plugin-demo@1.0.0",
-      release: "@natesclaw/plugin-demo@1.0.0",
-      expectedSpec: "clawhub:@natesclaw/plugin-demo@1.0.0",
+      spec: "clawhub:@openclaw/plugin-demo@1.0.0",
+      release: "@openclaw/plugin-demo@1.0.0",
+      expectedSpec: "clawhub:@openclaw/plugin-demo@1.0.0",
     },
     {
       name: "prefixes legacy persisted ClawHub package records in acknowledgement guidance",
-      release: "@natesclaw/plugin-demo@latest",
-      expectedSpec: "clawhub:@natesclaw/plugin-demo",
+      release: "@openclaw/plugin-demo@latest",
+      expectedSpec: "clawhub:@openclaw/plugin-demo",
     },
   ])("$name", async ({ spec, release, expectedSpec }) => {
     const records = {
       demo: {
         source: "clawhub",
         ...(spec ? { spec } : {}),
-        clawhubPackage: "@natesclaw/plugin-demo",
+        clawhubPackage: "@openclaw/plugin-demo",
         installPath: "/missing/demo",
       },
     };
@@ -3249,9 +3249,9 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const records = {
       demo: {
         source: "npm",
-        spec: "@natesclaw/plugin-demo@1.0.0",
-        resolvedName: "@natesclaw/plugin-demo",
-        resolvedSpec: "@natesclaw/plugin-demo@1.0.0",
+        spec: "@openclaw/plugin-demo@1.0.0",
+        resolvedName: "@openclaw/plugin-demo",
+        resolvedSpec: "@openclaw/plugin-demo@1.0.0",
         resolvedVersion: "1.0.0",
         integrity: "sha512-demo",
         installPath: "/tmp/natesclaw-plugins/demo",
@@ -3275,7 +3275,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           installs: {
             demo: {
               source: "npm",
-              spec: "@natesclaw/plugin-demo@1.0.0",
+              spec: "@openclaw/plugin-demo@1.0.0",
               installPath: "/tmp/natesclaw-plugins/demo",
             },
           },
@@ -3303,7 +3303,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const updateConfig = updateArg.config as { plugins?: { installs?: Record<string, unknown> } };
     const updateRecord = expectRecordFields(updateConfig.plugins?.installs?.demo, {
       source: "npm",
-      spec: "@natesclaw/plugin-demo@1.0.0",
+      spec: "@openclaw/plugin-demo@1.0.0",
       integrity: "sha512-demo",
       installPath: "/tmp/natesclaw-plugins/demo",
     });
@@ -3314,7 +3314,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
   it("reinstalls a known configured plugin from the catalog when its recorded install path is missing", async () => {
     const records = installedRecords("discord", {
-      spec: "@natesclaw/discord",
+      spec: "@openclaw/discord",
       installPath: "/tmp/natesclaw-missing-discord-install-record",
     });
     mocks.loadInstalledPluginIndexInstallRecords.mockResolvedValue(records);
@@ -3330,7 +3330,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.listChannelPluginCatalogEntries.mockReturnValue([
       channelPluginEntry({
         id: "discord",
-        npmSpec: "@natesclaw/discord",
+        npmSpec: "@openclaw/discord",
         label: "Discord",
         trustedSourceLinkedOfficialInstall: true,
       }),
@@ -3338,7 +3338,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "discord",
-        npmSpec: "@natesclaw/discord",
+        npmSpec: "@openclaw/discord",
         version: "1.2.3",
       }),
     );
@@ -3375,13 +3375,13 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     const updateConfig = updateArg.config as Record<string, unknown>;
     expectRecordFields(updateConfig.plugins, { installs: records });
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@natesclaw/discord"),
+      spec: expectedNpmInstallSpec("@openclaw/discord"),
       expectedPluginId: "discord",
       trustedSourceLinkedOfficialInstall: true,
     });
     const persistedRecords = mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords);
     expectRecordFields((persistedRecords as Record<string, unknown>).discord, {
-      spec: "@natesclaw/discord",
+      spec: "@openclaw/discord",
       installPath: "/tmp/natesclaw-plugins/discord",
     });
     expect(mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords, 0, 1)).toEqual({
@@ -3389,13 +3389,13 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env: {},
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "discord" from ${expectedNpmInstallSpec("@natesclaw/discord")}.`,
+      `Installed missing configured plugin "discord" from ${expectedNpmInstallSpec("@openclaw/discord")}.`,
     ]);
   });
 
   it("updates a known configured plugin when its installed manifest path still exists", async () => {
     const records = installedRecords("discord", {
-      spec: "@natesclaw/discord",
+      spec: "@openclaw/discord",
       installPath: process.cwd(),
     });
     mocks.loadInstalledPluginIndexInstallRecords.mockResolvedValue(records);
@@ -3417,7 +3417,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       successfulUpdate(
         "discord",
         installedRecords("discord", {
-          spec: "@natesclaw/discord",
+          spec: "@openclaw/discord",
           installPath: process.cwd(),
         }),
       ),
@@ -3452,14 +3452,14 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
   it("updates a configured plugin when its installed manifest lacks channel config descriptors", async () => {
     const records = installedRecords("discord", {
-      spec: "@natesclaw/discord",
+      spec: "@openclaw/discord",
       installPath: "/tmp/natesclaw-plugins/discord",
     });
     mocks.loadInstalledPluginIndexInstallRecords.mockResolvedValue(records);
     mocks.listChannelPluginCatalogEntries.mockReturnValue([
       channelPluginEntry({
         id: "discord",
-        npmSpec: "@natesclaw/discord",
+        npmSpec: "@openclaw/discord",
         label: "Discord",
       }),
     ]);
@@ -3483,7 +3483,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       successfulUpdate(
         "discord",
         installedRecords("discord", {
-          spec: "@natesclaw/discord",
+          spec: "@openclaw/discord",
           installPath: process.cwd(),
         }),
       ),
@@ -3521,7 +3521,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       repairedPluginIds: ["discord"],
       pluginInventoryChanged: true,
       records: installedRecords("discord", {
-        spec: "@natesclaw/discord",
+        spec: "@openclaw/discord",
         installPath: process.cwd(),
       }),
     });
@@ -3529,14 +3529,14 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
   it("reinstalls a recorded external web search plugin from provider-only config", async () => {
     const records = installedRecords("brave", {
-      spec: "@natesclaw/brave-plugin@beta",
+      spec: "@openclaw/brave-plugin@beta",
       installPath: "/missing/brave",
     });
     mocks.loadInstalledPluginIndexInstallRecords.mockResolvedValue(records);
     mocks.listOfficialExternalPluginCatalogEntries.mockReturnValue([
       officialWebSearchPluginEntry({
         id: "brave",
-        npmSpec: "@natesclaw/brave-plugin",
+        npmSpec: "@openclaw/brave-plugin",
         envVar: "BRAVE_API_KEY",
         label: "Brave",
         providerLabel: "Brave Search",
@@ -3546,7 +3546,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       successfulUpdate(
         "brave",
         installedRecords("brave", {
-          spec: "@natesclaw/brave-plugin@beta",
+          spec: "@openclaw/brave-plugin@beta",
           installPath: process.cwd(),
         }),
       ),
@@ -3582,8 +3582,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     {
       name: "replaces a configured official web search plugin when its installed package is source-only",
       pluginId: "brave",
-      npmSpec: "@natesclaw/brave-plugin",
-      priorSpec: "clawhub:@natesclaw/brave-plugin@2026.5.1-beta.1",
+      npmSpec: "@openclaw/brave-plugin",
+      priorSpec: "clawhub:@openclaw/brave-plugin@2026.5.1-beta.1",
       targetDir: "/tmp/natesclaw-plugins/brave",
       cfg: { tools: { web: { search: { provider: "brave" } } } } satisfies NatesclawConfig,
       catalogKind: "provider" as const,
@@ -3591,9 +3591,9 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     {
       name: "replaces a configured official channel plugin when only its channel is configured",
       pluginId: "slack",
-      npmSpec: "@natesclaw/slack",
-      priorSpec: "clawhub:@natesclaw/slack@2026.5.12-beta.1",
-      targetDir: "/tmp/natesclaw-npm/node_modules/@natesclaw/slack",
+      npmSpec: "@openclaw/slack",
+      priorSpec: "clawhub:@openclaw/slack@2026.5.12-beta.1",
+      targetDir: "/tmp/natesclaw-npm/node_modules/@openclaw/slack",
       cfg: { channels: { slack: { enabled: true, botToken: "xoxb-test" } } },
       catalogKind: "channel" as const,
     },
@@ -3672,15 +3672,15 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     fs.writeFileSync(path.join(installDir, "package.json"), JSON.stringify({ name: "brave" }));
     mockBrokenBraveInstall(installDir, {
       source: "clawhub",
-      spec: "clawhub:@natesclaw/brave-plugin@2026.5.1-beta.1",
-      clawhubPackage: "@natesclaw/brave-plugin",
+      spec: "clawhub:@openclaw/brave-plugin@2026.5.1-beta.1",
+      clawhubPackage: "@openclaw/brave-plugin",
       clawhubChannel: "official",
       clawhubUrl: "https://clawhub.ai",
     });
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "brave",
-        npmSpec: "@natesclaw/brave-plugin",
+        npmSpec: "@openclaw/brave-plugin",
         version: "2026.5.12",
       }),
     );
@@ -3707,8 +3707,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     fs.writeFileSync(path.join(installDir, "package.json"), JSON.stringify({ name: "brave" }));
     const records = mockBrokenBraveInstall(installDir, {
       source: "clawhub",
-      spec: "clawhub:@natesclaw/brave-plugin@2026.5.1-beta.1",
-      clawhubPackage: "@natesclaw/brave-plugin",
+      spec: "clawhub:@openclaw/brave-plugin@2026.5.1-beta.1",
+      clawhubPackage: "@openclaw/brave-plugin",
       clawhubChannel: "official",
       clawhubUrl: "https://clawhub.ai",
     });
@@ -3732,7 +3732,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     expect(result).toEqual({
       changes: [],
       warnings: [
-        `Failed to install missing configured plugin "brave" from ${expectedNpmInstallSpec("@natesclaw/brave-plugin")}: network unavailable`,
+        `Failed to install missing configured plugin "brave" from ${expectedNpmInstallSpec("@openclaw/brave-plugin")}: network unavailable`,
       ],
       failedPluginIds: ["brave"],
       records,
@@ -3772,9 +3772,9 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
   it("installs configured external speech and web-fetch plugins from selected providers", async () => {
     const packages = [
-      ["firecrawl", "@natesclaw/firecrawl-plugin"],
-      ["gradium", "@natesclaw/gradium-speech"],
-      ["inworld", "@natesclaw/inworld-speech"],
+      ["firecrawl", "@openclaw/firecrawl-plugin"],
+      ["gradium", "@openclaw/gradium-speech"],
+      ["inworld", "@openclaw/inworld-speech"],
     ] as const;
     mocks.listOfficialExternalPluginCatalogEntries.mockReturnValue(
       packages.map(([id, npmSpec]) =>
@@ -3834,14 +3834,14 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     {
       name: "installs missing configured non-channel plugins from the official external catalog",
       pluginId: "diagnostics-otel",
-      npmSpec: "@natesclaw/diagnostics-otel",
+      npmSpec: "@openclaw/diagnostics-otel",
       version: "2026.5.2",
       entry: {
         id: "diagnostics-otel",
         label: "Diagnostics OpenTelemetry",
         install: {
-          clawhubSpec: "clawhub:@natesclaw/diagnostics-otel",
-          npmSpec: "@natesclaw/diagnostics-otel",
+          clawhubSpec: "clawhub:@openclaw/diagnostics-otel",
+          npmSpec: "@openclaw/diagnostics-otel",
           defaultChoice: "npm" as const,
         },
       },
@@ -3851,7 +3851,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     {
       name: "installs the official llama.cpp plugin for configured local memory embeddings",
       pluginId: "llama-cpp",
-      npmSpec: "@natesclaw/llama-cpp-provider",
+      npmSpec: "@openclaw/llama-cpp-provider",
       version: "2026.6.2",
       entry: {
         id: "llama-cpp",
@@ -3860,12 +3860,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
           plugin: { id: "llama-cpp", label: "llama.cpp Provider" },
           contracts: { embeddingProviders: ["local"] },
           install: {
-            npmSpec: "@natesclaw/llama-cpp-provider",
+            npmSpec: "@openclaw/llama-cpp-provider",
             defaultChoice: "npm" as const,
           },
         },
         install: {
-          npmSpec: "@natesclaw/llama-cpp-provider",
+          npmSpec: "@openclaw/llama-cpp-provider",
           defaultChoice: "npm" as const,
         },
       },
@@ -3875,12 +3875,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     {
       name: "does not let runtime fallback metadata override official catalog install specs",
       pluginId: "acpx",
-      npmSpec: "@natesclaw/acpx",
+      npmSpec: "@openclaw/acpx",
       version: "2026.5.2-beta.2",
       entry: {
         id: "acpx",
         label: "ACPX Runtime",
-        install: { npmSpec: "@natesclaw/acpx", defaultChoice: "npm" as const },
+        install: { npmSpec: "@openclaw/acpx", defaultChoice: "npm" as const },
       },
       cfg: { acp: { backend: "acpx" } },
       useManifestResolvers: false,
@@ -3888,11 +3888,11 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     {
       name: "installs a configured external web search plugin from provider-only config",
       pluginId: "brave",
-      npmSpec: "@natesclaw/brave-plugin",
+      npmSpec: "@openclaw/brave-plugin",
       version: "2026.5.2",
       entry: officialWebSearchPluginEntry({
         id: "brave",
-        npmSpec: "@natesclaw/brave-plugin",
+        npmSpec: "@openclaw/brave-plugin",
         envVar: "BRAVE_API_KEY",
         label: "Brave",
         providerLabel: "Brave Search",
@@ -3905,10 +3905,10 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     {
       name: "installs a configured external model provider without an auth choice",
       pluginId: "groq",
-      npmSpec: "@natesclaw/groq-provider",
+      npmSpec: "@openclaw/groq-provider",
       entry: officialPluginEntry({
         id: "groq",
-        npmSpec: "@natesclaw/groq-provider",
+        npmSpec: "@openclaw/groq-provider",
         label: "Groq",
         manifest: { providers: [{ id: "groq" }] },
       }),
@@ -3920,10 +3920,10 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     {
       name: "installs an external media-understanding provider selected only by media config",
       pluginId: "groq",
-      npmSpec: "@natesclaw/groq-provider",
+      npmSpec: "@openclaw/groq-provider",
       entry: officialPluginEntry({
         id: "groq",
-        npmSpec: "@natesclaw/groq-provider",
+        npmSpec: "@openclaw/groq-provider",
         label: "Groq",
         manifest: { contracts: { mediaUnderstandingProviders: ["groq"] } },
       }),
@@ -3945,10 +3945,10 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     {
       name: "installs an external speech provider selected only by voiceModel",
       pluginId: "gradium",
-      npmSpec: "@natesclaw/gradium-speech",
+      npmSpec: "@openclaw/gradium-speech",
       entry: officialPluginEntry({
         id: "gradium",
-        npmSpec: "@natesclaw/gradium-speech",
+        npmSpec: "@openclaw/gradium-speech",
         label: "Gradium",
         manifest: { contracts: { speechProviders: ["gradium"] } },
       }),
@@ -3981,8 +3981,8 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
   it("installs env-only web provider plugins before auto-detection", async () => {
     const packages = [
-      ["exa", "@natesclaw/exa-plugin", "EXA_API_KEY"],
-      ["firecrawl", "@natesclaw/firecrawl-plugin", "FIRECRAWL_API_KEY"],
+      ["exa", "@openclaw/exa-plugin", "EXA_API_KEY"],
+      ["firecrawl", "@openclaw/firecrawl-plugin", "FIRECRAWL_API_KEY"],
     ] as const;
     mocks.listOfficialExternalPluginCatalogEntries.mockReturnValue(
       packages.map(([id, npmSpec, envVar]) =>
@@ -4026,7 +4026,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.listOfficialExternalPluginCatalogEntries.mockReturnValue([
       officialPluginEntry({
         id: "groq",
-        npmSpec: "@natesclaw/groq-provider",
+        npmSpec: "@openclaw/groq-provider",
         label: "Groq",
         manifest: {},
       }),
@@ -4034,7 +4034,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "groq",
-        npmSpec: "@natesclaw/groq-provider",
+        npmSpec: "@openclaw/groq-provider",
       }),
     );
 
@@ -4043,12 +4043,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
 
     expect(mocks.resolveOfficialExternalProviderPluginIdsForEnv).toHaveBeenCalledWith(env);
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@natesclaw/groq-provider"),
+      spec: expectedNpmInstallSpec("@openclaw/groq-provider"),
       expectedPluginId: "groq",
       trustedSourceLinkedOfficialInstall: true,
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "groq" from ${expectedNpmInstallSpec("@natesclaw/groq-provider")}.`,
+      `Installed missing configured plugin "groq" from ${expectedNpmInstallSpec("@openclaw/groq-provider")}.`,
     ]);
   });
 
@@ -4056,7 +4056,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.listOfficialExternalPluginCatalogEntries.mockReturnValue([
       officialWebSearchPluginEntry({
         id: "brave",
-        npmSpec: "@natesclaw/brave-plugin",
+        npmSpec: "@openclaw/brave-plugin",
         envVar: "BRAVE_API_KEY",
         label: "Brave",
         providerLabel: "Brave Search",
@@ -4068,7 +4068,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "brave",
-        npmSpec: "@natesclaw/brave-plugin",
+        npmSpec: "@openclaw/brave-plugin",
         version: "2026.5.4-beta.1",
       }),
     );
@@ -4085,7 +4085,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     });
 
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: "@natesclaw/brave-plugin@beta",
+      spec: "@openclaw/brave-plugin@beta",
       expectedPluginId: "brave",
       trustedSourceLinkedOfficialInstall: true,
     });
@@ -4093,14 +4093,14 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       mocks.writePersistedInstalledPluginIndexInstallRecords,
     ) as Record<string, unknown>;
     expectRecordFields(persistedRecords.brave, {
-      spec: "@natesclaw/brave-plugin",
+      spec: "@openclaw/brave-plugin",
     });
     expect(mockCallArg(mocks.writePersistedInstalledPluginIndexInstallRecords, 0, 1)).toEqual({
       config: expect.any(Object),
       env: {},
     });
     expect(result.changes).toEqual([
-      'Installed missing configured plugin "brave" from @natesclaw/brave-plugin@beta.',
+      'Installed missing configured plugin "brave" from @openclaw/brave-plugin@beta.',
     ]);
   });
 
@@ -4162,7 +4162,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.listOfficialExternalPluginCatalogEntries.mockReturnValue([
       officialPluginEntry({
         id: "firecrawl",
-        npmSpec: "@natesclaw/firecrawl-plugin",
+        npmSpec: "@openclaw/firecrawl-plugin",
         label: "Firecrawl",
         manifest: {},
       }),
@@ -4170,7 +4170,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.installPluginFromNpmSpec.mockResolvedValueOnce(
       successfulInstall({
         pluginId: "firecrawl",
-        npmSpec: "@natesclaw/firecrawl-plugin",
+        npmSpec: "@openclaw/firecrawl-plugin",
       }),
     );
 
@@ -4193,12 +4193,12 @@ describe("repairMissingConfiguredPluginInstalls", () => {
       env,
     });
     expectRecordFields(mockCallArg(mocks.installPluginFromNpmSpec), {
-      spec: expectedNpmInstallSpec("@natesclaw/firecrawl-plugin"),
+      spec: expectedNpmInstallSpec("@openclaw/firecrawl-plugin"),
       expectedPluginId: "firecrawl",
       trustedSourceLinkedOfficialInstall: true,
     });
     expect(result.changes).toEqual([
-      `Installed missing configured plugin "firecrawl" from ${expectedNpmInstallSpec("@natesclaw/firecrawl-plugin")}.`,
+      `Installed missing configured plugin "firecrawl" from ${expectedNpmInstallSpec("@openclaw/firecrawl-plugin")}.`,
     ]);
   });
 
@@ -4206,7 +4206,7 @@ describe("repairMissingConfiguredPluginInstalls", () => {
     mocks.listOfficialExternalPluginCatalogEntries.mockReturnValue([
       officialWebSearchPluginEntry({
         id: "brave",
-        npmSpec: "@natesclaw/brave-plugin",
+        npmSpec: "@openclaw/brave-plugin",
         envVar: "BRAVE_API_KEY",
         label: "Brave",
         providerLabel: "Brave Search",

@@ -14,7 +14,7 @@ summaries).
 ## Install plugin
 
 ```bash
-natesclaw plugins install @natesclaw/exa-plugin
+natesclaw plugins install @openclaw/exa-plugin
 natesclaw gateway restart
 ```
 

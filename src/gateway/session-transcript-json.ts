@@ -1,5 +1,5 @@
 // Shared bounded JSONL metadata parsing for gateway transcript readers.
-import { readNonBlankString } from "@natesclaw/normalization-core/string-coerce";
+import { readNonBlankString } from "@openclaw/normalization-core/string-coerce";
 import { escapeRegExp } from "../shared/regexp.js";
 
 /** Reads a nonblank transcript field while preserving its original whitespace. */

@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { isLikelyContextOverflowError } from "../../agents/failover/classify.js";
 import type { NatesclawConfig } from "../../config/config.js";
 import type { SessionEntry } from "../../config/sessions.js";

@@ -1,4 +1,4 @@
-# @natesclaw/buzz
+# @openclaw/buzz
 
 Official Buzz channel plugin for Natesclaw. It connects an Natesclaw agent to approved Buzz rooms for text conversations and threaded replies.
 
@@ -71,6 +71,6 @@ natesclaw message send \
   lookup in group rooms.
 - Not yet supported: DMs, media, reactions, or creating rooms from Natesclaw.
 
-Full documentation: https://docs.natesclaw.ai/channels/buzz
+Full documentation: https://docs.openclaw.ai/channels/buzz
 
-Package: `@natesclaw/buzz` · Plugin ID: `buzz`
+Package: `@openclaw/buzz` · Plugin ID: `buzz`

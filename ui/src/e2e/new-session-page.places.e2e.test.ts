@@ -431,7 +431,7 @@ suite.define(() => {
       id: "recorded-natesclaw",
       displayName: "natesclaw",
       repoRoot,
-      originUrl: "https://github.com/natesclaw/natesclaw.git",
+      originUrl: "https://github.com/openclaw/natesclaw.git",
       source: "registered",
     };
     const gateway = await installMockGateway(page, {

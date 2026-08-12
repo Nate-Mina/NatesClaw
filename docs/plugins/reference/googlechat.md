@@ -11,7 +11,7 @@ Natesclaw Google Chat channel plugin for spaces and direct messages.
 
 ## Distribution
 
-- Package: `@natesclaw/googlechat`
+- Package: `@openclaw/googlechat`
 - Install route: npm; ClawHub
 
 ## Surface

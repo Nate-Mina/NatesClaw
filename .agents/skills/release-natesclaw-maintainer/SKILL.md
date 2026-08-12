@@ -429,7 +429,7 @@ HEAD/worktree-bound manifest under git metadata for cutover review.
   `natesclaw/natesclaw/releases/download/vYYYY.M.PATCH/...` assets for the current
   stable release, or `releases/latest/download/...` only after verifying the
   redirect resolves to that same tag, so the installable signed Windows artifact
-  is visible from both the GitHub release page and natesclaw.ai.
+  is visible from both the GitHub release page and openclaw.ai.
 
 ## Build changelog-backed release notes
 
@@ -682,7 +682,7 @@ pnpm test:install:smoke
   a package newly added to the release is a release-prep blocker, not something
   to discover from the publish job.
 - Bootstrap a new ClawHub package only from the trusted workflow source:
-  `gh workflow run plugin-clawhub-new.yml --ref main -f plugins=@natesclaw/name -f ref=<full-release-sha> -f pretag_validation=true -f dry_run=true`.
+  `gh workflow run plugin-clawhub-new.yml --ref main -f plugins=@openclaw/name -f ref=<full-release-sha> -f pretag_validation=true -f dry_run=true`.
   The workflow source stays on `main`; `ref` is the exact release target. A
   pre-tag dry run rejects tag/parent-approval inputs and requires the target to be
   reachable from `main` or `release/*`. It must still resolve the live registry
@@ -944,7 +944,7 @@ node --import tsx scripts/natesclaw-npm-postpublish-verify.ts <published-version
   alpha branch. Reuse the successful preflight for that exact release SHA.
 - The release workflows stay tag-based; rely on the documented release sequence
   rather than workflow-level SHA pinning.
-- The `npm-release` environment must be approved by `@natesclaw/natesclaw-release-managers` before publish continues.
+- The `npm-release` environment must be approved by `@openclaw/natesclaw-release-managers` before publish continues.
 - Mac publish uses
   `natesclaw/releases/.github/workflows/natesclaw-macos-publish.yml` for
   release-ops mac preflight artifact preparation and real publish artifact
@@ -966,7 +966,7 @@ node --import tsx scripts/natesclaw-npm-postpublish-verify.ts <published-version
   publish path; package publishing uses trusted publishing.
 - Use `NPM_TOKEN` only for explicit npm dist-tag management modes, because npm
   does not support trusted publishing for `npm dist-tag add`.
-- `@natesclaw/*` plugin publishes use a separate maintainer-only flow.
+- `@openclaw/*` plugin publishes use a separate maintainer-only flow.
 - Publishable plugins that are new to npm require owner-led first-package
   minting before the full release publish. Do not consume the next beta version
   with an ad-hoc manual package publish; use the release-owned auto-bumped
@@ -1098,7 +1098,7 @@ node --import tsx scripts/natesclaw-npm-postpublish-verify.ts <published-version
     For stable publish, also pass the exact non-prerelease
     `natesclaw/natesclaw-windows-node` tag as `windows_node_tag` and its
     candidate-approved installer digest map as `windows_node_installer_digests`.
-25. Wait for `npm-release` approval from `@natesclaw/natesclaw-release-managers`.
+25. Wait for `npm-release` approval from `@openclaw/natesclaw-release-managers`.
 26. Wait for the real publish workflow to run postpublish verification,
     create or update the GitHub release as a draft, upload dependency evidence,
     promote and verify the required Windows Hub assets for stable releases,

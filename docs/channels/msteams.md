@@ -14,7 +14,7 @@ Microsoft Teams ships as a bundled plugin in current Natesclaw releases; no sepa
 On an older build or a custom install that excludes bundled Teams, install the npm package directly:
 
 ```bash
-natesclaw plugins install @natesclaw/msteams
+natesclaw plugins install @openclaw/msteams
 ```
 
 Use the bare package to follow the current official release tag. Pin an exact version only when you need a reproducible install.

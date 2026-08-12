@@ -1,5 +1,5 @@
-import { normalizeAgentId } from "@natesclaw/normalization-core/agent-id";
-import { normalizeNullableString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeAgentId } from "@openclaw/normalization-core/agent-id";
+import { normalizeNullableString } from "@openclaw/normalization-core/string-coerce";
 
 export type ControlUiSessionPathTarget =
   | { namespace: "chat" | "dashboard"; kind: "main"; agentId: string }

@@ -1,5 +1,5 @@
 // Discord tests cover chunk plugin behavior.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { countLines, hasBalancedFences } from "natesclaw/plugin-sdk/test-fixtures";
 import { describe, expect, it } from "vitest";
 import { chunkDiscordTextWithMode } from "./chunk.js";

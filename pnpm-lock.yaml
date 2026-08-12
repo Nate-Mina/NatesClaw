@@ -85,13 +85,13 @@ importers:
       '@mozilla/readability':
         specifier: 0.6.0
         version: 0.6.0
-      '@natesclaw/ai':
+      '@openclaw/ai':
         specifier: workspace:*
         version: link:packages/ai
-      '@natesclaw/fs-safe':
+      '@openclaw/fs-safe':
         specifier: 0.5.4
         version: 0.5.4
-      '@natesclaw/proxyline':
+      '@openclaw/proxyline':
         specifier: 0.3.4
         version: 0.3.4(undici@8.9.0)
       '@silvia-odwyer/photon-node':
@@ -257,7 +257,7 @@ importers:
       '@mdx-js/mdx':
         specifier: 3.1.1
         version: 3.1.1(supports-color@10.2.2)
-      '@natesclaw/session-url-contract':
+      '@openclaw/session-url-contract':
         specifier: workspace:*
         version: link:packages/session-url-contract
       '@opentelemetry/sdk-node':
@@ -384,7 +384,7 @@ importers:
 
   examples/ai-chat:
     dependencies:
-      '@natesclaw/ai':
+      '@openclaw/ai':
         specifier: workspace:*
         version: link:../../packages/ai
 
@@ -406,19 +406,19 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/admin-http-rpc:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/alibaba:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -443,7 +443,7 @@ importers:
         specifier: 4.16.1
         version: 4.16.1
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -456,13 +456,13 @@ importers:
         specifier: 1.1.0
         version: 1.1.0
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/anthropic:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -478,31 +478,31 @@ importers:
         specifier: 8.9.0
         version: 8.9.0
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/arcee:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/azure-speech:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/baseten:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/beam:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -512,13 +512,13 @@ importers:
         specifier: 1.3.10
         version: 1.3.10(supports-color@10.2.2)
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/brave:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -540,7 +540,7 @@ importers:
         specifier: 8.21.1
         version: 8.21.1
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       undici:
@@ -556,7 +556,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -565,7 +565,7 @@ importers:
 
   extensions/byteplus:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -590,25 +590,25 @@ importers:
         specifier: 8.21.1
         version: 8.21.1
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/cerebras:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/chutes:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/clawrouter:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -621,7 +621,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -630,7 +630,7 @@ importers:
 
   extensions/cloudflare-ai-gateway:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -652,19 +652,19 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/cohere:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/comfy:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -674,19 +674,19 @@ importers:
         specifier: 1.0.7
         version: 1.0.7
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/copilot-proxy:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/crabbox:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -702,25 +702,25 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/deepgram:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/deepinfra:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/deepseek:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -769,13 +769,13 @@ importers:
         specifier: 1.43.0
         version: 1.43.0
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/diagnostics-prometheus:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -797,13 +797,13 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/diffs-language-pack:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -840,7 +840,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -853,37 +853,37 @@ importers:
         specifier: 0.3.0
         version: 0.3.0
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/duckduckgo:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/elevenlabs:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/exa:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/fal:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/featherless:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -908,7 +908,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -924,7 +924,7 @@ importers:
         specifier: 1.3.6
         version: 1.3.6
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -934,19 +934,19 @@ importers:
         specifier: 1.3.6
         version: 1.3.6
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/fireworks:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/fish-audio-speech:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -956,13 +956,13 @@ importers:
         specifier: 1.7.0
         version: 1.7.0
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/gmi:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -978,7 +978,7 @@ importers:
         specifier: 10.9.1
         version: 10.9.1(supports-color@10.2.2)
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -994,7 +994,7 @@ importers:
         specifier: 1.3.6
         version: 1.3.6
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1010,7 +1010,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1019,25 +1019,25 @@ importers:
 
   extensions/gradium:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/groq:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/huggingface:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/image-generation-core:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1050,7 +1050,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1059,7 +1059,7 @@ importers:
 
   extensions/inworld:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1069,19 +1069,19 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/kilocode:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/kimi-coding:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1094,7 +1094,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1107,7 +1107,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1117,19 +1117,19 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/litellm:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/llama-cpp:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
     optionalDependencies:
@@ -1143,7 +1143,7 @@ importers:
         specifier: 1.3.6
         version: 1.3.6
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1158,13 +1158,13 @@ importers:
         specifier: 1.3.6
         version: 1.3.6
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/logbook:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1173,7 +1173,7 @@ importers:
 
   extensions/longcat:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1204,7 +1204,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1220,7 +1220,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1229,7 +1229,7 @@ importers:
 
   extensions/media-understanding-core:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1248,7 +1248,7 @@ importers:
         specifier: 1.3.6
         version: 1.3.6
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1270,7 +1270,7 @@ importers:
         specifier: 1.3.6
         version: 1.3.6
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1292,10 +1292,10 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/memory-core':
+      '@openclaw/memory-core':
         specifier: workspace:*
         version: link:../memory-core
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1304,7 +1304,7 @@ importers:
 
   extensions/meta:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1314,19 +1314,19 @@ importers:
         specifier: 1.2.10
         version: 1.2.10(supports-color@10.2.2)
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/microsoft-foundry:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/migrate-claude:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1342,7 +1342,7 @@ importers:
         specifier: 2.9.0
         version: 2.9.0
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1351,19 +1351,19 @@ importers:
 
   extensions/minimax:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/mistral:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/moonshot:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1391,7 +1391,7 @@ importers:
       '@microsoft/teams.common':
         specifier: 2.0.14
         version: 2.0.14(debug@4.4.3(supports-color@10.2.2))(supports-color@10.2.2)
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       jose:
@@ -1410,7 +1410,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1420,7 +1420,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1436,7 +1436,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1445,13 +1445,13 @@ importers:
 
   extensions/novita:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/nvidia:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1467,7 +1467,7 @@ importers:
         specifier: 2.9.0
         version: 2.9.0
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1480,26 +1480,26 @@ importers:
         specifier: 1.3.6
         version: 1.3.6
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/onepassword:
     dependencies:
-      '@natesclaw/fs-safe':
+      '@openclaw/fs-safe':
         specifier: 0.5.4
         version: 0.5.4
       execa:
         specifier: 10.0.0
         version: 10.0.0
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/open-prose:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1518,25 +1518,25 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/opencode:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/opencode-go:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/openrouter:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1549,25 +1549,25 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/parallel:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/perplexity:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/pixverse:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1580,7 +1580,7 @@ importers:
         specifier: 2.2.3
         version: 2.2.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1596,7 +1596,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1611,7 +1611,7 @@ importers:
       '@modelcontextprotocol/sdk':
         specifier: 1.30.0
         version: 1.30.0(supports-color@10.2.2)(zod@4.4.3)
-      '@natesclaw/crabline':
+      '@openclaw/crabline':
         specifier: 0.1.11
         version: 0.1.11
       p-limit:
@@ -1639,19 +1639,19 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/discord':
+      '@openclaw/discord':
         specifier: workspace:*
         version: link:../discord
-      '@natesclaw/matrix':
+      '@openclaw/matrix':
         specifier: workspace:*
         version: link:../matrix
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      '@natesclaw/slack':
+      '@openclaw/slack':
         specifier: workspace:*
         version: link:../slack
-      '@natesclaw/whatsapp':
+      '@openclaw/whatsapp':
         specifier: workspace:*
         version: link:../whatsapp
       natesclaw:
@@ -1663,7 +1663,7 @@ importers:
 
   extensions/qianfan:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1691,7 +1691,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       '@types/ws':
@@ -1703,7 +1703,7 @@ importers:
 
   extensions/qwen:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1713,7 +1713,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1738,31 +1738,31 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/runway:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/searxng:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/senseaudio:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/sglang:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1775,7 +1775,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1812,7 +1812,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1825,13 +1825,13 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/stepfun:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1841,13 +1841,13 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/synthetic:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1857,7 +1857,7 @@ importers:
         specifier: 1.3.6
         version: 1.3.6
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1867,7 +1867,7 @@ importers:
         specifier: 1.3.6
         version: 1.3.6
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1895,13 +1895,13 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/tencent:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1923,7 +1923,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1932,7 +1932,7 @@ importers:
 
   extensions/together:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1942,7 +1942,7 @@ importers:
         specifier: 0.8.1
         version: 0.8.1
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -1951,7 +1951,7 @@ importers:
 
   extensions/tts-local-cli:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -1970,37 +1970,37 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/vault:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/venice:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/vercel-ai-gateway:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/video-generation-core:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/vllm:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -2016,7 +2016,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -2025,19 +2025,19 @@ importers:
 
   extensions/volcengine:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/voyage:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/vydra:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -2050,7 +2050,7 @@ importers:
         specifier: 0.18.13
         version: 0.18.13
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -2060,7 +2060,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -2076,7 +2076,7 @@ importers:
         specifier: 1.3.6
         version: 1.3.6
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -2089,10 +2089,10 @@ importers:
         specifier: 1.3.6
         version: 1.3.6
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
-      '@natesclaw/workboard-contract':
+      '@openclaw/workboard-contract':
         specifier: workspace:*
         version: link:../../packages/workboard-contract
       natesclaw:
@@ -2108,19 +2108,19 @@ importers:
         specifier: 8.21.1
         version: 8.21.1
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/xiaomi:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
   extensions/zai:
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
 
@@ -2130,7 +2130,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -2149,7 +2149,7 @@ importers:
         specifier: 4.4.3
         version: 4.4.3
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -2162,7 +2162,7 @@ importers:
         specifier: 1.3.6
         version: 1.3.6
     devDependencies:
-      '@natesclaw/plugin-sdk':
+      '@openclaw/plugin-sdk':
         specifier: workspace:*
         version: link:../../packages/plugin-sdk
       natesclaw:
@@ -2171,19 +2171,19 @@ importers:
 
   packages/acp-core:
     dependencies:
-      '@natesclaw/normalization-core':
+      '@openclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
 
   packages/agent-core:
     dependencies:
-      '@natesclaw/ai':
+      '@openclaw/ai':
         specifier: workspace:*
         version: link:../ai
-      '@natesclaw/llm-core':
+      '@openclaw/llm-core':
         specifier: workspace:*
         version: link:../llm-core
-      '@natesclaw/normalization-core':
+      '@openclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
       typebox:
@@ -2201,7 +2201,7 @@ importers:
       '@mistralai/mistralai':
         specifier: 2.5.0
         version: 2.5.0(@opentelemetry/api@1.9.1)
-      '@natesclaw/normalization-core':
+      '@openclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
       openai:
@@ -2216,7 +2216,7 @@ importers:
 
   packages/gateway-client:
     dependencies:
-      '@natesclaw/gateway-protocol':
+      '@openclaw/gateway-protocol':
         specifier: workspace:*
         version: link:../gateway-protocol
       ipaddr.js:
@@ -2240,7 +2240,7 @@ importers:
 
   packages/markdown-core:
     dependencies:
-      '@natesclaw/normalization-core':
+      '@openclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
       markdown-it:
@@ -2264,7 +2264,7 @@ importers:
 
   packages/media-core:
     dependencies:
-      '@natesclaw/normalization-core':
+      '@openclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
       file-type:
@@ -2273,7 +2273,7 @@ importers:
 
   packages/media-generation-core:
     dependencies:
-      '@natesclaw/normalization-core':
+      '@openclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
 
@@ -2281,10 +2281,10 @@ importers:
 
   packages/memory-host-sdk:
     dependencies:
-      '@natesclaw/normalization-core':
+      '@openclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
-      '@natesclaw/retry':
+      '@openclaw/retry':
         specifier: workspace:*
         version: link:../retry
       p-map:
@@ -2297,7 +2297,7 @@ importers:
 
   packages/model-catalog-core:
     dependencies:
-      '@natesclaw/normalization-core':
+      '@openclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
       zod:
@@ -2306,7 +2306,7 @@ importers:
 
   packages/net-policy:
     dependencies:
-      '@natesclaw/normalization-core':
+      '@openclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
       ipaddr.js:
@@ -2330,16 +2330,16 @@ importers:
 
   packages/sdk:
     dependencies:
-      '@natesclaw/gateway-client':
+      '@openclaw/gateway-client':
         specifier: workspace:*
         version: link:../gateway-client
-      '@natesclaw/normalization-core':
+      '@openclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
 
   packages/session-url-contract:
     dependencies:
-      '@natesclaw/normalization-core':
+      '@openclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
 
@@ -2348,7 +2348,7 @@ importers:
       '@clack/prompts':
         specifier: 1.7.0
         version: 1.7.0
-      '@natesclaw/normalization-core':
+      '@openclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
       chalk:
@@ -2360,7 +2360,7 @@ importers:
 
   packages/tool-call-repair:
     dependencies:
-      '@natesclaw/normalization-core':
+      '@openclaw/normalization-core':
         specifier: workspace:*
         version: link:../normalization-core
 
@@ -2407,34 +2407,34 @@ importers:
       '@novnc/novnc':
         specifier: 1.7.0
         version: 1.7.0
-      '@natesclaw/gateway-client':
+      '@openclaw/gateway-client':
         specifier: workspace:*
         version: link:../packages/gateway-client
-      '@natesclaw/gateway-protocol':
+      '@openclaw/gateway-protocol':
         specifier: workspace:*
         version: link:../packages/gateway-protocol
-      '@natesclaw/libterminal':
+      '@openclaw/libterminal':
         specifier: 0.3.2
         version: 0.3.2
-      '@natesclaw/media-core':
+      '@openclaw/media-core':
         specifier: workspace:*
         version: link:../packages/media-core
-      '@natesclaw/model-catalog-core':
+      '@openclaw/model-catalog-core':
         specifier: workspace:*
         version: link:../packages/model-catalog-core
-      '@natesclaw/net-policy':
+      '@openclaw/net-policy':
         specifier: workspace:*
         version: link:../packages/net-policy
-      '@natesclaw/normalization-core':
+      '@openclaw/normalization-core':
         specifier: workspace:*
         version: link:../packages/normalization-core
-      '@natesclaw/session-url-contract':
+      '@openclaw/session-url-contract':
         specifier: workspace:*
         version: link:../packages/session-url-contract
-      '@natesclaw/uirouter':
+      '@openclaw/uirouter':
         specifier: 0.1.1
         version: 0.1.1
-      '@natesclaw/workboard-contract':
+      '@openclaw/workboard-contract':
         specifier: workspace:*
         version: link:../packages/workboard-contract
       '@tanstack/lit-virtual':
@@ -4136,16 +4136,16 @@ packages:
     cpu: [x64]
     os: [win32]
 
-  '@natesclaw/crabline@0.1.11':
+  '@openclaw/crabline@0.1.11':
     resolution: {integrity: sha512-A7KH6gi7tXfJmdyeCzhZ65cSrLk4lALbto3lNBOHp1C6uIirAgM4tcF9I7/LhNDX/dq/T+q2QytpVPhhsfwgQQ==}
     engines: {node: '>=22'}
     hasBin: true
 
-  '@natesclaw/fs-safe@0.5.4':
+  '@openclaw/fs-safe@0.5.4':
     resolution: {integrity: sha512-lttlWKRBQU7eYDYykU2BPoF1S6AESGrT77mVCXsuWBxnRBTAI/PuGB89DB3D1lBCDaqTykIjymPJz4pFesGnkg==}
     engines: {node: '>=22'}
 
-  '@natesclaw/libterminal@0.3.2':
+  '@openclaw/libterminal@0.3.2':
     resolution: {integrity: sha512-RbxYPG22kuEgvW2Gx8FK2uApYSgDi+yRahfR0lW7pcdMZvAWL9/iLJRVLEMKc1uAA69mAA/IW5AtwQ9LUdHypA==}
     engines: {node: ^22.18.0 || >=24.11.0}
     peerDependencies:
@@ -4154,13 +4154,13 @@ packages:
       node-pty:
         optional: true
 
-  '@natesclaw/proxyline@0.3.4':
+  '@openclaw/proxyline@0.3.4':
     resolution: {integrity: sha512-WuLE282PW7vLienDNFTjdSI/BCYDAepvr5siOTYABQhqFo8qbP9MgmJzZnwmskUqiYugGzle6gvaRbJTkwbZ8A==}
     engines: {node: '>=22.19.0'}
     peerDependencies:
       undici: '>=8.5.0 <9'
 
-  '@natesclaw/uirouter@0.1.1':
+  '@openclaw/uirouter@0.1.1':
     resolution: {integrity: sha512-aiZFvWmP/ndpS3em5xVtiPlj1k6asA8ueoNxGxekA1024EZlCwnICPZklG6g2sU4Wlntp9AYocLCr5/iuvL7hw==}
     engines: {node: ^22.18.0 || >=24.11.0}
 
@@ -11417,7 +11417,7 @@ snapshots:
   '@openai/codex@0.147.0-win32-x64':
     optional: true
 
-  '@natesclaw/crabline@0.1.11':
+  '@openclaw/crabline@0.1.11':
     dependencies:
       '@types/node': 22.20.1
       commander: 15.0.0
@@ -11433,20 +11433,20 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  '@natesclaw/fs-safe@0.5.4':
+  '@openclaw/fs-safe@0.5.4':
     optionalDependencies:
       jszip: 3.10.1
       tar: 7.5.22
 
-  '@natesclaw/libterminal@0.3.2':
+  '@openclaw/libterminal@0.3.2':
     dependencies:
       ghostty-web: 0.4.0
 
-  '@natesclaw/proxyline@0.3.4(undici@8.9.0)':
+  '@openclaw/proxyline@0.3.4(undici@8.9.0)':
     dependencies:
       undici: 8.9.0
 
-  '@natesclaw/uirouter@0.1.1': {}
+  '@openclaw/uirouter@0.1.1': {}
 
   '@opentelemetry/api-logs@0.221.0':
     dependencies:

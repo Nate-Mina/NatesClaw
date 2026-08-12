@@ -11,7 +11,7 @@ Adds policy-backed doctor checks for workspace conformance.
 
 ## Distribution
 
-- Package: `@natesclaw/policy`
+- Package: `@openclaw/policy`
 - Install route: included in Natesclaw
 
 ## Surface

@@ -49,7 +49,7 @@ describe("release-beta-smoke", () => {
   it("parses workflow run urls when gh includes them in dispatch output", () => {
     expect(
       parseWorkflowRunIdFromOutput(
-        "Dispatched: https://github.com/natesclaw/natesclaw/actions/runs/1234567890",
+        "Dispatched: https://github.com/openclaw/natesclaw/actions/runs/1234567890",
       ),
     ).toBe("1234567890");
   });
@@ -77,7 +77,7 @@ describe("release-beta-smoke", () => {
 
     const merged = mergeTelegramProofIntoReleaseBody(
       body,
-      "- npm Telegram beta E2E: https://github.com/natesclaw/natesclaw/actions/runs/123",
+      "- npm Telegram beta E2E: https://github.com/openclaw/natesclaw/actions/runs/123",
     );
 
     expect(merged).toContain("actions/runs/123");
@@ -101,7 +101,7 @@ describe("release-beta-smoke", () => {
 
     const merged = mergeTelegramProofIntoReleaseBody(
       body,
-      "- npm Telegram beta E2E: https://github.com/natesclaw/natesclaw/actions/runs/123",
+      "- npm Telegram beta E2E: https://github.com/openclaw/natesclaw/actions/runs/123",
     );
 
     expect(merged.indexOf("actions/runs/123")).toBeLessThan(merged.indexOf("### Assets"));
@@ -139,7 +139,7 @@ describe("release-beta-smoke", () => {
         pollIntervalMs: 400,
         readRun: () => ({
           conclusion: null,
-          html_url: "https://github.com/natesclaw/natesclaw/actions/runs/123",
+          html_url: "https://github.com/openclaw/natesclaw/actions/runs/123",
           status: "queued",
           updated_at: "2026-05-28T12:00:00Z",
         }),
@@ -158,7 +158,7 @@ describe("release-beta-smoke", () => {
       pollRun("natesclaw/natesclaw", "123", {
         readRun: () => ({
           conclusion: "success",
-          html_url: "https://github.com/natesclaw/natesclaw/actions/runs/123",
+          html_url: "https://github.com/openclaw/natesclaw/actions/runs/123",
           status: "completed",
           updated_at: "2026-05-28T12:00:00Z",
         }),

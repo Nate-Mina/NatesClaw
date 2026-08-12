@@ -1,7 +1,7 @@
 import type {
   UnifiedModelCatalogEntry,
   UnifiedModelCatalogKind,
-} from "@natesclaw/model-catalog-core/model-catalog-types";
+} from "@openclaw/model-catalog-core/model-catalog-types";
 import type { ModelCatalogEntry } from "../agents/model-catalog.types.js";
 import type { ModelProviderConfig } from "../config/types.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

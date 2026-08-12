@@ -26,7 +26,7 @@ official LongCat plugin for LongCat's OpenAI-compatible endpoint.
 Install the official package, then restart Gateway:
 
 ```bash
-natesclaw plugins install @natesclaw/longcat-provider
+natesclaw plugins install @openclaw/longcat-provider
 natesclaw gateway restart
 ```
 

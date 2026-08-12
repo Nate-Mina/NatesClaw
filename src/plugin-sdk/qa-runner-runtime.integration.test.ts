@@ -84,12 +84,12 @@ describe("plugin-sdk qa-runner-runtime linked plugin smoke", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/qa-linked",
+        name: "@openclaw/qa-linked",
         type: "module",
         natesclaw: {
           extensions: ["./index.js"],
           install: {
-            npmSpec: "@natesclaw/qa-linked",
+            npmSpec: "@openclaw/qa-linked",
           },
         },
       }),
@@ -166,12 +166,12 @@ describe("plugin-sdk qa-runner-runtime linked plugin smoke", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/qa-legacy",
+        name: "@openclaw/qa-legacy",
         type: "module",
         natesclaw: {
           extensions: ["./index.js"],
           install: {
-            npmSpec: "@natesclaw/qa-legacy",
+            npmSpec: "@openclaw/qa-legacy",
           },
         },
       }),
@@ -236,7 +236,7 @@ describe("plugin-sdk qa-runner-runtime linked plugin smoke", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/operator-runner",
+        name: "@openclaw/operator-runner",
         type: "module",
         natesclaw: { extensions: ["./index.js"] },
       }),

@@ -1,4 +1,4 @@
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import type { AgentMessage, AgentToolResult } from "./runtime/index.js";
 import { toToolSearchJsonSafe } from "./tool-search-json.js";
 import type { ToolSearchTargetTranscriptProjection } from "./tool-search-types.js";

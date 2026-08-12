@@ -25,7 +25,7 @@ This threat model documents adversarial threats to the Natesclaw AI agent platfo
 | MCP servers            | Yes      | External tool providers                          |
 | User devices           | Partial  | Mobile apps, desktop clients                     |
 
-Out-of-scope reports and false-positive patterns (public internet exposure, prompt-injection-only chains without a boundary bypass, mutually untrusted operators sharing one gateway host, and others) are enumerated in [`SECURITY.md`](https://github.com/natesclaw/natesclaw/blob/main/SECURITY.md); that file is the current source of truth for vulnerability-report scope, not this page.
+Out-of-scope reports and false-positive patterns (public internet exposure, prompt-injection-only chains without a boundary bypass, mutually untrusted operators sharing one gateway host, and others) are enumerated in [`SECURITY.md`](https://github.com/openclaw/natesclaw/blob/main/SECURITY.md); that file is the current source of truth for vulnerability-report scope, not this page.
 
 ## 2. System architecture
 
@@ -551,7 +551,7 @@ T-EXEC-002 → T-EXFIL-001 → External exfiltration
 
 ---
 
-_This threat model is a living document. Report security issues to `security@natesclaw.ai` or see the [Trust page](https://trust.natesclaw.ai)._
+_This threat model is a living document. Report security issues to `security@openclaw.ai` or see the [Trust page](https://trust.openclaw.ai)._
 
 ## Related
 

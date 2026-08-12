@@ -5,7 +5,7 @@ Adds the `lobster` agent tool as an **optional** plugin tool.
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/lobster
+natesclaw plugins install @openclaw/lobster
 ```
 
 Restart the Gateway after installing or updating the plugin.
@@ -83,11 +83,11 @@ Notes:
 
 ## Docs
 
-- https://docs.natesclaw.ai/tools/lobster
+- https://docs.openclaw.ai/tools/lobster
 
 ## Package
 
 - Plugin id: `lobster`
 - Tool: `lobster`
-- Package: `@natesclaw/lobster`
+- Package: `@openclaw/lobster`
 - Minimum Natesclaw host: `2026.4.25`

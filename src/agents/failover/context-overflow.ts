@@ -1,5 +1,5 @@
-import { matchesContextOverflowMessage } from "@natesclaw/ai/internal/runtime";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { matchesContextOverflowMessage } from "@openclaw/ai/internal/runtime";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import { isBillingErrorMessage, isRateLimitErrorMessage } from "./message-patterns.js";
 import {
   classifyProviderPluginError,

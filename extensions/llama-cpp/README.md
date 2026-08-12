@@ -1,4 +1,4 @@
-# @natesclaw/llama-cpp-provider
+# @openclaw/llama-cpp-provider
 
 Official llama.cpp text-inference and embedding provider for Natesclaw.
 
@@ -8,7 +8,7 @@ This plugin runs local GGUF chat and embedding models in-process through
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/llama-cpp-provider
+natesclaw plugins install @openclaw/llama-cpp-provider
 ```
 
 Restart the Gateway after installing or updating the plugin. Use Node 24 for
@@ -26,7 +26,7 @@ provider, or configure any custom GGUF through `params.modelPath`. The 16 GiB
 gate applies only to Natesclaw's bundled default download; custom GGUF models
 remain available on any machine.
 
-See the [llama.cpp provider guide](https://docs.natesclaw.ai/plugins/llama-cpp)
+See the [llama.cpp provider guide](https://docs.openclaw.ai/plugins/llama-cpp)
 for custom GGUF model configuration and hardware guidance.
 
 ## Configure embeddings
@@ -39,5 +39,5 @@ Face model URI, or HTTPS model URL.
 ## Package
 
 - Plugin id: `llama-cpp`
-- Package: `@natesclaw/llama-cpp-provider`
+- Package: `@openclaw/llama-cpp-provider`
 - Minimum Natesclaw host: `2026.6.2`

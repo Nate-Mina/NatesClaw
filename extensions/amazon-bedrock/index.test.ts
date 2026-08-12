@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type { PluginRuntime } from "natesclaw/plugin-sdk/core";
 import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";

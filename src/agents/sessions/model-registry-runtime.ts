@@ -3,8 +3,8 @@ import {
   createLlmRuntime,
   type ApiRegistry,
   type LlmRuntime,
-} from "@natesclaw/ai";
-import { registerBuiltInApiProviders } from "@natesclaw/ai/providers";
+} from "@openclaw/ai";
+import { registerBuiltInApiProviders } from "@openclaw/ai/providers";
 import "../ai-transport-runtime-host.js";
 import { bindStreamLlmRuntime } from "../../llm/model-runtime-binding.js";
 

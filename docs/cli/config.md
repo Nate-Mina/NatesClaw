@@ -9,7 +9,7 @@ sidebarTitle: "Config"
 Non-interactive helpers for `natesclaw.json`: get/set/patch/unset a value by path, print the schema, validate, or print the active file path. Run `natesclaw config` with no subcommand to open the same guided wizard as `natesclaw configure`.
 
 <Note>
-When `NATESCLAW_NIX_MODE=1`, Natesclaw treats `natesclaw.json` as immutable. Read-only commands (`config get`, `config file`, `config schema`, `config validate`) still work; config writers refuse. Edit the Nix source for the install instead; for the first-party nix-natesclaw distribution, use the [nix-natesclaw Quick Start](https://github.com/natesclaw/nix-natesclaw#quick-start) and set values under `programs.natesclaw.config` or `instances.<name>.config`.
+When `NATESCLAW_NIX_MODE=1`, Natesclaw treats `natesclaw.json` as immutable. Read-only commands (`config get`, `config file`, `config schema`, `config validate`) still work; config writers refuse. Edit the Nix source for the install instead; for the first-party nix-natesclaw distribution, use the [nix-natesclaw Quick Start](https://github.com/openclaw/nix-natesclaw#quick-start) and set values under `programs.natesclaw.config` or `instances.<name>.config`.
 </Note>
 
 ## Root options

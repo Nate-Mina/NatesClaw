@@ -1,4 +1,4 @@
-import type { WorkboardWorkspace, WorkboardWorkspaceAccess } from "@natesclaw/workboard-contract";
+import type { WorkboardWorkspace, WorkboardWorkspaceAccess } from "@openclaw/workboard-contract";
 // Workboard workspace access follows the caller's canonical filesystem boundary.
 import {
   listAgentIds,
@@ -17,7 +17,7 @@ import {
 } from "natesclaw/plugin-sdk/security-runtime";
 import { asOptionalRecord } from "natesclaw/plugin-sdk/string-coerce-runtime";
 
-export type { WorkboardWorkspaceAccess } from "@natesclaw/workboard-contract";
+export type { WorkboardWorkspaceAccess } from "@openclaw/workboard-contract";
 
 type WorkboardConfig = NonNullable<NatesclawPluginToolContext["config"]>;
 type ResolveSandboxWorkspaceAuthority =

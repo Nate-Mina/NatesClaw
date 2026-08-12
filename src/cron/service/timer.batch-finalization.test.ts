@@ -1,5 +1,5 @@
 // Completed cron work must become durable before unrelated batch work drains.
-import { MAX_DATE_TIMESTAMP_MS } from "@natesclaw/normalization-core/number-coercion";
+import { MAX_DATE_TIMESTAMP_MS } from "@openclaw/normalization-core/number-coercion";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   createDueIsolatedJob,

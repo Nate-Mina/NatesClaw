@@ -18,7 +18,7 @@ a memory store outside the default built-in memory backend.
 ## Installation
 
 ```bash
-natesclaw plugins install @natesclaw/memory-lancedb
+natesclaw plugins install @openclaw/memory-lancedb
 ```
 
 The plugin is published to npm; it is not bundled into the Natesclaw runtime

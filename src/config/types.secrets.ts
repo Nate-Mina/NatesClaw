@@ -1,5 +1,5 @@
-import { expectDefined } from "@natesclaw/normalization-core";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { expectDefined } from "@openclaw/normalization-core";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 // Defines secret reference and resolution configuration types.
 
 /** Supported secret reference backends in config. */

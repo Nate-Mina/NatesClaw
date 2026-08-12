@@ -1,11 +1,11 @@
 {
-  "name": "@natesclaw/memory-host-sdk",
+  "name": "@openclaw/memory-host-sdk",
   "version": "0.0.0-private",
   "private": true,
   "type": "module",
   "dependencies": {
-    "@natesclaw/normalization-core": "workspace:*",
-    "@natesclaw/retry": "workspace:*",
+    "@openclaw/normalization-core": "workspace:*",
+    "@openclaw/retry": "workspace:*",
     "p-map": "7.0.6"
   },
   "devDependencies": {

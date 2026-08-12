@@ -1,7 +1,7 @@
 // Minimal Gateway websocket test helpers.
 // Provides small fake-server frames plus an isolated real-Gateway boundary harness.
 import path from "node:path";
-import { rawDataToString } from "@natesclaw/gateway-client/websocket-data";
+import { rawDataToString } from "@openclaw/gateway-client/websocket-data";
 import { WebSocket, type WebSocketServer } from "ws";
 import { PROTOCOL_VERSION } from "../../packages/gateway-protocol/src/index.js";
 import { toAgentRequestSessionKey } from "../routing/session-key.js";

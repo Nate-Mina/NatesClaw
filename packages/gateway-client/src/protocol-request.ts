@@ -1,4 +1,4 @@
-import type { ErrorShape } from "@natesclaw/gateway-protocol";
+import type { ErrorShape } from "@openclaw/gateway-protocol";
 
 export type GatewayProtocolRequestOptions = {
   timeoutMs?: number | null;

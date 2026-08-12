@@ -1,7 +1,7 @@
 // Transcript redaction tests cover structured and text transcript fields so
 // secrets do not persist in logs or replay artifacts.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { AgentMessage } from "natesclaw/plugin-sdk/agent-core";
 import { describe, expect, it, vi } from "vitest";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

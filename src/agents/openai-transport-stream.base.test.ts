@@ -4,7 +4,7 @@ import {
   createNatesclawTransportStreamFnForModel,
   prepareTransportAwareSimpleModel,
   resolveTransportAwareSimpleApi,
-} from "@natesclaw/ai/transports";
+} from "@openclaw/ai/transports";
 import type { Api, Model } from "natesclaw/plugin-sdk/llm";
 import { describe, expect, it, vi } from "vitest";
 import {

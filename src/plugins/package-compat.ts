@@ -1,6 +1,6 @@
 // Checks package compatibility metadata for plugin manifests.
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
 import { prerelease as parseSemverPrerelease, satisfies as satisfiesSemver } from "semver";
 
 function normalizePartialComparableVersion(version: string): {
@@ -76,7 +76,7 @@ function normalizeNatesclawReleaseSuffixForPluginApi(pluginApiVersion: string): 
   return match?.[1] ?? pluginApiVersion;
 }
 
-/** Result of reading package.json natesclaw.compat.pluginApi metadata. */
+/** Result of reading package.json openclaw.compat.pluginApi metadata. */
 type PackagePluginApiRangeResult = { ok: true; range?: string } | { ok: false; error: string };
 
 /** Resolves the plugin API compatibility range declared by package metadata. */
@@ -97,18 +97,18 @@ export function resolvePackagePluginApiRange(
     return { ok: true };
   }
   if (!isRecord(compat)) {
-    return { ok: false, error: "package.json natesclaw.compat must be an object" };
+    return { ok: false, error: "package.json openclaw.compat must be an object" };
   }
   if (!("pluginApi" in compat)) {
     return { ok: true };
   }
   const pluginApi = compat.pluginApi;
   if (typeof pluginApi !== "string") {
-    return { ok: false, error: "package.json natesclaw.compat.pluginApi must be a string" };
+    return { ok: false, error: "package.json openclaw.compat.pluginApi must be a string" };
   }
   const range = pluginApi.trim();
   if (!range) {
-    return { ok: false, error: "package.json natesclaw.compat.pluginApi must not be empty" };
+    return { ok: false, error: "package.json openclaw.compat.pluginApi must not be empty" };
   }
   return { ok: true, range };
 }

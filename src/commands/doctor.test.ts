@@ -288,7 +288,7 @@ describe("doctorCommand", () => {
       body: "sanitized body",
       bodyPath: "/tmp/session.failure.md",
       title: "Session SQLite migration recovery report (run-1)",
-      url: "https://github.com/natesclaw/natesclaw/issues/new?title=run-1",
+      url: "https://github.com/openclaw/natesclaw/issues/new?title=run-1",
     };
     const report = {
       mode: "recover",
@@ -311,7 +311,7 @@ describe("doctorCommand", () => {
     mocks.runDoctorSessionSqlite.mockResolvedValueOnce(report);
     mocks.createSessionSqliteGithubIssue.mockReturnValueOnce({
       ok: true,
-      url: "https://github.com/natesclaw/natesclaw/issues/123",
+      url: "https://github.com/openclaw/natesclaw/issues/123",
     });
     const runtime = {
       log: vi.fn(),
@@ -333,7 +333,7 @@ describe("doctorCommand", () => {
 
     expect(mocks.createSessionSqliteGithubIssue).toHaveBeenCalledWith(supportIssue);
     expect(runtime.log).toHaveBeenCalledWith(
-      "session-sqlite recover: created GitHub issue https://github.com/natesclaw/natesclaw/issues/123",
+      "session-sqlite recover: created GitHub issue https://github.com/openclaw/natesclaw/issues/123",
     );
     expect(runtime.exit).toHaveBeenCalledWith(0);
   });
@@ -344,7 +344,7 @@ describe("doctorCommand", () => {
       supportIssue: {
         body: "sanitized body",
         title: "Session SQLite migration recovery report (run-1)",
-        url: "https://github.com/natesclaw/natesclaw/issues/new?title=run-1",
+        url: "https://github.com/openclaw/natesclaw/issues/new?title=run-1",
       },
       targets: [],
       totals: {

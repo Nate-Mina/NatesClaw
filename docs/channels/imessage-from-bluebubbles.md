@@ -7,7 +7,7 @@ read_when:
 title: "Coming from BlueBubbles"
 ---
 
-BlueBubbles support was removed. Natesclaw supports iMessage only through the official `@natesclaw/imessage` plugin, which drives [`steipete/imsg`](https://github.com/steipete/imsg) over JSON-RPC and reaches the same private API surface BlueBubbles had (`react`, `edit`, `unsend`, `reply`, `sendWithEffect`, native polls, group management, attachments). One CLI binary replaces the BlueBubbles server + client app + webhook plumbing: no REST endpoint, no webhook auth.
+BlueBubbles support was removed. Natesclaw supports iMessage only through the official `@openclaw/imessage` plugin, which drives [`steipete/imsg`](https://github.com/steipete/imsg) over JSON-RPC and reaches the same private API surface BlueBubbles had (`react`, `edit`, `unsend`, `reply`, `sendWithEffect`, native polls, group management, attachments). One CLI binary replaces the BlueBubbles server + client app + webhook plumbing: no REST endpoint, no webhook auth.
 
 This guide migrates old `channels.bluebubbles` configs to `channels.imessage`. There is no other supported migration path. On current Natesclaw a leftover `channels.bluebubbles` block is inert — no runtime reads it.
 
@@ -19,7 +19,7 @@ For the short announcement and operator summary, see [BlueBubbles removal and th
 
 The shortest safe path when you already know your old BlueBubbles config:
 
-1. Install the official plugin with `natesclaw plugins install @natesclaw/imessage`, then restart the Gateway.
+1. Install the official plugin with `natesclaw plugins install @openclaw/imessage`, then restart the Gateway.
 2. Verify `imsg` directly on the Mac that runs Messages.app (`imsg chats`, `imsg history`, `imsg send`, `imsg rpc --help`).
 3. Copy behavior keys from `channels.bluebubbles` to `channels.imessage`: `dmPolicy`, `allowFrom`, `groupPolicy`, `groupAllowFrom`, `groups`, `includeAttachments`, `attachmentRoots`, `mediaMaxMb`, `textChunkLimit`, and `actions`.
 4. Drop transport keys that no longer exist: `serverUrl`, `password`, webhook URLs, and BlueBubbles server setup.
@@ -197,10 +197,10 @@ This admits the configured senders in any group. Add `groups` entries to scope a
 | --------------------------------------------------- | ------------------ | ----------------------------------------------------------------------------- |
 | Send text / SMS fallback                            | ✅                 | ✅                                                                            |
 | Send media (photo, video, file, voice)              | ✅                 | ✅                                                                            |
-| Threaded reply (`reply_to_guid`)                    | ✅                 | ✅ (closes [#51892](https://github.com/natesclaw/natesclaw/issues/51892))       |
+| Threaded reply (`reply_to_guid`)                    | ✅                 | ✅ (closes [#51892](https://github.com/openclaw/natesclaw/issues/51892))       |
 | Tapback (`react`)                                   | ✅                 | ✅                                                                            |
 | Edit / unsend (macOS 13+ recipients)                | ✅                 | ✅                                                                            |
-| Send with screen effect                             | ✅                 | ✅ (closes part of [#9394](https://github.com/natesclaw/natesclaw/issues/9394)) |
+| Send with screen effect                             | ✅                 | ✅ (closes part of [#9394](https://github.com/openclaw/natesclaw/issues/9394)) |
 | Rich text bold / italic / underline / strikethrough | ✅                 | ✅ (typed-run formatting via attributedBody)                                  |
 | Native Messages polls (create and vote)             | ❌                 | ✅ (`actions.polls`; recipients need iOS/macOS 26+ for native rendering)      |
 | Rename group / set group icon                       | ✅                 | ✅                                                                            |

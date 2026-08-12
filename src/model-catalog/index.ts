@@ -2,7 +2,7 @@
 // normalized planning APIs instead of reaching into provider-index internals.
 export { loadNatesclawProviderIndex } from "./provider-index/index.js";
 export { planManifestModelCatalogSuppressions } from "./manifest-planner.js";
-import type { ModelCatalogProvider } from "@natesclaw/model-catalog-core/model-catalog-types";
+import type { ModelCatalogProvider } from "@openclaw/model-catalog-core/model-catalog-types";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   planManifestModelCatalogRows,

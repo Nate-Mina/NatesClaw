@@ -1,5 +1,5 @@
 // Resolves native approval support for the initiating channel surface.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import {
   getChannelPlugin,
   listChannelPlugins,

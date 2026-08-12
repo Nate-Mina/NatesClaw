@@ -119,11 +119,11 @@ describeControlUiE2e("GitHub link hover cards", () => {
             {
               type: "text",
               text: [
-                "Review [#99816](https://github.com/natesclaw/natesclaw/pull/99816),",
-                "then [#99815](https://github.com/natesclaw/natesclaw/issues/99815).",
-                "A [missing item](https://github.com/natesclaw/natesclaw/issues/999999) stays usable.",
-                "The [repository](https://github.com/natesclaw/natesclaw) has no item preview.",
-                "Styling notes live in [the docs](https://docs.natesclaw.ai/web/control-ui).",
+                "Review [#99816](https://github.com/openclaw/natesclaw/pull/99816),",
+                "then [#99815](https://github.com/openclaw/natesclaw/issues/99815).",
+                "A [missing item](https://github.com/openclaw/natesclaw/issues/999999) stays usable.",
+                "The [repository](https://github.com/openclaw/natesclaw) has no item preview.",
+                "Styling notes live in [the docs](https://docs.openclaw.ai/web/control-ui).",
               ].join(" "),
             },
           ],
@@ -184,7 +184,7 @@ describeControlUiE2e("GitHub link hover cards", () => {
     await expectText(card, "GitHub preview unavailable");
     expect((await gateway.getRequests("controlUi.githubPreview")).length).toBe(3);
     expect(await missingLink.getAttribute("href")).toBe(
-      "https://github.com/natesclaw/natesclaw/issues/999999",
+      "https://github.com/openclaw/natesclaw/issues/999999",
     );
     await page.mouse.move(1, 1);
 
@@ -207,6 +207,6 @@ describeControlUiE2e("GitHub link hover cards", () => {
     await pullLink.click();
     const popup = await popupPromise;
     await popup.waitForLoadState("domcontentloaded");
-    expect(popup.url()).toBe("https://github.com/natesclaw/natesclaw/pull/99816");
+    expect(popup.url()).toBe("https://github.com/openclaw/natesclaw/pull/99816");
   });
 });

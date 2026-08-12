@@ -6,8 +6,8 @@
 import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { stableStringify } from "@natesclaw/normalization-core";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { stableStringify } from "@openclaw/normalization-core";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import {
   getRuntimeConfig,
   getRuntimeConfigSourceSnapshot,

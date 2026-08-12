@@ -1,5 +1,5 @@
-import { isWssUrl } from "@natesclaw/net-policy/url-protocol";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { isWssUrl } from "@openclaw/net-policy/url-protocol";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import type { GatewayTlsConfig } from "../config/types.gateway.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { GatewayTlsRuntime } from "../infra/tls/gateway.js";

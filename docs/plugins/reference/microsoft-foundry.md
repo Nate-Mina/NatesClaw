@@ -11,7 +11,7 @@ Adds Microsoft Foundry model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/microsoft-foundry`
+- Package: `@openclaw/microsoft-foundry`
 - Install route: included in Natesclaw
 
 ## Surface

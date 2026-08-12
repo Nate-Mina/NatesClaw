@@ -115,7 +115,7 @@ describe("runPluginPayloadSmokeCheck", () => {
     const dir = path.join(tmpRoot, "discord");
     await writePackage(
       dir,
-      { name: "@natesclaw/discord", main: "dist/index.js" },
+      { name: "@openclaw/discord", main: "dist/index.js" },
       "module.exports = {};",
     );
     const result = await runPluginPayloadSmokeCheck({
@@ -130,7 +130,7 @@ describe("runPluginPayloadSmokeCheck", () => {
     const dir = path.join(tmpRoot, "codex");
     await writePackage(
       dir,
-      { name: "@natesclaw/codex", natesclaw: { extensions: ["./index.js"] } },
+      { name: "@openclaw/codex", natesclaw: { extensions: ["./index.js"] } },
       "export default {};",
     );
     const result = await runPluginPayloadSmokeCheckForManifestRecords({
@@ -344,7 +344,7 @@ describe("runPluginPayloadSmokeCheck", () => {
 
   it("reports a failure when the main entry file is missing on disk", async () => {
     const dir = path.join(tmpRoot, "brave");
-    await writePackage(dir, { name: "@natesclaw/brave", main: "dist/index.js" });
+    await writePackage(dir, { name: "@openclaw/brave", main: "dist/index.js" });
     const result = await runPluginPayloadSmokeCheck({
       records: { brave: { source: "npm", installPath: dir } },
       env: {},
@@ -361,7 +361,7 @@ describe("runPluginPayloadSmokeCheck", () => {
 
   it("accepts a manifest with no main field (Natesclaw plugins commonly use `exports` or `natesclaw.extensions`)", async () => {
     const dir = path.join(tmpRoot, "matrix");
-    await writePackage(dir, { name: "@natesclaw/plugin-matrix" });
+    await writePackage(dir, { name: "@openclaw/plugin-matrix" });
     const result = await runPluginPayloadSmokeCheck({
       records: { matrix: { source: "npm", installPath: dir } },
       env: {},
@@ -372,7 +372,7 @@ describe("runPluginPayloadSmokeCheck", () => {
   it("accepts a manifest that declares only `exports` and no `main`", async () => {
     const dir = path.join(tmpRoot, "qa");
     await writePackage(dir, {
-      name: "@natesclaw/qa-channel",
+      name: "@openclaw/qa-channel",
       exports: { ".": "./index.js", "./api.js": "./api.js" },
     });
     const result = await runPluginPayloadSmokeCheck({
@@ -385,7 +385,7 @@ describe("runPluginPayloadSmokeCheck", () => {
   it("accepts a manifest that declares an existing `natesclaw.extensions` entry and no `main`", async () => {
     const dir = path.join(tmpRoot, "brave");
     await writePackage(dir, {
-      name: "@natesclaw/brave-plugin",
+      name: "@openclaw/brave-plugin",
       natesclaw: { extensions: ["./index.js"] },
     });
     await fs.writeFile(path.join(dir, "index.js"), "export default {};\n", "utf8");
@@ -399,7 +399,7 @@ describe("runPluginPayloadSmokeCheck", () => {
   it("reports a failure when `natesclaw.extensions` contains invalid entries", async () => {
     const dir = path.join(tmpRoot, "brave");
     await writePackage(dir, {
-      name: "@natesclaw/brave-plugin",
+      name: "@openclaw/brave-plugin",
       natesclaw: { extensions: ["./index.js", " "] },
       main: "main.js",
     });
@@ -422,7 +422,7 @@ describe("runPluginPayloadSmokeCheck", () => {
   it("reports only extension-entry failure for an empty extensions list even if main is missing", async () => {
     const dir = path.join(tmpRoot, "brave-empty");
     await writePackage(dir, {
-      name: "@natesclaw/brave-plugin",
+      name: "@openclaw/brave-plugin",
       natesclaw: { extensions: [] },
       main: "dist/index.js",
     });
@@ -444,7 +444,7 @@ describe("runPluginPayloadSmokeCheck", () => {
   it("accepts a valid declared extension when an unrelated npm main is missing", async () => {
     const dir = path.join(tmpRoot, "brave");
     await writePackage(dir, {
-      name: "@natesclaw/brave-plugin",
+      name: "@openclaw/brave-plugin",
       natesclaw: { extensions: ["./index.js"] },
       main: "dist/index.js",
     });
@@ -487,7 +487,7 @@ describe("runPluginPayloadSmokeCheck", () => {
   it("accepts a packaged TypeScript extension entry when compiled runtime output exists", async () => {
     const dir = path.join(tmpRoot, "codex");
     await writePackage(dir, {
-      name: "@natesclaw/codex",
+      name: "@openclaw/codex",
       natesclaw: { extensions: ["./index.ts"] },
     });
     await fs.mkdir(path.join(dir, "dist"), { recursive: true });
@@ -504,7 +504,7 @@ describe("runPluginPayloadSmokeCheck", () => {
     await writePackage(
       dir,
       {
-        name: "@natesclaw/codex",
+        name: "@openclaw/codex",
         main: "dist/index.js",
         peerDependencies: { natesclaw: ">=2026.5.18-beta.1" },
       },
@@ -535,7 +535,7 @@ describe("runPluginPayloadSmokeCheck", () => {
     await writePackage(
       dir,
       {
-        name: "@natesclaw/codex",
+        name: "@openclaw/codex",
         main: "dist/index.js",
         peerDependencies: { natesclaw: ">=2026.5.18-beta.1" },
       },
@@ -629,7 +629,7 @@ describe("runPluginPayloadSmokeCheck", () => {
     await writePackage(
       dir,
       {
-        name: "@natesclaw/codex",
+        name: "@openclaw/codex",
         main: "dist/index.js",
         peerDependencies: { natesclaw: ">=2026.5.18-beta.1" },
       },
@@ -667,7 +667,7 @@ describe("runPluginPayloadSmokeCheck", () => {
     await writePackage(
       dir,
       {
-        name: "@natesclaw/codex",
+        name: "@openclaw/codex",
         main: "dist/index.js",
         peerDependencies: { natesclaw: ">=2026.5.18-beta.1" },
       },
@@ -686,7 +686,7 @@ describe("runPluginPayloadSmokeCheck", () => {
   it("reports a failure when an `natesclaw.extensions` entry file is missing", async () => {
     const dir = path.join(tmpRoot, "brave");
     await writePackage(dir, {
-      name: "@natesclaw/brave-plugin",
+      name: "@openclaw/brave-plugin",
       natesclaw: { extensions: ["./dist/index.js"] },
     });
     const result = await runPluginPayloadSmokeCheck({

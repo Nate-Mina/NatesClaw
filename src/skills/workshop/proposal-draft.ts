@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { err, ok, type Result } from "@natesclaw/normalization-core/result";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { err, ok, type Result } from "@openclaw/normalization-core/result";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { readLocalFileSafely, root, walkDirectory } from "../../infra/fs-safe.js";
 import {
   MAX_WORKSPACE_SKILL_SUPPORT_FILE_BYTES,

@@ -6,7 +6,7 @@ read_when:
 title: "Signal"
 ---
 
-Signal is a downloadable channel plugin (`@natesclaw/signal`). The gateway talks to `signal-cli` over HTTP: either the native daemon (JSON-RPC + SSE) or the [bbernhard/signal-cli-rest-api](https://github.com/bbernhard/signal-cli-rest-api) container (REST + WebSocket). Natesclaw does not embed libsignal.
+Signal is a downloadable channel plugin (`@openclaw/signal`). The gateway talks to `signal-cli` over HTTP: either the native daemon (JSON-RPC + SSE) or the [bbernhard/signal-cli-rest-api](https://github.com/bbernhard/signal-cli-rest-api) container (REST + WebSocket). Natesclaw does not embed libsignal.
 
 ## The number model (read this first)
 
@@ -17,10 +17,10 @@ Signal is a downloadable channel plugin (`@natesclaw/signal`). The gateway talks
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/signal
+natesclaw plugins install @openclaw/signal
 ```
 
-Bare plugin specs try ClawHub first, then npm fallback. Force a source with `natesclaw plugins install clawhub:@natesclaw/signal` or `npm:@natesclaw/signal`. `plugins install` registers and enables the plugin; no separate `enable` step is needed. See [Plugins](/tools/plugin) for general install rules.
+Bare plugin specs try ClawHub first, then npm fallback. Force a source with `natesclaw plugins install clawhub:@openclaw/signal` or `npm:@openclaw/signal`. `plugins install` registers and enables the plugin; no separate `enable` step is needed. See [Plugins](/tools/plugin) for general install rules.
 
 ## Quick setup
 
@@ -30,7 +30,7 @@ Bare plugin specs try ClawHub first, then npm fallback. Force a source with `nat
   </Step>
   <Step title="Install the plugin">
     ```bash
-    natesclaw plugins install @natesclaw/signal
+    natesclaw plugins install @openclaw/signal
     ```
   </Step>
   <Step title="Run the guided setup">

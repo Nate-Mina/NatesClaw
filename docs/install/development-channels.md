@@ -88,7 +88,7 @@ Notes:
   for that one run. For a persistent moving `main` install, use
   `natesclaw update --channel dev` (package installs switch to a git checkout)
   or reinstall with the installer's git method:
-  `curl -fsSL https://natesclaw.ai/install.sh | bash -s -- --install-method git --version main`.
+  `curl -fsSL https://openclaw.ai/install.sh | bash -s -- --install-method git --version main`.
   The npm install path rejects GitHub/git source targets outright and points
   you at the git method instead.
 - Downgrade protection: if the target version is older than the current

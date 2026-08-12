@@ -1,5 +1,5 @@
 // Plugin uninstall id resolver for registry ids, display names, npm specs, and ClawHub specs.
-import { err as resultError, ok, type Result } from "@natesclaw/normalization-core/result";
+import { err as resultError, ok, type Result } from "@openclaw/normalization-core/result";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { parseClawHubPluginSpec } from "../infra/clawhub-spec.js";
 import type { PluginRecord } from "../plugins/registry.js";

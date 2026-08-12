@@ -1,5 +1,5 @@
 // @vitest-environment node
-import type { RouteLoaderOptions } from "@natesclaw/uirouter";
+import type { RouteLoaderOptions } from "@openclaw/uirouter";
 import { describe, expect, it, vi } from "vitest";
 import type { GatewayBrowserClient } from "../api/gateway.ts";
 import type { ApplicationContext, ApplicationGatewaySnapshot } from "../app/context.ts";

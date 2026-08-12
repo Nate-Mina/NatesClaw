@@ -1,7 +1,7 @@
 /**
  * Public SDK subpath for LLM streaming, model utils, and validation.
  */
-export type { ApiProvider } from "@natesclaw/ai";
+export type { ApiProvider } from "@openclaw/ai";
 export { resolveProviderContext } from "../../packages/ai/src/provider-types.js";
 export type {
   ProviderContext,
@@ -18,13 +18,13 @@ export {
   getEnvApiKey,
   parseStreamingJson,
   sanitizeSurrogates,
-} from "@natesclaw/ai/internal/runtime";
+} from "@openclaw/ai/internal/runtime";
 export {
   adjustMaxTokensForThinking,
   buildBaseOptions,
   clampReasoning,
-} from "@natesclaw/ai/internal/shared";
-export { transformMessages } from "@natesclaw/ai/internal/shared";
+} from "@openclaw/ai/internal/shared";
+export { transformMessages } from "@openclaw/ai/internal/shared";
 export { complete, completeSimple, stream, streamSimple } from "../llm/stream.js";
 export type {
   Api,

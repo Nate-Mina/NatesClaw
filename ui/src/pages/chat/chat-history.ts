@@ -2,7 +2,7 @@
 import {
   readSessionMessageIdentity,
   readSessionMessageSequence,
-} from "@natesclaw/gateway-client/browser";
+} from "@openclaw/gateway-client/browser";
 import type { CommandsListResult } from "../../../../packages/gateway-protocol/src/index.js";
 import type { GatewayBrowserClient, GatewayHelloOk } from "../../api/gateway.ts";
 import type {

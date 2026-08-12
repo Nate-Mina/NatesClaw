@@ -1,9 +1,9 @@
 // Summarizes channel token/account credential fields for `natesclaw status --all`.
 // The display path is intentionally secret-safe unless the caller explicitly requests disclosure.
 
-import { asRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
-import { sliceUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { asRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { sliceUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import { hasConfiguredUnavailableCredentialStatus } from "../../channels/account-snapshot-fields.js";
 import type { ChannelAccountSnapshot } from "../../channels/plugins/types.public.js";
 import { sha256HexPrefix } from "../../logging/redact-identifier.js";

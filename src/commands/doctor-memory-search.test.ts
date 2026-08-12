@@ -320,7 +320,7 @@ describe("noteMemorySearchHealth", () => {
     expect(note).toHaveBeenCalledTimes(1);
     expectFirstNoteContains(
       'Memory search provider is set to "local"',
-      "natesclaw plugins install @natesclaw/llama-cpp-provider",
+      "natesclaw plugins install @openclaw/llama-cpp-provider",
     );
   });
 
@@ -977,7 +977,7 @@ describe("noteMemorySearchHealth", () => {
   it("warns for key-optional provider (lmstudio) when gateway probe timed out", async () => {
     // A gateway timeout sets checked: false but skipped: false/absent. This is a
     // real diagnostic signal — embeddings may be unavailable — so we should warn.
-    // Regression guard: https://github.com/natesclaw/natesclaw/issues/74608
+    // Regression guard: https://github.com/openclaw/natesclaw/issues/74608
     await runMemorySearchHealth("lmstudio", {
       gatewayMemoryProbe: {
         checked: false,

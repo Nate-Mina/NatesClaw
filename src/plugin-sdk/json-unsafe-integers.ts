@@ -5,4 +5,4 @@ export {
   parseJsonObjectPreservingUnsafeIntegers,
   parseJsonPreservingUnsafeIntegers,
   quoteUnsafeIntegerLiterals,
-} from "@natesclaw/ai/transports";
+} from "@openclaw/ai/transports";

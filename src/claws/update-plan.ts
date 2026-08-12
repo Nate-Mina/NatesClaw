@@ -1,7 +1,7 @@
 // Builds read-only, agent-centric Claw update plans from grouped manifests and ownership state.
 import { createHash } from "node:crypto";
 import { lstat } from "node:fs/promises";
-import { stableStringify } from "@natesclaw/normalization-core";
+import { stableStringify } from "@openclaw/normalization-core";
 import { normalizeConfiguredMcpServers } from "../config/mcp-config-normalize.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { root as fsSafeRoot } from "../infra/fs-safe.js";

@@ -81,7 +81,7 @@ function createSetupFailureFixture(params: {
 }) {
   const pluginDir = makePluginLoaderTempDir();
   writeFixtureJson(pluginDir, "package.json", {
-    name: `@natesclaw/${params.id}`,
+    name: `@openclaw/${params.id}`,
     natesclaw: {
       extensions: ["./index.cjs"],
       setupEntry: "./setup-entry.cjs",
@@ -224,7 +224,7 @@ ${channelPluginSource({
         pluginManifest("trusted-global-channel", ["trusted-global-channel"]),
       );
       writeFixtureJson(globalDir, "package.json", {
-        name: "@natesclaw/trusted-global-channel",
+        name: "@openclaw/trusted-global-channel",
         version: "0.0.0-test",
         main: "./index.cjs",
         natesclaw: {
@@ -318,7 +318,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-entry-test",
         label: "Setup Entry Test",
-        packageName: "@natesclaw/setup-entry-test",
+        packageName: "@openclaw/setup-entry-test",
         fullBlurb: "full entry should not run in setup-only mode",
         setupBlurb: "setup entry",
         configured: false,
@@ -339,7 +339,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-only-bundled-contract-test",
         label: "Setup Only Bundled Contract Test",
-        packageName: "@natesclaw/setup-only-bundled-contract-test",
+        packageName: "@openclaw/setup-only-bundled-contract-test",
         fullBlurb: "full entry should not run in setup-only mode",
         setupBlurb: "setup-only bundled contract",
         configured: false,
@@ -361,7 +361,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-runtime-test",
         label: "Setup Runtime Test",
-        packageName: "@natesclaw/setup-runtime-test",
+        packageName: "@openclaw/setup-runtime-test",
         fullBlurb: "full entry should not run while unconfigured",
         setupBlurb: "setup runtime",
         configured: false,
@@ -376,7 +376,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-runtime-bundled-contract-test",
         label: "Setup Runtime Bundled Contract Test",
-        packageName: "@natesclaw/setup-runtime-bundled-contract-test",
+        packageName: "@openclaw/setup-runtime-bundled-contract-test",
         fullBlurb: "full entry should not run while unconfigured",
         setupBlurb: "setup runtime bundled contract",
         configured: false,
@@ -392,7 +392,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-runtime-bundled-contract-secrets-test",
         label: "Setup Runtime Bundled Contract Secrets Test",
-        packageName: "@natesclaw/setup-runtime-bundled-contract-secrets-test",
+        packageName: "@openclaw/setup-runtime-bundled-contract-secrets-test",
         fullBlurb: "full entry should not run while unconfigured",
         setupBlurb: "setup runtime bundled contract secrets",
         configured: false,
@@ -410,7 +410,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-runtime-bundled-contract-runtime-test",
         label: "Setup Runtime Bundled Contract Runtime Test",
-        packageName: "@natesclaw/setup-runtime-bundled-contract-runtime-test",
+        packageName: "@openclaw/setup-runtime-bundled-contract-runtime-test",
         fullBlurb: "full entry should not run while unconfigured",
         setupBlurb: "setup runtime bundled contract runtime",
         configured: false,
@@ -431,7 +431,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-runtime-bundled-runtime-merge-test",
         label: "Setup Runtime Bundled Runtime Merge Test",
-        packageName: "@natesclaw/setup-runtime-bundled-runtime-merge-test",
+        packageName: "@openclaw/setup-runtime-bundled-runtime-merge-test",
         fullBlurb: "full runtime plugin",
         setupBlurb: "setup runtime override",
         configured: false,
@@ -453,7 +453,7 @@ ${channelPluginSource({
       fixture: {
         id: "setup-runtime-default-full-test",
         label: "Setup Runtime Default Full Test",
-        packageName: "@natesclaw/setup-runtime-default-full-test",
+        packageName: "@openclaw/setup-runtime-default-full-test",
         fullBlurb: "ordinary full runtime",
         setupBlurb: "setup runtime should not load by default",
         configured: false,
@@ -524,7 +524,7 @@ ${channelPluginSource({
     const built = createSetupEntryChannelPluginFixture({
       id: "setup-runtime-order-test",
       label: "Setup Runtime Order Test",
-      packageName: "@natesclaw/setup-runtime-order-test",
+      packageName: "@openclaw/setup-runtime-order-test",
       fullBlurb: "full runtime plugin",
       setupBlurb: "setup runtime override",
       configured: false,
@@ -549,7 +549,7 @@ ${channelPluginSource({
     const built = createSetupEntryChannelPluginFixture({
       id: "setup-runtime-error-test",
       label: "Setup Runtime Error Test",
-      packageName: "@natesclaw/setup-runtime-error-test",
+      packageName: "@openclaw/setup-runtime-error-test",
       fullBlurb: "full runtime plugin",
       setupBlurb: "setup runtime override",
       configured: false,
@@ -582,7 +582,7 @@ ${channelPluginSource({
     const built = createSetupEntryChannelPluginFixture({
       id: "setup-runtime-route-error-test",
       label: "Setup Runtime Route Error Test",
-      packageName: "@natesclaw/setup-runtime-route-error-test",
+      packageName: "@openclaw/setup-runtime-route-error-test",
       fullBlurb: "full runtime plugin",
       setupBlurb: "setup runtime route",
       configured: false,
@@ -619,7 +619,7 @@ ${channelPluginSource({
     const built = createSetupEntryChannelPluginFixture({
       id: "setup-runtime-late-route-test",
       label: "Setup Runtime Late Route Test",
-      packageName: "@natesclaw/setup-runtime-late-route-test",
+      packageName: "@openclaw/setup-runtime-late-route-test",
       fullBlurb: "full runtime plugin",
       setupBlurb: "setup runtime route",
       configured: false,
@@ -649,7 +649,7 @@ ${channelPluginSource({
       id: "setup-runtime-mismatch-test",
       bundledFullEntryId: "wrong-runtime-id",
       label: "Setup Runtime Mismatch Test",
-      packageName: "@natesclaw/setup-runtime-mismatch-test",
+      packageName: "@openclaw/setup-runtime-mismatch-test",
       fullBlurb: "full runtime plugin",
       setupBlurb: "setup runtime override",
       configured: false,
@@ -679,7 +679,7 @@ ${channelPluginSource({
       id: "setup-export-mismatch-test",
       bundledSetupEntryId: "wrong-setup-id",
       label: "Setup Export Mismatch Test",
-      packageName: "@natesclaw/setup-export-mismatch-test",
+      packageName: "@openclaw/setup-export-mismatch-test",
       fullBlurb: "full runtime plugin",
       setupBlurb: "setup runtime override",
       configured: false,

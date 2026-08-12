@@ -1,6 +1,6 @@
 /** Resolves provider environment variable candidates and auth evidence from core/plugin metadata. */
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
-import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import { resolveProviderAuthAliasMap } from "../agents/provider-auth-aliases.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { normalizePluginsConfig } from "../plugins/config-state.js";

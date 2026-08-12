@@ -945,14 +945,14 @@ describe("handleToolExecutionEnd cron mutation tracking", () => {
 
   it.each([
     ["exec", "natesclaw cron add --at +1h --message 'follow up' --name reminder"],
-    ["exec", "npx natesclaw cron add --at=+1h --message 'follow up'"],
+    ["exec", "npx openclaw cron add --at=+1h --message 'follow up'"],
     ["exec", "bunx natesclaw cron add --at +1h --message 'follow up'"],
     ["exec", "pnpm exec natesclaw cron add --at +1h --message 'follow up'"],
     ["exec", "pnpm dlx natesclaw cron add --at +1h --message 'follow up'"],
-    ["exec", "npx -y natesclaw cron add --at +1h --message 'follow up'"],
+    ["exec", "npx -y openclaw cron add --at +1h --message 'follow up'"],
     ["exec", "bunx --bun natesclaw cron add --at +1h --message 'follow up'"],
     ["exec", "pnpm dlx natesclaw@latest cron add --at +1h --message 'follow up'"],
-    ["exec", "npx natesclaw@latest cron add --at +1h --message 'follow up'"],
+    ["exec", "npx openclaw@latest cron add --at +1h --message 'follow up'"],
     ["exec", "bunx natesclaw@latest cron add --at +1h --message 'follow up'"],
     ["exec", "/usr/local/bin/natesclaw cron add --at +1h --message 'follow up'"],
     ["bash", "corepack pnpm exec natesclaw cron add --at +1h --message 'follow up'"],

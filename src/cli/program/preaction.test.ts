@@ -616,8 +616,8 @@ describe("registerPreActionHooks", () => {
 
   it("only allows invalid config for explicit official recovery reinstall requests", async () => {
     await runPreAction({
-      parseArgv: ["plugins", "install", "@natesclaw/discord"],
-      processArgv: ["node", "natesclaw", "plugins", "install", "@natesclaw/discord"],
+      parseArgv: ["plugins", "install", "@openclaw/discord"],
+      processArgv: ["node", "natesclaw", "plugins", "install", "@openclaw/discord"],
     });
 
     expect(ensureConfigReadyMock).toHaveBeenCalledWith({
@@ -629,8 +629,8 @@ describe("registerPreActionHooks", () => {
 
     vi.clearAllMocks();
     await runPreAction({
-      parseArgv: ["plugins", "install", "@natesclaw/discord@2026.5.22"],
-      processArgv: ["node", "natesclaw", "plugins", "install", "@natesclaw/discord@2026.5.22"],
+      parseArgv: ["plugins", "install", "@openclaw/discord@2026.5.22"],
+      processArgv: ["node", "natesclaw", "plugins", "install", "@openclaw/discord@2026.5.22"],
     });
 
     expect(ensureConfigReadyMock).toHaveBeenCalledWith({
@@ -642,8 +642,8 @@ describe("registerPreActionHooks", () => {
 
     vi.clearAllMocks();
     await runPreAction({
-      parseArgv: ["plugins", "install", "@natesclaw/brave-plugin"],
-      processArgv: ["node", "natesclaw", "plugins", "install", "@natesclaw/brave-plugin"],
+      parseArgv: ["plugins", "install", "@openclaw/brave-plugin"],
+      processArgv: ["node", "natesclaw", "plugins", "install", "@openclaw/brave-plugin"],
     });
 
     expect(ensureConfigReadyMock).toHaveBeenCalledWith({
@@ -655,8 +655,8 @@ describe("registerPreActionHooks", () => {
 
     vi.clearAllMocks();
     await runPreAction({
-      parseArgv: ["plugins", "install", "@natesclaw/slack"],
-      processArgv: ["node", "natesclaw", "plugins", "install", "@natesclaw/slack"],
+      parseArgv: ["plugins", "install", "@openclaw/slack"],
+      processArgv: ["node", "natesclaw", "plugins", "install", "@openclaw/slack"],
     });
 
     expect(ensureConfigReadyMock).toHaveBeenCalledWith({
@@ -693,13 +693,13 @@ describe("registerPreActionHooks", () => {
 
     vi.clearAllMocks();
     await runPreAction({
-      parseArgv: ["plugins", "install", "@natesclaw/discord", "--marketplace", "local/repo"],
+      parseArgv: ["plugins", "install", "@openclaw/discord", "--marketplace", "local/repo"],
       processArgv: [
         "node",
         "natesclaw",
         "plugins",
         "install",
-        "@natesclaw/discord",
+        "@openclaw/discord",
         "--marketplace",
         "local/repo",
       ],

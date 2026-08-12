@@ -2867,7 +2867,7 @@ jobs:
             reset_checkout_dir
             git init "$workdir" >/dev/null
             git -C "$workdir" config gc.auto 0
-            git -C "$workdir" remote add origin "https://github.com/natesclaw/clawhub.git"
+            git -C "$workdir" remote add origin "https://github.com/openclaw/clawhub.git"
 
             timeout --signal=TERM --kill-after=10s 120s git -C "$workdir" \
               -c protocol.version=2 \

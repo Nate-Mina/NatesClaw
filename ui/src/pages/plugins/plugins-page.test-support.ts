@@ -1,4 +1,4 @@
-import type { RouteLocation } from "@natesclaw/uirouter";
+import type { RouteLocation } from "@openclaw/uirouter";
 import { vi } from "vitest";
 import type { GatewayBrowserClient } from "../../api/gateway.ts";
 import type {

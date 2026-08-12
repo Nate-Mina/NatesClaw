@@ -1,6 +1,6 @@
 // Narrow session/runtime facade re-exported for memory transcript helpers.
 import path from "node:path";
-import { isValidAgentId, normalizeAgentId } from "@natesclaw/normalization-core/agent-id";
+import { isValidAgentId, normalizeAgentId } from "@openclaw/normalization-core/agent-id";
 
 export {
   canonicalizeMainSessionAlias,

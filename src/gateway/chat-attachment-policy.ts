@@ -1,7 +1,7 @@
 // Connection-level chat attachment ceilings shared by the parser and the
 // `hello-ok` handshake. Kept out of chat-attachments.ts so the handshake path
 // does not pull the media probe/store graph in just to read two numbers.
-import { MAX_IMAGE_BYTES } from "@natesclaw/media-core/constants";
+import { MAX_IMAGE_BYTES } from "@openclaw/media-core/constants";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 
 const DEFAULT_CHAT_ATTACHMENT_MAX_MB = 20;

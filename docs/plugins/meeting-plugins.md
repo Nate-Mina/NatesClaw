@@ -83,9 +83,9 @@ The Gateway host still owns the Natesclaw agent and model credentials when Chrom
 Install the meeting plugins you need. Each is enabled by default after installation:
 
 ```bash
-natesclaw plugins install npm:@natesclaw/google-meet
-natesclaw plugins install @natesclaw/teams-meetings
-natesclaw plugins install @natesclaw/zoom-meetings
+natesclaw plugins install npm:@openclaw/google-meet
+natesclaw plugins install @openclaw/teams-meetings
+natesclaw plugins install @openclaw/zoom-meetings
 natesclaw gateway restart
 ```
 

@@ -2,7 +2,7 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { SkillCommandSpec } from "../../skills/types.js";
 

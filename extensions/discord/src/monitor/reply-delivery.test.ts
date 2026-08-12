@@ -1,5 +1,5 @@
 // Discord tests cover reply delivery plugin behavior.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { isChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
 import { createMessageReceiptFromOutboundResults } from "natesclaw/plugin-sdk/channel-outbound";
 import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";

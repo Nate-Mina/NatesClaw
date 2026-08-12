@@ -1,4 +1,4 @@
-import { normalizeRouteBasePath, normalizeRoutePath } from "@natesclaw/uirouter";
+import { normalizeRouteBasePath, normalizeRoutePath } from "@openclaw/uirouter";
 
 const TERMINAL_DOCUMENT_PATH = "/terminal";
 

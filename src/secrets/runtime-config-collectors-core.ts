@@ -1,5 +1,5 @@
 /** Collects core config secret refs during runtime preparation. */
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import { listAgentEntriesWithSource } from "../agents/agent-scope-config.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { MediaUnderstandingModelConfig } from "../config/types.tools.js";

@@ -451,7 +451,7 @@ export async function monitorTlonProvider(opts: MonitorTlonOpts = {}): Promise<v
             `This can leak conversation context between users.\n\n` +
             `Fix: Add to your Natesclaw config:\n` +
             `session:\n  dmScope: "per-channel-peer"\n\n` +
-            `Docs: https://docs.natesclaw.ai/concepts/session#secure-dm-mode`;
+            `Docs: https://docs.openclaw.ai/concepts/session#secure-dm-mode`;
 
           sendDm({
             api,

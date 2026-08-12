@@ -199,12 +199,12 @@ describe("plugins marketplace entries", () => {
       source: "bundled-fallback",
       entries: [
         {
-          name: "@natesclaw/acpx",
+          name: "@openclaw/acpx",
           natesclaw: {
             plugin: { id: "acpx", label: "ACP" },
             install: {
-              clawhubSpec: "clawhub:@natesclaw/acpx",
-              npmSpec: "@natesclaw/acpx",
+              clawhubSpec: "clawhub:@openclaw/acpx",
+              npmSpec: "@openclaw/acpx",
               defaultChoice: "npm",
             },
           },
@@ -219,8 +219,8 @@ describe("plugins marketplace entries", () => {
     const output = mocks.defaultRuntime.log.mock.calls.map(([value]) => String(value)).join("\n");
     expect(output).toContain("bundled fallback");
     expect(output).toContain("acpx");
-    expect(output).toContain("@natesclaw/acpx");
-    expect(output).not.toContain("clawhub:@natesclaw/acpx");
+    expect(output).toContain("@openclaw/acpx");
+    expect(output).not.toContain("clawhub:@openclaw/acpx");
     expect(output).toContain("hosted catalog feed offline mode");
     expect(mocks.defaultRuntime.exit).not.toHaveBeenCalled();
   });

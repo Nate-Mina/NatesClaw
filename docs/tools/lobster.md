@@ -114,7 +114,7 @@ The tool is disabled entirely for sandboxed tool contexts.
 
 If you need the standalone Lobster CLI for development or external pipelines
 (outside the embedded gateway runner), install it from the
-[Lobster repo](https://github.com/natesclaw/lobster) and put `lobster` on
+[Lobster repo](https://github.com/openclaw/lobster) and put `lobster` on
 `PATH`.
 
 ## Pattern: small CLI + JSON pipes + approvals

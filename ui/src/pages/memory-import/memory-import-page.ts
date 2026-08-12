@@ -23,7 +23,7 @@ import {
 } from "./view.ts";
 
 const SESSION_BACKFILL_BATCH_DAYS = 14;
-const MEMORY_IMPORT_DOCS_URL = "https://docs.natesclaw.ai/install/migrating";
+const MEMORY_IMPORT_DOCS_URL = "https://docs.openclaw.ai/install/migrating";
 
 type PendingMemoryImport = {
   providerId: string;

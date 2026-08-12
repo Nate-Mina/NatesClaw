@@ -11,7 +11,7 @@ Adds video generation provider support.
 
 ## Distribution
 
-- Package: `@natesclaw/alibaba-provider`
+- Package: `@openclaw/alibaba-provider`
 - Install route: included in Natesclaw
 
 ## Surface

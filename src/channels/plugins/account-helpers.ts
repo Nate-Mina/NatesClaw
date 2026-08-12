@@ -3,8 +3,8 @@
  *
  * Lists configured accounts and resolves default-account behavior for plugin configs.
  */
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
-import { normalizeUniqueStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeUniqueStringEntries } from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   resolveAccountEntry,

@@ -1,5 +1,5 @@
 // Verifies plugin readonly-scope audit findings.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { NatesclawConfig } from "../config/config.js";
 

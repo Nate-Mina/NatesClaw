@@ -4,7 +4,7 @@ import type {
   WorkboardCard,
   WorkboardExecution,
   WorkboardWorkspace,
-} from "@natesclaw/workboard-contract";
+} from "@openclaw/workboard-contract";
 import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import { isFutureDateTimestampMs } from "natesclaw/plugin-sdk/number-runtime";
 import type { PluginRuntime } from "natesclaw/plugin-sdk/plugin-runtime";

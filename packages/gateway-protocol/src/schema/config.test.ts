@@ -14,7 +14,7 @@ const response = {
   schema: {},
   uiHints: {
     "channels.sms.fromNumber": {
-      docsUrl: "https://docs.natesclaw.ai/channels/sms",
+      docsUrl: "https://docs.openclaw.ai/channels/sms",
       presentation: "phone-number",
     },
   },
@@ -47,7 +47,7 @@ describe("ConfigSchemaLookupResultSchema", () => {
       Value.Check(ConfigSchemaLookupResultSchema, {
         path: "gateway",
         schema: { type: "object" },
-        hint: { docsUrl: "https://docs.natesclaw.ai/gateway" },
+        hint: { docsUrl: "https://docs.openclaw.ai/gateway" },
         children: [],
       }),
     ).toBe(true);

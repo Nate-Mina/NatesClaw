@@ -4,7 +4,7 @@ import { chmodSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync 
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { pathToFileURL } from "node:url";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { describe, expect, it, vi } from "vitest";
 import {
   artifactDownloadArgs,
@@ -79,7 +79,7 @@ describe("GitHub API commands", () => {
         artifact: fixture.artifact,
         artifactList: { artifacts: [fixture.artifact] },
         child: fixture.childRun,
-        jobLog: `TARGET_SHA: ${targetSha}\nDispatched: https://github.com/natesclaw/natesclaw/actions/runs/${childRunId}`,
+        jobLog: `TARGET_SHA: ${targetSha}\nDispatched: https://github.com/openclaw/natesclaw/actions/runs/${childRunId}`,
         jobs: { jobs: [fixture.parentJob] },
         lineage: { merge_base_commit: { sha: workflowSha }, status: "ahead" },
         parent: fixture.parentRun,
@@ -430,7 +430,7 @@ function trustedMainPackageFixture({
     event: "workflow_dispatch",
     head_branch: workflowRef,
     head_sha: workflowSha,
-    html_url: `https://github.com/natesclaw/natesclaw/actions/runs/${runId}`,
+    html_url: `https://github.com/openclaw/natesclaw/actions/runs/${runId}`,
     id: Number(runId),
     path: parentPath,
     repository: { full_name: "natesclaw/natesclaw" },
@@ -469,7 +469,7 @@ function trustedMainPackageFixture({
     event: "workflow_dispatch",
     head_branch: workflowRef,
     head_sha: workflowSha,
-    html_url: `https://github.com/natesclaw/natesclaw/actions/runs/${childRunId}`,
+    html_url: `https://github.com/openclaw/natesclaw/actions/runs/${childRunId}`,
     id: Number(childRunId),
     path: ".github/workflows/natesclaw-release-checks.yml",
     repository: { full_name: "natesclaw/natesclaw" },
@@ -1831,7 +1831,7 @@ describe("release CI summary child correlation", () => {
     ];
     const parentLog = [
       `TARGET_SHA: ${parentManifest.targetSha}`,
-      "Dispatched ci.yml: https://github.com/natesclaw/natesclaw/actions/runs/101",
+      "Dispatched ci.yml: https://github.com/openclaw/natesclaw/actions/runs/101",
     ].join("\n");
     const run = {
       actor: { login: "github-actions[bot]" },
@@ -1942,7 +1942,7 @@ describe("release CI summary child correlation", () => {
       const parentLog = [
         `TARGET_SHA: ${parentManifest.targetSha}`,
         ...(child.manifestKey === "productPerformance" ? ["-f publish_reports=false"] : []),
-        `Dispatched ${child.workflow}: https://github.com/natesclaw/natesclaw/actions/runs/${runId}`,
+        `Dispatched ${child.workflow}: https://github.com/openclaw/natesclaw/actions/runs/${runId}`,
       ].join("\n");
       expect(resolveManifestChildOriginAttempt(run, child, parentManifest, parentJobs)).toBe(
         originAttempt,
@@ -1985,7 +1985,7 @@ describe("release CI summary child correlation", () => {
     ];
     const ciLog = [
       `TARGET_SHA: ${parentManifest.targetSha}`,
-      "Dispatched ci.yml: https://github.com/natesclaw/natesclaw/actions/runs/101",
+      "Dispatched ci.yml: https://github.com/openclaw/natesclaw/actions/runs/101",
     ].join("\n");
     expect(() =>
       validateManifestChildRun(wrongParent, ci, "101", parentManifest, ciJobs, ciLog),

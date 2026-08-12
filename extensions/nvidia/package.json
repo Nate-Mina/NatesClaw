@@ -1,11 +1,11 @@
 {
-  "name": "@natesclaw/nvidia-provider",
+  "name": "@openclaw/nvidia-provider",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw NVIDIA provider plugin",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

@@ -1,5 +1,5 @@
 /** Commands for viewing and editing per-agent provider auth profile order. */
-import { normalizeStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
 import {
   type AuthProfileStore,
   externalCliDiscoveryForProviderAuth,

@@ -1,18 +1,18 @@
 {
-  "name": "@natesclaw/irc",
+  "name": "@openclaw/irc",
   "version": "2026.8.1",
   "description": "Natesclaw IRC channel plugin",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/irc",
-      "npmSpec": "@natesclaw/irc",
+      "clawhubSpec": "clawhub:@openclaw/irc",
+      "npmSpec": "@openclaw/irc",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.9",
       "allowInvalidConfigRecovery": true
@@ -136,6 +136,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   }
 }

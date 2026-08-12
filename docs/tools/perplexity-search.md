@@ -15,7 +15,7 @@ For compatibility, Natesclaw also supports legacy Perplexity Sonar/OpenRouter se
 Install the official plugin, then restart Gateway:
 
 ```bash
-natesclaw plugins install @natesclaw/perplexity-plugin
+natesclaw plugins install @openclaw/perplexity-plugin
 natesclaw gateway restart
 ```
 

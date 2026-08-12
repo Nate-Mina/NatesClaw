@@ -1,8 +1,8 @@
 // Parsing for the retired Web Push JSON stores: raw legacy file contents in,
 // validated domain shapes out. Doctor-only, split from
 // state-migrations.web-push.ts which owns detection/claiming/DB import.
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import {
   createWebPushVapidKeyPair,
   hashWebPushEndpoint,

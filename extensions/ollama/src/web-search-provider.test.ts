@@ -296,7 +296,7 @@ describe("ollama web search provider", () => {
       searchResponse(
         {
           title: "Natesclaw",
-          url: "https://natesclaw.ai/docs",
+          url: "https://openclaw.ai/docs",
           content: "Gateway docs and setup details",
         },
         release,
@@ -317,7 +317,7 @@ describe("ollama web search provider", () => {
     expect(result.query).toBe("natesclaw docs");
     expect(result.provider).toBe("ollama");
     expect(result.count).toBe(1);
-    expectSingleSearchResultUrl(result.results, "https://natesclaw.ai/docs");
+    expectSingleSearchResultUrl(result.results, "https://openclaw.ai/docs");
     expect(release).toHaveBeenCalledTimes(1);
   });
 

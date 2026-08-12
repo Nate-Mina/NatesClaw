@@ -1,7 +1,7 @@
 // Per-gateway, per-browser snooze state for the sidebar attention chips.
 // Deliberately client-side chrome (like nav width / dock layout), not gateway
 // state: dismissing a nag on one device should not acknowledge it everywhere.
-import { gatewayOriginScope } from "@natesclaw/gateway-client/browser";
+import { gatewayOriginScope } from "@openclaw/gateway-client/browser";
 import { getSafeLocalStorage } from "../local-storage.ts";
 
 const SIDEBAR_ATTENTION_KINDS = [

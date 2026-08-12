@@ -1,7 +1,7 @@
 // Internal SQLite persistence for channel pairing requests and allow entries.
-import { parseDateStringTimestampMs } from "@natesclaw/normalization-core/number-coercion";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { parseDateStringTimestampMs } from "@openclaw/normalization-core/number-coercion";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { executeSqliteQuerySync, getNodeSqliteKysely } from "../infra/kysely-sync.js";
 import { DEFAULT_ACCOUNT_ID } from "../routing/session-key.js";
 import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";

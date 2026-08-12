@@ -1,12 +1,12 @@
 import {
   collectConfiguredModelRefs,
   type ConfiguredModelRef,
-} from "@natesclaw/model-catalog-core/configured-model-refs";
+} from "@openclaw/model-catalog-core/configured-model-refs";
 import {
   buildModelCatalogMergeKey,
   parseModelCatalogRef,
-} from "@natesclaw/model-catalog-core/model-catalog-refs";
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+} from "@openclaw/model-catalog-core/model-catalog-refs";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 import { MODEL_APIS } from "../config/types.models.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.types.js";

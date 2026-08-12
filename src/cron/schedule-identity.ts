@@ -2,8 +2,8 @@
 import {
   asSafeIntegerInRange,
   parseStrictFiniteNumber,
-} from "@natesclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { parseCronPacingBounds } from "./pacing.js";
 import { coerceFiniteScheduleNumber } from "./schedule-number.js";
 import { normalizeCronStaggerMs } from "./stagger.js";

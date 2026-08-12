@@ -121,7 +121,7 @@ First-run Q&A - install, onboard, auth routes, subscriptions, initial failures -
     - Always-on Gateway (run on a VPS, interact from anywhere).
     - Nodes for local browser/screen/camera/exec.
 
-    Showcase: [https://natesclaw.ai/showcase](https://natesclaw.ai/showcase).
+    Showcase: [https://openclaw.ai/showcase](https://openclaw.ai/showcase).
 
   </Accordion>
 </AccordionGroup>
@@ -1573,7 +1573,7 @@ Model Q&A - defaults, selection, aliases, switching, failover, auth profiles - l
 
 ---
 
-Still stuck? Ask in [Discord](https://discord.com/invite/clawd) or use the [GitHub issue chooser](https://github.com/natesclaw/natesclaw/issues/new/choose).
+Still stuck? Ask in [Discord](https://discord.com/invite/clawd) or use the [GitHub issue chooser](https://github.com/openclaw/natesclaw/issues/new/choose).
 
 ## Related
 

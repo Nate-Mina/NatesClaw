@@ -11,7 +11,7 @@ Synology Chat channel plugin for Natesclaw channels and direct messages.
 
 ## Distribution
 
-- Package: `@natesclaw/synology-chat`
+- Package: `@openclaw/synology-chat`
 - Install route: npm; ClawHub
 
 ## Surface

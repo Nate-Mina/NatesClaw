@@ -95,7 +95,7 @@ function placeholderPackageJson(packageName) {
     license: "MIT",
     repository: {
       type: "git",
-      url: "git+https://github.com/natesclaw/natesclaw.git",
+      url: "git+https://github.com/openclaw/natesclaw.git",
     },
     publishConfig: {
       access: "public",

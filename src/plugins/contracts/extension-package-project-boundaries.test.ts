@@ -177,7 +177,7 @@ describe("opt-in extension package boundaries", () => {
       expect(tsconfig.exclude).toBeUndefined();
 
       const packageJson = readExtensionPackageBoundaryPackageJson(extensionName, REPO_ROOT);
-      expect(packageJson.devDependencies?.["@natesclaw/plugin-sdk"]).toBe("workspace:*");
+      expect(packageJson.devDependencies?.["@openclaw/plugin-sdk"]).toBe("workspace:*");
     }
   });
 
@@ -220,7 +220,7 @@ describe("opt-in extension package boundaries", () => {
     ]);
 
     const packageJson = readJsonFile<PackageJson>("packages/plugin-sdk/package.json");
-    expect(packageJson.name).toBe("@natesclaw/plugin-sdk");
+    expect(packageJson.name).toBe("@openclaw/plugin-sdk");
     expect(packageJson.exports?.["./account-id"]?.types).toBe(
       "./dist/src/plugin-sdk/account-id.d.ts",
     );
@@ -304,7 +304,7 @@ describe("opt-in extension package boundaries", () => {
     const packageJson = readJsonFile<PackageJson>("packages/memory-host-sdk/package.json");
     const packageExports = packageJson.exports as unknown as Record<string, string>;
 
-    expect(packageJson.name).toBe("@natesclaw/memory-host-sdk");
+    expect(packageJson.name).toBe("@openclaw/memory-host-sdk");
     expect(packageJson.version).toBe("0.0.0-private");
     expect(packageJson.private).toBe(true);
     expect(packageJson.type).toBe("module");

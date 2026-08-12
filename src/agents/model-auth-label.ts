@@ -1,8 +1,8 @@
 /**
  * Formats user-facing auth labels for resolved provider/model credentials.
  */
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
-import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import type { SessionEntry } from "../config/sessions.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {

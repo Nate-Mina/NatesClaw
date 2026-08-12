@@ -281,7 +281,7 @@ Unknown frame types are preserved as raw payloads for forward compatibility.
 
 Generated JSON Schema is a build artifact, not committed to the repo. During the package rollout, the current beta schema is available at:
 
-- [`protocol.schema.json`](https://unpkg.com/@natesclaw/gateway-protocol@beta/protocol.schema.json)
+- [`protocol.schema.json`](https://unpkg.com/@openclaw/gateway-protocol@beta/protocol.schema.json)
 
 ## When you change schemas
 

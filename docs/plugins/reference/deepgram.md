@@ -11,7 +11,7 @@ Adds media understanding provider support. Adds realtime transcription provider 
 
 ## Distribution
 
-- Package: `@natesclaw/deepgram-provider`
+- Package: `@openclaw/deepgram-provider`
 - Install route: included in Natesclaw
 
 ## Surface

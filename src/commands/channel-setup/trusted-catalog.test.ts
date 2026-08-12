@@ -85,7 +85,7 @@ function mockTelegramShadowFallback(params: {
     }),
     fallback: createCatalogEntry({
       id: "telegram",
-      pluginId: "@natesclaw/telegram",
+      pluginId: "@openclaw/telegram",
       origin: "bundled",
       label: "Telegram",
       localPath: "./bundled/telegram",
@@ -369,7 +369,7 @@ describe("trusted-catalog load-path discovery", () => {
       }),
     ).toMatchObject({
       id: "telegram",
-      pluginId: "@natesclaw/telegram",
+      pluginId: "@openclaw/telegram",
       origin: "bundled",
     });
   });
@@ -392,7 +392,7 @@ describe("trusted-catalog load-path discovery", () => {
       }),
     ).toMatchObject({
       id: "telegram",
-      pluginId: "@natesclaw/telegram",
+      pluginId: "@openclaw/telegram",
       origin: "bundled",
     });
   });
@@ -418,7 +418,7 @@ describe("trusted-catalog load-path discovery", () => {
       }),
     ).toMatchObject({
       id: "telegram",
-      pluginId: "@natesclaw/telegram",
+      pluginId: "@openclaw/telegram",
       origin: "bundled",
     });
   });

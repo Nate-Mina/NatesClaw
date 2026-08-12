@@ -5,7 +5,7 @@ import { createRequire } from "node:module";
 import { hostname } from "node:os";
 import { performance } from "node:perf_hooks";
 import type { DatabaseSync } from "node:sqlite";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { getFileLockProcessStartTime, isPidDefinitelyDead } from "../shared/pid-alive.js";
 import { withNatesclawStateDatabaseReadOnly } from "../state/natesclaw-state-db-readonly.js";
 import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";

@@ -11,7 +11,7 @@ Canvas rendering bridge for the Natesclaw Linux desktop app.
 
 ## Distribution
 
-- Package: `@natesclaw/linux-canvas`
+- Package: `@openclaw/linux-canvas`
 - Install route: included in Natesclaw
 
 ## Surface

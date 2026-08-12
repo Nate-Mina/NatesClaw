@@ -1,4 +1,4 @@
-# @natesclaw/memory-lancedb
+# @openclaw/memory-lancedb
 
 Official LanceDB-backed long-term memory plugin for Natesclaw.
 
@@ -7,7 +7,7 @@ This plugin adds persistent memory tools backed by LanceDB, vector search, auto-
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/memory-lancedb
+natesclaw plugins install @openclaw/memory-lancedb
 ```
 
 Restart the Gateway after installing or updating the plugin.
@@ -23,10 +23,10 @@ Restart the Gateway after installing or updating the plugin.
 
 Use the memory plugin docs for embedding provider setup, storage paths, indexing, and recall behavior:
 
-- https://docs.natesclaw.ai/plugins/memory-lancedb
+- https://docs.openclaw.ai/plugins/memory-lancedb
 
 ## Package
 
 - Plugin id: `memory-lancedb`
-- Package: `@natesclaw/memory-lancedb`
+- Package: `@openclaw/memory-lancedb`
 - Minimum Natesclaw host: `2026.4.10`

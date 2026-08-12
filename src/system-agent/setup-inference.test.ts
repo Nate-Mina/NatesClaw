@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { listAgentEntries, resolveAgentDir } from "../agents/agent-scope-config.js";
 import { readAuthProfileStoreForTest } from "../agents/auth-profiles/oauth-test-utils.js";
@@ -4028,7 +4028,7 @@ describe("activateSetupInference", () => {
               ...params.cfg.plugins?.installs,
               codex: {
                 source: "npm" as const,
-                spec: "@natesclaw/codex",
+                spec: "@openclaw/codex",
                 installPath: "/tmp/plugins/codex",
               },
             },
@@ -4304,7 +4304,7 @@ describe("activateSetupInference", () => {
     expect(persistedConfig.plugins?.installs).toBeUndefined();
     expect(pendingCodexInstalls[0]).toMatchObject({
       source: "npm",
-      spec: "@natesclaw/codex",
+      spec: "@openclaw/codex",
       installPath: "/tmp/plugins/codex",
     });
     expect(pendingCodexInstalls).toHaveLength(1);
@@ -4482,30 +4482,30 @@ describe("activateSetupInference", () => {
     const staleAuthoredRecords = {
       codex: {
         source: "npm" as const,
-        spec: "@natesclaw/codex@1.0.0",
+        spec: "@openclaw/codex@1.0.0",
         installPath: "/tmp/plugins/codex-v1",
       },
       unrelated: {
         source: "npm" as const,
-        spec: "@natesclaw/unrelated@1.0.0",
+        spec: "@openclaw/unrelated@1.0.0",
         installPath: "/tmp/plugins/unrelated-v1",
       },
     };
     const canonicalRecords = {
       codex: {
         source: "npm" as const,
-        spec: "@natesclaw/codex@2.0.0",
+        spec: "@openclaw/codex@2.0.0",
         installPath: "/tmp/plugins/codex-v2",
       },
       unrelated: {
         source: "npm" as const,
-        spec: "@natesclaw/unrelated@2.0.0",
+        spec: "@openclaw/unrelated@2.0.0",
         installPath: "/tmp/plugins/unrelated-v2",
       },
     };
     const refreshedCodexRecord = {
       source: "npm" as const,
-      spec: "@natesclaw/codex@3.0.0",
+      spec: "@openclaw/codex@3.0.0",
       installPath: "/tmp/plugins/codex-v3",
     };
     const sourceConfig = {
@@ -4611,7 +4611,7 @@ describe("activateSetupInference", () => {
   it("fails closed before inference when the staged Codex package cannot be retained", async () => {
     const installRecord: PluginInstallRecord = {
       source: "npm",
-      spec: "@natesclaw/codex",
+      spec: "@openclaw/codex",
       installPath: "/tmp/plugins/codex-unretained",
     };
     const runEmbeddedAgent = vi.fn();
@@ -4658,7 +4658,7 @@ describe("activateSetupInference", () => {
   it("reports an indeterminate activation when final Codex retention fails", async () => {
     const installRecord: PluginInstallRecord = {
       source: "npm",
-      spec: "@natesclaw/codex",
+      spec: "@openclaw/codex",
       installPath: "/tmp/plugins/codex-final-retention-failure",
     };
     const markRetainedInstall = vi.fn().mockResolvedValueOnce(true).mockResolvedValueOnce(false);
@@ -4698,7 +4698,7 @@ describe("activateSetupInference", () => {
     resetPluginRuntimeStateForTest();
     const installRecord: PluginInstallRecord = {
       source: "npm",
-      spec: "@natesclaw/codex",
+      spec: "@openclaw/codex",
       installPath: "/tmp/plugins/codex-staged-registry",
     };
     const persistedConfig = { plugins: { enabled: false } } satisfies NatesclawConfig;
@@ -4810,7 +4810,7 @@ describe("activateSetupInference", () => {
         deps: {
           ensureCodexRuntimePlugin: mockCodexRuntimeInstall({
             source: "npm",
-            spec: "@natesclaw/codex",
+            spec: "@openclaw/codex",
             installPath: packageDir,
           }),
           runEmbeddedAgent: runEmbeddedAgent as never,
@@ -4845,12 +4845,12 @@ describe("activateSetupInference", () => {
     const installRecords = [
       {
         source: "npm" as const,
-        spec: "@natesclaw/codex@generation-1",
+        spec: "@openclaw/codex@generation-1",
         installPath: "/tmp/plugins/codex-generation-1",
       },
       {
         source: "npm" as const,
-        spec: "@natesclaw/codex@generation-2",
+        spec: "@openclaw/codex@generation-2",
         installPath: "/tmp/plugins/codex-generation-2",
       },
     ];
@@ -4978,7 +4978,7 @@ describe("activateSetupInference", () => {
       installRecords: {
         codex: {
           source: "npm" as const,
-          spec: "@natesclaw/codex@other",
+          spec: "@openclaw/codex@other",
           installPath: "/tmp/plugins/codex-other",
         },
       },
@@ -4992,7 +4992,7 @@ describe("activateSetupInference", () => {
   ])("reconciles a post-write Codex error only with an $name install record", async (testCase) => {
     const installRecord: PluginInstallRecord = {
       source: "npm",
-      spec: "@natesclaw/codex",
+      spec: "@openclaw/codex",
       installPath: "/tmp/plugins/codex",
     };
     const installRecords = testCase.installRecords ?? { codex: installRecord };

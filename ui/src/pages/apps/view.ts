@@ -38,7 +38,7 @@ type AppSection = {
 
 const docsCta = (path: string): AppCardCta => ({
   kind: "external",
-  href: `https://docs.natesclaw.ai${path}`,
+  href: `https://docs.openclaw.ai${path}`,
   label: () => t("appsPage.ctaDocs"),
 });
 
@@ -116,7 +116,7 @@ const APP_SECTIONS: readonly AppSection[] = [
         ctas: [
           {
             kind: "external",
-            href: "https://github.com/natesclaw/natesclaw/releases",
+            href: "https://github.com/openclaw/natesclaw/releases",
             label: () => t("appsPage.ctaDownload"),
           },
           docsCta("/platforms/macos"),
@@ -131,7 +131,7 @@ const APP_SECTIONS: readonly AppSection[] = [
         ctas: [
           {
             kind: "external",
-            href: "https://github.com/natesclaw/natesclaw-windows-node/releases/latest",
+            href: "https://github.com/openclaw/natesclaw-windows-node/releases/latest",
             label: () => t("appsPage.ctaDownload"),
           },
           docsCta("/platforms/windows"),
@@ -146,7 +146,7 @@ const APP_SECTIONS: readonly AppSection[] = [
         ctas: [
           {
             kind: "external",
-            href: "https://github.com/natesclaw/natesclaw/releases",
+            href: "https://github.com/openclaw/natesclaw/releases",
             label: () => t("appsPage.ctaDownload"),
           },
           docsCta("/platforms/linux"),
@@ -171,7 +171,7 @@ const APP_SECTIONS: readonly AppSection[] = [
         ctas: [
           {
             kind: "external",
-            href: "https://docs.natesclaw.ai/tools/chrome-extension",
+            href: "https://docs.openclaw.ai/tools/chrome-extension",
             label: () => t("appsPage.ctaSetupGuide"),
           },
           {
@@ -207,7 +207,7 @@ const COMMUNITY_LINKS: ReadonlyArray<{ href: string; icon: TemplateResult; label
       icon: brandIcons.discord,
       label: () => t("appsPage.linkDiscord"),
     },
-    { href: "https://docs.natesclaw.ai", icon: icons.book, label: () => t("appsPage.linkDocs") },
+    { href: "https://docs.openclaw.ai", icon: icons.book, label: () => t("appsPage.linkDocs") },
   ];
 
 function renderCta(cta: AppCardCta, index: number, props: AppsProps) {

@@ -11,8 +11,8 @@ Adds Mistral model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/mistral-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/mistral-provider`
+- Package: `@openclaw/mistral-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/mistral-provider`
 
 ## Surface
 

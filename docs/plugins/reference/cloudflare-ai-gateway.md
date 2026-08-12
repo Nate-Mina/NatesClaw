@@ -11,8 +11,8 @@ Adds Cloudflare AI Gateway model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/cloudflare-ai-gateway-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/cloudflare-ai-gateway-provider`
+- Package: `@openclaw/cloudflare-ai-gateway-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/cloudflare-ai-gateway-provider`
 
 ## Surface
 

@@ -15,7 +15,7 @@ import {
   spinner,
   text,
 } from "@clack/prompts";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import {
   stripAnsi,
   truncateToVisibleWidth,

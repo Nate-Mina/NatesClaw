@@ -12,7 +12,7 @@ import {
 } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, describe, expect, it } from "vitest";
 import { parse } from "yaml";
 import { useAutoCleanupTempDirTracker } from "../helpers/temp-dir.js";
@@ -295,7 +295,7 @@ describe("Natesclaw performance workflow", () => {
 
     expect(baseline.if).toBeUndefined();
     expect(baseline.env?.CLAWGRIT_REPORTS_TOKEN).toBeUndefined();
-    expect(run).toContain('remote add origin "https://github.com/natesclaw/clawgrit-reports.git"');
+    expect(run).toContain('remote add origin "https://github.com/openclaw/clawgrit-reports.git"');
     expect(run).toContain("fetch --filter=blob:none --depth=1 origin main");
     expect(run).toContain('cat-file -e "FETCH_HEAD:${pointer}"');
     expect(run).toContain('show "FETCH_HEAD:${pointer}"');
@@ -563,7 +563,7 @@ describe("Natesclaw performance workflow", () => {
     expect(prepare.run).toContain("contains a symlink or special file");
     expect(prepare.run).toContain("config core.hooksPath /dev/null");
     expect(prepare.run).toContain(
-      'remote add origin "https://github.com/natesclaw/clawgrit-reports.git"',
+      'remote add origin "https://github.com/openclaw/clawgrit-reports.git"',
     );
     expect(publish.env?.CLAWGRIT_REPORTS_APP_TOKEN).toBe(
       "${{ steps.clawgrit_app_token.outputs.token }}",
@@ -676,7 +676,7 @@ printf '%s\\n' \
     const bin = join(root, "bin");
     const reportsRoot = join(root, "reports");
     const reportUrl =
-      "https://github.com/natesclaw/clawgrit-reports/tree/main/natesclaw-performance/main/123-1/mock-provider";
+      "https://github.com/openclaw/clawgrit-reports/tree/main/natesclaw-performance/main/123-1/mock-provider";
     mkdirSync(bin);
     mkdirSync(reportsRoot);
     writeFileSync(
@@ -684,7 +684,7 @@ printf '%s\\n' \
       `#!/bin/bash
 case "$*" in
   *"config --local --get core.hooksPath"*) echo /dev/null ;;
-  *"remote get-url origin"*) echo https://github.com/natesclaw/clawgrit-reports.git ;;
+  *"remote get-url origin"*) echo https://github.com/openclaw/clawgrit-reports.git ;;
   *" push origin HEAD:main"*) printf push > "$STUB_PUSH_MARKER"; exit "\${STUB_PUSH_STATUS:-0}" ;;
   *" fetch --depth=1 origin main"*) exit "\${STUB_FETCH_STATUS:-1}" ;;
   *"cat-file -e FETCH_HEAD:"*) exit "\${STUB_REMOTE_REPORT_STATUS:-1}" ;;

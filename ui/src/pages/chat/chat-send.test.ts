@@ -1,7 +1,7 @@
 /* @vitest-environment jsdom */
 
-import { reduceSessionProjection } from "@natesclaw/gateway-client/browser";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { reduceSessionProjection } from "@openclaw/gateway-client/browser";
+import { expectDefined } from "@openclaw/normalization-core";
 import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { createDeferred } from "../../../../test/helpers/promise.js";

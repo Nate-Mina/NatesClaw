@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/document-extract-plugin",
+  "name": "@openclaw/document-extract-plugin",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw local document extraction plugin",
@@ -8,7 +8,7 @@
     "clawpdf": "0.3.0"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

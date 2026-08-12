@@ -6,7 +6,7 @@
 import {
   normalizeTrimmedStringList,
   uniqueStrings,
-} from "@natesclaw/normalization-core/string-normalization";
+} from "@openclaw/normalization-core/string-normalization";
 import type { SecretRefSource } from "../config/types.secrets.js";
 import { listNatesclawPluginManifestMetadata } from "../plugins/manifest-metadata-scan.js";
 import { listKnownProviderEnvApiKeyNames } from "./model-auth-env-vars.js";

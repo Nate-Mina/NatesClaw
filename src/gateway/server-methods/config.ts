@@ -1,7 +1,7 @@
 // Config gateway methods: validation, redaction, secrets, reload planning.
 import { isDeepStrictEqual } from "node:util";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
 import {
   ErrorCodes,
   errorShape,

@@ -27,7 +27,7 @@ case "$1 $2" in
     if [ "\${NATESCLAW_TEST_GH_MODE:-}" = "pending-head-change" ]; then
       printf '[]\\n'
     elif [ -e "$NATESCLAW_TEST_GH_SEEN_RUN_LIST" ]; then
-      printf '[{"databaseId":99,"url":"https://github.com/natesclaw/natesclaw/actions/runs/99","headSha":"%s","createdAt":"2026-01-01T00:00:00Z","status":"queued"}]\\n' "$NATESCLAW_TEST_HEAD_SHA"
+      printf '[{"databaseId":99,"url":"https://github.com/openclaw/natesclaw/actions/runs/99","headSha":"%s","createdAt":"2026-01-01T00:00:00Z","status":"queued"}]\\n' "$NATESCLAW_TEST_HEAD_SHA"
     else
       : > "$NATESCLAW_TEST_GH_SEEN_RUN_LIST"
       printf '[]\\n'
@@ -121,7 +121,7 @@ describePosix("scripts/pr ci-dispatch", () => {
 
     expect(result.status, `${result.stdout}\n${result.stderr}`).toBe(0);
     expect(result.stdout).toContain(
-      "observed_run_url=https://github.com/natesclaw/natesclaw/actions/runs/99",
+      "observed_run_url=https://github.com/openclaw/natesclaw/actions/runs/99",
     );
     const calls = readFileSync(fakeGh.calls, "utf8");
     const callLines = calls.trim().split("\n");

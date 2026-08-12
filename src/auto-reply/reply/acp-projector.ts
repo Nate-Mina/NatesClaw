@@ -1,10 +1,10 @@
 // Projects ACP runtime events into Natesclaw-visible session update records.
-import type { AcpRuntimeEvent, AcpSessionUpdateTag } from "@natesclaw/acp-core/runtime/types";
+import type { AcpRuntimeEvent, AcpSessionUpdateTag } from "@openclaw/acp-core/runtime/types";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
-import { truncateUtf16Safe, truncateWithMarker } from "@natesclaw/normalization-core/utf16-slice";
+} from "@openclaw/normalization-core/string-coerce";
+import { truncateUtf16Safe, truncateWithMarker } from "@openclaw/normalization-core/utf16-slice";
 import { resolveAcpToolTerminalOutcome } from "../../acp/tool-status.js";
 import { EmbeddedBlockChunker } from "../../agents/embedded-agent-block-chunker.js";
 import { formatToolSummary, resolveToolDisplay } from "../../agents/tool-display.js";

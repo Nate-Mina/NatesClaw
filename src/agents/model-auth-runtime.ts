@@ -1,8 +1,8 @@
 /**
  * Snapshot-aware and synthetic provider-auth availability.
  */
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
-import { normalizeUniqueStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeUniqueStringEntries } from "@openclaw/normalization-core/string-normalization";
 import { getRuntimeConfigSnapshot } from "../config/config.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveProviderSyntheticAuthWithPlugin } from "../plugins/provider-runtime.js";

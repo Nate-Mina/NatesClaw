@@ -1,10 +1,10 @@
 // Configure wizard Gateway port, bind, auth, and Tailscale prompts.
-import { validateDottedDecimalIPv4Input } from "@natesclaw/net-policy/ipv4";
+import { validateDottedDecimalIPv4Input } from "@openclaw/net-policy/ipv4";
 import {
   normalizeOptionalString,
   readStringValue,
-} from "@natesclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@natesclaw/normalization-core/string-normalization";
+} from "@openclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { formatPortRangeHint } from "../cli/error-format.js";
 import { parsePort } from "../cli/shared/parse-port.js";
@@ -272,7 +272,7 @@ export async function promptGatewayConfig(
         "Only requests from specified proxy IPs will be trusted.",
         "",
         "Common use cases: Pomerium, Caddy + OAuth, Traefik + forward auth",
-        "Docs: https://docs.natesclaw.ai/gateway/trusted-proxy-auth",
+        "Docs: https://docs.openclaw.ai/gateway/trusted-proxy-auth",
       ].join("\n"),
       "Trusted Proxy Auth",
     );

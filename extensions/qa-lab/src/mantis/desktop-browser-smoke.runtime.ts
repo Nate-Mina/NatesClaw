@@ -74,7 +74,7 @@ type MantisDesktopBrowserSmokeSummary = {
   status: "pass" | "fail";
 };
 
-const DEFAULT_BROWSER_URL = "https://natesclaw.ai";
+const DEFAULT_BROWSER_URL = "https://openclaw.ai";
 const DEFAULT_PROVIDER = "hetzner";
 const DEFAULT_CLASS = "beast";
 const DEFAULT_IDLE_TIMEOUT = "60m";

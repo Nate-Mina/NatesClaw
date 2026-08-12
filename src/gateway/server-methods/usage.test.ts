@@ -3,7 +3,7 @@
  */
 import fsSync from "node:fs";
 import fs from "node:fs/promises";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ErrorCodes, errorShape } from "../../../packages/gateway-protocol/src/index.js";
 import type { NatesclawConfig } from "../../config/config.js";

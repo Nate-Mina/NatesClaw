@@ -1,7 +1,7 @@
 // Host hook contract tests cover plugin host hook registration and runtime behavior.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import {
   createPluginRegistryFixture,
   registerTestPlugin,
@@ -617,7 +617,7 @@ describe("host-hook fixture plugin contract", () => {
       record: createPluginRecord({
         id: "codex",
         name: "Codex",
-        packageName: "@natesclaw/codex",
+        packageName: "@openclaw/codex",
         origin: "global",
         rootDir: codexRoot,
         source: path.join(codexRoot, "dist", "index.js"),
@@ -681,7 +681,7 @@ describe("host-hook fixture plugin contract", () => {
       record: createPluginRecord({
         id: "codex",
         name: "Codex",
-        packageName: "@natesclaw/codex",
+        packageName: "@openclaw/codex",
         origin: "workspace",
         rootDir: codexRoot,
         source: path.join(codexRoot, "dist", "index.js"),

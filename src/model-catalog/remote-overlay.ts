@@ -2,8 +2,8 @@ import {
   validateAndSanitizeRemoteModelCatalogBundle,
   type RemoteModelCatalogBundle,
   type RemoteModelCatalogPricing,
-} from "@natesclaw/model-catalog-core";
-import type { ModelCatalogProvider } from "@natesclaw/model-catalog-core/model-catalog-types";
+} from "@openclaw/model-catalog-core";
+import type { ModelCatalogProvider } from "@openclaw/model-catalog-core/model-catalog-types";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { compareNatesclawVersions } from "../config/version.js";
 import { VERSION } from "../version.js";

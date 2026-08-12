@@ -2,7 +2,7 @@
  * Resolves public avatar sources for configured agent identities.
  */
 import path from "node:path";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { normalizeAgentId } from "../routing/session-key.js";
 import {

@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 
 export const GLOBAL_HEARTBEAT_WAKE_TARGET_KEY = "::";
 

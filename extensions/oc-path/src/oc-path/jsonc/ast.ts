@@ -11,7 +11,7 @@
  * detail in the structural tree — for production, a fuller
  * comment-preserving parser ports from `natesclaw-workspace`.
  *
- * @module @natesclaw/oc-path/jsonc/ast
+ * @module @openclaw/oc-path/jsonc/ast
  */
 
 /** The root JSONC AST. `raw` round-trips byte-identical via emit. */

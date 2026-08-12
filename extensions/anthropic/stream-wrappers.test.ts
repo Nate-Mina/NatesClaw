@@ -1,6 +1,6 @@
-import { configureAiTransportHost, getAiTransportHost } from "@natesclaw/ai";
+import { configureAiTransportHost, getAiTransportHost } from "@openclaw/ai";
 // Anthropic tests cover stream wrappers plugin behavior.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import {

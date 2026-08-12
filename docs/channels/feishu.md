@@ -6,7 +6,7 @@ read_when:
 title: Feishu
 ---
 
-Natesclaw connects to Feishu/Lark (the all-in-one collaboration platform) through the official `@natesclaw/feishu` plugin: bot DMs, group chats, streaming card replies, and Feishu doc/wiki/drive/Bitable tools.
+Natesclaw connects to Feishu/Lark (the all-in-one collaboration platform) through the official `@openclaw/feishu` plugin: bot DMs, group chats, streaming card replies, and Feishu doc/wiki/drive/Bitable tools.
 
 **Status:** production-ready for bot DMs + group chats. WebSocket is the default event transport (no public URL needed); webhook mode is optional.
 
@@ -21,7 +21,7 @@ Requires Natesclaw 2026.5.29 or above. Run `natesclaw --version` to check. Upgra
   ```bash
   natesclaw channels login --channel feishu
   ```
-  This installs the `@natesclaw/feishu` plugin if it is missing, then walks through setup:
+  This installs the `@openclaw/feishu` plugin if it is missing, then walks through setup:
 
 - **Manual setup**: paste an App ID and App Secret from Feishu Open Platform (`https://open.feishu.cn`) or Lark Developer (`https://open.larksuite.com`).
 - **QR setup**: scan a QR code in the Feishu app to create a bot automatically. This flow locks DMs to your own account (`dmPolicy: "allowlist"` with your `open_id`).

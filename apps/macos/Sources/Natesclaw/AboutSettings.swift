@@ -12,7 +12,7 @@ struct AboutSettings: View {
 
     var body: some View {
         VStack(spacing: 8) {
-            // Hero treatment from natesclaw.ai: coral silhouette glow at 10% of
+            // Hero treatment from openclaw.ai: coral silhouette glow at 10% of
             // size, teal glow at 15% plus scale 1.1 on hover. Clicks go to the
             // mascot's Easter eggs; the GitHub link lives in the row set below.
             NatesclawMascotView(interactive: true)
@@ -42,12 +42,12 @@ struct AboutSettings: View {
 
             // Unified first-party link set shared with the iOS and Android About screens.
             VStack(alignment: .center, spacing: 6) {
-                AboutLinkRow(icon: "globe", title: "Website", url: "https://natesclaw.ai")
-                AboutLinkRow(icon: "book", title: "Docs", url: "https://docs.natesclaw.ai")
+                AboutLinkRow(icon: "globe", title: "Website", url: "https://openclaw.ai")
+                AboutLinkRow(icon: "book", title: "Docs", url: "https://docs.openclaw.ai")
                 AboutLinkRow(
                     icon: "chevron.left.slash.chevron.right",
                     title: "GitHub",
-                    url: "https://github.com/natesclaw/natesclaw")
+                    url: "https://github.com/openclaw/natesclaw")
                 AboutLinkRow(
                     icon: "bubble.left.and.bubble.right",
                     title: "Discord",

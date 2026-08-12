@@ -325,7 +325,7 @@ Automatic fallback across authenticated providers is always enabled. A per-call
     videos must be remote `http(s)` URLs.
   </Accordion>
   <Accordion title="BytePlus plugin">
-    Requires the official `@natesclaw/byteplus-provider` plugin.
+    Requires the official `@openclaw/byteplus-provider` plugin.
     Provider id: `byteplus`.
 
     Models: `seedance-1-0-pro-250528` (default),
@@ -340,7 +340,7 @@ Automatic fallback across authenticated providers is always enabled. A per-call
 
   </Accordion>
   <Accordion title="BytePlus Seedance 1.5 plugin">
-    Requires the [`@natesclaw/byteplus-modelark`](https://www.npmjs.com/package/@natesclaw/byteplus-modelark)
+    Requires the [`@openclaw/byteplus-modelark`](https://www.npmjs.com/package/@openclaw/byteplus-modelark)
     plugin (external, not bundled). Provider id: `byteplus-seedance15`. Model:
     `seedance-1-5-pro-251215`.
 
@@ -355,7 +355,7 @@ Automatic fallback across authenticated providers is always enabled. A per-call
 
   </Accordion>
   <Accordion title="BytePlus Seedance 2.0">
-    Requires the [`@natesclaw/byteplus-modelark`](https://www.npmjs.com/package/@natesclaw/byteplus-modelark)
+    Requires the [`@openclaw/byteplus-modelark`](https://www.npmjs.com/package/@openclaw/byteplus-modelark)
     plugin (external, not bundled). Provider id: `byteplus-seedance2`. Models:
     `dreamina-seedance-2-0-260128`,
     `dreamina-seedance-2-0-fast-260128`.

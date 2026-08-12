@@ -1,7 +1,7 @@
 // Doctor detection for legacy meeting transcript files and interrupted imports.
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { resolveNatesclawStateSqlitePath } from "../state/natesclaw-state-db.paths.js";
 import { openNodeSqliteDatabase } from "./node-sqlite.js";
 import {

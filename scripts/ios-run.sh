@@ -25,7 +25,7 @@ Options:
       internal simulator proof secret.
   --push-relay-base-url <url>
       Override the sandbox relay URL used with --push-sandbox-simulator.
-      Defaults to https://ios-push-relay-sandbox.natesclaw.ai.
+      Defaults to https://ios-push-relay-sandbox.openclaw.ai.
   --simulator-proof-secret-env <name>
       Environment variable that contains the simulator proof secret.
       Defaults to NATESCLAW_SIMULATOR_PUSH_PROOF_SECRET.
@@ -40,7 +40,7 @@ run_simctl() {
 }
 
 push_sandbox_simulator=0
-push_relay_base_url="${NATESCLAW_PUSH_SANDBOX_RELAY_BASE_URL:-https://ios-push-relay-sandbox.natesclaw.ai}"
+push_relay_base_url="${NATESCLAW_PUSH_SANDBOX_RELAY_BASE_URL:-https://ios-push-relay-sandbox.openclaw.ai}"
 simulator_proof_secret_env="${NATESCLAW_SIMULATOR_PUSH_PROOF_SECRET_ENV:-NATESCLAW_SIMULATOR_PUSH_PROOF_SECRET}"
 
 while [[ $# -gt 0 ]]; do

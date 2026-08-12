@@ -11,7 +11,7 @@ Adds ClawRouter model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/clawrouter`
+- Package: `@openclaw/clawrouter`
 - Install route: included in Natesclaw
 
 ## Surface

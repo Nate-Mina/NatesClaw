@@ -1,5 +1,5 @@
 // Maintains channel catalog entries advertised by plugins.
-import { normalizeOptionalString as resolveOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString as resolveOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { resolveIsNixMode } from "../config/paths.js";
 import type { PluginInstallRecord } from "../config/types.plugins.js";
 import { resolveCompatibilityHostVersion } from "../version.js";

@@ -11,8 +11,8 @@ Adds BytePlus, BytePlus Plan model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/byteplus-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/byteplus-provider`
+- Package: `@openclaw/byteplus-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/byteplus-provider`
 
 ## Surface
 

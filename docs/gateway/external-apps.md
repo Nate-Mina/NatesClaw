@@ -17,9 +17,9 @@ for results, cancel work, or inspect Gateway resources.
 <Note>
   For npm packages, device pairing, reconnect recovery, history, subscriptions,
   and approvals, start with
-  [Building a Gateway client](https://docs.natesclaw.ai/gateway/clients). If your
+  [Building a Gateway client](https://docs.openclaw.ai/gateway/clients). If your
   app supervises the Gateway as a child process, also read
-  [Embedding Natesclaw](https://docs.natesclaw.ai/gateway/embedding). During the
+  [Embedding Natesclaw](https://docs.openclaw.ai/gateway/embedding). During the
   initial package rollout, npm may return `E404` until the first package-bearing
   Natesclaw release is published.
 </Note>
@@ -33,8 +33,8 @@ for results, cancel work, or inspect Gateway resources.
 
 | Surface                                                          | Status        | Use it for                                                                                    |
 | ---------------------------------------------------------------- | ------------- | --------------------------------------------------------------------------------------------- |
-| [Gateway client guide](https://docs.natesclaw.ai/gateway/clients) | Release train | npm packages, auth, reconnect, history, events, approvals, and version policy.                |
-| [Embedding guide](https://docs.natesclaw.ai/gateway/embedding)    | Release train | Child-process environment, readiness, lifecycle, recovery, RPC ownership, and packaging.      |
+| [Gateway client guide](https://docs.openclaw.ai/gateway/clients) | Release train | npm packages, auth, reconnect, history, events, approvals, and version policy.                |
+| [Embedding guide](https://docs.openclaw.ai/gateway/embedding)    | Release train | Child-process environment, readiness, lifecycle, recovery, RPC ownership, and packaging.      |
 | [Gateway protocol](/gateway/protocol)                            | Ready         | WebSocket transport, connect handshake, auth scopes, protocol versioning, and events.         |
 | [Gateway RPC reference](/reference/rpc)                          | Ready         | Current Gateway methods for agents, sessions, tasks, models, tools, artifacts, and approvals. |
 | [`natesclaw agent`](/cli/agent)                                   | Ready         | One-shot script integration when shelling out to the CLI is enough.                           |
@@ -185,8 +185,8 @@ plugins loaded by Natesclaw.
 
 ## Related
 
-- [Building a Gateway client](https://docs.natesclaw.ai/gateway/clients)
-- [Embedding Natesclaw](https://docs.natesclaw.ai/gateway/embedding)
+- [Building a Gateway client](https://docs.openclaw.ai/gateway/clients)
+- [Embedding Natesclaw](https://docs.openclaw.ai/gateway/embedding)
 - [Gateway protocol](/gateway/protocol)
 - [Gateway RPC reference](/reference/rpc)
 - [CLI agent command](/cli/agent)

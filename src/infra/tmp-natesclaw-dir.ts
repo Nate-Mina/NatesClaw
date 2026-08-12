@@ -22,7 +22,7 @@ export type ResolvePreferredNatesclawTmpDirOptions = {
   warn?: (message: string) => void;
 };
 
-type ResolveSecureTempRoot = typeof import("@natesclaw/fs-safe/temp").resolveSecureTempRoot;
+type ResolveSecureTempRoot = typeof import("@openclaw/fs-safe/temp").resolveSecureTempRoot;
 
 let resolveSecureTempRootRuntime: ResolveSecureTempRoot | undefined;
 
@@ -47,7 +47,7 @@ function loadResolveSecureTempRoot(): ResolveSecureTempRoot {
     throw new Error("Node createRequire is unavailable for secure temp-root resolution");
   }
   const require = moduleNamespace.createRequire(import.meta.url);
-  const fsSafeTemp = require("@natesclaw/fs-safe/temp") as typeof import("@natesclaw/fs-safe/temp");
+  const fsSafeTemp = require("@openclaw/fs-safe/temp") as typeof import("@openclaw/fs-safe/temp");
   resolveSecureTempRootRuntime = fsSafeTemp.resolveSecureTempRoot;
   return resolveSecureTempRootRuntime;
 }

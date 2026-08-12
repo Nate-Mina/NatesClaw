@@ -7,7 +7,7 @@ title: "Synthetic"
 ---
 
 [Synthetic](https://synthetic.new) exposes Anthropic-compatible endpoints.
-Natesclaw provides it through the official `@natesclaw/synthetic-provider`
+Natesclaw provides it through the official `@openclaw/synthetic-provider`
 plugin and uses the Anthropic Messages API.
 
 | Property | Value                                 |
@@ -22,7 +22,7 @@ plugin and uses the Anthropic Messages API.
 <Steps>
   <Step title="Install the plugin">
     ```bash
-    natesclaw plugins install @natesclaw/synthetic-provider
+    natesclaw plugins install @openclaw/synthetic-provider
     natesclaw gateway restart
     ```
   </Step>

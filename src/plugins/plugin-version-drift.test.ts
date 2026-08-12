@@ -11,7 +11,7 @@ function npmRecord(
   version: string,
   overrides: Partial<PluginInstallRecord> = {},
 ): PluginInstallRecord {
-  const resolvedName = overrides.resolvedName ?? "@natesclaw/whatsapp";
+  const resolvedName = overrides.resolvedName ?? "@openclaw/whatsapp";
   return {
     source: "npm",
     spec: `${resolvedName}@latest`,
@@ -27,8 +27,8 @@ function clawhubRecord(
 ): PluginInstallRecord {
   return {
     source: "clawhub",
-    spec: "clawhub:@natesclaw/whatsapp",
-    clawhubPackage: "@natesclaw/whatsapp",
+    spec: "clawhub:@openclaw/whatsapp",
+    clawhubPackage: "@openclaw/whatsapp",
     resolvedVersion: version,
     ...overrides,
   };
@@ -40,7 +40,7 @@ describe("detectPluginVersionDrift", () => {
       gatewayVersion: "2026.5.4",
       installRecords: {
         whatsapp: npmRecord("2026.5.4"),
-        discord: npmRecord("2026.5.4", { resolvedName: "@natesclaw/discord" }),
+        discord: npmRecord("2026.5.4", { resolvedName: "@openclaw/discord" }),
       },
     });
 
@@ -53,10 +53,10 @@ describe("detectPluginVersionDrift", () => {
       gatewayVersion: "2026.5.4",
       installRecords: {
         whatsapp: npmRecord("2026.5.3", {
-          resolvedName: "@natesclaw/whatsapp",
-          spec: "@natesclaw/whatsapp@2026.5.3",
+          resolvedName: "@openclaw/whatsapp",
+          spec: "@openclaw/whatsapp@2026.5.3",
         }),
-        discord: npmRecord("2026.5.4", { resolvedName: "@natesclaw/discord" }),
+        discord: npmRecord("2026.5.4", { resolvedName: "@openclaw/discord" }),
       },
     });
 
@@ -66,8 +66,8 @@ describe("detectPluginVersionDrift", () => {
       installedVersion: "2026.5.3",
       gatewayVersion: "2026.5.4",
       source: "npm",
-      packageName: "@natesclaw/whatsapp",
-      spec: "@natesclaw/whatsapp@2026.5.3",
+      packageName: "@openclaw/whatsapp",
+      spec: "@openclaw/whatsapp@2026.5.3",
     });
   });
 
@@ -77,7 +77,7 @@ describe("detectPluginVersionDrift", () => {
       installRecords: {
         whatsapp: npmRecord("2026.5.4"),
         // ...and the inverse direction
-        discord: npmRecord("2026.5.4-1", { resolvedName: "@natesclaw/discord" }),
+        discord: npmRecord("2026.5.4-1", { resolvedName: "@openclaw/discord" }),
       },
     });
 
@@ -101,8 +101,8 @@ describe("detectPluginVersionDrift", () => {
       gatewayVersion: "2026.5.4",
       installRecords: {
         discord: clawhubRecord("2026.5.3", {
-          spec: "clawhub:@natesclaw/discord",
-          clawhubPackage: "@natesclaw/discord",
+          spec: "clawhub:@openclaw/discord",
+          clawhubPackage: "@openclaw/discord",
           clawhubChannel: "official",
           clawhubUrl: "https://clawhub.ai",
         }),
@@ -177,19 +177,19 @@ describe("detectPluginVersionDrift", () => {
         // bump alone.
         archive: {
           source: "archive",
-          resolvedName: "@natesclaw/whatsapp",
+          resolvedName: "@openclaw/whatsapp",
           resolvedVersion: "2026.5.3",
-          spec: "@natesclaw/whatsapp@archive",
+          spec: "@openclaw/whatsapp@archive",
         },
         local: {
           source: "path",
-          resolvedName: "@natesclaw/whatsapp",
+          resolvedName: "@openclaw/whatsapp",
           resolvedVersion: "2026.5.3",
           spec: "/tmp/local-plugin",
         },
         forked: {
           source: "git",
-          resolvedName: "@natesclaw/whatsapp",
+          resolvedName: "@openclaw/whatsapp",
           resolvedVersion: "2026.5.3",
           spec: "git+ssh://example/forked",
         },
@@ -205,8 +205,8 @@ describe("detectPluginVersionDrift", () => {
       installRecords: {
         whatsapp: {
           source: "npm",
-          spec: "@natesclaw/whatsapp@latest",
-          resolvedName: "@natesclaw/whatsapp",
+          spec: "@openclaw/whatsapp@latest",
+          resolvedName: "@openclaw/whatsapp",
           version: "2026.5.3",
         },
       },
@@ -220,7 +220,7 @@ describe("detectPluginVersionDrift", () => {
     const result = detectPluginVersionDrift({
       gatewayVersion: "2026.5.4",
       installRecords: {
-        whatsapp: { source: "npm", spec: "@natesclaw/whatsapp@latest" },
+        whatsapp: { source: "npm", spec: "@openclaw/whatsapp@latest" },
       },
     });
 
@@ -241,7 +241,7 @@ describe("detectPluginVersionDrift", () => {
       gatewayVersion: "2026.5.4",
       installRecords: {
         whatsapp: npmRecord("2026.5.3"),
-        discord: npmRecord("2026.5.3", { resolvedName: "@natesclaw/discord" }),
+        discord: npmRecord("2026.5.3", { resolvedName: "@openclaw/discord" }),
       },
       config,
     });
@@ -313,8 +313,8 @@ describe("detectPluginVersionDrift", () => {
       gatewayVersion: "2026.5.4",
       installRecords: {
         whatsapp: npmRecord("2026.5.3"),
-        discord: npmRecord("2026.5.3", { resolvedName: "@natesclaw/discord" }),
-        matrix: npmRecord("2026.5.3", { resolvedName: "@natesclaw/matrix" }),
+        discord: npmRecord("2026.5.3", { resolvedName: "@openclaw/discord" }),
+        matrix: npmRecord("2026.5.3", { resolvedName: "@openclaw/matrix" }),
       },
     });
 
@@ -330,10 +330,10 @@ describe("resolvePluginVersionDriftUpdateCommand", () => {
         installedVersion: "2026.6.9",
         gatewayVersion: "2026.6.10-beta.1",
         source: "npm",
-        packageName: "@natesclaw/brave-plugin",
-        spec: "@natesclaw/brave-plugin@2026.6.9",
+        packageName: "@openclaw/brave-plugin",
+        spec: "@openclaw/brave-plugin@2026.6.9",
       }),
-    ).toBe("natesclaw plugins update @natesclaw/brave-plugin@2026.6.10-beta.1");
+    ).toBe("natesclaw plugins update @openclaw/brave-plugin@2026.6.10-beta.1");
   });
 
   it("parses the package name from exact npm specs when drift metadata is sparse", () => {
@@ -343,9 +343,9 @@ describe("resolvePluginVersionDriftUpdateCommand", () => {
         installedVersion: "2026.6.9",
         gatewayVersion: "2026.6.10-beta.1",
         source: "npm",
-        spec: "@natesclaw/brave-plugin@2026.6.9",
+        spec: "@openclaw/brave-plugin@2026.6.9",
       }),
-    ).toBe("natesclaw plugins update @natesclaw/brave-plugin@2026.6.10-beta.1");
+    ).toBe("natesclaw plugins update @openclaw/brave-plugin@2026.6.10-beta.1");
   });
 
   it("prefers the parsed exact npm spec package over inconsistent drift metadata", () => {
@@ -355,24 +355,24 @@ describe("resolvePluginVersionDriftUpdateCommand", () => {
         installedVersion: "2026.6.9",
         gatewayVersion: "2026.6.10-beta.1",
         source: "npm",
-        packageName: "@natesclaw/other-plugin",
-        spec: "@natesclaw/brave-plugin@2026.6.9",
+        packageName: "@openclaw/other-plugin",
+        spec: "@openclaw/brave-plugin@2026.6.9",
       }),
-    ).toBe("natesclaw plugins update @natesclaw/brave-plugin@2026.6.10-beta.1");
+    ).toBe("natesclaw plugins update @openclaw/brave-plugin@2026.6.10-beta.1");
   });
 
   it.each([
     {
       pluginId: "codex",
       source: "npm" as const,
-      packageName: "@natesclaw/codex",
-      spec: "@natesclaw/codex",
+      packageName: "@openclaw/codex",
+      spec: "@openclaw/codex",
     },
     {
       pluginId: "diagnostics-otel",
       source: "clawhub" as const,
-      packageName: "@natesclaw/diagnostics-otel",
-      spec: "clawhub:@natesclaw/diagnostics-otel",
+      packageName: "@openclaw/diagnostics-otel",
+      spec: "clawhub:@openclaw/diagnostics-otel",
     },
   ])("keeps the repairing plugin-id update for a floating $source install", (entry) => {
     expect(
@@ -394,8 +394,8 @@ describe("resolvePluginVersionDriftUpdateCommand", () => {
         installedVersion: "2026.6.9",
         gatewayVersion: "unknown",
         source: "npm",
-        packageName: "@natesclaw/brave-plugin",
-        spec: "@natesclaw/brave-plugin@2026.6.9",
+        packageName: "@openclaw/brave-plugin",
+        spec: "@openclaw/brave-plugin@2026.6.9",
       }),
     ).toBe("natesclaw plugins update brave");
   });

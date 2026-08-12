@@ -9,14 +9,14 @@ title: "Android app"
 ---
 
 <Note>
-The official Android app is available on [Google Play](https://play.google.com/store/apps/details?id=ai.natesclaw.app&hl=en_IN) and as a signed standalone APK on supported [GitHub Releases](https://github.com/natesclaw/natesclaw/releases). It is a companion node and requires a running Natesclaw Gateway. Source: [apps/android](https://github.com/natesclaw/natesclaw/tree/main/apps/android) ([build instructions](https://github.com/natesclaw/natesclaw/blob/main/apps/android/README.md)).
+The official Android app is available on [Google Play](https://play.google.com/store/apps/details?id=ai.natesclaw.app&hl=en_IN) and as a signed standalone APK on supported [GitHub Releases](https://github.com/openclaw/natesclaw/releases). It is a companion node and requires a running Natesclaw Gateway. Source: [apps/android](https://github.com/openclaw/natesclaw/tree/main/apps/android) ([build instructions](https://github.com/openclaw/natesclaw/blob/main/apps/android/README.md)).
 </Note>
 
 ## Support snapshot
 
 - Role: companion node app (Android does not host the Gateway).
 - Gateway required: yes (run it on macOS, Linux, or Windows via WSL2).
-- Install: [Google Play](https://play.google.com/store/apps/details?id=ai.natesclaw.app&hl=en_IN) or `Natesclaw-Android.apk` from a supported [GitHub Release](https://github.com/natesclaw/natesclaw/releases), [Getting Started](/start/getting-started) for the Gateway, then [Pairing](/channels/pairing).
+- Install: [Google Play](https://play.google.com/store/apps/details?id=ai.natesclaw.app&hl=en_IN) or `Natesclaw-Android.apk` from a supported [GitHub Release](https://github.com/openclaw/natesclaw/releases), [Getting Started](/start/getting-started) for the Gateway, then [Pairing](/channels/pairing).
 - Gateway: [Runbook](/gateway) + [Configuration](/gateway/configuration).
   - Protocols: [Gateway protocol](/gateway/protocol) (nodes + control plane).
 - **Settings → Natesclaw** opens a dedicated Gateway settings assistant when the operator connection has `operator.admin` and the Gateway supports `natesclaw.chat`. Its setup conversation stays separate from ordinary Chat, redacts secret replies locally, and moves to Chat only after you tap **Open Chat**.
@@ -42,7 +42,7 @@ The Wear OS companion uses the paired Android phone's authenticated Gateway conn
 
 Regular final and correction GitHub Releases include a universal `Natesclaw-Android.apk` and `Natesclaw-Android-SHA256SUMS.txt`. The APK is built from the release tag, signed with the Natesclaw Android release key, and carries GitHub Actions provenance.
 
-Choose a [release](https://github.com/natesclaw/natesclaw/releases) that lists both assets, then download and verify that exact tag before sideloading:
+Choose a [release](https://github.com/openclaw/natesclaw/releases) that lists both assets, then download and verify that exact tag before sideloading:
 
 ```bash
 release_tag=vYYYY.M.PATCH

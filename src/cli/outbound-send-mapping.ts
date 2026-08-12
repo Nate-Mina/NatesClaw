@@ -1,5 +1,5 @@
 // Maps CLI send dependency sources into outbound send dependencies with legacy aliases.
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import {
   resolveLegacyOutboundSendDepKeys,
   type OutboundSendDeps,

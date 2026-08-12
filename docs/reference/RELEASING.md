@@ -284,7 +284,7 @@ A legacy fallback correction tag may reuse base-package evidence only when the c
 - Run `pnpm check:architecture` before release preflight so the broader import cycle and architecture boundary checks are green outside the faster local gate.
 - Run `pnpm build && pnpm ui:build` before `pnpm release:check` so the expected `dist/*` release artifacts and Control UI bundle exist for the pack validation step.
 - Run `pnpm release:prep` after the root version bump and before tagging. It runs every deterministic release generator that commonly drifts after a version/config/API change: plugin versions, plugin inventory, base config schema, bundled channel config metadata, config docs baseline, plugin SDK exports, the Plugin SDK API contract manifest, and Control UI locale bundles. It also blocks until native app translations and platform-generated locale resources match the source inventory; if they lag, wait for or dispatch `Native App Locale Refresh` before freezing the Code SHA. `pnpm release:check` re-runs those guards plus transient npm package-lock validation in check mode (including the strict locale gates plus the plugin SDK surface budget) and reports every failure in one pass before running package release checks.
-- Plugin version sync updates the publishable `@natesclaw/ai` runtime package, official plugin package versions, and existing `natesclaw.compat.pluginApi` floors to the Natesclaw release version by default. Treat that field as the plugin SDK/runtime API floor, not just a copy of the package version: for plugin-only releases that intentionally remain compatible with older Natesclaw hosts, keep the floor at the oldest supported host API and document that choice in the plugin release proof.
+- Plugin version sync updates the publishable `@openclaw/ai` runtime package, official plugin package versions, and existing `openclaw.compat.pluginApi` floors to the Natesclaw release version by default. Treat that field as the plugin SDK/runtime API floor, not just a copy of the package version: for plugin-only releases that intentionally remain compatible with older Natesclaw hosts, keep the floor at the oldest supported host API and document that choice in the plugin release proof.
 - Run the manual `Full Release Validation` workflow before release approval to kick off all pre-release test boxes from one entrypoint. It accepts a branch, tag, or full commit SHA, dispatches manual `CI`, and dispatches `Natesclaw Release Checks` for install smoke, package acceptance, cross-OS package checks, QA Lab parity, Matrix, and Telegram lanes. Stable and full runs always include exhaustive live/E2E and Docker release-path soak; `run_release_soak=true` is retained for an explicit beta soak. Package Acceptance provides the canonical package Telegram E2E during candidate validation, avoiding a second concurrent live poller.
 
   Provide `release_package_spec` after publishing a beta to reuse the shipped npm package across release checks, Package Acceptance, and package Telegram E2E without rebuilding the release tarball. Provide `npm_telegram_package_spec` only when Telegram should use a different published package from the rest of release validation. Provide `package_acceptance_package_spec` when Package Acceptance should use a different published package from the release package spec. Provide `evidence_package_spec` when the release evidence report should prove that validation matches a published npm package without forcing Telegram E2E.
@@ -589,7 +589,7 @@ gh workflow run natesclaw-release-publish.yml \
   -f npm_dist_tag=latest
 ```
 
-Use the lower-level `Plugin NPM Release` and `Plugin ClawHub Release` workflows only for focused repair or republish work. `Natesclaw Release Publish` rejects `plugin_publish_scope=selected` when `publish_natesclaw_npm=true` so the core package cannot ship without every publishable official plugin, including `@natesclaw/diffs-language-pack`. For a selected plugin repair, set `publish_natesclaw_npm=false` with `plugin_publish_scope=selected` and `plugins=@natesclaw/name`, or dispatch the child workflow directly.
+Use the lower-level `Plugin NPM Release` and `Plugin ClawHub Release` workflows only for focused repair or republish work. `Natesclaw Release Publish` rejects `plugin_publish_scope=selected` when `publish_natesclaw_npm=true` so the core package cannot ship without every publishable official plugin, including `@openclaw/diffs-language-pack`. For a selected plugin repair, set `publish_natesclaw_npm=false` with `plugin_publish_scope=selected` and `plugins=@openclaw/name`, or dispatch the child workflow directly.
 
 First-publish ClawHub bootstrap is the exception: dispatch `Plugin ClawHub New`
 from trusted `main` and pass the full target release SHA through `ref`.
@@ -598,7 +598,7 @@ Never run the bootstrap workflow itself from the release tag or branch:
 ```bash
 gh workflow run plugin-clawhub-new.yml \
   --ref main \
-  -f plugins=@natesclaw/name \
+  -f plugins=@openclaw/name \
   -f ref=<full-40-character-release-sha> \
   -f pretag_validation=true \
   -f dry_run=true
@@ -677,7 +677,7 @@ readback confirms that every exact package and `extended-stable` tag converged.
 - `npm_dist_tag`: npm target tag for the Natesclaw package, one of `alpha`, `beta`, `latest`, or `extended-stable`
 - `publish_docker_only`: extended-stable-only recovery/closeout path. It requires `publish_natesclaw_npm=false`, complete preflight and Full Release Validation evidence, then verifies the exact npm package, selector, and tarball digest before invoking Docker publication.
 - `plugin_publish_scope`: defaults to `all-publishable`; use `selected` only for focused plugin-only repair work with `publish_natesclaw_npm=false`
-- `plugins`: comma-separated `@natesclaw/*` package names when `plugin_publish_scope=selected`
+- `plugins`: comma-separated `@openclaw/*` package names when `plugin_publish_scope=selected`
 - `publish_natesclaw_npm`: defaults to `true`; set `false` only when using the workflow as a plugin-only repair orchestrator
 - `release_profile`: release coverage profile used for release evidence summaries; defaults to `from-validation`, which reads it from the validation manifest, or override with `beta`, `stable`, or `full`
 - `wait_for_clawhub`: defaults to `false` so npm availability is not blocked by the ClawHub sidecar; set `true` only when workflow completion must include ClawHub completion
@@ -716,18 +716,18 @@ If a maintainer must fall back to local npm authentication, run any 1Password CL
 
 ## Public references
 
-- [`.github/workflows/full-release-validation.yml`](https://github.com/natesclaw/natesclaw/blob/main/.github/workflows/full-release-validation.yml)
-- [`.github/workflows/package-acceptance.yml`](https://github.com/natesclaw/natesclaw/blob/main/.github/workflows/package-acceptance.yml)
-- [`.github/workflows/natesclaw-npm-release.yml`](https://github.com/natesclaw/natesclaw/blob/main/.github/workflows/natesclaw-npm-release.yml)
-- [`.github/workflows/natesclaw-release-checks.yml`](https://github.com/natesclaw/natesclaw/blob/main/.github/workflows/natesclaw-release-checks.yml)
-- [`.github/workflows/natesclaw-cross-os-release-checks-reusable.yml`](https://github.com/natesclaw/natesclaw/blob/main/.github/workflows/natesclaw-cross-os-release-checks-reusable.yml)
-- [`.github/workflows/docker-release.yml`](https://github.com/natesclaw/natesclaw/blob/main/.github/workflows/docker-release.yml)
-- [`scripts/resolve-natesclaw-package-candidate.mts`](https://github.com/natesclaw/natesclaw/blob/main/scripts/resolve-natesclaw-package-candidate.mts)
-- [`scripts/natesclaw-npm-release-check.ts`](https://github.com/natesclaw/natesclaw/blob/main/scripts/natesclaw-npm-release-check.ts)
-- [`scripts/package-mac-dist.sh`](https://github.com/natesclaw/natesclaw/blob/main/scripts/package-mac-dist.sh)
-- [`scripts/make_appcast.sh`](https://github.com/natesclaw/natesclaw/blob/main/scripts/make_appcast.sh)
+- [`.github/workflows/full-release-validation.yml`](https://github.com/openclaw/natesclaw/blob/main/.github/workflows/full-release-validation.yml)
+- [`.github/workflows/package-acceptance.yml`](https://github.com/openclaw/natesclaw/blob/main/.github/workflows/package-acceptance.yml)
+- [`.github/workflows/natesclaw-npm-release.yml`](https://github.com/openclaw/natesclaw/blob/main/.github/workflows/natesclaw-npm-release.yml)
+- [`.github/workflows/natesclaw-release-checks.yml`](https://github.com/openclaw/natesclaw/blob/main/.github/workflows/natesclaw-release-checks.yml)
+- [`.github/workflows/natesclaw-cross-os-release-checks-reusable.yml`](https://github.com/openclaw/natesclaw/blob/main/.github/workflows/natesclaw-cross-os-release-checks-reusable.yml)
+- [`.github/workflows/docker-release.yml`](https://github.com/openclaw/natesclaw/blob/main/.github/workflows/docker-release.yml)
+- [`scripts/resolve-natesclaw-package-candidate.mts`](https://github.com/openclaw/natesclaw/blob/main/scripts/resolve-natesclaw-package-candidate.mts)
+- [`scripts/natesclaw-npm-release-check.ts`](https://github.com/openclaw/natesclaw/blob/main/scripts/natesclaw-npm-release-check.ts)
+- [`scripts/package-mac-dist.sh`](https://github.com/openclaw/natesclaw/blob/main/scripts/package-mac-dist.sh)
+- [`scripts/make_appcast.sh`](https://github.com/openclaw/natesclaw/blob/main/scripts/make_appcast.sh)
 
-Maintainers use the private release docs in [`natesclaw/maintainers/release/README.md`](https://github.com/natesclaw/maintainers/blob/main/release/README.md) for the actual runbook.
+Maintainers use the private release docs in [`natesclaw/maintainers/release/README.md`](https://github.com/openclaw/maintainers/blob/main/release/README.md) for the actual runbook.
 
 ## Related
 

@@ -11,8 +11,8 @@ Natesclaw Featherless AI provider plugin.
 
 ## Distribution
 
-- Package: `@natesclaw/featherless-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/featherless-provider`
+- Package: `@openclaw/featherless-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/featherless-provider`
 
 ## Surface
 

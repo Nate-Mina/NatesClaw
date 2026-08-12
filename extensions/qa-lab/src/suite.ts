@@ -2,7 +2,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { setTimeout as sleep } from "node:timers/promises";
-import type { NatesclawCrablineChannelDriverSelection } from "@natesclaw/crabline";
+import type { NatesclawCrablineChannelDriverSelection } from "@openclaw/crabline";
 import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import { parseStrictPositiveInteger } from "natesclaw/plugin-sdk/number-runtime";

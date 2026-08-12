@@ -1,5 +1,5 @@
 /** Control-plane provider discovery helpers that keep runtime imports lazy until catalog hooks run. */
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 import type { ModelProviderConfig } from "../config/types.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { createLazyImportLoader } from "../shared/lazy-promise.js";

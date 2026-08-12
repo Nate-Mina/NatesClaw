@@ -1,5 +1,5 @@
 // Imports machine-owned natesclaw.json values into the shared SQLite state store.
-import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { compareNatesclawVersions } from "../config/version.js";
 import {

@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import {
   bundledDistPluginFile,
   bundledPluginFile,
@@ -155,7 +155,7 @@ function writeWorkspacePackageEntry(params: {
 }
 
 type WorkspaceAliasFixture = readonly [
-  alias: `@natesclaw/${string}`,
+  alias: `@openclaw/${string}`,
   packageDir: string,
   entryStem: string,
   rootDistFile?: string,
@@ -271,7 +271,7 @@ function createBundledPluginPackagePublicSurfaceAliasFixture() {
   mkdirSafeDir(distExtensionRoot);
   fs.writeFileSync(
     path.join(extensionRoot, "package.json"),
-    JSON.stringify({ name: "@natesclaw/slack", type: "module" }, null, 2),
+    JSON.stringify({ name: "@openclaw/slack", type: "module" }, null, 2),
     "utf-8",
   );
   const sourceApiPath = path.join(extensionRoot, "api.ts");
@@ -393,7 +393,7 @@ function expectPluginSdkAliasTargets(
     expect(fs.realpathSync(aliases["natesclaw/plugin-sdk/channel-runtime-context"] ?? "")).toBe(
       fs.realpathSync(params.channelRuntimePath),
     );
-    expect(fs.realpathSync(aliases["@natesclaw/plugin-sdk/channel-runtime-context"] ?? "")).toBe(
+    expect(fs.realpathSync(aliases["@openclaw/plugin-sdk/channel-runtime-context"] ?? "")).toBe(
       fs.realpathSync(params.channelRuntimePath),
     );
   }
@@ -401,7 +401,7 @@ function expectPluginSdkAliasTargets(
     expect(fs.realpathSync(aliases["natesclaw/plugin-sdk/plugin-entry"] ?? "")).toBe(
       fs.realpathSync(params.pluginEntryPath),
     );
-    expect(fs.realpathSync(aliases["@natesclaw/plugin-sdk/plugin-entry"] ?? "")).toBe(
+    expect(fs.realpathSync(aliases["@openclaw/plugin-sdk/plugin-entry"] ?? "")).toBe(
       fs.realpathSync(params.pluginEntryPath),
     );
   }
@@ -595,19 +595,19 @@ describe("plugin sdk alias helpers", () => {
     const { packageRoot: installedCodexRoot, pluginEntry: installedCodexEntry } =
       writeInstalledPluginEntry({
         installRoot: path.join(makeTempDir(), ".natesclaw", "npm"),
-        packageName: "@natesclaw/codex",
+        packageName: "@openclaw/codex",
       });
     const { packageRoot: installedOtherRoot, pluginEntry: installedOtherEntry } =
       writeInstalledPluginEntry({
         installRoot: path.join(makeTempDir(), ".natesclaw", "npm"),
-        packageName: "@natesclaw/demo",
+        packageName: "@openclaw/demo",
       });
     const shadowCodexRoot = path.join(makeTempDir(), ".natesclaw", "extensions", "codex-shadow");
     const shadowCodexEntry = path.join(shadowCodexRoot, "dist", "index.js");
     mkdirSafeDir(path.dirname(shadowCodexEntry));
     fs.writeFileSync(
       path.join(shadowCodexRoot, "package.json"),
-      JSON.stringify({ name: "@natesclaw/codex", type: "module" }, null, 2),
+      JSON.stringify({ name: "@openclaw/codex", type: "module" }, null, 2),
       "utf-8",
     );
     fs.writeFileSync(shadowCodexEntry, 'export const plugin = "shadow";\n', "utf-8");
@@ -882,19 +882,19 @@ describe("plugin sdk alias helpers", () => {
     const { packageRoot: installedCodexRoot, pluginEntry: installedCodexEntry } =
       writeInstalledPluginEntry({
         installRoot: path.join(makeTempDir(), ".natesclaw", "npm"),
-        packageName: "@natesclaw/codex",
+        packageName: "@openclaw/codex",
       });
     const { packageRoot: installedOtherRoot, pluginEntry: installedOtherEntry } =
       writeInstalledPluginEntry({
         installRoot: path.join(makeTempDir(), ".natesclaw", "npm"),
-        packageName: "@natesclaw/demo",
+        packageName: "@openclaw/demo",
       });
     const shadowCodexRoot = path.join(makeTempDir(), ".natesclaw", "extensions", "codex-shadow");
     const shadowCodexEntry = path.join(shadowCodexRoot, "dist", "index.js");
     mkdirSafeDir(path.dirname(shadowCodexEntry));
     fs.writeFileSync(
       path.join(shadowCodexRoot, "package.json"),
-      JSON.stringify({ name: "@natesclaw/codex", type: "module" }, null, 2),
+      JSON.stringify({ name: "@openclaw/codex", type: "module" }, null, 2),
       "utf-8",
     );
     fs.writeFileSync(shadowCodexEntry, 'export const plugin = "shadow";\n', "utf-8");
@@ -1049,7 +1049,7 @@ describe("plugin sdk alias helpers", () => {
     const { packageRoot: installedOllamaRoot, pluginEntry: installedOllamaEntry } =
       writeInstalledPluginEntry({
         installRoot: path.join(makeTempDir(), ".natesclaw", "npm"),
-        packageName: "@natesclaw/ollama",
+        packageName: "@openclaw/ollama",
       });
 
     for (const owner of owners.filter(({ resolution }) => resolution === undefined)) {
@@ -1149,32 +1149,32 @@ describe("plugin sdk alias helpers", () => {
   it("aliases workspace packages to source when dist artifacts are missing", () => {
     const fixture = createPluginSdkAliasFixture();
     const workspaceAliases = writeWorkspaceAliasFixtures(fixture.root, [
-      ["@natesclaw/gateway-client", "gateway-client", "index"],
-      ["@natesclaw/gateway-client/timeouts", "gateway-client", "timeouts"],
-      ["@natesclaw/gateway-client/websocket-data", "gateway-client", "websocket-data"],
-      ["@natesclaw/gateway-protocol", "gateway-protocol", "index"],
-      ["@natesclaw/gateway-protocol/schema", "gateway-protocol", "schema"],
-      ["@natesclaw/gateway-protocol/frame-guards", "gateway-protocol", "frame-guards"],
-      ["@natesclaw/markdown-core", "markdown-core", "index"],
-      ["@natesclaw/markdown-core/tables", "markdown-core", "tables"],
-      ["@natesclaw/media-generation-core", "media-generation-core", "index"],
-      ["@natesclaw/media-generation-core/model-ref", "media-generation-core", "model-ref"],
-      ["@natesclaw/media-core", "media-core", "index"],
-      ["@natesclaw/media-core/mime", "media-core", "mime"],
-      ["@natesclaw/acp-core", "acp-core", "index"],
-      ["@natesclaw/acp-core/runtime/types", "acp-core", "runtime/types"],
-      ["@natesclaw/normalization-core", "normalization-core", "index"],
-      ["@natesclaw/normalization-core/boolean-coercion", "normalization-core", "boolean-coercion"],
-      ["@natesclaw/normalization-core/result", "normalization-core", "result"],
-      ["@natesclaw/normalization-core/agent-id", "normalization-core", "agent-id"],
-      ["@natesclaw/normalization-core/string-coerce", "normalization-core", "string-coerce"],
-      ["@natesclaw/retry", "retry", "index"],
-      ["@natesclaw/terminal-core", "terminal-core", "index"],
-      ["@natesclaw/terminal-core/theme", "terminal-core", "theme"],
-      ["@natesclaw/net-policy", "net-policy", "index"],
-      ["@natesclaw/net-policy/ip", "net-policy", "ip"],
-      ["@natesclaw/net-policy/url-protocol", "net-policy", "url-protocol"],
-      ["@natesclaw/model-catalog-core/provider-id", "model-catalog-core", "provider-id"],
+      ["@openclaw/gateway-client", "gateway-client", "index"],
+      ["@openclaw/gateway-client/timeouts", "gateway-client", "timeouts"],
+      ["@openclaw/gateway-client/websocket-data", "gateway-client", "websocket-data"],
+      ["@openclaw/gateway-protocol", "gateway-protocol", "index"],
+      ["@openclaw/gateway-protocol/schema", "gateway-protocol", "schema"],
+      ["@openclaw/gateway-protocol/frame-guards", "gateway-protocol", "frame-guards"],
+      ["@openclaw/markdown-core", "markdown-core", "index"],
+      ["@openclaw/markdown-core/tables", "markdown-core", "tables"],
+      ["@openclaw/media-generation-core", "media-generation-core", "index"],
+      ["@openclaw/media-generation-core/model-ref", "media-generation-core", "model-ref"],
+      ["@openclaw/media-core", "media-core", "index"],
+      ["@openclaw/media-core/mime", "media-core", "mime"],
+      ["@openclaw/acp-core", "acp-core", "index"],
+      ["@openclaw/acp-core/runtime/types", "acp-core", "runtime/types"],
+      ["@openclaw/normalization-core", "normalization-core", "index"],
+      ["@openclaw/normalization-core/boolean-coercion", "normalization-core", "boolean-coercion"],
+      ["@openclaw/normalization-core/result", "normalization-core", "result"],
+      ["@openclaw/normalization-core/agent-id", "normalization-core", "agent-id"],
+      ["@openclaw/normalization-core/string-coerce", "normalization-core", "string-coerce"],
+      ["@openclaw/retry", "retry", "index"],
+      ["@openclaw/terminal-core", "terminal-core", "index"],
+      ["@openclaw/terminal-core/theme", "terminal-core", "theme"],
+      ["@openclaw/net-policy", "net-policy", "index"],
+      ["@openclaw/net-policy/ip", "net-policy", "ip"],
+      ["@openclaw/net-policy/url-protocol", "net-policy", "url-protocol"],
+      ["@openclaw/model-catalog-core/provider-id", "model-catalog-core", "provider-id"],
     ]);
     for (const entry of workspaceAliases) {
       fs.rmSync(entry.distFile);
@@ -1194,33 +1194,33 @@ describe("plugin sdk alias helpers", () => {
   it("aliases workspace package subpaths to dist when available", () => {
     const fixture = createPluginSdkAliasFixture();
     const workspaceAliases = writeWorkspaceAliasFixtures(fixture.root, [
-      ["@natesclaw/gateway-client/readiness", "gateway-client", "readiness"],
+      ["@openclaw/gateway-client/readiness", "gateway-client", "readiness"],
       [
-        "@natesclaw/gateway-protocol/connect-error-details",
+        "@openclaw/gateway-protocol/connect-error-details",
         "gateway-protocol",
         "connect-error-details",
       ],
-      ["@natesclaw/gateway-protocol/frame-guards", "gateway-protocol", "frame-guards"],
-      ["@natesclaw/markdown-core/render", "markdown-core", "render"],
-      ["@natesclaw/media-generation-core/catalog", "media-generation-core", "catalog"],
+      ["@openclaw/gateway-protocol/frame-guards", "gateway-protocol", "frame-guards"],
+      ["@openclaw/markdown-core/render", "markdown-core", "render"],
+      ["@openclaw/media-generation-core/catalog", "media-generation-core", "catalog"],
       [
-        "@natesclaw/acp-core/normalize-text",
+        "@openclaw/acp-core/normalize-text",
         "acp-core",
         "normalize-text",
         "dist/acp-core/normalize-text.js",
         false,
       ],
       [
-        "@natesclaw/normalization-core/record-coerce",
+        "@openclaw/normalization-core/record-coerce",
         "normalization-core",
         "record-coerce",
         "dist/normalization-core/record-coerce.js",
       ],
-      ["@natesclaw/retry", "retry", "index", "dist/retry/index.js"],
-      ["@natesclaw/terminal-core/links", "terminal-core", "links", "dist/terminal-core/links.js"],
-      ["@natesclaw/net-policy/url-protocol", "net-policy", "url-protocol"],
+      ["@openclaw/retry", "retry", "index", "dist/retry/index.js"],
+      ["@openclaw/terminal-core/links", "terminal-core", "links", "dist/terminal-core/links.js"],
+      ["@openclaw/net-policy/url-protocol", "net-policy", "url-protocol"],
       [
-        "@natesclaw/model-catalog-core/provider-model-id-normalize",
+        "@openclaw/model-catalog-core/provider-model-id-normalize",
         "model-catalog-core",
         "provider-model-id-normalize",
       ],
@@ -1262,10 +1262,10 @@ describe("plugin sdk alias helpers", () => {
       ),
     );
 
-    expect(fs.realpathSync(aliases["@natesclaw/acp-core/runtime/errors"] ?? "")).toBe(
+    expect(fs.realpathSync(aliases["@openclaw/acp-core/runtime/errors"] ?? "")).toBe(
       fs.realpathSync(acpRuntimeErrors),
     );
-    expect(fs.realpathSync(aliases["@natesclaw/normalization-core/agent-id"] ?? "")).toBe(
+    expect(fs.realpathSync(aliases["@openclaw/normalization-core/agent-id"] ?? "")).toBe(
       fs.realpathSync(normalizationAgentId),
     );
   });
@@ -1282,14 +1282,14 @@ describe("plugin sdk alias helpers", () => {
       buildPluginLoaderAliasMap(sourcePluginEntry),
     );
 
-    expect(fs.realpathSync(aliases["@natesclaw/slack/api.js"] ?? "")).toBe(
+    expect(fs.realpathSync(aliases["@openclaw/slack/api.js"] ?? "")).toBe(
       fs.realpathSync(sourceApiPath),
     );
-    expect(fs.realpathSync(aliases["@natesclaw/slack/runtime-api.js"] ?? "")).toBe(
+    expect(fs.realpathSync(aliases["@openclaw/slack/runtime-api.js"] ?? "")).toBe(
       fs.realpathSync(sourceRuntimeApiPath),
     );
-    expect(aliases["@natesclaw/slack/test-api.js"]).toBeUndefined();
-    expect(aliases["@natesclaw/slack/internal.js"]).toBeUndefined();
+    expect(aliases["@openclaw/slack/test-api.js"]).toBeUndefined();
+    expect(aliases["@openclaw/slack/internal.js"]).toBeUndefined();
   });
 
   it("aliases bundled plugin package test surfaces only in private QA mode", () => {
@@ -1303,7 +1303,7 @@ describe("plugin sdk alias helpers", () => {
       buildPluginLoaderAliasMap(sourcePluginEntry),
     );
 
-    expect(fs.realpathSync(aliases["@natesclaw/slack/test-api.js"] ?? "")).toBe(
+    expect(fs.realpathSync(aliases["@openclaw/slack/test-api.js"] ?? "")).toBe(
       fs.realpathSync(sourceTestApiPath),
     );
   });
@@ -1320,10 +1320,10 @@ describe("plugin sdk alias helpers", () => {
       buildPluginLoaderAliasMap(sourcePluginEntry, undefined, undefined, "dist"),
     );
 
-    expect(fs.realpathSync(aliases["@natesclaw/slack/api.js"] ?? "")).toBe(
+    expect(fs.realpathSync(aliases["@openclaw/slack/api.js"] ?? "")).toBe(
       fs.realpathSync(distApiPath),
     );
-    expect(fs.realpathSync(aliases["@natesclaw/slack/runtime-api.js"] ?? "")).toBe(
+    expect(fs.realpathSync(aliases["@openclaw/slack/runtime-api.js"] ?? "")).toBe(
       fs.realpathSync(distRuntimeApiPath),
     );
   });
@@ -1664,7 +1664,7 @@ describe("plugin sdk alias helpers", () => {
     fs.writeFileSync(sourceLoaderBaseFile, "export {};\n", "utf-8");
     fs.writeFileSync(
       path.join(copiedSourceDir, "channel.runtime.ts"),
-      `import { resolveOutboundSendDep } from "@natesclaw/plugin-sdk/channel-outbound";
+      `import { resolveOutboundSendDep } from "@openclaw/plugin-sdk/channel-outbound";
 
 export const syntheticRuntimeMarker = {
   resolveOutboundSendDep,
@@ -1701,7 +1701,7 @@ export const syntheticRuntimeMarker = {
     const withAlias = createJiti(sourceLoaderBaseUrl, {
       ...buildPluginLoaderJitiOptions({
         "natesclaw/plugin-sdk/channel-outbound": copiedChannelRuntimeShim,
-        "@natesclaw/plugin-sdk/channel-outbound": copiedChannelRuntimeShim,
+        "@openclaw/plugin-sdk/channel-outbound": copiedChannelRuntimeShim,
       }),
       tryNative: false,
     });
@@ -2164,7 +2164,7 @@ describe("buildPluginLoaderJitiOptions", () => {
     const marker = Symbol.for("pathe:normalizedAlias");
     const aliasMap = {
       "natesclaw/plugin-sdk/core": "/repo/src/plugin-sdk/core.ts",
-      "@natesclaw/plugin-sdk/core": "/repo/src/plugin-sdk/core.ts",
+      "@openclaw/plugin-sdk/core": "/repo/src/plugin-sdk/core.ts",
     };
 
     const first = buildPluginLoaderJitiOptions(aliasMap).alias as Record<string, string>;

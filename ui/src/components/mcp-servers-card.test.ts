@@ -1,6 +1,6 @@
 /* @vitest-environment jsdom */
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ApplicationContext, ApplicationGateway } from "../app/context.ts";
 import { i18n } from "../i18n/index.ts";
@@ -229,7 +229,7 @@ describe("natesclaw-mcp-servers-card", () => {
     );
     const setupLink = card.querySelector<HTMLAnchorElement>(".settings-empty a");
     expect(setupLink?.textContent?.trim()).toBe("Set up your first MCP server");
-    expect(setupLink?.href).toBe("https://docs.natesclaw.ai/tools/mcp");
+    expect(setupLink?.href).toBe("https://docs.openclaw.ai/tools/mcp");
     expect(setupLink?.target).toBe("_blank");
     expect(setupLink?.rel).toBe("noopener noreferrer");
   });

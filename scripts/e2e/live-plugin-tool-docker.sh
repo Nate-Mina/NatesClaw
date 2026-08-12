@@ -113,7 +113,7 @@ fi
 
 MODEL_REF="${NATESCLAW_LIVE_PLUGIN_TOOL_MODEL:?missing NATESCLAW_LIVE_PLUGIN_TOOL_MODEL}"
 PLUGIN_ID="e2e-slug-tool"
-PLUGIN_NAME="@natesclaw/e2e-slug-tool"
+PLUGIN_NAME="@openclaw/e2e-slug-tool"
 PLUGIN_VERSION="0.0.0-e2e.1"
 TOOL_NAME="e2e_slug_probe"
 SEED="Natesclaw E2E Plugin Tool $(date +%s)-$RANDOM"

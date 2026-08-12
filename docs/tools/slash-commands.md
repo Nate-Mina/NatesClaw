@@ -456,7 +456,7 @@ chat.
 /plugins enable context7
 /plugins disable context7
 /plugins install clawhub:<package>
-/plugins install npm:@natesclaw/<official-package>
+/plugins install npm:@openclaw/<official-package>
 /plugins install npm:<package> --force
 /plugins install git:<repository>@<ref> --force
 ```

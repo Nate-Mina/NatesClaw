@@ -1,5 +1,5 @@
 // Gateway RPC handler for the tool catalog shown by clients and Control UI.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import {
   type ToolsCatalogResult,
   validateToolsCatalogParams,

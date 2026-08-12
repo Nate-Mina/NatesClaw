@@ -171,7 +171,7 @@ async function writeFakePlugin(params: {
     path.join(pluginDir, "package.json"),
     `${JSON.stringify(
       {
-        name: "@natesclaw/tool-search-e2e-fixture",
+        name: "@openclaw/tool-search-e2e-fixture",
         version: "0.0.0",
         type: "module",
         natesclaw: {

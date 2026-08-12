@@ -5,7 +5,7 @@ import {
   mergeTransportHeaders,
   sanitizeNonEmptyTransportPayloadText,
   sanitizeTransportPayloadText,
-} from "@natesclaw/ai/transports";
+} from "@openclaw/ai/transports";
 import OpenAI from "openai";
 // Transport stream shared tests cover payload sanitization, header merging, and
 // final/error stream termination helpers used by provider transports.

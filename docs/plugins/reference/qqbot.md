@@ -11,7 +11,7 @@ Natesclaw QQ Bot channel plugin for group and direct-message workflows.
 
 ## Distribution
 
-- Package: `@natesclaw/qqbot`
+- Package: `@openclaw/qqbot`
 - Install route: npm; ClawHub
 
 ## Surface

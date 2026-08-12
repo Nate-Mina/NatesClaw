@@ -1,6 +1,6 @@
 // Reads provider ids selected by auth, model, channel, and media configuration.
-import { collectConfiguredModelRefs } from "@natesclaw/model-catalog-core/configured-model-refs";
-import { normalizeNullableString as normalizeId } from "@natesclaw/normalization-core/string-coerce";
+import { collectConfiguredModelRefs } from "@openclaw/model-catalog-core/configured-model-refs";
+import { normalizeNullableString as normalizeId } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { asObjectRecord } from "./object.js";
 

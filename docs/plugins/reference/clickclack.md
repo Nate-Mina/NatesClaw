@@ -11,8 +11,8 @@ Adds the Clickclack channel surface for sending and receiving Natesclaw messages
 
 ## Distribution
 
-- Package: `@natesclaw/clickclack`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/clickclack`
+- Package: `@openclaw/clickclack`
+- Install route: npm; ClawHub: `clawhub:@openclaw/clickclack`
 
 ## Surface
 

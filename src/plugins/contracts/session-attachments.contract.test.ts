@@ -1,7 +1,7 @@
 // Session attachment contract tests cover plugin session attachment metadata and storage.
 import * as fs from "node:fs/promises";
 import path from "node:path";
-import { FILE_TYPE_SNIFF_MAX_BYTES } from "@natesclaw/media-core/mime";
+import { FILE_TYPE_SNIFF_MAX_BYTES } from "@openclaw/media-core/mime";
 import { registerTestPlugin } from "natesclaw/plugin-sdk/plugin-test-contracts";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { SessionEntry } from "../../config/sessions.js";

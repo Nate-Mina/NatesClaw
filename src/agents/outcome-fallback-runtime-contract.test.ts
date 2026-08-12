@@ -1,6 +1,6 @@
 // Verifies embedded runtime outcome classifications drive model fallback correctly.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import {
   createContractRunResult,
   OUTCOME_FALLBACK_RUNTIME_CONTRACT,

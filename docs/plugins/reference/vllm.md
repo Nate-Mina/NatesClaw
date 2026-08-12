@@ -11,7 +11,7 @@ Adds vLLM model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/vllm-provider`
+- Package: `@openclaw/vllm-provider`
 - Install route: included in Natesclaw
 
 ## Surface

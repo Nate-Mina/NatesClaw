@@ -22,7 +22,7 @@
 </ul>
 <h3>Changes</h3>
 <ul>
-<li><strong>Meta provider:</strong> add bundled <code>muse-spark-1.1</code> Responses API support with streaming, tool calls, encrypted reasoning replay, onboarding, exact-model live validation, and standalone npm/ClawHub distribution as <code>@natesclaw/meta-provider</code>. (#102873, #103070, #103163) Thanks @HamidShojanazeri, @davemorin, @Solvely-Colin, @jalehman, and @vincentkoc.</li>
+<li><strong>Meta provider:</strong> add bundled <code>muse-spark-1.1</code> Responses API support with streaming, tool calls, encrypted reasoning replay, onboarding, exact-model live validation, and standalone npm/ClawHub distribution as <code>@openclaw/meta-provider</code>. (#102873, #103070, #103163) Thanks @HamidShojanazeri, @davemorin, @Solvely-Colin, @jalehman, and @vincentkoc.</li>
 <li><strong>Android chat agent selector:</strong> switch the active agent directly from the live chat screen while keeping chat, Talk mode, and home canvas on the same canonical session. (#80422) Thanks @bcperry and @joshavant.</li>
 <li><strong>Gateway host status:</strong> show the connected Gateway's host, network address, OS, runtime, uptime, CPU, memory, and disk details in Control UI Settings. (#100478)</li>
 <li><strong>Gateway crash-loop recovery:</strong> persist boot outcomes, enter control-plane-safe mode after repeated unclean starts, hold transport and provider activation until recovery, and exit with <code>EX_CONFIG</code> for fatal configuration errors so systemd and launchd stop restart flapping. Thanks @obviyus.</li>
@@ -184,7 +184,7 @@
 <li><strong>Control UI terminal cursor:</strong> hide the browser-native contenteditable caret so the integrated terminal shows only its canvas-rendered cursor.</li>
 <li><strong>macOS SSH tunnels:</strong> resolve user-installed SSH <code>ProxyCommand</code> helpers through the app's managed PATH while preserving inherited connection environment, so remote aliases work after Finder and sanitized-script launches.</li>
 <li><strong>Control UI OpenAI speed picker:</strong> show only Standard and Fast choices for OpenAI models.</li>
-<li><strong>Control UI terminal rendering:</strong> adopt the shared <code>@natesclaw/libterminal</code> browser lifecycle and add Nerd Font fallbacks so icon-enabled shell listings render their glyphs when a compatible local font is installed.</li>
+<li><strong>Control UI terminal rendering:</strong> adopt the shared <code>@openclaw/libterminal</code> browser lifecycle and add Nerd Font fallbacks so icon-enabled shell listings render their glyphs when a compatible local font is installed.</li>
 <li><strong>Slack transcript history:</strong> let Codex app-server own its persisted assistant replies so Slack does not append redundant delivery-mirror rows, while the Control UI keeps legacy duplicate mirrors hidden. Thanks @bek91.</li>
 <li><strong>Control UI chat history:</strong> hide redundant channel-final delivery mirrors when the preceding app-server assistant reply already shows the same text.</li>
 <li><strong>Control UI chat spacing:</strong> keep the first message comfortably clear of the topbar with a responsive minimum transcript inset.</li>
@@ -1748,9 +1748,9 @@ Shipped baseline exclusions: v2026.6.11 (10 PRs: #87298, #89949, #90811, #92020,
 <li><strong>PR #106065</strong> fix(sqlite): reject runtimes vulnerable to WAL corruption. Thanks @vincentkoc.</li>
 <li><strong>PR #103725</strong> fix(install-cli): track mktemp paths and clean up on EXIT. Thanks @SebTardif.</li>
 </ul>
-<p><a href="https://github.com/natesclaw/natesclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
+<p><a href="https://github.com/openclaw/natesclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
 ]]></description>
-            <enclosure url="https://github.com/natesclaw/natesclaw/releases/download/v2026.7.1/Natesclaw-2026.7.1.zip" length="59038535" type="application/octet-stream" sparkle:edSignature="a7K+wq4Fgg44Fg/Mt1XseUcICLiPShPz023twbvVHSlus+gQZjkE33aV4pwRKAOA2VlzZYkdRkEOX+3sE8h2BA=="/>
+            <enclosure url="https://github.com/openclaw/natesclaw/releases/download/v2026.7.1/Natesclaw-2026.7.1.zip" length="59038535" type="application/octet-stream" sparkle:edSignature="a7K+wq4Fgg44Fg/Mt1XseUcICLiPShPz023twbvVHSlus+gQZjkE33aV4pwRKAOA2VlzZYkdRkEOX+3sE8h2BA=="/>
         </item>
         <item>
             <title>2026.6.11</title>
@@ -1803,7 +1803,7 @@ This audited record covers the complete v2026.6.10..0a4d0daa8cc99e9b2c6bc78c2e67
 <li><strong>PR #94977</strong> fix(telegram): honor outbound reaction directives. Related #71140. Thanks @hugenshen and @Cuttingwater.</li>
 <li><strong>PR #95069</strong> fix(telegram): skip mirror write when primary reply already exists (#94930). Thanks @heichaowo.</li>
 <li><strong>PR #95550</strong> Preserve inherited channel account policies during migration. Thanks @amknight.</li>
-<li><strong>PR #95390</strong> fix #95378: https://github.com/natesclaw/natesclaw/issues/95378. Thanks @mikasa0818 and @obviyus and @MaiDuy708.</li>
+<li><strong>PR #95390</strong> fix #95378: https://github.com/openclaw/natesclaw/issues/95378. Thanks @mikasa0818 and @obviyus and @MaiDuy708.</li>
 <li><strong>PR #93143</strong> fix(imessage): keep split-send coalescing opt-in. Thanks @omarshahine.</li>
 <li><strong>PR #95008</strong> fix(claude-cli): also disable native background Bash and Monitor in --print runs. Thanks @anagnorisis2peripeteia.</li>
 <li><strong>PR #94545</strong> fix: keep trusted policies with hook registry. Thanks @jesse-merhi.</li>
@@ -2096,9 +2096,9 @@ This audited record covers the complete v2026.6.10..0a4d0daa8cc99e9b2c6bc78c2e67
 <li><strong>PR #97543</strong> fix(telegram): recover stalled ingress spool claims. Thanks @vincentkoc.</li>
 <li><strong>PR #97122</strong> ci(docker): publish releases to Docker Hub. Thanks @vincentkoc.</li>
 </ul>
-<p><a href="https://github.com/natesclaw/natesclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
+<p><a href="https://github.com/openclaw/natesclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
 ]]></description>
-            <enclosure url="https://github.com/natesclaw/natesclaw/releases/download/v2026.6.11/Natesclaw-2026.6.11.zip" length="53768361" type="application/octet-stream" sparkle:edSignature="OXkfRdvWubTkAb+76PsrirKIz3E2TXu5h8apLubWr6wrRhef1K4eZwsqcg5+qoVG3xuCg6r5kdAQ45G2USBYDw=="/>
+            <enclosure url="https://github.com/openclaw/natesclaw/releases/download/v2026.6.11/Natesclaw-2026.6.11.zip" length="53768361" type="application/octet-stream" sparkle:edSignature="OXkfRdvWubTkAb+76PsrirKIz3E2TXu5h8apLubWr6wrRhef1K4eZwsqcg5+qoVG3xuCg6r5kdAQ45G2USBYDw=="/>
         </item>
         <item>
             <title>2026.6.10</title>
@@ -2143,9 +2143,9 @@ This audited record covers the complete v2026.6.9..HEAD history: 12 merged PRs. 
 <li><strong>PR #94545</strong> fix: keep trusted policies with hook registry. Thanks @jesse-merhi.</li>
 <li><strong>PR #95792</strong> fix(onboard): refresh provider plugin registry after setup installs. Related #95765. Thanks @snowzlmbot.</li>
 </ul>
-<p><a href="https://github.com/natesclaw/natesclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
+<p><a href="https://github.com/openclaw/natesclaw/blob/main/CHANGELOG.md">View full changelog</a></p>
 ]]></description>
-            <enclosure url="https://github.com/natesclaw/natesclaw/releases/download/v2026.6.10/Natesclaw-2026.6.10.zip" length="56115790" type="application/octet-stream" sparkle:edSignature="MEeGG8+WePhUg9uDShznmdhhAgy/WWe7bAwr4XRTauNdrM441iziQYIlwhfNrtHDHX+uE1/tkRtIMcELfuekAg=="/>
+            <enclosure url="https://github.com/openclaw/natesclaw/releases/download/v2026.6.10/Natesclaw-2026.6.10.zip" length="56115790" type="application/octet-stream" sparkle:edSignature="MEeGG8+WePhUg9uDShznmdhhAgy/WWe7bAwr4XRTauNdrM441iziQYIlwhfNrtHDHX+uE1/tkRtIMcELfuekAg=="/>
         </item>
     </channel>
 </rss>

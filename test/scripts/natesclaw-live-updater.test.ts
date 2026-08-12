@@ -154,7 +154,7 @@ function initializeFixture(root: string) {
   git(seed, "remote", "add", "origin", "../origin.git");
   git(seed, "push", "-u", "origin", "main");
   git(root, "clone", `--template=${gitTemplate}`, origin, mirror);
-  const canonicalOrigin = "https://github.com/natesclaw/natesclaw.git";
+  const canonicalOrigin = "https://github.com/openclaw/natesclaw.git";
   git(mirror, "remote", "set-url", "origin", canonicalOrigin);
   return { root, mirror, origin, seed };
 }
@@ -628,7 +628,7 @@ describe("natesclaw live updater", () => {
     const sourceRoot = path.join(root, "managed/natesclaw/dist");
     const foreignRoot = path.join(root, "worktree/natesclaw");
     mkdirSync(path.join(foreignRoot, ".git"), { recursive: true });
-    writeFileSync(path.join(foreignRoot, "package.json"), '{"name":"natesclaw"}\n');
+    writeFileSync(path.join(foreignRoot, "package.json"), '{"name": "openclaw"}\n');
     const output = [
       {
         "0": '{"subsystem":"gateway"}',
@@ -680,7 +680,7 @@ describe("natesclaw live updater", () => {
     const linkedRoot = path.join(root, "current");
     mkdirSync(releaseDist, { recursive: true });
     mkdirSync(path.join(releaseRoot, ".git"));
-    writeFileSync(path.join(releaseRoot, "package.json"), '{"name":"natesclaw"}\n');
+    writeFileSync(path.join(releaseRoot, "package.json"), '{"name": "openclaw"}\n');
     const sourceFile = path.join(releaseDist, "console-managed.js");
     writeFileSync(sourceFile, "export {};\n");
     symlinkSync(releaseRoot, linkedRoot);
@@ -708,7 +708,7 @@ describe("natesclaw live updater", () => {
     const sourceRoot = path.join(root, "managed/natesclaw/dist");
     const foreignRoot = path.join(root, "worktree/natesclaw");
     mkdirSync(path.join(foreignRoot, ".git"), { recursive: true });
-    writeFileSync(path.join(foreignRoot, "package.json"), '{"name":"natesclaw"}\n');
+    writeFileSync(path.join(foreignRoot, "package.json"), '{"name": "openclaw"}\n');
     const configuredPluginFile = path.join(foreignRoot, "configured-plugin.ts");
     writeFileSync(configuredPluginFile, "export default {};\n");
     const output = [
@@ -1248,7 +1248,7 @@ console.log(JSON.stringify({ ok: true, channels: {} }));
   });
 
   test("accepts supported Natesclaw GitHub origins", () => {
-    expect(originMatches("https://github.com/natesclaw/natesclaw.git")).toBe(true);
+    expect(originMatches("https://github.com/openclaw/natesclaw.git")).toBe(true);
     expect(originMatches("git@github.com:natesclaw/natesclaw.git")).toBe(true);
     expect(originMatches("https://github.com/example/natesclaw.git")).toBe(false);
   });
@@ -1261,7 +1261,7 @@ console.log(JSON.stringify({ ok: true, channels: {} }));
     const snapshot = path.join(runtimeRoot, `gateway-${head.slice(0, 7)}`);
     mkdirSync(runtimeRoot, { recursive: true });
     git(runtimeRoot, "clone", origin, snapshot);
-    git(snapshot, "remote", "set-url", "origin", "https://github.com/natesclaw/natesclaw.git");
+    git(snapshot, "remote", "set-url", "origin", "https://github.com/openclaw/natesclaw.git");
     git(snapshot, "checkout", "--detach", head);
     chmodSync(path.join(snapshot, ".git/HEAD"), 0o600);
     chmodSync(path.join(snapshot, ".git/config"), 0o600);
@@ -1460,7 +1460,7 @@ console.log(JSON.stringify({ ok: true, channels: {} }));
 
   test("rejects Git URL rewrites that change the effective fetch source", () => {
     const { mirror, origin } = makeFixture();
-    git(mirror, "config", `url.${origin}.insteadOf`, "https://github.com/natesclaw/natesclaw.git");
+    git(mirror, "config", `url.${origin}.insteadOf`, "https://github.com/openclaw/natesclaw.git");
 
     const result = spawnSync(process.execPath, [script, "--checkout", mirror], {
       encoding: "utf8",

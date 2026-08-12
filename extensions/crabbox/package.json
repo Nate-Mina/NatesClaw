@@ -1,11 +1,11 @@
 {
-  "name": "@natesclaw/crabbox-provider",
+  "name": "@openclaw/crabbox-provider",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw cloud worker provider backed by the Crabbox CLI",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

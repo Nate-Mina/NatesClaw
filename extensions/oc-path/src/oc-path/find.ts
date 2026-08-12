@@ -4,7 +4,7 @@
  * preserving the input pattern's slot shape, so each result is
  * pipeable into `resolveOcPath` / `setOcPath`.
  *
- * @module @natesclaw/oc-path/find
+ * @module @openclaw/oc-path/find
  */
 
 import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";

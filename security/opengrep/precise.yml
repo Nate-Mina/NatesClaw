@@ -25,8 +25,8 @@ rules:
       likelihood: medium
       impact: medium
       references:
-        - https://github.com/natesclaw/natesclaw/security/advisories/GHSA-25gx-x37c-7pph
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-25GX-X37C-7PPH
+        - https://github.com/openclaw/natesclaw/security/advisories/GHSA-25gx-x37c-7pph
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-25GX-X37C-7PPH
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-novnc-x11vnc-missing-auth
@@ -48,7 +48,7 @@ rules:
       ghsa: GHSA-25PW-4H6W-QWVM
       confidence: high
       note: Captures the original iMessage vulnerable merge shape exactly and generalizes to same-family explicit merge sites.
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-25PW-4H6W-QWVM
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-25PW-4H6W-QWVM
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw.imessage-group-allowlist-merged-with-pairing-store
@@ -89,7 +89,7 @@ rules:
         - CWE-862
         - CWE-20
       ghsa: GHSA-2PRF-9CW7-FQ62
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-2PRF-9CW7-FQ62
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-2PRF-9CW7-FQ62
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: whatsapp-reaction-requires-allowfrom-guard
@@ -146,7 +146,7 @@ rules:
               regex: ^(build|render|compose|construct|format)[A-Z]\w*Prompt\w*$
     metadata:
       ghsa: GHSA-2QJ5-GWG2-XWC4
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-2QJ5-GWG2-XWC4
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-2QJ5-GWG2-XWC4
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw.prompt-unsanitized-literal-interpolation
@@ -162,7 +162,7 @@ rules:
       ghsas:
         - GHSA-2QRV-RC5X-2G2H
       ghsa: GHSA-2QRV-RC5X-2G2H
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-2QRV-RC5X-2G2H
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-2QRV-RC5X-2G2H
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-untrusted-workspace-channel-shadow-setup
@@ -216,7 +216,7 @@ rules:
         - CWE-345
         - CWE-807
       ghsa: GHSA-2RGF-HM63-5QPH
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-2RGF-HM63-5QPH
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-2RGF-HM63-5QPH
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: xff-last-hop-without-trusted-proxy-context
@@ -250,7 +250,7 @@ rules:
           - pattern: approveNodePairing($REQ, undefined, ...)
     metadata:
       ghsa: GHSA-2X4X-CC5G-QMMG
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-2X4X-CC5G-QMMG
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-2X4X-CC5G-QMMG
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: node-pair-approve-missing-callerscopes-object
@@ -266,7 +266,7 @@ rules:
       ghsas:
         - GHSA-3298-56P6-RPW2
       ghsa: GHSA-3298-56P6-RPW2
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-3298-56P6-RPW2
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-3298-56P6-RPW2
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-killprocesstree-from-shell-utils
@@ -313,7 +313,7 @@ rules:
         - CWE-22
         - CWE-284
       ghsa: GHSA-33HM-CQ8R-WC49
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-33HM-CQ8R-WC49
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-33HM-CQ8R-WC49
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-sandbox-tmp-accepts-os-tmpdir
@@ -345,7 +345,7 @@ rules:
       - pattern-not-regex: resolveDmGroupAccessWithLists
     metadata:
       ghsa: GHSA-354R-7MFH-7RH2
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-354R-7MFH-7RH2
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-354R-7MFH-7RH2
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: review-reaction-enqueue-without-dm-access-check
@@ -360,7 +360,7 @@ rules:
       cwe:
         - CWE-22
         - CWE-59
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-36H3-7C54-J27R
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-36H3-7C54-J27R
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: browser-route-tempdir-write-missing-symlink-guard
@@ -430,7 +430,7 @@ rules:
       coverage_requirement: vulnerable_fix_diff_files
       review_surface: owner_only_send_policy
       rationale: catches /send policy mutations guarded only by general authorization
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-39MP-545Q-W789
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-39MP-545Q-W789
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-owner-only-send-policy-mutation
@@ -447,7 +447,7 @@ rules:
           - pattern: let port = gatewayPort ?? 18789
     metadata:
       ghsa: GHSA-3CW3-5VXW-G2H3
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-3CW3-5VXW-G2H3
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-3CW3-5VXW-G2H3
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: discovery-txt-hint-routing
@@ -499,7 +499,7 @@ rules:
                   }
     metadata:
       ghsa: GHSA-3HCM-GGVF-RCH5
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-3HCM-GGVF-RCH5
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-3HCM-GGVF-RCH5
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: exec-allowlist-double-quoted-command-substitution
@@ -514,7 +514,7 @@ rules:
       detector: A
       confidence: low
       category: security
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-3Q42-XMXV-9VFR
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-3Q42-XMXV-9VFR
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-talk-voice-set-without-admin-scope-check
@@ -569,7 +569,7 @@ rules:
           }
     metadata:
       ghsa: GHSA-4685-C5CP-VP95
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-4685-C5CP-VP95
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-4685-C5CP-VP95
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: safe-bin-missing-blocked-option-policy
@@ -594,7 +594,7 @@ rules:
       technology:
         - typescript
       ghsa: GHSA-49CG-279W-M73X
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-49CG-279W-M73X
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-49CG-279W-M73X
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: approval-auth-empty-approver-authorized
@@ -640,7 +640,7 @@ rules:
       family: discord-allowlist-name-matching
       review: reusable structural rule for missing dangerous opt-in
       ghsa: GHSA-4CQV-H74H-93J4
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-4CQV-H74H-93J4
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-4CQV-H74H-93J4
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: discord-allowlist-name-matching-without-dangerous-opt-in
@@ -670,7 +670,7 @@ rules:
       confidence: medium
       ghsa: GHSA-4G5X-2JFC-XM98
       detector: A
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-4G5X-2JFC-XM98
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-4G5X-2JFC-XM98
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: raw-fetch-to-disk-bypasses-media-runtime
@@ -694,7 +694,7 @@ rules:
       confidence: high
       cwe: CWE-287
       ghsa: GHSA-4RJ2-GPMH-QQ5X
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-4RJ2-GPMH-QQ5X
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-4RJ2-GPMH-QQ5X
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: inbound-allowlist-bidirectional-endswith
@@ -708,7 +708,7 @@ rules:
       category: security
       cwe:
         - CWE-918
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-527M-976R-JF79
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-527M-976R-JF79
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: browser-existing-session-interaction-missing-navigation-guard
@@ -774,7 +774,7 @@ rules:
         - playwright
         - browser
       ghsa: GHSA-536Q-MJ95-H29H
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-536Q-MJ95-H29H
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-536Q-MJ95-H29H
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-browser-interaction-navigation-guard
@@ -804,7 +804,7 @@ rules:
       cwe: CWE-918
       ghsa: GHSA-56F2-HVWG-5743
       detector: A
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-56F2-HVWG-5743
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-56F2-HVWG-5743
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-unguarded-remote-media-fetch
@@ -822,7 +822,7 @@ rules:
             : [];
     metadata:
       ghsa: GHSA-5MX2-2MGW-X8RM
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-5MX2-2MGW-X8RM
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-5MX2-2MGW-X8RM
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-webhook-loopback-passwordless-fallback
@@ -852,7 +852,7 @@ rules:
       ghsa: GHSA-5V6X-RFC3-7QFR
       detector: A
       rationale: Requires v1 structured approval binding before matching.
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-5V6X-RFC3-7QFR
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-5V6X-RFC3-7QFR
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-system-run-approval-legacy-command-only-binding
@@ -883,7 +883,7 @@ rules:
       category: security
       confidence: medium
       ghsa: GHSA-5WCW-8JJV-M286
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-5WCW-8JJV-M286
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-5WCW-8JJV-M286
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: trusted-proxy-accept-without-origin-guard
@@ -902,7 +902,7 @@ rules:
       ghsa: GHSA-5XFQ-5MR7-426Q
       confidence: low
       justification: Coverage-first detector for the vulnerable family in pre-fix session transcript path helpers.
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-5XFQ-5MR7-426Q
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-5XFQ-5MR7-426Q
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-session-transcript-path-traversal
@@ -925,7 +925,7 @@ rules:
           regex: ^set.*Override$
     metadata:
       ghsa: GHSA-62F6-MRCJ-V8H5
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-62F6-MRCJ-V8H5
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-62F6-MRCJ-V8H5
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: runtime-overrides-unsanitized-override-store
@@ -939,7 +939,7 @@ rules:
       category: security
       cwe:
         - CWE-78
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-65RX-FVH6-R4H2
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-65RX-FVH6-R4H2
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-unquoted-heredoc-body-missing-expansion-token-guard
@@ -989,7 +989,7 @@ rules:
           ...
     metadata:
       ghsa: GHSA-66R7-M7XM-V49H
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-66R7-M7XM-V49H
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-66R7-M7XM-V49H
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: qqbot-outbound-media-unvalidated-local-path
@@ -1020,7 +1020,7 @@ rules:
           regex: (?i).*(verifier|codeVerifier).*
     metadata:
       ghsa: GHSA-6G25-PC82-VFWP
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-6G25-PC82-VFWP
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-6G25-PC82-VFWP
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: oauth-state-reuses-pkce-verifier
@@ -1051,7 +1051,7 @@ rules:
       regex: authorize.*
     metadata:
       ghsa: GHSA-6MQC-JQH6-X8FC
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-6MQC-JQH6-X8FC
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-6MQC-JQH6-X8FC
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-canvas-auth-local-direct-bypass
@@ -1079,7 +1079,7 @@ rules:
       ghsa: GHSA-767M-XRHC-FXM7
       detector: A
       rationale: Structural callsite check for helper invocations that omit gatewayClientScopes, which disables the operator.admin gate inside Telegram target writeback persistence.
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-767M-XRHC-FXM7
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-767M-XRHC-FXM7
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: telegram-target-writeback-admin-scope-required
@@ -1113,7 +1113,7 @@ rules:
         - "**/*.js"
     metadata:
       ghsa: GHSA-77W2-CRQV-CMV3
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-77W2-CRQV-CMV3
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-77W2-CRQV-CMV3
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: feishu-structured-card-action-envelope-required
@@ -1143,7 +1143,7 @@ rules:
           ].filter(($ENTRY) => Boolean($ENTRY));
     metadata:
       ghsa: GHSA-782P-5FR5-7FJ8
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-782P-5FR5-7FJ8
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-782P-5FR5-7FJ8
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: channel-metadata-into-trusted-system-prompt
@@ -1164,7 +1164,7 @@ rules:
               }
     metadata:
       ghsa: GHSA-796M-2973-WC5Q
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-796M-2973-WC5Q
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-796M-2973-WC5Q
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: env-wrapper-transparent-unwrap
@@ -1225,7 +1225,7 @@ rules:
               ...
     metadata:
       ghsa: GHSA-7FCC-CW49-XM78
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-7FCC-CW49-XM78
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-7FCC-CW49-XM78
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: windows-shell-fallback-after-spawn-error
@@ -1379,7 +1379,7 @@ rules:
               })
     metadata:
       ghsa: GHSA-7GGG-PVRF-458V
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-7GGG-PVRF-458V
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-7GGG-PVRF-458V
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-host-exec-python-index-override
@@ -1414,7 +1414,7 @@ rules:
               return { ..., payload: { ..., bootstrapToken: $ISSUED.token, ... }, ... }
     metadata:
       ghsa: GHSA-7H7G-X2PX-94HJ
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-7H7G-X2PX-94HJ
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-7H7G-X2PX-94HJ
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-setup-bootstrap-issued-with-profile-argument
@@ -1428,7 +1428,7 @@ rules:
       category: security
       cwe:
         - CWE-862
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-7JP6-R74R-995Q
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-7JP6-R74R-995Q
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-matrix-set-profile-missing-owner-guard
@@ -1484,7 +1484,7 @@ rules:
           expect(...)
     metadata:
       ghsa: GHSA-7QF6-H84J-8FQ4
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-7QF6-H84J-8FQ4
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-7QF6-H84J-8FQ4
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: msteams-safe-fetch-missing-resolvefn
@@ -1505,7 +1505,7 @@ rules:
       cwe: CWE-352
       ghsa: GHSA-7RCP-MXPQ-72PJ
       rationale: Detects catch blocks in OAuth callback parsers that fabricate a matching state while accepting non-URL code-only input.
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-7RCP-MXPQ-72PJ
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-7RCP-MXPQ-72PJ
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: oauth-manual-callback-code-only-acceptance
@@ -1530,7 +1530,7 @@ rules:
       - pattern-not-regex: CLAWHUB_
     metadata:
       ghsa: GHSA-7WV4-CC7P-JHXC
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-7WV4-CC7P-JHXC
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-7WV4-CC7P-JHXC
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw.workspace-dotenv-runtime-guard-incomplete
@@ -1544,7 +1544,7 @@ rules:
       category: security
       ghsa: GHSA-7XMQ-G46G-F8PV
       detector: A
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-7XMQ-G46G-F8PV
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-7XMQ-G46G-F8PV
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-sandbox-media-deferred-path-read
@@ -1613,7 +1613,7 @@ rules:
           ...
     metadata:
       ghsa: GHSA-82G8-464F-2MV7
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-82G8-464F-2MV7
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-82G8-464F-2MV7
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-skill-env-host-injection
@@ -1653,7 +1653,7 @@ rules:
         - qqbot
       confidence: medium
       ghsa: GHSA-846P-HGPV-VPHC
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-846P-HGPV-VPHC
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-846P-HGPV-VPHC
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: qqbot-outbound-local-read-without-boundary-check
@@ -1683,7 +1683,7 @@ rules:
       confidence: medium
       ghsa: GHSA-8689-GM9G-JGR6
       detector: A
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-8689-GM9G-JGR6
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-8689-GM9G-JGR6
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: plivo-v3-replay-key-uses-unsorted-url
@@ -1704,7 +1704,7 @@ rules:
       cwe: CWE-918
       ghsa: GHSA-8CP7-RP8R-MG77
       detector_kind: reusable-opengrep
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-8CP7-RP8R-MG77
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-8CP7-RP8R-MG77
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: ipv6-transition-special-use-ssrf-guard-bypass
@@ -1719,7 +1719,7 @@ rules:
       ghsa: GHSA-8FMP-37RC-P5G7
       cwe: CWE-15
       detector: A
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-8FMP-37RC-P5G7
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-8FMP-37RC-P5G7
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-service-env-merges-unfiltered-dotenv-or-config-env
@@ -1796,7 +1796,7 @@ rules:
               ...
     metadata:
       ghsa: GHSA-8JPQ-5H99-FF5R
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-8JPQ-5H99-FF5R
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-8JPQ-5H99-FF5R
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: ghsa-8jpq-local-path-media-send
@@ -1815,7 +1815,7 @@ rules:
       ghsas:
         - GHSA-8MF7-VV8W-HJR2
       ghsa: GHSA-8MF7-VV8W-HJR2
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-8MF7-VV8W-HJR2
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-8MF7-VV8W-HJR2
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw.safebin-profile-lookup-permissive-fallback
@@ -1876,7 +1876,7 @@ rules:
       confidence: medium
       ghsa: GHSA-92JP-89MQ-4374
       rationale: Helper routes like noVNC observer/token redemption should not be reachable before bridge auth is established.
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-92JP-89MQ-4374
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-92JP-89MQ-4374
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-browser-bridge-preauth-helper-route
@@ -1890,7 +1890,7 @@ rules:
       category: security
       cwe:
         - CWE-266
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-94PW-C6M8-P9P9
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-94PW-C6M8-P9P9
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-gateway-config-mutation-guard-missing-dangerous-flag-diff
@@ -1918,7 +1918,7 @@ rules:
       category: security
       cwe:
         - CWE-307
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-9528-X887-J2FP
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-9528-X887-J2FP
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-webhook-signature-missing-auth-rate-limit
@@ -1946,7 +1946,7 @@ rules:
       ghsas:
         - GHSA-98CH-45WP-CH47
       ghsa: GHSA-98CH-45WP-CH47
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-98CH-45WP-CH47
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-98CH-45WP-CH47
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw.system-run-approval-binding-portable-normalization-regression
@@ -1970,7 +1970,7 @@ rules:
       ghsa: GHSA-98HH-7GHG-X6RQ
       detector: A
       note: Reusable review surface for approval-resolution entrypoints; authorization must be verified manually.
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-98HH-7GHG-X6RQ
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-98HH-7GHG-X6RQ
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: approval-resolve-call-review
@@ -2003,7 +2003,7 @@ rules:
       confidence: medium
       rationale: Detects OAuth flows that directly reuse PKCE verifier material as the OAuth state token.
       ghsa: GHSA-9JPJ-G8VV-J5MF
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-9JPJ-G8VV-J5MF
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-9JPJ-G8VV-J5MF
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: oauth-state-reuses-pkce-verifier
@@ -2020,7 +2020,7 @@ rules:
       ghsas:
         - GHSA-9Q7V-8MR7-G23P
       ghsa: GHSA-9Q7V-8MR7-G23P
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-9Q7V-8MR7-G23P
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-9Q7V-8MR7-G23P
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw.marketplace-plugin-download-unguarded-fetch
@@ -2044,7 +2044,7 @@ rules:
       category: authorization
       cwe:
         - CWE-863
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-9WQX-G2CW-VC7R
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-9WQX-G2CW-VC7R
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: matrix-verification-notice-missing-dm-access-gate
@@ -2079,7 +2079,7 @@ rules:
           regex: ^(verificationUrl|url)$
     metadata:
       ghsa: GHSA-CG6C-Q2HX-69H7
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-CG6C-Q2HX-69H7
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-CG6C-Q2HX-69H7
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: plivo-v2-replay-key-uses-full-verification-url
@@ -2100,7 +2100,7 @@ rules:
           regex: .*[Ee]mail.*
     metadata:
       ghsa: GHSA-CHM2-M3W2-WCXM
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-CHM2-M3W2-WCXM
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-CHM2-M3W2-WCXM
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: googlechat-users-email-allowlist-mutable-principal
@@ -2114,7 +2114,7 @@ rules:
       category: security
       cwe:
         - CWE-22
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-CV7M-C9JX-VG7Q
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-CV7M-C9JX-VG7Q
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-browser-upload-raw-paths-forwarded
@@ -2135,7 +2135,7 @@ rules:
       category: security
       cwe:
         - CWE-22
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-CWF8-44X6-32C2
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-CWF8-44X6-32C2
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-openshell-uploadpath-direct-localpath-upload
@@ -2155,7 +2155,7 @@ rules:
         - CWE-636
         - CWE-754
       ghsa: GHSA-CWQ8-6F96-G3Q4
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-CWQ8-6F96-G3Q4
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-CWQ8-6F96-G3Q4
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-install-scan-fail-open
@@ -2230,7 +2230,7 @@ rules:
       technology:
         - natesclaw
         - acp
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-CXPW-2G23-2VGW
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-CXPW-2G23-2VGW
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: acp-extract-text-from-prompt-without-size-limit
@@ -2274,7 +2274,7 @@ rules:
           })
     metadata:
       ghsa: GHSA-F5MF-3R52-R83W
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-F5MF-3R52-R83W
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-F5MF-3R52-R83W
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: zalouser-dangerous-group-name-auth-match
@@ -2289,7 +2289,7 @@ rules:
       category: security
       cwe:
         - CWE-918
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-F7FH-QG34-X2XH
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-F7FH-QG34-X2XH
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-direct-cdp-websocket-top-level-branch-missing-validation
@@ -2317,7 +2317,7 @@ rules:
               }
     metadata:
       ghsa: GHSA-FG3M-VHRR-8GJ6
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-FG3M-VHRR-8GJ6
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-FG3M-VHRR-8GJ6
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: windows-shell-fallback-retry
@@ -2350,7 +2350,7 @@ rules:
       technology:
         - nodejs
       ghsa: GHSA-FH3F-Q9QW-93J9
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-FH3F-Q9QW-93J9
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-FH3F-Q9QW-93J9
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: sandbox-config-sha1-hash
@@ -2404,7 +2404,7 @@ rules:
           }
     metadata:
       ghsa: GHSA-FQCM-97M6-W7RM
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-FQCM-97M6-W7RM
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-FQCM-97M6-W7RM
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-unconditional-sandboxvalidated-loadwebmedia
@@ -2419,7 +2419,7 @@ rules:
       category: security
       cwe:
         - CWE-667
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-FQRJ-M88P-QF3V
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-FQRJ-M88P-QF3V
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-zalo-replay-dedupe-key-missing-target-scope
@@ -2456,7 +2456,7 @@ rules:
       category: security
       confidence: medium
       ghsa: GHSA-FV94-QVG8-XQPW
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-FV94-QVG8-XQPW
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-FV94-QVG8-XQPW
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: ssh-sandbox-upload-missing-symlink-boundary-check
@@ -2474,7 +2474,7 @@ rules:
       confidence: low
       note: Review aid only; misses inherited/defaulted config and may not prove runtime exploitability.
       ghsa: GHSA-G353-MGV3-8PCJ
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-G353-MGV3-8PCJ
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-G353-MGV3-8PCJ
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: feishu-webhook-mode-missing-encrypt-key
@@ -2557,7 +2557,7 @@ rules:
                   ]);
     metadata:
       ghsa: GHSA-G86V-F9QV-RH6M
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-G86V-F9QV-RH6M
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-G86V-F9QV-RH6M
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-missing-discard-ipv6-special-use-range
@@ -2594,7 +2594,7 @@ rules:
                   $HOST.pendingGatewayUrl = ...
     metadata:
       ghsa: GHSA-G8P2-7WF7-98MQ
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-G8P2-7WF7-98MQ
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-G8P2-7WF7-98MQ
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: query-gatewayurl-applied-without-confirmation
@@ -2649,7 +2649,7 @@ rules:
       cwe: CWE-918
       ghsa: GHSA-G99V-8HWM-G76G
       rationale: HEAD-based citation redirect resolution must not opt into private-network SSRF policy.
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-G99V-8HWM-G76G
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-G99V-8HWM-G76G
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-web-search-citation-redirect-private-network-policy
@@ -2691,7 +2691,7 @@ rules:
         - CWE-294
         - CWE-345
       ghsa: GHSA-GCJ7-R3HG-M7W6
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-GCJ7-R3HG-M7W6
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-GCJ7-R3HG-M7W6
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: replay-key-derived-from-idempotency-header
@@ -2705,7 +2705,7 @@ rules:
       category: security
       cwe:
         - CWE-269
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-GG9V-MGCP-V6M7
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-GG9V-MGCP-V6M7
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-bootstrap-token-legacy-acceptance-without-profile-record
@@ -2723,7 +2723,7 @@ rules:
       category: security
       cwe:
         - CWE-22
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-GQ9C-WG68-GWJ2
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-GQ9C-WG68-GWJ2
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: browser-writable-output-path-bypasses-resolveWritablePathWithinRoot
@@ -2763,7 +2763,7 @@ rules:
           })
     metadata:
       ghsa: GHSA-H7F7-89MM-PQH6
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-H7F7-89MM-PQH6
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-H7F7-89MM-PQH6
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-skill-download-targetdir-outside-tools-root
@@ -2806,7 +2806,7 @@ rules:
           }
     metadata:
       ghsa: GHSA-H9XM-J4QG-FVPG
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-H9XM-J4QG-FVPG
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-H9XM-J4QG-FVPG
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: apply-patch-sandbox-hostpath-without-workspace-guard
@@ -2849,7 +2849,7 @@ rules:
       detector_review: family_candidate
       rationale: Matches Teams fileConsent invoke handlers that both upload and remove pending uploads based on uploadId-controlled lookup without a same-handler conversation-binding guard.
       ghsa: GHSA-J26J-7QC4-3MRF
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-J26J-7QC4-3MRF
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-J26J-7QC4-3MRF
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: teams-file-consent-missing-conversation-binding
@@ -2880,7 +2880,7 @@ rules:
               regex: ^(GIT_SSH_COMMAND|GIT_EXEC_PATH|GIT_TEMPLATE_DIR|YARN_RC_FILENAME|CC|CXX|CMAKE_C_COMPILER|CMAKE_CXX_COMPILER|RUSTC_WRAPPER|CARGO_BUILD_RUSTC|CARGO_BUILD_RUSTC_WRAPPER|MAKEFLAGS|MFLAGS|GIT_CONFIG_[A-Z0-9_]+|NPM_CONFIG_[A-Z0-9_]+|CARGO_REGISTRIES_[A-Z0-9_]+|TF_VAR_[A-Z0-9_]+)$
     metadata:
       ghsa: GHSA-J425-WHC4-4JGC
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-J425-WHC4-4JGC
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-J425-WHC4-4JGC
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-dangerous-host-env-override-pivots
@@ -2894,7 +2894,7 @@ rules:
       category: security
       cwe:
         - CWE-22
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-JF25-7968-H2H5
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-JF25-7968-H2H5
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-nodes-screen-record-outpath-guard-missing
@@ -2947,7 +2947,7 @@ rules:
           }
     metadata:
       ghsa: GHSA-JFV4-H8MC-JCP8
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-JFV4-H8MC-JCP8
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-JFV4-H8MC-JCP8
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: immediate-process-tree-sigkill
@@ -2976,7 +2976,7 @@ rules:
       category: security
       confidence: medium
       ghsa: GHSA-JJ6Q-RRRF-H66H
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-JJ6Q-RRRF-H66H
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-JJ6Q-RRRF-H66H
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: timing-safe-equal-length-short-circuit
@@ -2998,7 +2998,7 @@ rules:
           })
     metadata:
       ghsa: GHSA-JJW7-3VJF-FG5J
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-JJW7-3VJF-FG5J
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-JJW7-3VJF-FG5J
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-config-private-key-string-field
@@ -3033,7 +3033,7 @@ rules:
       cwe:
         - CWE-208
       ghsa: GHSA-JMM5-FVH5-GF4P
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-JMM5-FVH5-GF4P
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-JMM5-FVH5-GF4P
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: ts-early-length-check-before-timingsafeequal
@@ -3055,7 +3055,7 @@ rules:
           })
     metadata:
       ghsa: GHSA-JP4J-Q5FC-58GV
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-JP4J-Q5FC-58GV
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-JP4J-Q5FC-58GV
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: discord-component-missing-group-policy
@@ -3085,7 +3085,7 @@ rules:
           const $BODY = await readJsonBodyWithLimit($REQ, ...);
     metadata:
       ghsa: GHSA-JQ3F-VJWW-8RQ7
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-JQ3F-VJWW-8RQ7
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-JQ3F-VJWW-8RQ7
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: webhook-body-read-before-secret-validation
@@ -3099,7 +3099,7 @@ rules:
       category: security
       cwe:
         - CWE-426
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-JQPQ-MGVM-F9R6
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-JQPQ-MGVM-F9R6
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-project-local-node-modules-bin-prepended-to-path
@@ -3127,7 +3127,7 @@ rules:
       category: security
       ghsa: GHSA-M34Q-H93W-VG5X
       detector: A
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-M34Q-H93W-VG5X
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-M34Q-H93W-VG5X
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: openshell-unsafe-remote-path-normalization
@@ -3170,7 +3170,7 @@ rules:
           }
     metadata:
       ghsa: GHSA-M3MH-3MPG-37HW
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-M3MH-3MPG-37HW
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-M3MH-3MPG-37HW
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-staged-package-install-without-hidden-project-npmrc
@@ -3187,7 +3187,7 @@ rules:
               const $TYPE = $EVENT.chat_type === "group" ? "group" : "p2p";
     metadata:
       ghsa: GHSA-M69H-JM2F-2PV8
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-M69H-JM2F-2PV8
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-M69H-JM2F-2PV8
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: feishu-reaction-chat-type-defaults-to-p2p
@@ -3213,7 +3213,7 @@ rules:
               execSync('gh api users/' + $LOGIN + ..., ...)
     metadata:
       ghsa: GHSA-M7X8-2W3W-PR42
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-M7X8-2W3W-PR42
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-M7X8-2W3W-PR42
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: ghsa-m7x8-shell-interpolated-gh-api-login
@@ -3228,7 +3228,7 @@ rules:
       category: security
       cwe:
         - CWE-78
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-MC68-Q9JW-2H3V
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-MC68-Q9JW-2H3V
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-docker-path-env-shell-interpolation
@@ -3270,7 +3270,7 @@ rules:
       category: security
       ghsa: GHSA-MF5G-6R6F-GHHM
       detector: A
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-MF5G-6R6F-GHHM
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-MF5G-6R6F-GHHM
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: webhook-invalid-token-without-preauth-lockout
@@ -3310,7 +3310,7 @@ rules:
       - pattern: git add -- "${files[@]}"
     metadata:
       ghsa: GHSA-MMPF-JWF4-H3QV
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-MMPF-JWF4-H3QV
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-MMPF-JWF4-H3QV
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: shell-git-add-paths-must-use-double-dash
@@ -3324,7 +3324,7 @@ rules:
       ghsa: GHSA-MP66-RF4F-MHH8
       detector: A
       category: security
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-MP66-RF4F-MHH8
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-MP66-RF4F-MHH8
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: googlechat-app-url-addon-principal-missing-binding
@@ -3363,7 +3363,7 @@ rules:
           }
     metadata:
       ghsa: GHSA-MWXV-35WR-4VVJ
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-MWXV-35WR-4VVJ
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-MWXV-35WR-4VVJ
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw.gateway.api-channels-prefix-auth-gap
@@ -3392,7 +3392,7 @@ rules:
           ...
     metadata:
       ghsa: GHSA-P4X4-2R7F-WJXG
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-P4X4-2R7F-WJXG
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-P4X4-2R7F-WJXG
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-wrapper-carrier-allow-always
@@ -3411,7 +3411,7 @@ rules:
         - GHSA-P536-VVPP-9MC8
         - GHSA-J27P-HQ53-9WGC
       ghsa: GHSA-P536-VVPP-9MC8
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-P536-VVPP-9MC8
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-P536-VVPP-9MC8
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw.web-fetch-or-media-unbounded-response-read
@@ -3471,7 +3471,7 @@ rules:
           }
     metadata:
       ghsa: GHSA-PFV7-RR5M-QMV6
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-PFV7-RR5M-QMV6
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-PFV7-RR5M-QMV6
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: local-relay-json-endpoint-missing-auth-header-check
@@ -3504,7 +3504,7 @@ rules:
       category: authz-bypass
       confidence: medium
       detector: A
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-Q2QC-744P-66R2
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-Q2QC-744P-66R2
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: ghsa-q2qc-post-resolution-agent-prefix-guard
@@ -3518,7 +3518,7 @@ rules:
       category: security
       cwe:
         - CWE-400
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-Q447-RJ3R-2CGH
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-Q447-RJ3R-2CGH
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw.webhook-request-stream-read-without-shared-limit-helper
@@ -3566,7 +3566,7 @@ rules:
       category: security
       confidence: medium
       rationale: The vulnerable helper only accepted {root, bridge}, so any call to it in sandboxed image loading implies missing workspaceOnly enforcement.
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-Q6QF-4P5J-R25G
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-Q6QF-4P5J-R25G
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw.sandbox-image-tool.workspace-only-omission
@@ -3596,7 +3596,7 @@ rules:
               process.env.NATESCLAW_BROWSER_CONTROL_MODULE
     metadata:
       ghsa: GHSA-QCJ9-WWGW-6GM8
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-QCJ9-WWGW-6GM8
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-QCJ9-WWGW-6GM8
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-workspace-trust-root-env-read
@@ -3611,7 +3611,7 @@ rules:
       category: security
       cwe:
         - CWE-22
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-QF48-QFV4-JJM9
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-QF48-QFV4-JJM9
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-extension-upload-direct-file-read-before-sandboxed-media-load
@@ -3655,7 +3655,7 @@ rules:
       category: security
       cwe:
         - CWE-306
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-QPJJ-47VM-64PJ
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-QPJJ-47VM-64PJ
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-browser-control-routes-missing-auth-middleware
@@ -3702,7 +3702,7 @@ rules:
         - .artifacts/ghsa-detector-review-runs/**/*.ts
     metadata:
       ghsa: GHSA-QQQ7-4HXC-X63C
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-QQQ7-4HXC-X63C
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-QQQ7-4HXC-X63C
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-trusted-tool-media-alias-bypass
@@ -3733,7 +3733,7 @@ rules:
           const { response: $RESP, ...$REST } = await fetchWithSsrFGuard(...)
     metadata:
       ghsa: GHSA-QXGF-HMCJ-3XW3
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-QXGF-HMCJ-3XW3
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-QXGF-HMCJ-3XW3
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: raw-image-download-fetch-without-ssrf-guard
@@ -3780,7 +3780,7 @@ rules:
       cwe:
         - CWE-79
       ghsa: GHSA-R294-2894-92J3
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-R294-2894-92J3
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-R294-2894-92J3
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: exported-session-html-unsafe-marked-setup
@@ -3806,7 +3806,7 @@ rules:
               })
     metadata:
       ghsa: GHSA-R5H9-VJQC-HQ3R
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-R5H9-VJQC-HQ3R
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-R5H9-VJQC-HQ3R
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: nextcloud-talk-allowlist-display-name-match
@@ -3820,7 +3820,7 @@ rules:
       category: security
       cwe:
         - CWE-598
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-RCHV-X836-W7XP
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-RCHV-X836-W7XP
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-dashboard-auth-query-credentials
@@ -3844,7 +3844,7 @@ rules:
       ghsas:
         - GHSA-RHFG-J8JQ-7V2H
       ghsa: GHSA-RHFG-J8JQ-7V2H
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-RHFG-J8JQ-7V2H
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-RHFG-J8JQ-7V2H
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw.extension-configurable-baseurl-raw-fetch-bypasses-ssrf-guard
@@ -3936,7 +3936,7 @@ rules:
           })
     metadata:
       ghsa: GHSA-RM2P-J3R7-4X4J
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-RM2P-J3R7-4X4J
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-RM2P-J3R7-4X4J
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: slack-reaction-handler-missing-system-event-authorization
@@ -3951,7 +3951,7 @@ rules:
       category: security
       cwe:
         - CWE-284
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-RQP8-Q22P-5J9Q
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-RQP8-Q22P-5J9Q
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-multi-account-plugin-route-replacement
@@ -4017,7 +4017,7 @@ rules:
       category: security
       bug-family: unresolved-discovery-routing
       ghsa: GHSA-RVQR-HRCC-J9VV
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-RVQR-HRCC-J9VV
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-RVQR-HRCC-J9VV
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: unresolved-discovery-routing-from-txt-hints
@@ -4032,7 +4032,7 @@ rules:
       cwe: CWE-22
       category: security
       confidence: medium
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-RWJ8-P9VQ-25GV
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-RWJ8-P9VQ-25GV
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: local-media-read-without-root-allowlist
@@ -4069,7 +4069,7 @@ rules:
       confidence: medium
       ghsa: GHSA-V3J7-34XH-6G3W
       detector: A
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-V3J7-34XH-6G3W
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-V3J7-34XH-6G3W
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: loopback-cdp-probe-copies-relay-auth-headers
@@ -4103,7 +4103,7 @@ rules:
           }
     metadata:
       ghsa: GHSA-V3QC-WRWX-J3PW
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-V3QC-WRWX-J3PW
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-V3QC-WRWX-J3PW
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw.gateway.config-write.missing-protected-path-guard
@@ -4117,7 +4117,7 @@ rules:
       category: security
       confidence: medium
       ghsa: GHSA-V6X2-2QVM-6GV8
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-V6X2-2QVM-6GV8
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-V6X2-2QVM-6GV8
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: prompt-hash-secret-falls-back-to-gateway-auth-token
@@ -4160,7 +4160,7 @@ rules:
       confidence: medium
       rationale: catches bounded repeated-decode canonicalizers that never fail closed on leftover encodings
       ghsa: GHSA-V865-P3GQ-HW6M
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-V865-P3GQ-HW6M
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-V865-P3GQ-HW6M
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: repeated-decode-without-limit-anomaly-check
@@ -4174,7 +4174,7 @@ rules:
       category: security
       cwe:
         - CWE-862
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-V8CG-4474-49V8
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-V8CG-4474-49V8
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-slack-system-event-missing-sender-authorization
@@ -4219,7 +4219,7 @@ rules:
               readStringParam($ARGS, "fileUrl", { trim: false })
     metadata:
       ghsa: GHSA-V8WV-JG3Q-QWPQ
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-V8WV-JG3Q-QWPQ
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-V8WV-JG3Q-QWPQ
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: outbound-media-alias-not-normalized
@@ -4252,7 +4252,7 @@ rules:
               }
     metadata:
       ghsa: GHSA-VFG3-PQPQ-93M4
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-VFG3-PQPQ-93M4
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-VFG3-PQPQ-93M4
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-tlon-cites-before-final-auth-general
@@ -4268,7 +4268,7 @@ rules:
       cwe:
         - CWE-77
         - CWE-426
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-VFW7-6RHC-6XXG
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-VFW7-6RHC-6XXG
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw.cli-backend-unsanitized-env-merge
@@ -4332,7 +4332,7 @@ rules:
         - GHSA-VJ3G-5PX3-GR46
         - GHSA-XW4P-PW82-HQR7
       ghsa: GHSA-VJ3G-5PX3-GR46
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-VJ3G-5PX3-GR46
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-VJ3G-5PX3-GR46
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw.untrusted-feishu-key-or-skill-name-into-temp-path-join
@@ -4379,7 +4379,7 @@ rules:
     pattern-regex: (?s)sort\s*:\s*\{.*?valueFlags\s*:\s*\[[^\]]*["\']--compress-program["\'][^\]]*\]
     metadata:
       ghsa: GHSA-VMQR-RC7X-3446
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-VMQR-RC7X-3446
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-VMQR-RC7X-3446
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-safe-bins-external-helper-flag
@@ -4408,7 +4408,7 @@ rules:
             $AUTH_METHOD === "trusted-proxy";
     metadata:
       ghsa: GHSA-VVGP-4C28-M3JM
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-VVGP-4C28-M3JM
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-VVGP-4C28-M3JM
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: trusted-proxy-control-ui-bypass-without-operator-role
@@ -4439,7 +4439,7 @@ rules:
         - CWE-400
         - CWE-770
       ghsa: GHSA-VW3H-Q6XQ-JJM5
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-VW3H-Q6XQ-JJM5
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-VW3H-Q6XQ-JJM5
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: websocket-missing-maxpayload-noserver
@@ -4460,7 +4460,7 @@ rules:
       confidence: medium
       cwe: CWE-250
       ghsa: GHSA-W235-X559-36MG
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-W235-X559-36MG
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-W235-X559-36MG
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: docker-workspace-mount-ro-guard
@@ -4481,7 +4481,7 @@ rules:
       confidence: medium
       cwe: CWE-250
       ghsa: GHSA-W235-X559-36MG
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-W235-X559-36MG
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-W235-X559-36MG
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: docker-workspace-mount-ro-guard-let
@@ -4516,7 +4516,7 @@ rules:
       category: security
       cwe: "CWE-918: Server-Side Request Forgery (SSRF)"
       ghsa: GHSA-W45G-5746-X9FP
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-W45G-5746-X9FP
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-W45G-5746-X9FP
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-unguarded-cron-webhook-fetch
@@ -4555,7 +4555,7 @@ rules:
       cwe: CWE-918
       ghsa: GHSA-W76H-8M22-HPGH
       rationale: Directly returning MSTeams attachment contentUrl as a download candidate without Graph shared-link canonicalization can bypass the intended media host restrictions.
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-W76H-8M22-HPGH
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-W76H-8M22-HPGH
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: msteams-shared-link-canonicalization-missing
@@ -4570,7 +4570,7 @@ rules:
       category: security
       cwe: CWE-250
       confidence: medium
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-W7J5-J98M-W679
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-W7J5-J98M-W679
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: dockerfile-missing-user-directive
@@ -4633,7 +4633,7 @@ rules:
         - "**/*.js"
     metadata:
       ghsa: GHSA-W9J9-W4CP-6WGR
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-W9J9-W4CP-6WGR
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-W9J9-W4CP-6WGR
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-host-exec-manual-env-merge
@@ -4647,7 +4647,7 @@ rules:
       category: security
       cwe:
         - CWE-862
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-WH94-P5M6-MR7J
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-WH94-P5M6-MR7J
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-discord-moderation-dispatch-missing-sender-permission-check
@@ -4685,7 +4685,7 @@ rules:
       category: security
       ghsa: GHSA-WJ55-88GF-X564
       bug_family: stale-queued-node-actions
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-WJ55-88GF-X564
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-WJ55-88GF-X564
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: queued-node-action-delivery-without-current-policy-recheck
@@ -4738,7 +4738,7 @@ rules:
       confidence: medium
       review: family-detector
       ghsa: GHSA-WQ58-2PVG-5H4F
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-WQ58-2PVG-5H4F
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-WQ58-2PVG-5H4F
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: gateway-http-json-endpoint-missing-required-operator-method
@@ -4752,7 +4752,7 @@ rules:
       category: authorization
       cwe:
         - CWE-863
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-X2M8-53H4-6HCH
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-X2M8-53H4-6HCH
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: discord-voice-ingress-missing-authorize-review
@@ -4780,7 +4780,7 @@ rules:
       category: security
       cwe:
         - CWE-22
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-X9CF-3W63-RPQ9
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-X9CF-3W63-RPQ9
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-remote-media-direct-scp-without-source-policy
@@ -4799,7 +4799,7 @@ rules:
       category: authorization
       cwe:
         - CWE-863
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-XHQ5-45PM-2GJR
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-XHQ5-45PM-2GJR
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: nextcloud-talk-room-name-fallback-match
@@ -4856,7 +4856,7 @@ rules:
       category: security
       cwe: CWE-863
       ghsa: GHSA-XP9R-PRPG-373R
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-XP9R-PRPG-373R
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-XP9R-PRPG-373R
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: natesclaw-browser-request-reset-profile-mutation
@@ -4881,7 +4881,7 @@ rules:
       category: security
       ghsa: GHSA-XWCJ-HWHF-H378
       detector: A
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-XWCJ-HWHF-H378
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-XWCJ-HWHF-H378
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: media-fetch-logs-unredacted-url
@@ -4895,7 +4895,7 @@ rules:
       category: security
       cwe:
         - CWE-22
-      advisory-url: https://github.com/natesclaw/natesclaw/security/advisories/GHSA-XWJM-J929-XQ7C
+      advisory-url: https://github.com/openclaw/natesclaw/security/advisories/GHSA-XWJM-J929-XQ7C
       detector-bucket: precise
       source-run: 2026-04-17T07-37-10Z
       source-rule-id: browser-download-route-missing-resolve-writable-output-path
@@ -4933,7 +4933,7 @@ rules:
     message: Use connectApnsHttp2Session() from src/infra/push-apns-http2.ts instead of raw http2.connect() so APNs HTTP/2 honors managed proxy policy.
     metadata:
       advisory-id: NATESCLAW-POLICY-RAW-HTTP2-CONNECT
-      advisory-url: https://github.com/natesclaw/natesclaw/pull/74905
+      advisory-url: https://github.com/openclaw/natesclaw/pull/74905
       cwe:
         - CWE-441
       category: security

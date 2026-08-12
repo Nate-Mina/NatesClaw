@@ -1,6 +1,6 @@
 /** Bounded execution-identity facts captured at authoritative run admission. */
 import { randomUUID } from "node:crypto";
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import { type Static, Type } from "typebox";
 import { Value } from "typebox/value";
 import { redactSensitiveText } from "../logging/redact.js";

@@ -1,8 +1,8 @@
 // Workspace skill loading turns validated discovery candidates into source-aware skill entries.
 import fs from "node:fs";
 import path from "node:path";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
-import { normalizeTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
 import { canonicalizePath } from "../../agents/utils/paths.js";
 import { isDefaultStateDir } from "../../config/paths.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";

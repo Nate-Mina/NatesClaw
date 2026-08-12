@@ -65,7 +65,7 @@ describe("promotion payload validation", () => {
 
   it("rejects plugin values that are not package names", async () => {
     await expectPromotionRejected(
-      { pluginNames: ["@natesclaw/openrouter-provider@latest"] },
+      { pluginNames: ["@openclaw/openrouter-provider@latest"] },
       /pluginNames/,
     );
   });

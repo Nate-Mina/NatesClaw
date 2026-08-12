@@ -4,7 +4,7 @@ import {
   type AssistantMessage,
   type Context,
   type Model,
-} from "@natesclaw/llm-core";
+} from "@openclaw/llm-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { configureAiTransportHost, getAiTransportHost } from "../host.js";
 import { cleanupSessionResources } from "../session-resources.js";

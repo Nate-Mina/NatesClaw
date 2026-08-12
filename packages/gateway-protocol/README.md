@@ -1,11 +1,11 @@
-# `@natesclaw/gateway-protocol`
+# `@openclaw/gateway-protocol`
 
 Typed schemas, inferred TypeScript types, and runtime validators for the Natesclaw
 Gateway WebSocket protocol.
 
 The current wire protocol is version 4. General clients must use v4; authenticated
 node clients and lightweight probes may use the N-1 window during rolling upgrades.
-See the [Gateway protocol specification](https://docs.natesclaw.ai/gateway/protocol)
+See the [Gateway protocol specification](https://docs.openclaw.ai/gateway/protocol)
 for transport, authentication, roles, scopes, and complete frame examples.
 
 ## Versioning
@@ -16,7 +16,7 @@ therefore identifies the Natesclaw source release that produced the schemas; it 
 not the wire protocol number.
 
 The wire protocol integer is versioned separately. Its current value is exported
-as `PROTOCOL_VERSION` from `@natesclaw/gateway-protocol/version`. Gateway protocol
+as `PROTOCOL_VERSION` from `@openclaw/gateway-protocol/version`. Gateway protocol
 changes are additive first. An incompatible wire change requires an explicit
 protocol-version decision and coordinated client follow-through. See
 [`CHANGELOG.md`](./CHANGELOG.md) for the wire and schema history.
@@ -24,26 +24,26 @@ protocol-version decision and coordinated client follow-through. See
 ## Install
 
 ```bash
-npm install @natesclaw/gateway-protocol
+npm install @openclaw/gateway-protocol
 ```
 
 ## Entry points
 
-- `@natesclaw/gateway-protocol` exports runtime validators, selected schemas, error
+- `@openclaw/gateway-protocol` exports runtime validators, selected schemas, error
   formatting, and their TypeScript types. This is the main TypeBox-backed entry.
-- `@natesclaw/gateway-protocol/schema` exports the TypeBox schema graph, including
+- `@openclaw/gateway-protocol/schema` exports the TypeBox schema graph, including
   the `ProtocolSchemas` registry used by generators.
-- `@natesclaw/gateway-protocol/frame-guards` exports dependency-free structural
+- `@openclaw/gateway-protocol/frame-guards` exports dependency-free structural
   guards for gateway event and response envelopes.
-- `@natesclaw/gateway-protocol/client-info` exports client ID, mode, and capability
+- `@openclaw/gateway-protocol/client-info` exports client ID, mode, and capability
   registries plus normalization helpers.
-- `@natesclaw/gateway-protocol/connect-error-details` exports structured connect
+- `@openclaw/gateway-protocol/connect-error-details` exports structured connect
   error readers and recovery metadata.
-- `@natesclaw/gateway-protocol/gateway-error-details` exports helpers for reading
+- `@openclaw/gateway-protocol/gateway-error-details` exports helpers for reading
   structured details from general gateway errors.
-- `@natesclaw/gateway-protocol/startup-unavailable` exports startup retry constants
+- `@openclaw/gateway-protocol/startup-unavailable` exports startup retry constants
   and helpers.
-- `@natesclaw/gateway-protocol/version` exports the current and minimum accepted
+- `@openclaw/gateway-protocol/version` exports the current and minimum accepted
   protocol versions.
 
 The `frame-guards`, `client-info`, `connect-error-details`, `gateway-error-details`,
@@ -58,7 +58,7 @@ The compiled validators are callable type guards. Their `errors` property contai
 the most recent validation errors.
 
 ```ts
-import { formatValidationErrors, validateRequestFrame } from "@natesclaw/gateway-protocol";
+import { formatValidationErrors, validateRequestFrame } from "@openclaw/gateway-protocol";
 
 const frame: unknown = JSON.parse(inboundText);
 
@@ -80,7 +80,7 @@ check dispatch-critical envelope fields and intentionally allow additive payload
 fields.
 
 ```ts
-import { isGatewayEventFrame } from "@natesclaw/gateway-protocol/frame-guards";
+import { isGatewayEventFrame } from "@openclaw/gateway-protocol/frame-guards";
 
 const frame: unknown = JSON.parse(inboundText);
 
@@ -94,8 +94,8 @@ if (isGatewayEventFrame(frame)) {
 Protocol levels and client capabilities live in TypeBox-free entry points.
 
 ```ts
-import { GATEWAY_CLIENT_CAPS } from "@natesclaw/gateway-protocol/client-info";
-import { MIN_CLIENT_PROTOCOL_VERSION, PROTOCOL_VERSION } from "@natesclaw/gateway-protocol/version";
+import { GATEWAY_CLIENT_CAPS } from "@openclaw/gateway-protocol/client-info";
+import { MIN_CLIENT_PROTOCOL_VERSION, PROTOCOL_VERSION } from "@openclaw/gateway-protocol/version";
 
 const handshake = {
   minProtocol: MIN_CLIENT_PROTOCOL_VERSION,

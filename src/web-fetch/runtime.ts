@@ -1,6 +1,6 @@
 /** Runtime provider selection and tool construction for the `web_fetch` tool. */
 import { createHash } from "node:crypto";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../config/types.js";
 import { logVerbose } from "../globals.js";
 import { getActivePluginRegistryVersion } from "../plugins/runtime.js";

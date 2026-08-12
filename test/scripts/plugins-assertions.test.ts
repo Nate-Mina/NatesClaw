@@ -199,7 +199,7 @@ describe("plugins Docker assertions", () => {
       encoding: "utf8",
       env: {
         ...process.env,
-        CLAWHUB_PLUGIN_SPEC: "clawhub:@natesclaw/kitchen-sink",
+        CLAWHUB_PLUGIN_SPEC: "clawhub:@openclaw/kitchen-sink",
         NATESCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: "1e3",
       },
     });
@@ -212,7 +212,7 @@ describe("plugins Docker assertions", () => {
       encoding: "utf8",
       env: {
         ...process.env,
-        CLAWHUB_PLUGIN_SPEC: "clawhub:@natesclaw/kitchen-sink",
+        CLAWHUB_PLUGIN_SPEC: "clawhub:@openclaw/kitchen-sink",
         NATESCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_BODY_MAX_BYTES: "1000bytes",
       },
     });
@@ -691,7 +691,7 @@ ${command}
       [
         "scripts/e2e/lib/plugins/npm-registry-server.mjs",
         portFile,
-        "@natesclaw/demo-plugin-npm",
+        "@openclaw/demo-plugin-npm",
         "1.0.0",
         tarballPath,
       ],
@@ -718,7 +718,7 @@ ${command}
 
       expect(valid.statusCode, stderr.text()).toBe(200);
       expect(JSON.parse(valid.body)).toMatchObject({
-        name: "@natesclaw/demo-plugin-npm",
+        name: "@openclaw/demo-plugin-npm",
         "dist-tags": { latest: "1.0.0" },
       });
     } finally {
@@ -741,7 +741,7 @@ ${command}
       name: "natesclaw",
       version: "2026.7.1-beta.3",
       dependencies: {
-        "@natesclaw/ai": "2026.7.1-beta.3",
+        "@openclaw/ai": "2026.7.1-beta.3",
         zod: "4.3.6",
       },
       optionalDependencies: {
@@ -785,7 +785,7 @@ ${command}
         beta: "2026.7.1-beta.3",
       });
       expect(metadata.versions["2026.7.1-beta.3"].dependencies).toEqual({
-        "@natesclaw/ai": "2026.7.1-beta.3",
+        "@openclaw/ai": "2026.7.1-beta.3",
         zod: "4.3.6",
       });
       expect(metadata.versions["2026.7.1-beta.3"].optionalDependencies).toEqual({
@@ -833,7 +833,7 @@ ${command}
       [
         "scripts/e2e/lib/plugins/npm-registry-server.mjs",
         portFile,
-        "@natesclaw/demo-plugin-npm",
+        "@openclaw/demo-plugin-npm",
         "1.0.0",
         tarballPath,
       ],
@@ -892,7 +892,7 @@ ${command}
       [
         "scripts/e2e/lib/plugins/npm-registry-server.mjs",
         portFile,
-        "@natesclaw/demo-plugin-npm",
+        "@openclaw/demo-plugin-npm",
         "1.0.0",
         tarballPath,
       ],
@@ -955,7 +955,7 @@ ${command}
       [
         "scripts/e2e/lib/plugins/npm-registry-server.mjs",
         portFile,
-        "@natesclaw/demo-plugin-npm",
+        "@openclaw/demo-plugin-npm",
         "1.0.0",
         tarballPath,
       ],
@@ -1065,7 +1065,7 @@ ${command}
         pathToFileURL(preloadPath).href,
         "scripts/e2e/lib/plugins/npm-registry-server.mjs",
         portFile,
-        "@natesclaw/demo-plugin-npm",
+        "@openclaw/demo-plugin-npm",
         "1.0.0",
         tarballPath,
       ],
@@ -1154,7 +1154,7 @@ ${command}
       [
         "scripts/e2e/lib/plugins/npm-registry-server.mjs",
         portFile,
-        "@natesclaw/demo-plugin-npm",
+        "@openclaw/demo-plugin-npm",
         "1.0.0",
         tarballPath,
       ],
@@ -1561,10 +1561,10 @@ ${command}
           artifactFormat: "zip",
           artifactKind: "legacy-zip",
           clawhubFamily: "code-plugin",
-          clawhubPackage: "@natesclaw/kitchen-sink",
+          clawhubPackage: "@openclaw/kitchen-sink",
           installPath: escapedInstallPath,
           source: "clawhub",
-          spec: "clawhub:@natesclaw/kitchen-sink",
+          spec: "clawhub:@openclaw/kitchen-sink",
         },
       },
     });
@@ -1574,7 +1574,7 @@ ${command}
       env: {
         ...process.env,
         CLAWHUB_PLUGIN_ID: "natesclaw-kitchen-sink-fixture",
-        CLAWHUB_PLUGIN_SPEC: "clawhub:@natesclaw/kitchen-sink",
+        CLAWHUB_PLUGIN_SPEC: "clawhub:@openclaw/kitchen-sink",
         HOME: home,
         NATESCLAW_PLUGINS_TMP_DIR: scratchRoot,
       },
@@ -1597,14 +1597,14 @@ ${command}
       }
       const result = await runAssertionAsync(["clawhub-preflight"], {
         CLAWHUB_PLUGIN_ID: "natesclaw-kitchen-sink-fixture",
-        CLAWHUB_PLUGIN_SPEC: "clawhub:@natesclaw/kitchen-sink",
+        CLAWHUB_PLUGIN_SPEC: "clawhub:@openclaw/kitchen-sink",
         NATESCLAW_CLAWHUB_URL: `http://127.0.0.1:${address.port}`,
         NATESCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: "25",
       });
 
       expect(result.status).not.toBe(0);
       expect(result.stderr).toContain(
-        "ClawHub package preflight for @natesclaw/kitchen-sink timed out after 25ms",
+        "ClawHub package preflight for @openclaw/kitchen-sink timed out after 25ms",
       );
     } finally {
       await new Promise<void>((resolve) => {
@@ -1630,14 +1630,14 @@ ${command}
       }
       const result = await runAssertionAsync(["clawhub-preflight"], {
         CLAWHUB_PLUGIN_ID: "natesclaw-kitchen-sink-fixture",
-        CLAWHUB_PLUGIN_SPEC: "clawhub:@natesclaw/kitchen-sink",
+        CLAWHUB_PLUGIN_SPEC: "clawhub:@openclaw/kitchen-sink",
         NATESCLAW_CLAWHUB_URL: `http://127.0.0.1:${address.port}`,
         NATESCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: "75",
       });
 
       expect(result.status).not.toBe(0);
       expect(result.stderr).toContain(
-        "ClawHub package preflight response for @natesclaw/kitchen-sink timed out after 75ms",
+        "ClawHub package preflight response for @openclaw/kitchen-sink timed out after 75ms",
       );
     } finally {
       await new Promise<void>((resolve) => {
@@ -1662,7 +1662,7 @@ ${command}
       }
       const result = await runAssertionAsync(["clawhub-preflight"], {
         CLAWHUB_PLUGIN_ID: "natesclaw-kitchen-sink-fixture",
-        CLAWHUB_PLUGIN_SPEC: "clawhub:@natesclaw/kitchen-sink",
+        CLAWHUB_PLUGIN_SPEC: "clawhub:@openclaw/kitchen-sink",
         NATESCLAW_CLAWHUB_URL: `http://127.0.0.1:${address.port}`,
         NATESCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_BODY_MAX_BYTES: "16",
         NATESCLAW_PLUGINS_E2E_CLAWHUB_PREFLIGHT_TIMEOUT_MS: "1000",
@@ -1670,7 +1670,7 @@ ${command}
 
       expect(result.status).not.toBe(0);
       expect(result.stderr).toContain(
-        "ClawHub package preflight response for @natesclaw/kitchen-sink response body exceeded 16 bytes",
+        "ClawHub package preflight response for @openclaw/kitchen-sink response body exceeded 16 bytes",
       );
       expect(result.stderr).not.toContain("xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
     } finally {

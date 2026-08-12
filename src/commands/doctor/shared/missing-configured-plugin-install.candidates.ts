@@ -1,4 +1,4 @@
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import { listRawChannelPluginCatalogEntries } from "../../../channels/plugins/catalog.js";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import type { PluginInstallRecord } from "../../../config/types.plugins.js";

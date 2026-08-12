@@ -1,8 +1,8 @@
 // Builds diagnostics for Codex plugin config and provider wiring.
-import { collectConfiguredModelRefs } from "@natesclaw/model-catalog-core/configured-model-refs";
-import { parseModelCatalogRef } from "@natesclaw/model-catalog-core/model-catalog-refs";
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { collectConfiguredModelRefs } from "@openclaw/model-catalog-core/configured-model-refs";
+import { parseModelCatalogRef } from "@openclaw/model-catalog-core/model-catalog-refs";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import {
   isDefaultAgentRuntimeId,
   normalizeOptionalAgentRuntimeId,

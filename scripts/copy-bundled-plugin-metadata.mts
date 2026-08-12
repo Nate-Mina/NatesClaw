@@ -104,7 +104,7 @@ function isManifestlessBundledRuntimeSupportPackage(params: {
     isRecord(params.packageJson) && typeof params.packageJson.name === "string"
       ? params.packageJson.name
       : "";
-  if (packageName !== `@natesclaw/${params.dirName}`) {
+  if (packageName !== `@openclaw/${params.dirName}`) {
     return false;
   }
   return params.topLevelPublicSurfaceEntries.length > 0;

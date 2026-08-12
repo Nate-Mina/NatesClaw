@@ -11,7 +11,7 @@ Adds media understanding provider support. Adds realtime transcription provider 
 
 ## Distribution
 
-- Package: `@natesclaw/elevenlabs-speech`
+- Package: `@openclaw/elevenlabs-speech`
 - Install route: included in Natesclaw
 
 ## Surface

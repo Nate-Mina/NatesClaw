@@ -14,9 +14,9 @@ vi.mock("./media-services.js", () => ({
   convertHeicToJpeg: (...args: unknown[]) => convertHeicToJpegMock(...args),
 }));
 
-vi.mock("@natesclaw/media-core/mime", async () => {
-  const actual = await vi.importActual<typeof import("@natesclaw/media-core/mime")>(
-    "@natesclaw/media-core/mime",
+vi.mock("@openclaw/media-core/mime", async () => {
+  const actual = await vi.importActual<typeof import("@openclaw/media-core/mime")>(
+    "@openclaw/media-core/mime",
   );
   return { ...actual, detectMime: (...args: unknown[]) => detectMimeMock(...args) };
 });

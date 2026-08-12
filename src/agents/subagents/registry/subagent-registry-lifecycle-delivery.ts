@@ -1,5 +1,5 @@
-import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
-import { sliceUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
+import { sliceUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import { resolveSessionStorePathCore } from "../../../config/sessions/paths.js";
 import {
   loadSessionEntryReadOnly,

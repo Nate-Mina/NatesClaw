@@ -16,9 +16,9 @@ import {
   isLegacyIpv4Literal,
   parseCanonicalIpAddress,
   parseLooseIpAddress,
-} from "@natesclaw/net-policy/ip";
-import { expectDefined } from "@natesclaw/normalization-core";
-import { normalizeUniqueStringEntries } from "@natesclaw/normalization-core/string-normalization";
+} from "@openclaw/net-policy/ip";
+import { expectDefined } from "@openclaw/normalization-core";
+import { normalizeUniqueStringEntries } from "@openclaw/normalization-core/string-normalization";
 import type { Dispatcher } from "undici";
 import { normalizeHostname } from "./hostname.js";
 import {

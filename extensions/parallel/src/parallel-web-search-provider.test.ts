@@ -1,4 +1,4 @@
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createStreamingResponse } from "../../test-support/streaming-error-response.js";
 type EndpointCall = {
@@ -181,7 +181,7 @@ describe("parallel web search provider", () => {
     expect(
       testing.resolveParallelSearchEndpoint({ baseUrl: "ftp://proxy.example/parallel" }),
     ).toEqual({
-      docs: "https://docs.natesclaw.ai/tools/parallel-search",
+      docs: "https://docs.openclaw.ai/tools/parallel-search",
       error: "invalid_base_url",
       message:
         "plugins.entries.parallel.config.webSearch.baseUrl must be a valid http(s) URL. Got: ftp://proxy.example/parallel",
@@ -296,7 +296,7 @@ describe("parallel web search provider", () => {
       error: "missing_parallel_api_key",
       message:
         "web_search (parallel) needs a Parallel API key. Set PARALLEL_API_KEY in the Gateway environment, or configure plugins.entries.parallel.config.webSearch.apiKey.",
-      docs: "https://docs.natesclaw.ai/tools/parallel-search",
+      docs: "https://docs.openclaw.ai/tools/parallel-search",
     });
   });
   it("identifies the plugin via a versioned User-Agent header", () => {

@@ -1,11 +1,11 @@
-# @natesclaw/diffs
+# @openclaw/diffs
 
 Read-only diff viewer plugin for **Natesclaw** agents.
 
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/diffs
+natesclaw plugins install @openclaw/diffs
 ```
 
 Restart the Gateway after installing or updating the plugin.
@@ -121,12 +121,12 @@ Explicit tool parameters still win over these defaults.
 
 ## Docs
 
-- https://docs.natesclaw.ai/tools/diffs
+- https://docs.openclaw.ai/tools/diffs
 
 ## Package
 
 - Plugin id: `diffs`
-- Package: `@natesclaw/diffs`
+- Package: `@openclaw/diffs`
 - Minimum Natesclaw host: `2026.4.30`
 
 Security options:

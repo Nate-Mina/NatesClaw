@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/sdk",
+  "name": "@openclaw/sdk",
   "version": "0.0.0-private",
   "private": true,
   "files": [
@@ -19,7 +19,7 @@
     "build": "tsdown src/index.ts --no-config --platform node --format esm --dts --out-dir dist --clean"
   },
   "dependencies": {
-    "@natesclaw/gateway-client": "workspace:*",
-    "@natesclaw/normalization-core": "workspace:*"
+    "@openclaw/gateway-client": "workspace:*",
+    "@openclaw/normalization-core": "workspace:*"
   }
 }

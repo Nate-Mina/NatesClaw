@@ -3,9 +3,9 @@
  *
  * Routes completion payloads through gateway/channel/session paths and records delivery evidence.
  */
-import { clampTimerTimeoutMs } from "@natesclaw/normalization-core/number-coercion";
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
-import { normalizeUniqueTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
+import { clampTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeUniqueTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
 import { completionRequiresMessageToolDelivery } from "../../../auto-reply/reply/completion-delivery-policy.js";
 import { sanitizePendingFinalDeliveryText } from "../../../auto-reply/reply/pending-final-delivery.js";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";

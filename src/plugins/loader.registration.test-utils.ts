@@ -555,7 +555,7 @@ describe("loadNatesclawPlugins", () => {
     fs.writeFileSync(
       path.join(scopedDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/scoped-provider",
+        name: "@openclaw/scoped-provider",
         natesclaw: { extensions: ["./index.cjs"] },
       }),
       "utf-8",
@@ -582,7 +582,7 @@ describe("loadNatesclawPlugins", () => {
     fs.writeFileSync(
       path.join(unscopedDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/unscoped-provider",
+        name: "@openclaw/unscoped-provider",
         natesclaw: { extensions: ["./index.cjs"] },
       }),
       "utf-8",
@@ -629,7 +629,7 @@ describe("loadNatesclawPlugins", () => {
     fs.writeFileSync(
       path.join(bundledPluginDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/notify-host",
+        name: "@openclaw/notify-host",
         natesclaw: { extensions: ["./index.cjs"] },
       }),
       "utf-8",

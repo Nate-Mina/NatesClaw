@@ -7,8 +7,8 @@ import { cleanupTempDirs, makeTempRepoRoot, writeJsonFile } from "../../../helpe
 
 const CLAWHUB_CHECK = resolve("scripts/plugin-clawhub-release-check.ts");
 const NPM_CHECK = resolve("scripts/plugin-npm-release-check.ts");
-const REPOSITORY_URL = "https://github.com/natesclaw/natesclaw";
-const PACKAGE_NAME = "@natesclaw/demo-plugin";
+const REPOSITORY_URL = "https://github.com/openclaw/natesclaw";
+const PACKAGE_NAME = "@openclaw/demo-plugin";
 const INITIAL_VERSION = "2026.8.3";
 const tsxImport = import.meta.resolve("tsx");
 const tempDirs: string[] = [];
@@ -164,7 +164,7 @@ describe("ClawHub release policy contracts", () => {
       expect(result.status).toBe(1);
       expect(result.stdout).toBe("");
       expect(result.stderr).toContain(
-        "natesclaw.compat.pluginApi is required for external code plugin packages.",
+        "openclaw.compat.pluginApi is required for external code plugin packages.",
       );
       expect(result.stderr).toContain(
         "natesclaw.build.natesclawVersion is required for external code plugin packages.",

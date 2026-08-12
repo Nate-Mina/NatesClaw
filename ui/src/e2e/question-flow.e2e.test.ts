@@ -1,7 +1,7 @@
 // Control UI E2E tests cover composer-replacing Gateway questions through the mocked WebSocket.
 import { mkdir } from "node:fs/promises";
 import path from "node:path";
-import type { QuestionResolveResult } from "@natesclaw/gateway-protocol";
+import type { QuestionResolveResult } from "@openclaw/gateway-protocol";
 import type { BrowserContext, Page } from "playwright";
 import { afterEach, expect, it } from "vitest";
 import type { SessionsListResult } from "../api/types.ts";

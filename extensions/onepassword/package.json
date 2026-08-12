@@ -1,15 +1,15 @@
 {
-  "name": "@natesclaw/onepassword",
+  "name": "@openclaw/onepassword",
   "version": "2026.8.1",
   "private": true,
   "description": "1Password SecretRef resolver and audited agent secrets broker for Natesclaw",
   "type": "module",
   "dependencies": {
-    "@natesclaw/fs-safe": "0.5.4",
+    "@openclaw/fs-safe": "0.5.4",
     "execa": "10.0.0"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

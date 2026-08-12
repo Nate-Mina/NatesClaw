@@ -6,7 +6,7 @@ read_when:
 title: "StepFun"
 ---
 
-StepFun ships as an external official plugin (`@natesclaw/stepfun-provider`) with two provider ids:
+StepFun ships as an external official plugin (`@openclaw/stepfun-provider`) with two provider ids:
 
 - `stepfun` for the standard endpoint
 - `stepfun-plan` for the Step Plan endpoint
@@ -18,7 +18,7 @@ Standard and Step Plan are **separate providers** with different endpoints and m
 ## Install plugin
 
 ```bash
-natesclaw plugins install @natesclaw/stepfun-provider
+natesclaw plugins install @openclaw/stepfun-provider
 natesclaw gateway restart
 ```
 

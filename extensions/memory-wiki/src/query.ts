@@ -1,7 +1,7 @@
 // Memory Wiki plugin module implements query behavior.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { filterMemorySearchHitsBySessionVisibility } from "@natesclaw/memory-core/api.js";
+import { filterMemorySearchHitsBySessionVisibility } from "@openclaw/memory-core/api.js";
 import type { MemorySearchResult } from "natesclaw/plugin-sdk/memory-core-host-runtime-files";
 import { resolveDefaultAgentId, resolveSessionAgentId } from "natesclaw/plugin-sdk/memory-host-core";
 import { getActiveMemorySearchManager } from "natesclaw/plugin-sdk/memory-host-search";

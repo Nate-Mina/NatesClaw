@@ -1,5 +1,5 @@
 // @vitest-environment node
-import type { RouteLocation } from "@natesclaw/uirouter";
+import type { RouteLocation } from "@openclaw/uirouter";
 import { describe, expect, it } from "vitest";
 import {
   canonicalPluginsRouteLocation,

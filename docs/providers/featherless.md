@@ -14,7 +14,7 @@ model ids from Featherless at runtime.
 | Property        | Value                                    |
 | --------------- | ---------------------------------------- |
 | Provider id     | `featherless`                            |
-| Package         | `@natesclaw/featherless-provider`         |
+| Package         | `@openclaw/featherless-provider`         |
 | Auth env var    | `FEATHERLESS_API_KEY`                    |
 | Onboarding flag | `--auth-choice featherless-api-key`      |
 | Direct CLI flag | `--featherless-api-key <key>`            |
@@ -27,7 +27,7 @@ model ids from Featherless at runtime.
 Install the plugin and restart the Gateway:
 
 ```bash
-natesclaw plugins install @natesclaw/featherless-provider
+natesclaw plugins install @openclaw/featherless-provider
 natesclaw gateway restart
 ```
 

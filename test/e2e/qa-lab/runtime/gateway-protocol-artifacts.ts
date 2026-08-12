@@ -75,8 +75,8 @@ export function buildInstalledProtocolInspectionScript() {
 import {
   validateConnectParams,
   validateRequestFrame,
-} from "@natesclaw/gateway-protocol";
-import { ProtocolSchemas } from "@natesclaw/gateway-protocol/schema";
+} from "@openclaw/gateway-protocol";
+import { ProtocolSchemas } from "@openclaw/gateway-protocol/schema";
 
 const requestValid = validateRequestFrame({
   type: "req",
@@ -226,7 +226,7 @@ export function buildCanonicalProtocolSchema(
 ): ProtocolSchemaDocument {
   return structuredClone({
     $schema: "http://json-schema.org/draft-07/schema#",
-    $id: "https://natesclaw.ai/protocol.schema.json",
+    $id: "https://openclaw.ai/protocol.schema.json",
     title: "Natesclaw Gateway Protocol",
     description: "Handshake, request/response, and event frames for the Gateway WebSocket.",
     oneOf: [
@@ -387,7 +387,7 @@ async function packAndInspectProtocol(params: {
   const packageJson = JSON.parse(
     await fs.readFile(path.join(unpackedRoot, "package.json"), "utf8"),
   ) as { name?: string; version?: string };
-  assert.equal(packageJson.name, "@natesclaw/gateway-protocol");
+  assert.equal(packageJson.name, "@openclaw/gateway-protocol");
   assert.ok(packageJson.version, "packed protocol package version is missing");
 
   const published = JSON.parse(
@@ -451,8 +451,8 @@ async function packAndInspectProtocol(params: {
   return {
     consumer: {
       installed: true,
-      packageSpecifier: "@natesclaw/gateway-protocol",
-      schemaSpecifier: "@natesclaw/gateway-protocol/schema",
+      packageSpecifier: "@openclaw/gateway-protocol",
+      schemaSpecifier: "@openclaw/gateway-protocol/schema",
     },
     definitions: REQUIRED_DEFINITIONS.filter((definition) =>
       Object.hasOwn(published.definitions, definition),

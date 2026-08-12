@@ -11,8 +11,8 @@ Adds Cerebras model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/cerebras-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/cerebras-provider`
+- Package: `@openclaw/cerebras-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/cerebras-provider`
 
 ## Surface
 

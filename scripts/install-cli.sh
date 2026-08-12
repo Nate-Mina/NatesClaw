@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # Natesclaw CLI installer (non-interactive, no onboarding)
-# Usage: curl -fsSL --proto '=https' --tlsv1.2 https://natesclaw.ai/install-cli.sh | bash -s -- [--json] [--prefix <path>] [--version <ver>] [--node-version <ver>] [--onboard]
+# Usage: curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install-cli.sh | bash -s -- [--json] [--prefix <path>] [--version <ver>] [--node-version <ver>] [--onboard]
 
 ensure_home_env() {
   if [[ -n "${HOME:-}" && "${HOME}" != "/" && -d "${HOME}" ]]; then
@@ -1288,7 +1288,7 @@ install_natesclaw() {
 
   if [[ "${requested}" == "latest" ]]; then
     if ! env -u NPM_CONFIG_BEFORE -u npm_config_before -u NPM_CONFIG_MIN_RELEASE_AGE -u npm_config_min_release_age -u npm_config_min-release-age "$(npm_bin)" install -g --prefix "$(node_dir)" "${npm_args[@]}" "natesclaw@${resolved_requested}"; then
-      log "npm install natesclaw@latest failed; retrying natesclaw@next"
+      log "npm install openclaw@latest failed; retrying natesclaw@next"
       emit_json "{\"event\":\"step\",\"name\":\"natesclaw\",\"status\":\"retry\",\"version\":\"next\"}"
       resolved_requested="next"
       if [[ -n "${REQUIRED_COMPATIBLE_VERSION:-}" ]]; then
@@ -1350,7 +1350,7 @@ ensure_pnpm_git_prepare_allowlist() {
 
 install_natesclaw_from_git() {
   local repo_dir="$1"
-  local repo_url="https://github.com/natesclaw/natesclaw.git"
+  local repo_url="https://github.com/openclaw/natesclaw.git"
   local fresh_checkout=0
 
   if [[ -z "$repo_dir" ]]; then

@@ -11,7 +11,7 @@ const profile = process.argv[2];
 const portFile = process.argv[3];
 const artifactManifestFile = process.argv[4];
 const requireFromApp = createRequire(path.join(process.cwd(), "package.json"));
-const packageName = "@natesclaw/kitchen-sink";
+const packageName = "@openclaw/kitchen-sink";
 const pluginId = "natesclaw-kitchen-sink-fixture";
 
 async function assertPrepublishRequests(
@@ -513,7 +513,7 @@ export default definePluginEntry({
           },
           verification: {
             tier: "source-linked",
-            sourceRepo: "https://github.com/natesclaw/kitchen-sink",
+            sourceRepo: "https://github.com/openclaw/kitchen-sink",
             hasProvenance: false,
             scanStatus: "passed",
           },

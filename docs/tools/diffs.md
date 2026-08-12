@@ -154,7 +154,7 @@ Common aliases (`js`, `ts`, `bash`, `md`, `yml`, `c++`, `dockerfile`, `rb`, `kt`
 Install the Diff Viewer Language Pack plugin for more languages (Astro, Vue, Svelte, MDX, GraphQL, Terraform/HCL, Nix, Clojure, Elixir, Haskell, OCaml, Scala, Zig, Solidity, Verilog/VHDL, Fortran, MATLAB, LaTeX, Mermaid, Sass/Less/SCSS, Nginx, Apache, CSV, dotenv, INI, diff, and more):
 
 ```bash
-natesclaw plugins install clawhub:@natesclaw/diffs-language-pack
+natesclaw plugins install clawhub:@openclaw/diffs-language-pack
 ```
 
 Without the pack, unsupported languages still render as readable plain text. See [Diffs Language Pack plugin](/plugins/reference/diffs-language-pack) and [Shiki languages](https://shiki.style/languages) for the upstream catalog.

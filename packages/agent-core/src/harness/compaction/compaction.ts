@@ -4,12 +4,12 @@ import {
   type SimpleStreamOptions,
   type StreamFn,
   type Usage,
-} from "@natesclaw/llm-core";
+} from "@openclaw/llm-core";
 // Agent Core module implements compaction behavior.
 import {
   CHARS_PER_TOKEN_ESTIMATE,
   estimateStringChars,
-} from "@natesclaw/normalization-core/cjk-chars";
+} from "@openclaw/normalization-core/cjk-chars";
 import { resolveAgentReasoningOption } from "../../reasoning.js";
 import {
   type AgentCoreCompletionRuntimeDeps,

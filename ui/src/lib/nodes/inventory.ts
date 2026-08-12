@@ -1,4 +1,4 @@
-import { asFiniteNumber as optionalNumber } from "@natesclaw/normalization-core/number-coercion";
+import { asFiniteNumber as optionalNumber } from "@openclaw/normalization-core/number-coercion";
 import type { PresenceEntry } from "../../api/types.ts";
 // Builds the unified node/device inventory shown on the Devices page.
 // The gateway exposes two overlapping views of the same machines: paired device

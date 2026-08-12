@@ -3,8 +3,8 @@ import type { Dirent } from "node:fs";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { isRecord as hasRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalLowercaseString as normalizeString } from "@natesclaw/normalization-core/string-coerce";
+import { isRecord as hasRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalLowercaseString as normalizeString } from "@openclaw/normalization-core/string-coerce";
 import { collectConfiguredAgentHarnessRuntimes } from "../../../agents/harness-runtimes.js";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 
@@ -199,7 +199,7 @@ export async function collectCodexNativeAssetInfoNotes(params: {
   return [
     [
       `- Personal Codex CLI assets found (${counts.join(", ")}) in ${resolveCodexHome(env)} and ${resolvePersonalAgentSkillsDir(env)}; native Codex-mode agents use isolated per-agent homes and will not load them.`,
-      "- To review or promote them: install the Codex plugin (natesclaw plugins install npm:@natesclaw/codex), then run natesclaw migrate plan codex.",
+      "- To review or promote them: install the Codex plugin (natesclaw plugins install npm:@openclaw/codex), then run natesclaw migrate plan codex.",
     ].join("\n"),
   ];
 }

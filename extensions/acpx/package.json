@@ -1,10 +1,10 @@
 {
-  "name": "@natesclaw/acpx",
+  "name": "@openclaw/acpx",
   "version": "2026.8.1",
   "description": "Natesclaw ACP runtime backend with plugin-owned session and transport management.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -15,14 +15,14 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@natesclaw/acpx",
+      "npmSpec": "@openclaw/acpx",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.25",
       "requiredPlatformPackages": [

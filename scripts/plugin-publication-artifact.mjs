@@ -77,7 +77,7 @@ const ROUTES = new Set([
 ]);
 const NPM_TAGS = new Set(["latest", "alpha", "beta", "extended-stable"]);
 const CLAWHUB_TAGS = new Set(["latest", "alpha", "beta"]);
-const META_PACKAGE = "@natesclaw/meta-provider";
+const META_PACKAGE = "@openclaw/meta-provider";
 const META_PACKAGE_DIR = "extensions/meta";
 
 function sha256(bytes) {

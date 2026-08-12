@@ -28,7 +28,7 @@ function canonicalPackages(value) {
     new Set(packages).size !== packages.length ||
     packages.some((entry) => !/^@natesclaw\/[a-z0-9][a-z0-9._-]*$/u.test(entry))
   ) {
-    fail("ClawHub bootstrap approval requires a unique @natesclaw/* package set.");
+    fail("ClawHub bootstrap approval requires a unique @openclaw/* package set.");
   }
   return packages.toSorted((a, b) => (a < b ? -1 : a > b ? 1 : 0));
 }

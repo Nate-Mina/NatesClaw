@@ -8,10 +8,10 @@ import type {
   PromptResponse,
   StopReason,
 } from "@agentclientprotocol/sdk";
-import { readBool, readMetadataString, readNonNegativeInteger } from "@natesclaw/acp-core/meta";
-import type { AcpSessionStore } from "@natesclaw/acp-core/session";
-import type { AcpServerOptions } from "@natesclaw/acp-core/types";
-import { normalizeLowercaseStringOrEmpty as normalizedChatSendAckStatus } from "@natesclaw/normalization-core/string-coerce";
+import { readBool, readMetadataString, readNonNegativeInteger } from "@openclaw/acp-core/meta";
+import type { AcpSessionStore } from "@openclaw/acp-core/session";
+import type { AcpServerOptions } from "@openclaw/acp-core/types";
+import { normalizeLowercaseStringOrEmpty as normalizedChatSendAckStatus } from "@openclaw/normalization-core/string-coerce";
 import type { EventFrame } from "../../packages/gateway-protocol/src/index.js";
 import type { GatewayClient } from "../gateway/client.js";
 import { shortenHomePath } from "../utils.js";

@@ -1,8 +1,8 @@
 // Gateway session reset/delete service.
 // Rotates transcripts and coordinates lifecycle cleanup across runtimes/hooks.
 import { randomUUID } from "node:crypto";
-import { cleanupSessionResources } from "@natesclaw/ai/internal/runtime";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { cleanupSessionResources } from "@openclaw/ai/internal/runtime";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { ErrorCodes, errorShape } from "../../packages/gateway-protocol/src/index.js";
 import { getAcpSessionManager } from "../acp/control-plane/manager.js";
 import { getAcpRuntimeBackend } from "../acp/runtime/registry.js";

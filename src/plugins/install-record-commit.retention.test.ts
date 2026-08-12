@@ -18,7 +18,7 @@ function npmRecord(packageName: string, installPath: string): PluginInstallRecor
 describe("retained managed npm record commits", () => {
   it("suppresses recovery when a retained install record is removed", async () => {
     await withNatesclawTestState({ label: "retained-record-removal" }, async (state) => {
-      const packageName = "@natesclaw/retained-demo";
+      const packageName = "@openclaw/retained-demo";
       const installPath = writeManagedNpmPlugin({
         stateDir: state.stateDir,
         packageName,
@@ -50,7 +50,7 @@ describe("retained managed npm record commits", () => {
     "does not retire a package still used by a %s active install path",
     async (activePathKind) => {
       await withNatesclawTestState({ label: `retained-active-${activePathKind}` }, async (state) => {
-        const packageName = "@natesclaw/retained-active";
+        const packageName = "@openclaw/retained-active";
         const installPath = writeManagedNpmPlugin({
           stateDir: state.stateDir,
           packageName,
@@ -85,7 +85,7 @@ describe("retained managed npm record commits", () => {
     await withNatesclawTestState({ label: "retained-outside-root" }, async (state) => {
       const outsideRoot = state.path("outside-root");
       try {
-        const packageName = "@natesclaw/outside-retained";
+        const packageName = "@openclaw/outside-retained";
         const installPath = writeManagedNpmPlugin({
           stateDir: outsideRoot,
           packageName,
@@ -106,7 +106,7 @@ describe("retained managed npm record commits", () => {
 
   it("keeps npm-to-local source changes cleanup-eligible", async () => {
     await withNatesclawTestState({ label: "retained-source-change" }, async (state) => {
-      const packageName = "@natesclaw/moved-local";
+      const packageName = "@openclaw/moved-local";
       const installPath = writeManagedNpmPlugin({
         stateDir: state.stateDir,
         packageName,

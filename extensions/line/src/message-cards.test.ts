@@ -1,7 +1,7 @@
 // Line tests cover message cards plugin behavior.
 import { createServer } from "node:http";
 import { messagingApi } from "@line/bot-sdk";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { describe, expect, it } from "vitest";
 import {
   datetimePickerAction,

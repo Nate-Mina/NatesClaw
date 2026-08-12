@@ -1,8 +1,8 @@
 // Model auth tests cover provider auth status, expiry, and display helpers.
 
-import { expectDefined } from "@natesclaw/normalization-core";
-import { MAX_DATE_TIMESTAMP_MS } from "@natesclaw/normalization-core/number-coercion";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { expectDefined } from "@openclaw/normalization-core";
+import { MAX_DATE_TIMESTAMP_MS } from "@openclaw/normalization-core/number-coercion";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { NatesclawConfig } from "../../config/config.js";
 import type { ProviderPlugin } from "../../plugins/types.js";
@@ -514,7 +514,7 @@ describe("modelsAuthLoginCommand", () => {
       "Default model available: openai/gpt-5.5 (current default unchanged; run natesclaw models set openai/gpt-5.5 to apply)",
     );
     expect(runtime.log).toHaveBeenCalledWith(
-      "Tip: Codex-capable models can use native Codex web search. Configure the `web_search` tool with `natesclaw configure --section web`. Docs: https://docs.natesclaw.ai/tools/web",
+      "Tip: Codex-capable models can use native Codex web search. Configure the `web_search` tool with `natesclaw configure --section web`. Docs: https://docs.openclaw.ai/tools/web",
     );
     expect(mocks.callGateway).toHaveBeenCalledWith({
       method: "models.authStatus",

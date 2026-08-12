@@ -11,7 +11,7 @@ Natesclaw read-only diff viewer plugin and file renderer for agents.
 
 ## Distribution
 
-- Package: `@natesclaw/diffs`
+- Package: `@openclaw/diffs`
 - Install route: npm; ClawHub
 
 ## Surface

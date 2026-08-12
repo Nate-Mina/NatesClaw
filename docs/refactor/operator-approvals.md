@@ -9,7 +9,7 @@ title: "Multi-surface operator approvals"
 
 # Multi-surface operator approvals
 
-This design tracks [#103505](https://github.com/natesclaw/natesclaw/issues/103505). It replaces process-local approval authority with one Gateway-owned, SQLite-backed lifecycle. Every Gateway-owned exec or plugin/tool approval gets one stable ID, one authenticated Control UI route, atomic first-answer-wins resolution, and operator-only projections to its source and ancestor session streams.
+This design tracks [#103505](https://github.com/openclaw/natesclaw/issues/103505). It replaces process-local approval authority with one Gateway-owned, SQLite-backed lifecycle. Every Gateway-owned exec or plugin/tool approval gets one stable ID, one authenticated Control UI route, atomic first-answer-wins resolution, and operator-only projections to its source and ancestor session streams.
 
 Inline actions and deep links coexist. There is no approval-mode toggle.
 

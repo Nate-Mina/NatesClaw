@@ -1,5 +1,5 @@
-import { createAssistantMessageEventStream } from "@natesclaw/llm-core";
-import type { Api, Model, StreamFn } from "@natesclaw/llm-core";
+import { createAssistantMessageEventStream } from "@openclaw/llm-core";
+import type { Api, Model, StreamFn } from "@openclaw/llm-core";
 import { afterAll, describe, expect, it, vi } from "vitest";
 import { createApiRegistry, type ApiRegistry } from "./api-registry.js";
 import type { AiTransformTransportMessages } from "./host.js";

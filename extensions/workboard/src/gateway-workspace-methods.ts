@@ -1,4 +1,4 @@
-import type { WorkboardCard } from "@natesclaw/workboard-contract";
+import type { WorkboardCard } from "@openclaw/workboard-contract";
 // Workboard Gateway methods that can persist workspace-bearing card metadata.
 import type { NatesclawPluginApi } from "../api.js";
 import {

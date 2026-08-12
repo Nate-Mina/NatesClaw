@@ -1,5 +1,5 @@
 import "./ai-transport-runtime-host.js";
-import "@natesclaw/ai/transports";
+import "@openclaw/ai/transports";
 
 const responsesTesting = globalThis.natesclawOpenAIResponsesTransportTestApi;
 if (!responsesTesting) {

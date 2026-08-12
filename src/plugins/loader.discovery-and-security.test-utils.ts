@@ -850,7 +850,7 @@ describe("loadNatesclawPlugins", () => {
               path.join(globalDir, "package.json"),
               JSON.stringify(
                 {
-                  name: "@natesclaw/memory-lancedb",
+                  name: "@openclaw/memory-lancedb",
                   version: "2026.5.12-beta.1",
                   natesclaw: { extensions: ["./index.cjs"] },
                 },
@@ -872,8 +872,8 @@ describe("loadNatesclawPlugins", () => {
                   installs: {
                     "memory-lancedb": {
                       source: "npm",
-                      spec: "@natesclaw/memory-lancedb",
-                      resolvedName: "@natesclaw/memory-lancedb",
+                      spec: "@openclaw/memory-lancedb",
+                      resolvedName: "@openclaw/memory-lancedb",
                       resolvedVersion: "2026.5.12-beta.1",
                       installPath: globalDir,
                     },

@@ -486,7 +486,7 @@ fs.writeFileSync(
   path.join(root, "package.json"),
   `${JSON.stringify(
     {
-      name: "@natesclaw/brave-plugin",
+      name: "@openclaw/brave-plugin",
       version,
       natesclaw: { extensions: ["./index.js"] },
     },
@@ -528,7 +528,7 @@ fs.writeFileSync(
 );
 NODE
     tar -czf "$tarball" -C "$fixture_root" package
-    registry_args+=("@natesclaw/brave-plugin" "$candidate_version" "$tarball")
+    registry_args+=("@openclaw/brave-plugin" "$candidate_version" "$tarball")
   fi
 
   if [ "${#registry_args[@]}" -eq 0 ]; then
@@ -1541,9 +1541,9 @@ phase configure-plugin-registry configure_plugin_registry
 phase update-candidate update_candidate
 if [ -n "${NATESCLAW_CLAWHUB_URL:-}" ]; then
   clawhub_security_mode="required"
-  prepublish_package="@natesclaw/whatsapp"
+  prepublish_package="@openclaw/whatsapp"
   if [ "$SCENARIO" = "configured-plugin-installs" ]; then
-    prepublish_package="@natesclaw/matrix"
+    prepublish_package="@openclaw/matrix"
   fi
   # 2026.6.35 predates the release-security endpoint. The trusted fixture still
   # asserts its exact older request contract instead of accepting arbitrary IO.

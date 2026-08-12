@@ -2,7 +2,7 @@
 import {
   collectManifestModelIdNormalizationPolicies,
   normalizeProviderModelIdWithPolicies,
-} from "@natesclaw/model-catalog-core/provider-model-id-normalization";
+} from "@openclaw/model-catalog-core/provider-model-id-normalization";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginManifestRecord } from "./manifest-registry.js";
 import type { PluginManifestModelIdNormalizationProvider } from "./manifest.js";

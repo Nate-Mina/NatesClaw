@@ -17,7 +17,7 @@ on:
   workflow_dispatch:
     inputs:
       sync_website:
-        description: Sync natesclaw.ai after verification
+        description: Sync openclaw.ai after verification
         required: false
         default: false
         type: boolean
@@ -141,28 +141,28 @@ jobs:
         with:
           path: natesclaw
 
-      - name: Checkout natesclaw.ai
+      - name: Checkout openclaw.ai
         if: env.NATESCLAW_GH_TOKEN != ''
         uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10 # v6.0.3
         with:
-          repository: natesclaw/natesclaw.ai
+          repository: natesclaw/openclaw.ai
           ref: main
           token: ${{ env.NATESCLAW_GH_TOKEN }}
-          path: natesclaw.ai
+          path: openclaw.ai
 
       - name: Sync installer scripts
         if: env.NATESCLAW_GH_TOKEN != ''
         run: |
-          cp natesclaw/scripts/install.sh natesclaw.ai/public/install.sh
-          cp natesclaw/scripts/install-cli.sh natesclaw.ai/public/install-cli.sh
-          cp natesclaw/scripts/install.ps1 natesclaw.ai/public/install.ps1
-          rm -f natesclaw.ai/public/install.cmd
-          chmod +x natesclaw.ai/public/install.sh natesclaw.ai/public/install-cli.sh
+          cp natesclaw/scripts/install.sh openclaw.ai/public/install.sh
+          cp natesclaw/scripts/install-cli.sh openclaw.ai/public/install-cli.sh
+          cp natesclaw/scripts/install.ps1 openclaw.ai/public/install.ps1
+          rm -f openclaw.ai/public/install.cmd
+          chmod +x openclaw.ai/public/install.sh openclaw.ai/public/install-cli.sh
 
       - name: Check for changes
         if: env.NATESCLAW_GH_TOKEN != ''
         id: changes
-        working-directory: natesclaw.ai
+        working-directory: openclaw.ai
         run: |
           if git diff --quiet -- public/install.sh public/install-cli.sh public/install.ps1 public/install.cmd; then
             echo "changed=false" >> "$GITHUB_OUTPUT"
@@ -188,7 +188,7 @@ jobs:
 
       - name: Verify website with synced installers
         if: steps.changes.outputs.changed == 'true'
-        working-directory: natesclaw.ai
+        working-directory: openclaw.ai
         run: |
           bash -n public/install.sh public/install-cli.sh
           shellcheck -e SC1091 public/install.sh public/install-cli.sh
@@ -197,7 +197,7 @@ jobs:
 
       - name: Commit and push website sync
         if: steps.changes.outputs.changed == 'true'
-        working-directory: natesclaw.ai
+        working-directory: openclaw.ai
         run: |
           git config user.name "natesclaw-installer-sync[bot]"
           git config user.email "natesclaw-installer-sync[bot]@users.noreply.github.com"

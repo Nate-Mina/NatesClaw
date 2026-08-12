@@ -1,7 +1,7 @@
 // Section-level value and row builders for the standard status report.
 // These helpers own compact operator text for agents, tasks, memory, health, sessions, and footers.
 
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import {
   buildPairingConnectRecoveryTitle,
   describePairingConnectRequirement,
@@ -400,7 +400,7 @@ export function buildStatusModelSelectionLines(params: {
       `  Session selected: ${selected}`,
       reasonLine,
       clearLine,
-      "  Docs: https://docs.natesclaw.ai/concepts/models#selection-source-and-fallback-behavior",
+      "  Docs: https://docs.openclaw.ai/concepts/models#selection-source-and-fallback-behavior",
     );
   }
   if (mismatches.length > limit) {
@@ -418,8 +418,8 @@ export function buildStatusFooterLines(params: {
   gatewayReachable: boolean;
 }) {
   return [
-    "FAQ: https://docs.natesclaw.ai/faq",
-    "Troubleshooting: https://docs.natesclaw.ai/troubleshooting",
+    "FAQ: https://docs.openclaw.ai/faq",
+    "Troubleshooting: https://docs.openclaw.ai/troubleshooting",
     ...(params.updateHint ? ["", params.warn(params.updateHint)] : []),
     "Next steps:",
     `  Need to share?      ${params.formatCliCommand("natesclaw status --all")}`,

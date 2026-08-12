@@ -12,7 +12,7 @@
  *   oc://FILE/section/+0           → indexed insertion
  *   oc://FILE/+                    → file-root insertion
  *
- * @module @natesclaw/oc-path/universal
+ * @module @openclaw/oc-path/universal
  */
 
 import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";

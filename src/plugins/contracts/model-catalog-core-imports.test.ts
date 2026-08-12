@@ -6,30 +6,30 @@ import { listGitTrackedFiles } from "../../test-utils/repo-files.js";
 
 const REPO_ROOT = path.resolve(import.meta.dirname, "../../..");
 const LEGACY_MODEL_CATALOG_BRIDGES = new Map([
-  [path.join(REPO_ROOT, "src/agents/provider-id.ts"), "@natesclaw/model-catalog-core/provider-id"],
+  [path.join(REPO_ROOT, "src/agents/provider-id.ts"), "@openclaw/model-catalog-core/provider-id"],
   [
     path.join(REPO_ROOT, "src/model-catalog/refs.ts"),
-    "@natesclaw/model-catalog-core/model-catalog-refs",
+    "@openclaw/model-catalog-core/model-catalog-refs",
   ],
   [
     path.join(REPO_ROOT, "src/model-catalog/normalize.ts"),
-    "@natesclaw/model-catalog-core/model-catalog-normalize",
+    "@openclaw/model-catalog-core/model-catalog-normalize",
   ],
   [
     path.join(REPO_ROOT, "src/model-catalog/types.ts"),
-    "@natesclaw/model-catalog-core/model-catalog-types",
+    "@openclaw/model-catalog-core/model-catalog-types",
   ],
   [
     path.join(REPO_ROOT, "src/config/model-refs.ts"),
-    "@natesclaw/model-catalog-core/configured-model-refs",
+    "@openclaw/model-catalog-core/configured-model-refs",
   ],
   [
     path.join(REPO_ROOT, "src/shared/provider-model-id-normalization.ts"),
-    "@natesclaw/model-catalog-core/provider-model-id-normalization",
+    "@openclaw/model-catalog-core/provider-model-id-normalization",
   ],
   [
     path.join(REPO_ROOT, "src/plugin-sdk/provider-model-id-normalize.ts"),
-    "@natesclaw/model-catalog-core/provider-model-id-normalize",
+    "@openclaw/model-catalog-core/provider-model-id-normalize",
   ],
 ]);
 

@@ -11,7 +11,7 @@ Natesclaw Raft channel plugin for secure CLI wake bridges.
 
 ## Distribution
 
-- Package: `@natesclaw/raft`
+- Package: `@openclaw/raft`
 - Install route: npm; ClawHub
 
 ## Surface

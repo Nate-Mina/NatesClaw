@@ -112,7 +112,7 @@ docker_e2e_restore_package_dist_from_image() (
   fi
   if [ "$requires_ai_dist" = "1" ] && \
     ! docker_e2e_docker_cmd cp \
-      "${container_id}:/app/node_modules/@natesclaw/ai/dist" \
+      "${container_id}:/app/node_modules/@openclaw/ai/dist" \
       "$temp_dir/ai-dist"; then
     cleanup_restore_package_dist
     return 1

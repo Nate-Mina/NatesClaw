@@ -197,7 +197,7 @@ const BLOCKS_FINAL_PRESENTATION = {
       type: "buttons",
       buttons: [
         { label: "Approve release", action: { type: "callback", value: "approve-release" } },
-        { label: "Release notes", url: "https://docs.natesclaw.ai/release" },
+        { label: "Release notes", url: "https://docs.openclaw.ai/release" },
       ],
     },
   ],

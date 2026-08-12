@@ -22,7 +22,7 @@ async function initializeRepository(root: string): Promise<string> {
     "remote",
     "add",
     "origin",
-    "https://github.com/natesclaw/natesclaw.git",
+    "https://github.com/openclaw/natesclaw.git",
   ]);
   await fs.writeFile(path.join(repo, "README.md"), "registered\n");
   await execFileAsync("git", ["-C", repo, "add", "README.md"]);
@@ -119,7 +119,7 @@ test("projects.list exposes checkout details only at write scope", async () => {
             {
               id: "registered",
               repoRoot: repo,
-              originUrl: "https://github.com/natesclaw/natesclaw.git",
+              originUrl: "https://github.com/openclaw/natesclaw.git",
             },
           ],
         },

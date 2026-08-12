@@ -1,8 +1,8 @@
 // Node invoke wake tests cover APNs wake attempts, reconnect waits, nudge
 // throttling, command policy, and foreground-restricted command handling.
 
-import { expectDefined } from "@natesclaw/normalization-core";
-import { MAX_TIMER_TIMEOUT_MS } from "@natesclaw/normalization-core/number-coercion";
+import { expectDefined } from "@openclaw/normalization-core";
+import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ErrorCodes } from "../../../packages/gateway-protocol/src/index.js";
 import { createOperationalRunInstanceRef } from "../../agents/admitted-run-context.js";
@@ -276,7 +276,7 @@ function directRegistration(nodeId: string) {
     nodeId,
     transport: "direct" as const,
     token: "abcd1234abcd1234abcd1234abcd1234",
-    topic: "ai.natesclaw.ios",
+    topic: "ai.openclaw.ios",
     environment: "sandbox" as const,
     updatedAtMs: 1,
   };
@@ -289,7 +289,7 @@ function relayRegistration(nodeId: string) {
     relayHandle: "relay-handle-123",
     sendGrant: "send-grant-123",
     installationId: "install-123",
-    topic: "ai.natesclaw.ios",
+    topic: "ai.openclaw.ios",
     environment: "production" as const,
     distribution: "official" as const,
     updatedAtMs: 1,
@@ -311,7 +311,7 @@ function mockDirectWakeConfig(nodeId: string, overrides: WakeResultOverrides = {
     ok: true,
     status: 200,
     tokenSuffix: "1234abcd",
-    topic: "ai.natesclaw.ios",
+    topic: "ai.openclaw.ios",
     environment: "sandbox",
     transport: "direct",
     ...overrides,
@@ -337,7 +337,7 @@ function mockRelayWakeConfig(nodeId: string, overrides: WakeResultOverrides = {}
     ok: true,
     status: 200,
     tokenSuffix: "abcd1234",
-    topic: "ai.natesclaw.ios",
+    topic: "ai.openclaw.ios",
     environment: "production",
     transport: "relay",
     ...overrides,
@@ -1110,7 +1110,7 @@ describe("node.invoke APNs wake path", () => {
       ok: true,
       status: 200,
       tokenSuffix: "1234abcd",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
       transport: "direct",
     });
@@ -1143,7 +1143,7 @@ describe("node.invoke APNs wake path", () => {
       ok: true,
       status: 200,
       tokenSuffix: "1234abcd",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
       transport: "direct",
     });
@@ -1371,7 +1371,7 @@ describe("node.invoke APNs wake path", () => {
               ok: true,
               status: 200,
               tokenSuffix: "1234abcd",
-              topic: "ai.natesclaw.ios",
+              topic: "ai.openclaw.ios",
               environment: "sandbox",
               transport: "direct",
             });
@@ -1412,7 +1412,7 @@ describe("node.invoke APNs wake path", () => {
         ok: true,
         status: 200,
         tokenSuffix: "1234abcd",
-        topic: "ai.natesclaw.ios",
+        topic: "ai.openclaw.ios",
         environment: "sandbox",
         transport: "direct",
       };
@@ -1449,7 +1449,7 @@ describe("node.invoke APNs wake path", () => {
               ok: true,
               status: 200,
               tokenSuffix: "1234abcd",
-              topic: "ai.natesclaw.ios",
+              topic: "ai.openclaw.ios",
               environment: "sandbox",
               transport: "direct",
             });
@@ -1756,7 +1756,7 @@ describe("node.invoke APNs wake path", () => {
         status: 410,
         reason: "Unregistered",
         tokenSuffix: "abcd1234",
-        topic: "ai.natesclaw.ios",
+        topic: "ai.openclaw.ios",
         environment: "production",
         transport: "relay",
       },
@@ -1816,7 +1816,7 @@ describe("node.invoke APNs wake path", () => {
       ok: true,
       status: 200,
       tokenSuffix: "1234abcd",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
       transport: "direct",
     });
@@ -2205,7 +2205,7 @@ describe("node.invoke APNs wake path", () => {
       ok: true,
       status: 200,
       tokenSuffix: "1234abcd",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
       transport: "direct",
     });

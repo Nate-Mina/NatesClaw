@@ -74,7 +74,7 @@ This guide assumes Ubuntu or Debian on Hetzner. On another Linux VPS, map packag
 
   <Step title="Clone the Natesclaw repository">
     ```bash
-    git clone https://github.com/natesclaw/natesclaw.git
+    git clone https://github.com/openclaw/natesclaw.git
     cd natesclaw
     ```
 

@@ -1,4 +1,4 @@
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   MAX_TOOL_SEARCH_RESULTS,

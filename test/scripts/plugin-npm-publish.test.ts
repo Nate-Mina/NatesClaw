@@ -32,7 +32,7 @@ function makePackage(version: string): { packageDir: string; path: string; root:
   mkdirSync(binDir, { recursive: true });
   writeFileSync(
     join(packageDir, "package.json"),
-    JSON.stringify({ name: "@natesclaw/demo", version }),
+    JSON.stringify({ name: "@openclaw/demo", version }),
   );
   const npmPath = join(binDir, "npm");
   writeFileSync(npmPath, "#!/bin/sh\nexit 1\n");
@@ -70,7 +70,7 @@ describe("plugin npm publish wrapper", () => {
     expect(result.status).toBe(0);
     expect(result.stdout).toContain(`Resolved repository root: ${fixture.root}`);
     expect(result.stdout).toContain(`Resolved package dir: ${fixture.packageDir}`);
-    expect(result.stdout).toContain("Resolved package name: @natesclaw/demo");
+    expect(result.stdout).toContain("Resolved package name: @openclaw/demo");
   });
 
   it("requires an explicit artifact directory for real pack mode", () => {

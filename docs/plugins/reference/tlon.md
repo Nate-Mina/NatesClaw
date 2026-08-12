@@ -11,7 +11,7 @@ Natesclaw Tlon/Urbit channel plugin for chat workflows.
 
 ## Distribution
 
-- Package: `@natesclaw/tlon`
+- Package: `@openclaw/tlon`
 - Install route: npm; ClawHub
 
 ## Surface

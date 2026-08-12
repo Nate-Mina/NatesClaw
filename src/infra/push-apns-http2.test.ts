@@ -1,6 +1,6 @@
 // Covers APNs HTTP/2 session and proxy behavior.
 import type http2 from "node:http2";
-import { MAX_TIMER_TIMEOUT_MS } from "@natesclaw/normalization-core/number-coercion";
+import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   registerActiveManagedProxyUrl,
@@ -8,7 +8,7 @@ import {
 } from "./net/proxy/active-proxy-state.js";
 
 type ProxyConnectTunnelParams = Parameters<
-  typeof import("@natesclaw/proxyline").openProxyConnectTunnel
+  typeof import("@openclaw/proxyline").openProxyConnectTunnel
 >[0];
 
 const {
@@ -137,7 +137,7 @@ vi.mock("node:tls", () => ({
   connect: tlsConnectSpy,
 }));
 
-vi.mock("@natesclaw/proxyline", () => ({
+vi.mock("@openclaw/proxyline", () => ({
   openProxyConnectTunnel: tunnelSpy,
 }));
 
@@ -421,7 +421,7 @@ describe("connectApnsHttp2Session", () => {
       ":method": "POST",
       ":path": `/3/device/${"0".repeat(64)}`,
       authorization: "bearer intentionally.invalid.natesclaw.proxy.validation",
-      "apns-topic": "ai.natesclaw.ios",
+      "apns-topic": "ai.openclaw.ios",
       "apns-push-type": "alert",
       "apns-priority": "10",
     });

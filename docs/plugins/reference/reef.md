@@ -11,7 +11,7 @@ Guarded end-to-end encrypted claw channel.
 
 ## Distribution
 
-- Package: `@natesclaw/reef`
+- Package: `@openclaw/reef`
 - Install route: included in Natesclaw
 
 ## Surface

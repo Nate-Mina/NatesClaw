@@ -1,6 +1,6 @@
 import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { CLAW_LAZY_ADDITIVE_STATE_COLUMN_DEFINITIONS } from "./natesclaw-state-db-additive-columns.js";
 import {
   backfillAcpReplayEstimatedBytes,

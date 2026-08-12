@@ -1,5 +1,5 @@
 // Setup plugin config helpers build plugin config from onboarding answers.
-import { normalizeStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { PluginManifestRecord } from "../plugins/manifest-registry.js";
 import type { PluginConfigUiHint } from "../plugins/types.js";

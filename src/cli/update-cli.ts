@@ -98,7 +98,7 @@ function registerUpdateFinalizationCommand(update: Command, name: string, hidden
           "- Repairs post-update plugin state after the core package already changed",
         )}\n${theme.muted("- Runs doctor repair and plugin convergence, but never restarts the Gateway")}\n\n${theme.muted(
           "Docs:",
-        )} ${formatDocsLink("/cli/update", "docs.natesclaw.ai/cli/update")}`,
+        )} ${formatDocsLink("/cli/update", "docs.openclaw.ai/cli/update")}`,
     )
     .action(async (opts, actionCommand) => {
       try {
@@ -194,7 +194,7 @@ ${theme.heading("Notes:")}
   - Downgrades require confirmation (can break configuration)
   - Skips update if the working directory has uncommitted changes
 
-${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.natesclaw.ai/cli/update")}`;
+${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.openclaw.ai/cli/update")}`;
     })
     .action(async (opts: CommanderUpdateOptions) => {
       try {
@@ -223,7 +223,7 @@ ${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.natesclaw.ai/cli/u
     .option("--timeout <seconds>", "Timeout for each update step in seconds (default: 1800)")
     .addHelpText(
       "after",
-      `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.natesclaw.ai/cli/update")}\n`,
+      `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.openclaw.ai/cli/update")}\n`,
     )
     .action(async (opts, command) => {
       try {
@@ -256,7 +256,7 @@ ${theme.muted("Docs:")} ${formatDocsLink("/cli/update", "docs.natesclaw.ai/cli/u
           "- Shows current update channel (stable/extended-stable/beta/dev) and source",
         )}\n${theme.muted("- Includes git tag/branch/SHA for source checkouts")}\n\n${theme.muted(
           "Docs:",
-        )} ${formatDocsLink("/cli/update", "docs.natesclaw.ai/cli/update")}`,
+        )} ${formatDocsLink("/cli/update", "docs.openclaw.ai/cli/update")}`,
     )
     .action(async (opts, command) => {
       try {

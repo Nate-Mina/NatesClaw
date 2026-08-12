@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { createRouter, definePage, type RouteLocation } from "@natesclaw/uirouter";
+import { createRouter, definePage, type RouteLocation } from "@openclaw/uirouter";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { RouterOutletController, selectRenderedRouteMatch } from "./router-outlet-controller.ts";
 

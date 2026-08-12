@@ -1,5 +1,5 @@
 // Doctor-only import for the retired primary device identity JSON.
-import { root, type Root } from "@natesclaw/fs-safe";
+import { root, type Root } from "@openclaw/fs-safe";
 import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import {
   openNatesclawStateDatabase,

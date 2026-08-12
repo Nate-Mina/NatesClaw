@@ -115,7 +115,7 @@ describe("memory hybrid helpers", () => {
     const merged = await mergeHybridResults({
       vectorWeight: 1,
       textWeight: 0,
-      activeProjectKeys: ["github.com/natesclaw/natesclaw"],
+      activeProjectKeys: ["github.com/openclaw/natesclaw"],
       keyword: [],
       vector: [
         {
@@ -126,7 +126,7 @@ describe("memory hybrid helpers", () => {
           source: "memory",
           snippet: "same",
           vectorScore: 0.8,
-          projectKey: "github.com/natesclaw/natesclaw",
+          projectKey: "github.com/openclaw/natesclaw",
         },
         {
           id: "global",

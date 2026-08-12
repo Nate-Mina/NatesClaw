@@ -11,7 +11,7 @@ Natesclaw Google Meet participant plugin for joining calls through Chrome or Twi
 
 ## Distribution
 
-- Package: `@natesclaw/google-meet`
+- Package: `@openclaw/google-meet`
 - Install route: npm; ClawHub
 
 ## Surface

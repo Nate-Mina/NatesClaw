@@ -20,7 +20,7 @@ function pullRequest(
     repo: "natesclaw",
     branch: "feature/demo",
     title: `Pull request ${number}`,
-    url: `https://github.com/natesclaw/natesclaw/pull/${number}`,
+    url: `https://github.com/openclaw/natesclaw/pull/${number}`,
     state,
   };
 }

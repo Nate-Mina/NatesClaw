@@ -1,4 +1,4 @@
-# @natesclaw/zalo
+# @openclaw/zalo
 
 Zalo channel plugin for Natesclaw (Bot API).
 
@@ -11,7 +11,7 @@ natesclaw plugins install ./path/to/local/zalo-plugin
 ## Install (npm)
 
 ```bash
-natesclaw plugins install @natesclaw/zalo
+natesclaw plugins install @openclaw/zalo
 ```
 
 Onboarding: select Zalo and confirm the install prompt to fetch the plugin automatically.

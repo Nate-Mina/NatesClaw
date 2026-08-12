@@ -222,7 +222,7 @@ describe("setupWizardCommand", () => {
           "Windows detected - Natesclaw runs great on WSL2!",
           "Native Windows might be trickier.",
           "Quick setup: wsl --install (one command, one reboot)",
-          "Guide: https://docs.natesclaw.ai/windows",
+          "Guide: https://docs.openclaw.ai/windows",
         ].join("\n"),
       );
     } finally {

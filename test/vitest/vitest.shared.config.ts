@@ -87,7 +87,7 @@ function hasWorkerOverride(env: Record<string, string | undefined>): boolean {
 
 function sourcePackageAlias(packageId: string, subpath?: string) {
   return {
-    find: `@natesclaw/${packageId}${subpath ? `/${subpath}` : ""}`,
+    find: `@openclaw/${packageId}${subpath ? `/${subpath}` : ""}`,
     replacement: path.join(
       repoRoot,
       "packages",
@@ -191,55 +191,55 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/qa-channel/api.js",
+        find: "@openclaw/qa-channel/api.js",
         replacement: path.join(repoRoot, "extensions", "qa-channel", "api.ts"),
       },
       {
-        find: "@natesclaw/discord/api.js",
+        find: "@openclaw/discord/api.js",
         replacement: path.join(repoRoot, "extensions", "discord", "api.ts"),
       },
       {
-        find: "@natesclaw/matrix/test-api.js",
+        find: "@openclaw/matrix/test-api.js",
         replacement: path.join(repoRoot, "extensions", "matrix", "test-api.ts"),
       },
       {
-        find: "@natesclaw/memory-core/api.js",
+        find: "@openclaw/memory-core/api.js",
         replacement: path.join(repoRoot, "extensions", "memory-core", "api.ts"),
       },
       {
-        find: "@natesclaw/slack/api.js",
+        find: "@openclaw/slack/api.js",
         replacement: path.join(repoRoot, "extensions", "slack", "api.ts"),
       },
       {
-        find: "@natesclaw/whatsapp/api.js",
+        find: "@openclaw/whatsapp/api.js",
         replacement: path.join(repoRoot, "extensions", "whatsapp", "api.ts"),
       },
       {
-        find: "@natesclaw/gateway-client/browser",
+        find: "@openclaw/gateway-client/browser",
         replacement: path.join(repoRoot, "packages", "gateway-client", "src", "browser.ts"),
       },
       {
-        find: "@natesclaw/gateway-client/readiness",
+        find: "@openclaw/gateway-client/readiness",
         replacement: path.join(repoRoot, "packages", "gateway-client", "src", "readiness.ts"),
       },
       {
-        find: "@natesclaw/gateway-client/timeouts",
+        find: "@openclaw/gateway-client/timeouts",
         replacement: path.join(repoRoot, "packages", "gateway-client", "src", "timeouts.ts"),
       },
       {
-        find: "@natesclaw/gateway-client/websocket-data",
+        find: "@openclaw/gateway-client/websocket-data",
         replacement: path.join(repoRoot, "packages", "gateway-client", "src", "websocket-data.ts"),
       },
       {
-        find: "@natesclaw/gateway-client",
+        find: "@openclaw/gateway-client",
         replacement: path.join(repoRoot, "packages", "gateway-client", "src", "index.ts"),
       },
       {
-        find: "@natesclaw/gateway-protocol/client-info",
+        find: "@openclaw/gateway-protocol/client-info",
         replacement: path.join(repoRoot, "packages", "gateway-protocol", "src", "client-info.ts"),
       },
       {
-        find: "@natesclaw/gateway-protocol/connect-error-details",
+        find: "@openclaw/gateway-protocol/connect-error-details",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -249,11 +249,11 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/gateway-protocol/frame-guards",
+        find: "@openclaw/gateway-protocol/frame-guards",
         replacement: path.join(repoRoot, "packages", "gateway-protocol", "src", "frame-guards.ts"),
       },
       {
-        find: "@natesclaw/gateway-protocol/gateway-error-details",
+        find: "@openclaw/gateway-protocol/gateway-error-details",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -263,11 +263,11 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/gateway-protocol/schema",
+        find: "@openclaw/gateway-protocol/schema",
         replacement: path.join(repoRoot, "packages", "gateway-protocol", "src", "schema.ts"),
       },
       {
-        find: "@natesclaw/gateway-protocol/startup-unavailable",
+        find: "@openclaw/gateway-protocol/startup-unavailable",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -277,11 +277,11 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/gateway-protocol/version",
+        find: "@openclaw/gateway-protocol/version",
         replacement: path.join(repoRoot, "packages", "gateway-protocol", "src", "version.ts"),
       },
       {
-        find: "@natesclaw/gateway-protocol",
+        find: "@openclaw/gateway-protocol",
         replacement: path.join(repoRoot, "packages", "gateway-protocol", "src", "index.ts"),
       },
       {
@@ -289,23 +289,23 @@ export const sharedVitestConfig = {
         replacement: path.join(repoRoot, "packages", "ai", "src", "internal", "$1.ts"),
       },
       {
-        find: "@natesclaw/ai/diagnostics",
+        find: "@openclaw/ai/diagnostics",
         replacement: path.join(repoRoot, "packages", "ai", "src", "utils", "diagnostics.ts"),
       },
       {
-        find: "@natesclaw/ai/event-stream",
+        find: "@openclaw/ai/event-stream",
         replacement: path.join(repoRoot, "packages", "ai", "src", "utils", "event-stream.ts"),
       },
       {
-        find: "@natesclaw/ai/providers",
+        find: "@openclaw/ai/providers",
         replacement: path.join(repoRoot, "packages", "ai", "src", "providers.ts"),
       },
       {
-        find: "@natesclaw/ai/types",
+        find: "@openclaw/ai/types",
         replacement: path.join(repoRoot, "packages", "ai", "src", "types.ts"),
       },
       {
-        find: "@natesclaw/ai/validation",
+        find: "@openclaw/ai/validation",
         replacement: path.join(repoRoot, "packages", "ai", "src", "validation.ts"),
       },
       {
@@ -313,27 +313,27 @@ export const sharedVitestConfig = {
         replacement: path.join(repoRoot, "packages", "ai", "src", "$1.ts"),
       },
       {
-        find: "@natesclaw/ai",
+        find: "@openclaw/ai",
         replacement: path.join(repoRoot, "packages", "ai", "src", "index.ts"),
       },
       {
-        find: "@natesclaw/llm-core/diagnostics",
+        find: "@openclaw/llm-core/diagnostics",
         replacement: path.join(repoRoot, "packages", "llm-core", "src", "utils", "diagnostics.ts"),
       },
       {
-        find: "@natesclaw/llm-core/event-stream",
+        find: "@openclaw/llm-core/event-stream",
         replacement: path.join(repoRoot, "packages", "llm-core", "src", "utils", "event-stream.ts"),
       },
       {
-        find: "@natesclaw/llm-core/validation",
+        find: "@openclaw/llm-core/validation",
         replacement: path.join(repoRoot, "packages", "llm-core", "src", "validation.ts"),
       },
       {
-        find: "@natesclaw/llm-core",
+        find: "@openclaw/llm-core",
         replacement: path.join(repoRoot, "packages", "llm-core", "src", "index.ts"),
       },
       {
-        find: "@natesclaw/model-catalog-core/configured-model-refs",
+        find: "@openclaw/model-catalog-core/configured-model-refs",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -343,7 +343,7 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/model-catalog-core/model-catalog-refs",
+        find: "@openclaw/model-catalog-core/model-catalog-refs",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -353,7 +353,7 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/model-catalog-core/model-catalog-normalize",
+        find: "@openclaw/model-catalog-core/model-catalog-normalize",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -363,7 +363,7 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/model-catalog-core/model-catalog-types",
+        find: "@openclaw/model-catalog-core/model-catalog-types",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -373,11 +373,11 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/model-catalog-core/provider-id",
+        find: "@openclaw/model-catalog-core/provider-id",
         replacement: path.join(repoRoot, "packages", "model-catalog-core", "src", "provider-id.ts"),
       },
       {
-        find: "@natesclaw/model-catalog-core/provider-model-id-normalization",
+        find: "@openclaw/model-catalog-core/provider-model-id-normalization",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -387,7 +387,7 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/model-catalog-core/provider-model-id-normalize",
+        find: "@openclaw/model-catalog-core/provider-model-id-normalize",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -397,19 +397,19 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/model-catalog-core",
+        find: "@openclaw/model-catalog-core",
         replacement: path.join(repoRoot, "packages", "model-catalog-core", "src", "index.ts"),
       },
       {
-        find: "@natesclaw/net-policy/ip",
+        find: "@openclaw/net-policy/ip",
         replacement: path.join(repoRoot, "packages", "net-policy", "src", "ip.ts"),
       },
       {
-        find: "@natesclaw/net-policy/ipv4",
+        find: "@openclaw/net-policy/ipv4",
         replacement: path.join(repoRoot, "packages", "net-policy", "src", "ipv4.ts"),
       },
       {
-        find: "@natesclaw/net-policy/redact-sensitive-url",
+        find: "@openclaw/net-policy/redact-sensitive-url",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -419,23 +419,23 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/net-policy/url-protocol",
+        find: "@openclaw/net-policy/url-protocol",
         replacement: path.join(repoRoot, "packages", "net-policy", "src", "url-protocol.ts"),
       },
       {
-        find: "@natesclaw/net-policy/url-userinfo",
+        find: "@openclaw/net-policy/url-userinfo",
         replacement: path.join(repoRoot, "packages", "net-policy", "src", "url-userinfo.ts"),
       },
       {
-        find: "@natesclaw/net-policy",
+        find: "@openclaw/net-policy",
         replacement: path.join(repoRoot, "packages", "net-policy", "src", "index.ts"),
       },
       {
-        find: "@natesclaw/normalization-core/agent-id",
+        find: "@openclaw/normalization-core/agent-id",
         replacement: path.join(repoRoot, "packages", "normalization-core", "src", "agent-id.ts"),
       },
       {
-        find: "@natesclaw/normalization-core/boolean-coercion",
+        find: "@openclaw/normalization-core/boolean-coercion",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -445,11 +445,11 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/normalization-core/cjk-chars",
+        find: "@openclaw/normalization-core/cjk-chars",
         replacement: path.join(repoRoot, "packages", "normalization-core", "src", "cjk-chars.ts"),
       },
       {
-        find: "@natesclaw/normalization-core/error-coercion",
+        find: "@openclaw/normalization-core/error-coercion",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -459,11 +459,11 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/normalization-core/json-schema",
+        find: "@openclaw/normalization-core/json-schema",
         replacement: path.join(repoRoot, "packages", "normalization-core", "src", "json-schema.ts"),
       },
       {
-        find: "@natesclaw/normalization-core/number-coercion",
+        find: "@openclaw/normalization-core/number-coercion",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -473,7 +473,7 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/normalization-core/phone-presentation",
+        find: "@openclaw/normalization-core/phone-presentation",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -483,7 +483,7 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/normalization-core/promise-like",
+        find: "@openclaw/normalization-core/promise-like",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -493,7 +493,7 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/normalization-core/record-coerce",
+        find: "@openclaw/normalization-core/record-coerce",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -503,11 +503,11 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/normalization-core/result",
+        find: "@openclaw/normalization-core/result",
         replacement: path.join(repoRoot, "packages", "normalization-core", "src", "result.ts"),
       },
       {
-        find: "@natesclaw/normalization-core/stable-node-path",
+        find: "@openclaw/normalization-core/stable-node-path",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -517,7 +517,7 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/normalization-core/string-coerce",
+        find: "@openclaw/normalization-core/string-coerce",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -527,7 +527,7 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/normalization-core/string-normalization",
+        find: "@openclaw/normalization-core/string-normalization",
         replacement: path.join(
           repoRoot,
           "packages",
@@ -537,7 +537,7 @@ export const sharedVitestConfig = {
         ),
       },
       {
-        find: "@natesclaw/normalization-core/utf16-slice",
+        find: "@openclaw/normalization-core/utf16-slice",
         replacement: path.join(repoRoot, "packages", "normalization-core", "src", "utf16-slice.ts"),
       },
       {
@@ -567,7 +567,7 @@ export const sharedVitestConfig = {
         replacement: path.join(repoRoot, "src", "plugin-sdk", `${subpath}.ts`),
       })),
       ...pluginSdkSubpaths.map((subpath) => ({
-        find: `@natesclaw/plugin-sdk/${subpath}`,
+        find: `@openclaw/plugin-sdk/${subpath}`,
         replacement: path.join(repoRoot, "packages", "plugin-sdk", "src", `${subpath}.ts`),
       })),
     ],

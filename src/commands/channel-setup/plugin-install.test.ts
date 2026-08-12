@@ -1,6 +1,6 @@
 // Channel setup plugin install tests cover install decisions, registry reloads, scoped snapshots, and trust boundaries.
 import path from "node:path";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import {
   createRequireRecord,
   bundledPluginRoot,
@@ -116,7 +116,7 @@ import {
   loadChannelSetupPluginRegistrySnapshotForChannel,
 } from "./plugin-install.js";
 
-const bundledChatNpmSpec = "@natesclaw/bundled-chat@1.2.3";
+const bundledChatNpmSpec = "@openclaw/bundled-chat@1.2.3";
 const bundledChatIntegrity = "sha512-bundled-chat";
 const bundledChatForkNpmSpec = "@vendor/bundled-chat-fork@1.2.3";
 const bundledChatForkIntegrity = "sha512-vendor-bundled-chat-fork";
@@ -482,9 +482,9 @@ describe("ensureChannelSetupPluginInstalled", () => {
       targetDir: "/tmp/wecom-natesclaw-plugin",
       version: "2026.5.4-beta.1",
       npmResolution: {
-        name: "@natesclaw/wecom",
+        name: "@openclaw/wecom",
         version: "2026.5.4-beta.1",
-        resolvedSpec: "@natesclaw/wecom@2026.5.4-beta.1",
+        resolvedSpec: "@openclaw/wecom@2026.5.4-beta.1",
       },
     });
 
@@ -501,7 +501,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
           blurb: "WeCom channel",
         },
         install: {
-          npmSpec: "@natesclaw/wecom",
+          npmSpec: "@openclaw/wecom",
         },
       },
       prompter,
@@ -511,10 +511,10 @@ describe("ensureChannelSetupPluginInstalled", () => {
 
     expect(select).not.toHaveBeenCalled();
     expectRecordFields(requireMockCallArg(installPluginFromNpmSpec, 0), "npm install args", {
-      spec: "@natesclaw/wecom@beta",
+      spec: "@openclaw/wecom@beta",
       expectedPluginId: "wecom-natesclaw-plugin",
     });
-    expect(result.cfg.plugins?.installs?.["wecom-natesclaw-plugin"]?.spec).toBe("@natesclaw/wecom");
+    expect(result.cfg.plugins?.installs?.["wecom-natesclaw-plugin"]?.spec).toBe("@openclaw/wecom");
   });
 
   it("defaults to bundled local path on beta channel when available", async () => {
@@ -689,7 +689,7 @@ describe("ensureChannelSetupPluginInstalled", () => {
         blurb: "WeCom channel",
       },
       install: {
-        npmSpec: "@natesclaw/wecom@2026.4.23",
+        npmSpec: "@openclaw/wecom@2026.4.23",
       },
     };
     installPluginFromNpmSpec.mockResolvedValue({

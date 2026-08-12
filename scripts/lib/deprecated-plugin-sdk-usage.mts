@@ -17,7 +17,7 @@ export function buildDeprecatedPluginSdkModuleSpecifiers(
     ...DEPRECATED_PLUGIN_SDK_EXTRA_SPECIFIERS,
     ...deprecatedSubpaths.map((subpath) => `natesclaw/plugin-sdk/${subpath}`),
   ];
-  // tsconfig aliases the scoped @natesclaw/plugin-sdk package to the same
+  // tsconfig aliases the scoped @openclaw/plugin-sdk package to the same
   // src/plugin-sdk modules, so ban both spellings of every deprecated specifier.
   return [...new Set(unscoped.flatMap((specifier) => [specifier, `@${specifier}`]))].toSorted(
     (a, b) => a.localeCompare(b),

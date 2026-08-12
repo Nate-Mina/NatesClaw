@@ -6,7 +6,7 @@ import net from "node:net";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { rawDataToString } from "@natesclaw/gateway-client/websocket-data";
+import { rawDataToString } from "@openclaw/gateway-client/websocket-data";
 import { WebSocket, type RawData } from "ws";
 import { PROTOCOL_VERSION } from "../../../../packages/gateway-protocol/src/index.js";
 import { clearConfigCache, clearRuntimeConfigSnapshot } from "../../../../src/config/config.js";

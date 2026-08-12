@@ -135,7 +135,7 @@ describe("listChannelCatalogEntries", () => {
     module.listChannelCatalogEntries({ ...baseline, installRecords: otherInstallRecords });
     otherInstallRecords.telegram = {
       source: "npm",
-      spec: "@natesclaw/telegram@1.0.0",
+      spec: "@openclaw/telegram@1.0.0",
     } as PluginInstallRecord;
     module.listChannelCatalogEntries({ ...baseline, installRecords: otherInstallRecords });
 
@@ -173,7 +173,7 @@ describe("listChannelCatalogEntries", () => {
     const supplied: Record<string, PluginInstallRecord> = {
       slack: {
         source: "npm",
-        spec: "@natesclaw/slack@1.0.0",
+        spec: "@openclaw/slack@1.0.0",
       } as PluginInstallRecord,
     };
 

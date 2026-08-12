@@ -11,8 +11,8 @@ Adds Chutes model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/chutes-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/chutes-provider`
+- Package: `@openclaw/chutes-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/chutes-provider`
 
 ## Surface
 

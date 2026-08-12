@@ -11,7 +11,7 @@ Adds SGLang model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/sglang-provider`
+- Package: `@openclaw/sglang-provider`
 - Install route: included in Natesclaw
 
 ## Surface

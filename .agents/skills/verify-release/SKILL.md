@@ -61,7 +61,7 @@ Use these checks only for the regular orchestrated release track.
    - Use Natesclaw itself for live registry proof:
      `natesclaw plugins search <known-plugin> --json`.
    - Install one official plugin from ClawHub in an isolated HOME:
-     `natesclaw plugins install clawhub:@natesclaw/matrix --pin`.
+     `natesclaw plugins install clawhub:@openclaw/matrix --pin`.
      Prefer `matrix` unless that plugin is not in the expected set.
 5. Release workflows:
    - Verify conclusions for release notes evidence links:

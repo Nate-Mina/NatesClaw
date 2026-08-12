@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/migrate-hermes",
+  "name": "@openclaw/migrate-hermes",
   "version": "2026.8.1",
   "private": true,
   "description": "Hermes to Natesclaw migration provider",
@@ -9,7 +9,7 @@
     "yaml": "2.9.0"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*",
+    "@openclaw/plugin-sdk": "workspace:*",
     "natesclaw": "workspace:*"
   },
   "peerDependencies": {

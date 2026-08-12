@@ -1,4 +1,4 @@
-import { normalizeStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
 
 export function mergeSkillFilters(
   channelFilter?: string[],

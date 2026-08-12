@@ -1,6 +1,6 @@
 // Transcript echo delivery sends best-effort preflight audio transcripts back
 // through deliverable message channels.
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import type { MsgContext } from "../auto-reply/templating.js";
 import type { NatesclawConfig } from "../config/types.js";
 import { logVerbose, shouldLogVerbose } from "../globals.js";

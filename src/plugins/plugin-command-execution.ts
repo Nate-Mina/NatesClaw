@@ -1,6 +1,6 @@
 /** Exact-registry plugin command execution shared by focused and compatibility runtimes. */
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import { resolveBoundAgentIdForSession } from "../agents/session-agent-binding.js";
 import { resolveConversationBindingContext } from "../channels/conversation-binding-context.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

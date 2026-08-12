@@ -757,9 +757,9 @@ subpath yet. Bundled examples:
 
 - **Anthropic**: public `api.ts` / `contract-api.ts` seam for Claude
   beta-header and `service_tier` stream helpers.
-- **`@natesclaw/openai-provider`**: `api.ts` exports provider builders,
+- **`@openclaw/openai-provider`**: `api.ts` exports provider builders,
   default-model helpers, and realtime provider builders.
-- **`@natesclaw/openrouter-provider`**: `api.ts` exports the provider builder
+- **`@openclaw/openrouter-provider`**: `api.ts` exports the provider builder
   plus onboarding/config helpers.
 
 <Warning>

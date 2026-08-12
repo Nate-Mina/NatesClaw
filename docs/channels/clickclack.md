@@ -143,7 +143,7 @@ such as Cloudflare Access:
 {
   channels: {
     clickclack: {
-      baseUrl: "https://clack.natesclaw.ai",
+      baseUrl: "https://clack.openclaw.ai",
       apiBaseUrl: "http://127.0.0.1:8484",
       token: { source: "env", provider: "default", id: "CLICKCLACK_BOT_TOKEN" },
       workspace: "default",
@@ -163,7 +163,7 @@ ClickClack in channel setup or running `natesclaw plugins enable clickclack`
 appends `clickclack` to that list. Onboarding installation uses the same
 explicit-selection behavior. These paths do not override `plugins.deny` or a
 global `plugins.enabled: false` setting. Direct
-`natesclaw plugins install @natesclaw/clickclack` follows the normal
+`natesclaw plugins install @openclaw/clickclack` follows the normal
 plugin-install policy and also records ClickClack in an existing allowlist.
 
 ## Multiple bots
@@ -214,7 +214,7 @@ setup token cannot create or synchronize channels.
       discussions: {
         enabled: true,
         workspace: "default",
-        controlUrlBase: "https://team.natesclaw.ai",
+        controlUrlBase: "https://team.openclaw.ai",
         section: "Sessions",
       },
     },

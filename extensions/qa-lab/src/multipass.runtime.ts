@@ -3,7 +3,7 @@ import { randomUUID } from "node:crypto";
 import fs from "node:fs";
 import { access, mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
-import type { NatesclawCrablineChannelDriverSelection } from "@natesclaw/crabline";
+import type { NatesclawCrablineChannelDriverSelection } from "@openclaw/crabline";
 import { runExec } from "natesclaw/plugin-sdk/process-runtime";
 import { sleep } from "natesclaw/plugin-sdk/runtime-env";
 import { appendRegularFile } from "natesclaw/plugin-sdk/security-runtime";

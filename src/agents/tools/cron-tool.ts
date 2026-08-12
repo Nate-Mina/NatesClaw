@@ -3,7 +3,7 @@
  *
  * Manages scheduled jobs, wake/run actions, delivery context, and reminder-style payload normalization.
  */
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import { parseDurationMs } from "../../cli/parse-duration.js";
 import { getRuntimeConfig } from "../../config/config.js";
 import { resolveCronCreationDelivery } from "../../cron/delivery-context.js";
@@ -308,7 +308,7 @@ Job wakeMode (main jobs): "now"(default)|"next-heartbeat". Restricted automation
             // job properties to the top level alongside `action` instead of nesting
             // them inside `job`. When `params.job` is missing or empty, reconstruct
             // a synthetic job object from any recognised top-level job fields.
-            // See: https://github.com/natesclaw/natesclaw/issues/11310
+            // See: https://github.com/openclaw/natesclaw/issues/11310
             if (isMissingOrEmptyObject(params.job)) {
               const synthetic = recoverCronObjectFromFlatParams(params);
               // Only use the synthetic job if at least one meaningful field is present

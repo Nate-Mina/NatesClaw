@@ -1,4 +1,4 @@
-import { normalizeStringifiedEntries } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeStringifiedEntries } from "@openclaw/normalization-core/string-coerce";
 import { createDeferredCore } from "../../shared/deferred.js";
 import { resolveGlobalMap } from "../../shared/global-singleton.js";
 

@@ -1,4 +1,4 @@
-import { hasNonEmptyString } from "@natesclaw/normalization-core/string-coerce";
+import { hasNonEmptyString } from "@openclaw/normalization-core/string-coerce";
 import {
   isSilentReplyPayloadText,
   isSilentReplyText,

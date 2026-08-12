@@ -24,4 +24,4 @@ export {
   type ArchiveEntryKind,
   type ArchiveExtractLimits,
   type ExtractArchiveOptions,
-} from "@natesclaw/fs-safe/archive";
+} from "@openclaw/fs-safe/archive";

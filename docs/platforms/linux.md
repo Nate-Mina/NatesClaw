@@ -35,7 +35,7 @@ the shell does not grant microphone capture to the WebKitGTK WebView, so
 Control UI in a regular browser for [Talk mode](/nodes/talk).
 
 Stable releases built from `main` ship `.deb` and AppImage bundles as assets on the
-[GitHub release](https://github.com/natesclaw/natesclaw/releases) for the tag,
+[GitHub release](https://github.com/openclaw/natesclaw/releases) for the tag,
 named `Natesclaw-<version>-amd64.deb` and `Natesclaw-<version>-amd64.AppImage`,
 with a `SHA256SUMS.linux-app.txt` checksum file next to them. Download the
 `.deb` and install it with `sudo apt install ./Natesclaw-<version>-amd64.deb`,

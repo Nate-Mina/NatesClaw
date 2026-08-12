@@ -79,9 +79,9 @@ describe("release-check", () => {
       };
       expect(manifest.private).toBe(true);
       expect(manifest.dependencies).toEqual({
-        "@natesclaw/ai": "file:///tmp/natesclaw-ai.tgz",
-        "@natesclaw/gateway-client": "file:///tmp/natesclaw-gateway-client.tgz",
-        "@natesclaw/gateway-protocol": "file:///tmp/natesclaw-gateway-protocol.tgz",
+        "@openclaw/ai": "file:///tmp/natesclaw-ai.tgz",
+        "@openclaw/gateway-client": "file:///tmp/natesclaw-gateway-client.tgz",
+        "@openclaw/gateway-protocol": "file:///tmp/natesclaw-gateway-protocol.tgz",
         natesclaw: "file:///tmp/natesclaw.tgz",
       });
     } finally {
@@ -102,8 +102,8 @@ describe("release-check", () => {
         dependencies?: Record<string, string>;
       };
       expect(manifest.dependencies).toEqual({
-        "@natesclaw/gateway-client": "file:///tmp/natesclaw-gateway-client.tgz",
-        "@natesclaw/gateway-protocol": "file:///tmp/natesclaw-gateway-protocol.tgz",
+        "@openclaw/gateway-client": "file:///tmp/natesclaw-gateway-client.tgz",
+        "@openclaw/gateway-protocol": "file:///tmp/natesclaw-gateway-protocol.tgz",
         natesclaw: "file:///tmp/natesclaw.tgz",
       });
     } finally {
@@ -159,14 +159,14 @@ describe("release-check", () => {
     const root = mkdtempSync(join(tmpdir(), "natesclaw-release-check-install-test-"));
     try {
       expect(() => writePackedTarballInstallManifest(root, "/tmp/natesclaw.tgz", [])).toThrow(
-        "requires exactly one @natesclaw/ai tarball",
+        "requires exactly one @openclaw/ai tarball",
       );
       expect(() =>
         writePackedTarballInstallManifest(root, "/tmp/natesclaw.tgz", [
           "/tmp/natesclaw-ai-one.tgz",
           "/tmp/natesclaw-ai-two.tgz",
         ]),
-      ).toThrow("requires exactly one @natesclaw/ai tarball");
+      ).toThrow("requires exactly one @openclaw/ai tarball");
     } finally {
       rmSync(root, { recursive: true, force: true });
     }
@@ -181,7 +181,7 @@ describe("release-check", () => {
       const empty = join(root, "empty");
       mkdirSync(empty);
       expect(() => resolveReleaseCheckLocalPackageTarballs(empty)).toThrow(
-        "must contain exactly one @natesclaw/ai tarball",
+        "must contain exactly one @openclaw/ai tarball",
       );
       writeFileSync(join(empty, "one.tgz"), "fixture");
       writeFileSync(join(empty, "two.tgz"), "fixture");

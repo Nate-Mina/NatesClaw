@@ -9,16 +9,16 @@ describe("trusted official npm install records", () => {
   it("resolves an exact canonical catalog package", () => {
     const record = {
       source: "npm" as const,
-      spec: "@natesclaw/acpx@2026.7.2",
-      resolvedName: "@natesclaw/acpx",
-      resolvedSpec: "@natesclaw/acpx@2026.7.2",
+      spec: "@openclaw/acpx@2026.7.2",
+      resolvedName: "@openclaw/acpx",
+      resolvedSpec: "@openclaw/acpx@2026.7.2",
     };
 
     expect(resolveTrustedSourceLinkedOfficialNpmSpec({ pluginId: "acpx", record })).toBe(
-      "@natesclaw/acpx",
+      "@openclaw/acpx",
     );
     expect(resolveTrustedSourceLinkedOfficialNpmInstall({ pluginId: "acpx", record })).toEqual({
-      npmSpec: "@natesclaw/acpx",
+      npmSpec: "@openclaw/acpx",
       pluginId: "acpx",
     });
   });
@@ -28,14 +28,14 @@ describe("trusted official npm install records", () => {
       name: "missing requested spec",
       record: {
         source: "npm" as const,
-        resolvedName: "@natesclaw/acpx",
+        resolvedName: "@openclaw/acpx",
       },
     },
     {
       name: "resolved-spec-only evidence",
       record: {
         source: "npm" as const,
-        resolvedSpec: "@natesclaw/acpx@2026.7.2",
+        resolvedSpec: "@openclaw/acpx@2026.7.2",
       },
     },
     {
@@ -43,22 +43,22 @@ describe("trusted official npm install records", () => {
       record: {
         source: "npm" as const,
         spec: "@vendor/acpx@1.0.0",
-        resolvedName: "@natesclaw/acpx",
+        resolvedName: "@openclaw/acpx",
         resolvedSpec: "@vendor/acpx@1.0.0",
       },
     },
   ])("preserves canonical official updates for $name", ({ record }) => {
     expect(resolveTrustedSourceLinkedOfficialNpmSpec({ pluginId: "acpx", record })).toBe(
-      "@natesclaw/acpx",
+      "@openclaw/acpx",
     );
   });
 
   it("returns a replacement only for a catalog-declared legacy id", () => {
     const record = {
       source: "npm" as const,
-      spec: "@natesclaw/fish-audio-speech@2026.7.2-beta.7",
-      resolvedName: "@natesclaw/fish-audio-speech",
-      resolvedSpec: "@natesclaw/fish-audio-speech@2026.7.2-beta.7",
+      spec: "@openclaw/fish-audio-speech@2026.7.2-beta.7",
+      resolvedName: "@openclaw/fish-audio-speech",
+      resolvedSpec: "@openclaw/fish-audio-speech@2026.7.2-beta.7",
     };
 
     expect(
@@ -67,7 +67,7 @@ describe("trusted official npm install records", () => {
         record,
       }),
     ).toEqual({
-      npmSpec: "@natesclaw/fish-audio-speech",
+      npmSpec: "@openclaw/fish-audio-speech",
       pluginId: "fish-audio-speech",
       replacementPluginId: "fish-audio-speech",
     });
@@ -85,9 +85,9 @@ describe("trusted official npm install records", () => {
         pluginId: "fish-audio",
         record: {
           source: "npm",
-          spec: "@natesclaw/fish-audio-speech@2026.7.2-beta.7",
+          spec: "@openclaw/fish-audio-speech@2026.7.2-beta.7",
           resolvedName: "@vendor/fish-audio-speech",
-          resolvedSpec: "@natesclaw/fish-audio-speech@2026.7.2-beta.7",
+          resolvedSpec: "@openclaw/fish-audio-speech@2026.7.2-beta.7",
         },
       }),
     ).toBeUndefined();
@@ -99,8 +99,8 @@ describe("trusted official npm install records", () => {
         pluginId: "fish-audio",
         record: {
           source: "clawhub",
-          spec: "clawhub:@natesclaw/fish-audio-speech",
-          clawhubPackage: "@natesclaw/fish-audio-speech",
+          spec: "clawhub:@openclaw/fish-audio-speech",
+          clawhubPackage: "@openclaw/fish-audio-speech",
           clawhubChannel: "official",
           clawhubUrl: "https://clawhub.ai",
         },

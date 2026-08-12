@@ -1,4 +1,4 @@
-import { asNullableObjectRecord as readCostRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asNullableObjectRecord as readCostRecord } from "@openclaw/normalization-core/record-coerce";
 import { html, nothing } from "lit";
 import { isTranscriptOnlyNatesclawAssistantMessage } from "../../../../../src/shared/transcript-only-natesclaw-assistant.js";
 import type { GatewaySessionRow } from "../../../api/types.ts";

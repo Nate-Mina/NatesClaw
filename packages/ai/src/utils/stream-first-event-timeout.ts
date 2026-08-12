@@ -1,4 +1,4 @@
-import { clampTimerTimeoutMs } from "@natesclaw/normalization-core/number-coercion";
+import { clampTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
 
 type StreamStage = "responses" | "completions";
 

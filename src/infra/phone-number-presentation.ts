@@ -1,4 +1,4 @@
-import { formatInternationalPhoneNumberForDisplay } from "@natesclaw/normalization-core/phone-presentation";
+import { formatInternationalPhoneNumberForDisplay } from "@openclaw/normalization-core/phone-presentation";
 
 export function formatPhoneNumberForCli(
   raw: string,

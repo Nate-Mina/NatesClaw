@@ -1,7 +1,7 @@
 /** Filesystem discovery and bounded JSON readers for local secret storage audits. */
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord as isJsonObject } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord as isJsonObject } from "@openclaw/normalization-core/record-coerce";
 import { listAgentIds, resolveAgentDir } from "../agents/agent-scope.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";

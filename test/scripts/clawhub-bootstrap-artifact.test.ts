@@ -51,7 +51,7 @@ function fixture() {
     matrixPath,
     JSON.stringify([
       {
-        packageName: "@natesclaw/meta",
+        packageName: "@openclaw/meta",
         version: "2026.7.1-beta.3",
         packageDir: "extensions/meta",
         publishTag: "beta",
@@ -59,7 +59,7 @@ function fixture() {
         requiresManualOverride: false,
       },
       {
-        packageName: "@natesclaw/existing",
+        packageName: "@openclaw/existing",
         version: "2026.7.1-beta.3",
         packageDir: "extensions/existing",
         publishTag: "beta",
@@ -82,7 +82,7 @@ function common(paths: ReturnType<typeof fixture>) {
     clawhubToolchainIntegrity,
     clawhubToolchainSha256,
     clawhubToolchainVersion,
-    plugins: "@natesclaw/meta,@natesclaw/existing",
+    plugins: "@openclaw/meta,@openclaw/existing",
     repository: "natesclaw/natesclaw",
     runAttempt: "2",
     runId: "123",
@@ -168,7 +168,7 @@ describe("ClawHub bootstrap artifact manifest", () => {
       matrixPath: paths.matrixPath,
       outputPath: paths.manifestPath,
     });
-    const meta = created.entries.find((entry) => entry.packageName === "@natesclaw/meta");
+    const meta = created.entries.find((entry) => entry.packageName === "@openclaw/meta");
     expect(meta).toMatchObject({
       artifactPath: "packages/meta/natesclaw-meta-2026.7.1-beta.3.tgz",
       size: 11,
@@ -274,7 +274,7 @@ describe("ClawHub bootstrap artifact manifest", () => {
       matrixPath: paths.matrixPath,
       outputPath: paths.manifestPath,
     });
-    const existing = manifest.entries.find((entry) => entry.packageName === "@natesclaw/existing");
+    const existing = manifest.entries.find((entry) => entry.packageName === "@openclaw/existing");
     expect(existing).toMatchObject({
       artifactPath: "packages/existing/natesclaw-existing-2026.7.1-beta.3.tgz",
       size: 15,
@@ -349,7 +349,7 @@ describe("ClawHub bootstrap artifact manifest", () => {
 describe("ClawHub packed artifact identity", () => {
   const expectedIdentity = {
     expectedDir: "extensions/meta",
-    expectedName: "@natesclaw/meta-provider",
+    expectedName: "@openclaw/meta-provider",
     expectedVersion: "2026.7.1-beta.3",
   };
 
@@ -359,7 +359,7 @@ describe("ClawHub packed artifact identity", () => {
         name: "package.json",
         prefix: "package",
         contents: JSON.stringify({
-          name: "@natesclaw/meta-provider",
+          name: "@openclaw/meta-provider",
           version: "2026.7.1-beta.3",
           natesclaw: {
             release: {
@@ -382,11 +382,11 @@ describe("ClawHub packed artifact identity", () => {
         expectedSha256: pack.sha256,
         expectedSize: String(pack.bytes.byteLength),
         expectedDir: "extensions/meta",
-        expectedName: "@natesclaw/meta-provider",
+        expectedName: "@openclaw/meta-provider",
         expectedVersion: "2026.7.1-beta.3",
       }),
     ).resolves.toMatchObject({
-      packageName: "@natesclaw/meta-provider",
+      packageName: "@openclaw/meta-provider",
       packageVersion: "2026.7.1-beta.3",
       sha256: pack.sha256,
       size: pack.bytes.byteLength,
@@ -399,14 +399,14 @@ describe("ClawHub packed artifact identity", () => {
         name: " package.json ",
         prefix: " package ",
         contents: JSON.stringify({
-          name: "@natesclaw/meta-provider",
+          name: "@openclaw/meta-provider",
           version: "2026.7.1-beta.3",
         }),
       },
       {
         name: "package/package.json",
         contents: JSON.stringify({
-          name: "@natesclaw/other",
+          name: "@openclaw/other",
           version: "9.9.9",
         }),
       },
@@ -422,7 +422,7 @@ describe("ClawHub packed artifact identity", () => {
         expectedSha256: pack.sha256,
         expectedSize: String(pack.bytes.byteLength),
         expectedDir: "extensions/meta",
-        expectedName: "@natesclaw/meta-provider",
+        expectedName: "@openclaw/meta-provider",
         expectedVersion: "2026.7.1-beta.3",
       }),
     ).rejects.toThrow("changes under the pinned ClawHub path normalization");
@@ -433,7 +433,7 @@ describe("ClawHub packed artifact identity", () => {
       {
         name: "package/package.json",
         contents: JSON.stringify({
-          name: "@natesclaw/meta-provider",
+          name: "@openclaw/meta-provider",
           version: "2026.7.1-beta.3",
         }),
       },
@@ -441,7 +441,7 @@ describe("ClawHub packed artifact identity", () => {
         name: " package.json ",
         prefix: " package ",
         contents: JSON.stringify({
-          name: "@natesclaw/other",
+          name: "@openclaw/other",
           version: "9.9.9",
         }),
       },

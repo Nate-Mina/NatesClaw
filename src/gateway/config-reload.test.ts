@@ -4375,7 +4375,7 @@ describe("startGatewayConfigReloader", () => {
     const readPluginInstallRecords = vi.fn(async () => ({
       brave: {
         source: "npm" as const,
-        spec: "@natesclaw/brave",
+        spec: "@openclaw/brave",
         installPath: "/tmp/natesclaw/plugins/brave",
       },
     }));
@@ -4420,7 +4420,7 @@ describe("startGatewayConfigReloader", () => {
     const installRecords = {
       telegram: {
         source: "npm",
-        spec: "@natesclaw/telegram",
+        spec: "@openclaw/telegram",
         installPath: "/tmp/natesclaw/plugins/telegram",
       },
     } satisfies Record<string, PluginInstallRecord>;

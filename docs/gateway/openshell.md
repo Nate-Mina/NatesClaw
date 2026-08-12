@@ -18,7 +18,7 @@ workspace sync mode.
 
 ## Prerequisites
 
-- OpenShell plugin installed (`natesclaw plugins install @natesclaw/openshell-sandbox`)
+- OpenShell plugin installed (`natesclaw plugins install @openclaw/openshell-sandbox`)
 - `openshell` CLI on `PATH` (or a custom path via
   `plugins.entries.openshell.config.command`)
 - OpenSSH client available on the Gateway host
@@ -29,7 +29,7 @@ workspace sync mode.
 ## Quick start
 
 ```bash
-natesclaw plugins install @natesclaw/openshell-sandbox
+natesclaw plugins install @openclaw/openshell-sandbox
 ```
 
 ```json5

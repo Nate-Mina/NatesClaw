@@ -1,12 +1,12 @@
 /** Relays child ACP session stream updates back into the requester parent session. */
-import { asFiniteNumber } from "@natesclaw/normalization-core/number-coercion";
-import { asOptionalRecord as asObjectRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
+import { asOptionalRecord as asObjectRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import {
   sliceUtf16Safe,
   truncateUtf16Safe,
   truncateWithMarker,
-} from "@natesclaw/normalization-core/utf16-slice";
+} from "@openclaw/normalization-core/utf16-slice";
 import {
   isAcpTagVisible,
   resolveAcpProjectionSettings,

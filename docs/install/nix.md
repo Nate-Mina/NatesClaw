@@ -7,10 +7,10 @@ read_when:
 title: "Nix"
 ---
 
-Install Natesclaw declaratively with **[nix-natesclaw](https://github.com/natesclaw/nix-natesclaw)**, the first-party, batteries-included Home Manager module.
+Install Natesclaw declaratively with **[nix-natesclaw](https://github.com/openclaw/nix-natesclaw)**, the first-party, batteries-included Home Manager module.
 
 <Info>
-The [nix-natesclaw](https://github.com/natesclaw/nix-natesclaw) repo is the source of truth for Nix installation. This page is a quick overview.
+The [nix-natesclaw](https://github.com/openclaw/nix-natesclaw) repo is the source of truth for Nix installation. This page is a quick overview.
 </Info>
 
 ## What you get
@@ -46,7 +46,7 @@ The [nix-natesclaw](https://github.com/natesclaw/nix-natesclaw) repo is the sour
   </Step>
 </Steps>
 
-See the [nix-natesclaw README](https://github.com/natesclaw/nix-natesclaw) for full module options and examples.
+See the [nix-natesclaw README](https://github.com/openclaw/nix-natesclaw) for full module options and examples.
 
 ## Nix-mode runtime behavior
 
@@ -68,7 +68,7 @@ defaults write ai.natesclaw.mac natesclaw.nixMode -bool true
 
 - Auto-install and self-mutation flows are disabled.
 - `natesclaw.json` is treated as immutable. Startup-derived defaults stay runtime-only, and config writers (setup, onboarding, mutating `natesclaw update`, plugin install/update/uninstall/enable, `doctor --fix`, `doctor --generate-gateway-token`, `natesclaw config set`) refuse to edit the file.
-- Edit the Nix source instead. For nix-natesclaw, use the agent-first [Quick Start](https://github.com/natesclaw/nix-natesclaw#quick-start) and set config under `programs.natesclaw.config` or `instances.<name>.config`.
+- Edit the Nix source instead. For nix-natesclaw, use the agent-first [Quick Start](https://github.com/openclaw/nix-natesclaw#quick-start) and set config under `programs.natesclaw.config` or `instances.<name>.config`.
 - Missing dependencies surface Nix-specific remediation messages.
 - The UI shows a read-only Nix mode banner.
 
@@ -94,7 +94,7 @@ This applies to both macOS launchd and Linux systemd service environments.
 ## Related
 
 <CardGroup cols={2}>
-  <Card title="nix-natesclaw" href="https://github.com/natesclaw/nix-natesclaw" icon="arrow-up-right-from-square">
+  <Card title="nix-natesclaw" href="https://github.com/openclaw/nix-natesclaw" icon="arrow-up-right-from-square">
     Source-of-truth Home Manager module and full setup guide.
   </Card>
   <Card title="Setup wizard" href="/start/wizard" icon="wand-magic-sparkles">

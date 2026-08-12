@@ -303,7 +303,7 @@ describe("applyNonInteractivePluginProviderChoice", () => {
       label: "Groq",
       origin: "bundled",
       install: {
-        npmSpec: "@natesclaw/groq-provider",
+        npmSpec: "@openclaw/groq-provider",
         defaultChoice: "npm",
       },
     } as never);
@@ -349,7 +349,7 @@ describe("applyNonInteractivePluginProviderChoice", () => {
           pluginId: "groq",
           label: "Groq",
           install: {
-            npmSpec: "@natesclaw/groq-provider",
+            npmSpec: "@openclaw/groq-provider",
             defaultChoice: "npm",
           },
           trustedSourceLinkedOfficialInstall: true,

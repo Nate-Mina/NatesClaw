@@ -1,9 +1,9 @@
 // Live-sweeps discovered model profiles with optional provider/model filters and probes.
 import { writeSync } from "node:fs";
-import { defaultApiRegistry } from "@natesclaw/ai/internal/runtime";
-import { prepareModelForSimpleCompletion } from "@natesclaw/ai/transports";
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { defaultApiRegistry } from "@openclaw/ai/internal/runtime";
+import { prepareModelForSimpleCompletion } from "@openclaw/ai/transports";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { expectDefined } from "@openclaw/normalization-core";
 import { type Api, completeSimple, type Model } from "natesclaw/plugin-sdk/llm";
 import { Type } from "typebox";
 import { describe, expect, it, vi } from "vitest";

@@ -1,5 +1,5 @@
 // Resolves inbound attachment text-extraction limits for media-understanding.
-import { asPositiveFiniteNumber as positiveExtractionLimit } from "@natesclaw/normalization-core/number-coercion";
+import { asPositiveFiniteNumber as positiveExtractionLimit } from "@openclaw/normalization-core/number-coercion";
 import type { NatesclawConfig } from "../config/types.js";
 import {
   type InputFileLimits,

@@ -1,18 +1,18 @@
 {
-  "name": "@natesclaw/zai-provider",
+  "name": "@openclaw/zai-provider",
   "version": "2026.8.1",
   "description": "Natesclaw Z.AI provider plugin",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/zai-provider",
-      "npmSpec": "@natesclaw/zai-provider",
+      "clawhubSpec": "clawhub:@openclaw/zai-provider",
+      "npmSpec": "@openclaw/zai-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.9"
     },
@@ -30,6 +30,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   }
 }

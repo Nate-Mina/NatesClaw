@@ -1,6 +1,6 @@
 // Cron service store tests cover persisted service state loading and writes.
 import fs from "node:fs/promises";
-import { MAX_DATE_TIMESTAMP_MS } from "@natesclaw/normalization-core/number-coercion";
+import { MAX_DATE_TIMESTAMP_MS } from "@openclaw/normalization-core/number-coercion";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { openNatesclawStateDatabase } from "../../state/natesclaw-state-db.js";
 import { setupCronServiceSuite } from "../service.test-harness.js";

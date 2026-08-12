@@ -22,5 +22,5 @@ without making you scan the raw changelog first.
 Use the curated notes when you want the product story. Use the raw history when
 you need compact maintainer accounting:
 
-- [GitHub releases](https://github.com/natesclaw/natesclaw/releases)
-- [CHANGELOG.md](https://github.com/natesclaw/natesclaw/blob/main/CHANGELOG.md)
+- [GitHub releases](https://github.com/openclaw/natesclaw/releases)
+- [CHANGELOG.md](https://github.com/openclaw/natesclaw/blob/main/CHANGELOG.md)

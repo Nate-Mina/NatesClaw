@@ -433,7 +433,7 @@ Control and automate Home Assistant devices via natural language.
 Native Swift menu bar app showing agent status with quick controls.
 </Card>
 
-<Card title="Nix packaging" icon="snowflake" href="https://github.com/natesclaw/nix-natesclaw">
+<Card title="Nix packaging" icon="snowflake" href="https://github.com/openclaw/nix-natesclaw">
   **@natesclaw** • `nix` `packaging` `deployment`
 
 Batteries-included nixified Natesclaw configuration for reproducible deployments.
@@ -523,4 +523,4 @@ Open agent-to-agent negotiation: your agent haggles deals, schedules, and servic
 
 - [Getting started](/start/getting-started)
 - [Natesclaw](/start/natesclaw)
-- [Full X showcase on natesclaw.ai](https://natesclaw.ai/showcase/)
+- [Full X showcase on openclaw.ai](https://openclaw.ai/showcase/)

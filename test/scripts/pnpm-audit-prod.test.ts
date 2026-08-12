@@ -2,7 +2,7 @@
 import { mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
-import { toErrorObject as toLintErrorObject } from "@natesclaw/normalization-core/error-coercion";
+import { toErrorObject as toLintErrorObject } from "@openclaw/normalization-core/error-coercion";
 import { describe, expect, it } from "vitest";
 import {
   collectProdResolvedPackagesFromLockfile,

@@ -198,7 +198,7 @@ describe("plugin loader CLI metadata", () => {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@natesclaw/cli-metadata-channel",
+          name: "@openclaw/cli-metadata-channel",
           natesclaw: { extensions: ["./index.cjs"], setupEntry: "./setup-entry.cjs" },
         },
         null,
@@ -305,7 +305,7 @@ module.exports = {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@natesclaw/bundled-skip-channel",
+          name: "@openclaw/bundled-skip-channel",
           natesclaw: { extensions: ["./index.cjs"] },
         },
         null,
@@ -373,7 +373,7 @@ module.exports = {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@natesclaw/bundled-cli-channel",
+          name: "@openclaw/bundled-cli-channel",
           natesclaw: { extensions: ["./index.cjs"] },
         },
         null,
@@ -464,7 +464,7 @@ module.exports = {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@natesclaw/bundled-skip-provider",
+          name: "@openclaw/bundled-skip-provider",
           natesclaw: { extensions: ["./index.cjs"] },
         },
         null,
@@ -528,7 +528,7 @@ module.exports = {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@natesclaw/full-cli-metadata-channel",
+          name: "@openclaw/full-cli-metadata-channel",
           natesclaw: { extensions: ["./index.cjs"] },
         },
         null,
@@ -625,7 +625,7 @@ module.exports = {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@natesclaw/discovery-cli-metadata-channel",
+          name: "@openclaw/discovery-cli-metadata-channel",
           natesclaw: { extensions: ["./index.cjs"] },
         },
         null,
@@ -731,7 +731,7 @@ module.exports = {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@natesclaw/force-runtime-cli-channel",
+          name: "@openclaw/force-runtime-cli-channel",
           natesclaw: { extensions: ["./index.cjs"], setupEntry: "./setup-entry.cjs" },
         },
         null,

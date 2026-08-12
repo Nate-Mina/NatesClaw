@@ -141,7 +141,7 @@ beforeEach(() => {
   mocks.resolveProviderInstallCatalogEntry.mockReturnValue(undefined);
   mocks.loadManifestMetadataSnapshot.mockReturnValue({
     manifestRegistry: {
-      plugins: [{ id: "openrouter", packageName: "@natesclaw/openrouter-provider" }],
+      plugins: [{ id: "openrouter", packageName: "@openclaw/openrouter-provider" }],
     },
   });
   mocks.promptYesNo.mockResolvedValue(false);
@@ -305,7 +305,7 @@ describe("promosClaimCommand", () => {
 
   it("accepts a declared plugin package owned by the resolved auth choice", async () => {
     mocks.fetchClawHubPromotion.mockResolvedValue(
-      makePromotion({ pluginNames: ["@natesclaw/openrouter-provider"] }),
+      makePromotion({ pluginNames: ["@openclaw/openrouter-provider"] }),
     );
 
     await promosClaimCommand("spring-models", {}, makeRuntime());
@@ -315,7 +315,7 @@ describe("promosClaimCommand", () => {
 
   it("refuses a declared plugin package not owned by the resolved auth choice", async () => {
     mocks.fetchClawHubPromotion.mockResolvedValue(
-      makePromotion({ pluginNames: ["@natesclaw/other-provider"] }),
+      makePromotion({ pluginNames: ["@openclaw/other-provider"] }),
     );
 
     await expect(promosClaimCommand("spring-models", {}, makeRuntime())).rejects.toThrow(
@@ -420,11 +420,11 @@ describe("promosClaimCommand", () => {
     mocks.resolveProviderInstallCatalogEntry.mockReturnValue({
       ...authChoice,
       installSource: {
-        npm: { packageName: "@natesclaw/openrouter-provider" },
+        npm: { packageName: "@openclaw/openrouter-provider" },
       },
     });
     mocks.fetchClawHubPromotion.mockResolvedValue(
-      makePromotion({ pluginNames: ["@natesclaw/openrouter-provider"] }),
+      makePromotion({ pluginNames: ["@openclaw/openrouter-provider"] }),
     );
     mocks.hasAvailableAuthForProvider.mockResolvedValue(true);
     mocks.applyAuthChoiceLoadedPluginProvider.mockResolvedValue({ config: {} });

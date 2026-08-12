@@ -54,7 +54,7 @@ non-`latest` tags, third-party plugins, and non-npm sources remain unchanged.
 Catalog installs created by current Natesclaw versions retain that default
 intent. Older records that contain only an exact version remain pinned because
 Natesclaw cannot safely distinguish an old automatic pin from a user pin; run
-`natesclaw plugins update @natesclaw/name` once on the extended-stable channel
+`natesclaw plugins update @openclaw/name` once on the extended-stable channel
 to opt that plugin back into exact-core tracking.
 
 `--channel dev` gives a persistent moving GitHub `main` checkout. For a one-off
@@ -132,7 +132,7 @@ instead — it manages the checkout, build, and gateway restart for you.
 ## Alternative: re-run the installer
 
 ```bash
-curl -fsSL https://natesclaw.ai/install.sh | bash
+curl -fsSL https://openclaw.ai/install.sh | bash
 ```
 
 Add `--no-onboard` to skip onboarding. To force a specific install type, pass
@@ -143,13 +143,13 @@ installer instead. It does not call the updater; it runs the global package
 install directly and can recover a partially updated npm install.
 
 ```bash
-curl -fsSL https://natesclaw.ai/install.sh | bash -s -- --install-method npm
+curl -fsSL https://openclaw.ai/install.sh | bash -s -- --install-method npm
 ```
 
 Pin the recovery to a specific version or dist-tag with `--version`:
 
 ```bash
-curl -fsSL https://natesclaw.ai/install.sh | bash -s -- --install-method npm --version <version-or-dist-tag>
+curl -fsSL https://openclaw.ai/install.sh | bash -s -- --install-method npm --version <version-or-dist-tag>
 ```
 
 ## Alternative: manual npm, pnpm, or bun

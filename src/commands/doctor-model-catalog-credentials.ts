@@ -1,8 +1,8 @@
 /** Doctor-owned migration of plaintext model-catalog credentials into agent SQLite. */
 import fs from "node:fs";
 import path from "node:path";
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { resolveDefaultAgentDir } from "../agents/agent-scope.js";
 import { AUTH_STORE_VERSION } from "../agents/auth-profiles/constants.js";

@@ -11,7 +11,7 @@ Adds agent-callable tools.
 
 ## Distribution
 
-- Package: `@natesclaw/browser-plugin`
+- Package: `@openclaw/browser-plugin`
 - Install route: included in Natesclaw
 
 ## Surface

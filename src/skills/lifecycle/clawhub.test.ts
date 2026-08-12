@@ -4,7 +4,7 @@ import { createHash } from "node:crypto";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createTrackedTempDirs } from "../../test-utils/tracked-temp-dirs.js";
 
@@ -369,7 +369,7 @@ describe("skills-clawhub", () => {
         commit,
         trustState,
         contentHash: "sha256:approved",
-        sourceUrl: `https://github.com/natesclaw/skills/tree/${commit}/skills/weather`,
+        sourceUrl: `https://github.com/openclaw/skills/tree/${commit}/skills/weather`,
       },
     });
     withExtractedArchiveRootMock.mockImplementationOnce(async (params) => {
@@ -437,7 +437,7 @@ describe("skills-clawhub", () => {
         path: "skills/weather",
         commit: "main",
         contentHash: "sha256:approved",
-        sourceUrl: "https://github.com/natesclaw/skills/tree/main/skills/weather",
+        sourceUrl: "https://github.com/openclaw/skills/tree/main/skills/weather",
       },
     });
 
@@ -527,7 +527,7 @@ describe("skills-clawhub", () => {
           path: "skills/weather",
           commit: "a".repeat(40),
           contentHash: "sha256:approved",
-          sourceUrl: "https://github.com/natesclaw/skills",
+          sourceUrl: "https://github.com/openclaw/skills",
         },
       });
 
@@ -1399,9 +1399,9 @@ describe("skills-clawhub", () => {
 
   it("persists the source URL from server-resolved verification provenance", async () => {
     const workspaceDir = await tempDirs.make("natesclaw-skills-source-");
-    const sourceUrl = "https://github.com/natesclaw/skills/tree/main/agentreceipt";
+    const sourceUrl = "https://github.com/openclaw/skills/tree/main/agentreceipt";
     const verifiedSourceUrl =
-      "https://github.com/natesclaw/skills/tree/0123456789abcdef0123456789abcdef01234567/agentreceipt";
+      "https://github.com/openclaw/skills/tree/0123456789abcdef0123456789abcdef01234567/agentreceipt";
     fetchClawHubSkillDetailMock.mockResolvedValueOnce({
       skill: {
         slug: "agentreceipt",
@@ -1495,7 +1495,7 @@ describe("skills-clawhub", () => {
         commit: "0123456789abcdef0123456789abcdef01234567",
       }),
     ).toBe(
-      "https://github.com/natesclaw/skills/tree/0123456789abcdef0123456789abcdef01234567/agentreceipt",
+      "https://github.com/openclaw/skills/tree/0123456789abcdef0123456789abcdef01234567/agentreceipt",
     );
     expect(
       readVerifiedClawHubSkillSourceUrl({
@@ -1519,12 +1519,12 @@ describe("skills-clawhub", () => {
         displayName: "AgentReceipt",
         createdAt: 1,
         updatedAt: 2,
-        sourceUrl: "https://github.com/natesclaw/skills/tree/latest/agentreceipt",
+        sourceUrl: "https://github.com/openclaw/skills/tree/latest/agentreceipt",
       },
       latestVersion: {
         version: "1.0.0",
         createdAt: 3,
-        sourceUrl: "https://github.com/natesclaw/skills/tree/latest/agentreceipt",
+        sourceUrl: "https://github.com/openclaw/skills/tree/latest/agentreceipt",
       },
     });
     fetchClawHubSkillVerificationMock.mockRejectedValueOnce(new Error("verification down"));
@@ -1573,7 +1573,7 @@ describe("skills-clawhub", () => {
       artifact: { sourceFingerprint: "source-fp" },
       provenance: {
         source: "unavailable",
-        url: "https://github.com/natesclaw/skills/tree/unverified/agentreceipt",
+        url: "https://github.com/openclaw/skills/tree/unverified/agentreceipt",
       },
       security: { status: "clean" },
       signature: { status: "unsigned" },
@@ -1839,7 +1839,7 @@ describe("skills-clawhub", () => {
         path: "skills/weather",
         commit,
         contentHash: "sha256:approved",
-        sourceUrl: `https://github.com/natesclaw/skills/tree/${commit}/skills/weather`,
+        sourceUrl: `https://github.com/openclaw/skills/tree/${commit}/skills/weather`,
       },
     });
     withExtractedArchiveRootMock.mockImplementationOnce(async (params) => {

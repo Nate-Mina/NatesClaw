@@ -1,4 +1,4 @@
-import { stableStringify } from "@natesclaw/normalization-core";
+import { stableStringify } from "@openclaw/normalization-core";
 import { clawProfileExtensionPackages } from "./application-plan.js";
 import type { ClawPackageStatus } from "./lifecycle-status.js";
 import type { PersistedClawPackageRef } from "./provenance.js";

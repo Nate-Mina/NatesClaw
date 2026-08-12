@@ -13,8 +13,8 @@ Zalo ships as a bundled plugin in current Natesclaw releases, so packaged builds
 
 On an older build or a custom install that excludes Zalo, install the npm package directly:
 
-- Install: `natesclaw plugins install @natesclaw/zalo`
-- Pinned version: `natesclaw plugins install @natesclaw/zalo@2026.6.11`
+- Install: `natesclaw plugins install @openclaw/zalo`
+- Pinned version: `natesclaw plugins install @openclaw/zalo@2026.6.11`
 - From a local checkout: `natesclaw plugins install ./path/to/local/zalo-plugin`
 - Details: [Plugins](/tools/plugin)
 

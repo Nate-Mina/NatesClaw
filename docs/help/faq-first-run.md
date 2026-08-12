@@ -3,7 +3,7 @@ summary: "FAQ: quick-start and first-run setup — install, onboard, auth, subsc
 read_when:
   - New install, onboarding stuck, or first-run errors
   - Choosing auth and provider subscriptions
-  - Cannot access docs.natesclaw.ai, cannot open dashboard, install stuck
+  - Cannot access docs.openclaw.ai, cannot open dashboard, install stuck
 title: "FAQ: first-run setup"
 sidebarTitle: "First-run FAQ"
 ---
@@ -26,7 +26,7 @@ and troubleshooting see the main [FAQ](/help/faq).
     code + docs and reason about the exact version you run:
 
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://natesclaw.ai/install.sh | bash -s -- --install-method git
+    curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --install-method git
     ```
 
     Ask the agent to plan and supervise the fix step-by-step, then execute only the
@@ -45,8 +45,8 @@ and troubleshooting see the main [FAQ](/help/faq).
     | `natesclaw health --verbose` | Detailed health report |
 
     Found a real bug or fix? File an issue or send a PR:
-    [Issues](https://github.com/natesclaw/natesclaw/issues) /
-    [Pull requests](https://github.com/natesclaw/natesclaw/pulls).
+    [Issues](https://github.com/openclaw/natesclaw/issues) /
+    [Pull requests](https://github.com/openclaw/natesclaw/pulls).
 
     Quick debug loop: [First 60 seconds if something is broken](/help/faq#first-60-seconds-if-something-is-broken).
     Install docs: [Install](/install), [Installer flags](/install/installer), [Updating](/install/updating).
@@ -68,14 +68,14 @@ and troubleshooting see the main [FAQ](/help/faq).
 
   <Accordion title="Recommended way to install and set up Natesclaw">
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://natesclaw.ai/install.sh | bash
+    curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash
     natesclaw onboard --install-daemon
     ```
 
     From source (contributors/dev):
 
     ```bash
-    git clone https://github.com/natesclaw/natesclaw.git
+    git clone https://github.com/openclaw/natesclaw.git
     cd natesclaw
     pnpm install
     pnpm build
@@ -232,7 +232,7 @@ and troubleshooting see the main [FAQ](/help/faq).
 
   <Accordion title="Where do I see what is new in the latest version?">
     Check the GitHub changelog:
-    [https://github.com/natesclaw/natesclaw/blob/main/CHANGELOG.md](https://github.com/natesclaw/natesclaw/blob/main/CHANGELOG.md)
+    [https://github.com/openclaw/natesclaw/blob/main/CHANGELOG.md](https://github.com/openclaw/natesclaw/blob/main/CHANGELOG.md)
 
     Newest entries are at the top. If the top section is **Unreleased**, the next dated
     section is the latest shipped version. Entries group under **Highlights**, **Changes**,
@@ -240,13 +240,13 @@ and troubleshooting see the main [FAQ](/help/faq).
 
   </Accordion>
 
-  <Accordion title="Cannot access docs.natesclaw.ai (SSL error)">
-    Some Comcast/Xfinity connections incorrectly block `docs.natesclaw.ai` via Xfinity
-    Advanced Security. Disable it or allowlist `docs.natesclaw.ai`, then retry. Help us
+  <Accordion title="Cannot access docs.openclaw.ai (SSL error)">
+    Some Comcast/Xfinity connections incorrectly block `docs.openclaw.ai` via Xfinity
+    Advanced Security. Disable it or allowlist `docs.openclaw.ai`, then retry. Help us
     get it unblocked: [https://spa.xfinity.com/check_url_status](https://spa.xfinity.com/check_url_status).
 
     Still blocked? Docs are mirrored on GitHub:
-    [https://github.com/natesclaw/natesclaw/tree/main/docs](https://github.com/natesclaw/natesclaw/tree/main/docs)
+    [https://github.com/openclaw/natesclaw/tree/main/docs](https://github.com/openclaw/natesclaw/tree/main/docs)
 
   </Accordion>
 
@@ -261,7 +261,7 @@ and troubleshooting see the main [FAQ](/help/faq).
     can also publish straight to `latest`. That is why beta and stable can point at the
     **same version** after promotion.
 
-    See what changed: [CHANGELOG.md](https://github.com/natesclaw/natesclaw/blob/main/CHANGELOG.md).
+    See what changed: [CHANGELOG.md](https://github.com/openclaw/natesclaw/blob/main/CHANGELOG.md).
 
     For install one-liners and the difference between beta and dev, see the next accordion.
 
@@ -274,14 +274,14 @@ and troubleshooting see the main [FAQ](/help/faq).
     One-liners (macOS/Linux):
 
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://natesclaw.ai/install.sh | bash -s -- --beta
+    curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --beta
     ```
 
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://natesclaw.ai/install.sh | bash -s -- --install-method git
+    curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --install-method git
     ```
 
-    Windows installer (PowerShell): `iwr -useb https://natesclaw.ai/install.ps1 | iex`
+    Windows installer (PowerShell): `iwr -useb https://openclaw.ai/install.ps1 | iex`
 
     More detail: [Development channels](/install/development-channels) and [Installer flags](/install/installer).
 
@@ -302,13 +302,13 @@ and troubleshooting see the main [FAQ](/help/faq).
     2. **Hackable (git) install (fresh machine):**
 
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://natesclaw.ai/install.sh | bash -s -- --install-method git
+    curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --install-method git
     ```
 
     Prefer a manual clone:
 
     ```bash
-    git clone https://github.com/natesclaw/natesclaw.git
+    git clone https://github.com/openclaw/natesclaw.git
     cd natesclaw
     pnpm install
     pnpm build
@@ -336,9 +336,9 @@ and troubleshooting see the main [FAQ](/help/faq).
     Re-run with `--verbose`:
 
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://natesclaw.ai/install.sh | bash -s -- --verbose
-    curl -fsSL --proto '=https' --tlsv1.2 https://natesclaw.ai/install.sh | bash -s -- --beta --verbose
-    curl -fsSL --proto '=https' --tlsv1.2 https://natesclaw.ai/install.sh | bash -s -- --install-method git --verbose
+    curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --verbose
+    curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --beta --verbose
+    curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --install-method git --verbose
     ```
 
     `install.ps1` has no dedicated verbose switch; wrap it in `Set-PSDebug -Trace 1` /
@@ -387,7 +387,7 @@ and troubleshooting see the main [FAQ](/help/faq).
     natesclaw gateway restart
     ```
 
-    Still reproducing this on latest Natesclaw? Track/report it: [Issue #30640](https://github.com/natesclaw/natesclaw/issues/30640).
+    Still reproducing this on latest Natesclaw? Track/report it: [Issue #30640](https://github.com/openclaw/natesclaw/issues/30640).
 
   </Accordion>
 
@@ -396,7 +396,7 @@ and troubleshooting see the main [FAQ](/help/faq).
     your bot (or Claude/Codex) **from that folder** so it can read the repo and answer precisely.
 
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://natesclaw.ai/install.sh | bash -s -- --install-method git
+    curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --install-method git
     ```
 
     More detail: [Install](/install) and [Installer flags](/install/installer).
@@ -754,8 +754,8 @@ and troubleshooting see the main [FAQ](/help/faq).
     The installer can force either mode too:
 
     ```bash
-    curl -fsSL --proto '=https' --tlsv1.2 https://natesclaw.ai/install.sh | bash -s -- --install-method git
-    curl -fsSL --proto '=https' --tlsv1.2 https://natesclaw.ai/install.sh | bash -s -- --install-method npm
+    curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --install-method git
+    curl -fsSL --proto '=https' --tlsv1.2 https://openclaw.ai/install.sh | bash -s -- --install-method npm
     ```
 
     Backup tips: [Where things live on disk](/help/faq#where-things-live-on-disk).

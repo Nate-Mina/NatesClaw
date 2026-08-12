@@ -7,7 +7,7 @@
  * for canonical paths. Extra query parameters are ignored except for
  * the first non-empty `session=` value.
  *
- * @module @natesclaw/oc-path/oc-path
+ * @module @openclaw/oc-path/oc-path
  */
 
 import { expectDefined } from "natesclaw/plugin-sdk/expect-runtime";

@@ -11,7 +11,7 @@ Natesclaw admin HTTP RPC endpoint.
 
 ## Distribution
 
-- Package: `@natesclaw/admin-http-rpc`
+- Package: `@openclaw/admin-http-rpc`
 - Install route: included in Natesclaw
 
 ## Surface

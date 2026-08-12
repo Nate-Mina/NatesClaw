@@ -2,7 +2,7 @@ import {
   WORKBOARD_STATUSES,
   type WorkboardCard,
   type WorkboardStatus,
-} from "@natesclaw/workboard-contract";
+} from "@openclaw/workboard-contract";
 // Workboard plugin module implements command behavior.
 import type { NatesclawPluginApi } from "../api.js";
 import { resolveWorkboardCardByIdOrPrefix } from "./card-lookup.js";

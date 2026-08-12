@@ -7,10 +7,10 @@ read_when:
 title: "Ansible"
 ---
 
-Deploy Natesclaw to production servers with **[natesclaw-ansible](https://github.com/natesclaw/natesclaw-ansible)**, an automated installer with a security-first architecture.
+Deploy Natesclaw to production servers with **[natesclaw-ansible](https://github.com/openclaw/natesclaw-ansible)**, an automated installer with a security-first architecture.
 
 <Info>
-The [natesclaw-ansible](https://github.com/natesclaw/natesclaw-ansible) repo is the source of truth for Ansible deployment. This page is a quick overview.
+The [natesclaw-ansible](https://github.com/openclaw/natesclaw-ansible) repo is the source of truth for Ansible deployment. This page is a quick overview.
 </Info>
 
 ## Prerequisites
@@ -125,7 +125,7 @@ Docker is installed for agent sandboxes (isolated tool execution), not for runni
   </Step>
   <Step title="Clone the repository">
     ```bash
-    git clone https://github.com/natesclaw/natesclaw-ansible.git
+    git clone https://github.com/openclaw/natesclaw-ansible.git
     cd natesclaw-ansible
     ```
   </Step>
@@ -196,7 +196,7 @@ This is idempotent and safe to run multiple times.
     cd /opt/natesclaw/natesclaw
     sudo -u natesclaw ./scripts/sandbox-setup.sh
     # For npm installs without a source checkout, see
-    # https://docs.natesclaw.ai/gateway/sandboxing#images-and-setup
+    # https://docs.openclaw.ai/gateway/sandboxing#images-and-setup
     ```
 
   </Accordion>
@@ -213,13 +213,13 @@ This is idempotent and safe to run multiple times.
 
 For detailed security architecture and troubleshooting, see the natesclaw-ansible repo:
 
-- [Security Architecture](https://github.com/natesclaw/natesclaw-ansible/blob/main/docs/security.md)
-- [Technical Details](https://github.com/natesclaw/natesclaw-ansible/blob/main/docs/architecture.md)
-- [Troubleshooting Guide](https://github.com/natesclaw/natesclaw-ansible/blob/main/docs/troubleshooting.md)
+- [Security Architecture](https://github.com/openclaw/natesclaw-ansible/blob/main/docs/security.md)
+- [Technical Details](https://github.com/openclaw/natesclaw-ansible/blob/main/docs/architecture.md)
+- [Troubleshooting Guide](https://github.com/openclaw/natesclaw-ansible/blob/main/docs/troubleshooting.md)
 
 ## Related
 
-- [natesclaw-ansible](https://github.com/natesclaw/natesclaw-ansible): full deployment guide
+- [natesclaw-ansible](https://github.com/openclaw/natesclaw-ansible): full deployment guide
 - [Docker](/install/docker): containerized gateway setup
 - [Sandboxing](/gateway/sandboxing): agent sandbox configuration
 - [Multi-Agent Sandbox and Tools](/tools/multi-agent-sandbox-tools): per-agent isolation

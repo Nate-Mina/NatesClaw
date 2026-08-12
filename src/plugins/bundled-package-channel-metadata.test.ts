@@ -45,7 +45,7 @@ describe("bundled package channel metadata", () => {
     const root = makeTempRepoRoot(tempDirs, "bpcm-");
     const extensionsRoot = path.join(root, "dist", "extensions");
     writeJsonFile(path.join(extensionsRoot, "matrix", "package.json"), {
-      name: "@natesclaw/matrix",
+      name: "@openclaw/matrix",
       natesclaw: {
         channel: {
           id: "matrix",
@@ -89,7 +89,7 @@ describe("bundled package channel metadata", () => {
     useBundledPluginsDir(extensionsRoot);
 
     writeJsonFile(packagePath, {
-      name: "@natesclaw/matrix",
+      name: "@openclaw/matrix",
       natesclaw: {
         channel: {
           id: "matrix",
@@ -112,7 +112,7 @@ describe("bundled package channel metadata", () => {
     ).toBe("Before");
 
     writeJsonFile(packagePath, {
-      name: "@natesclaw/matrix",
+      name: "@openclaw/matrix",
       natesclaw: {
         channel: {
           id: "matrix",

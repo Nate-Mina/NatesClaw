@@ -21,7 +21,7 @@ The Volcengine provider gives access to Doubao models and third-party models hos
 <Steps>
   <Step title="Install the plugin">
     ```bash
-    natesclaw plugins install @natesclaw/volcengine-provider
+    natesclaw plugins install @openclaw/volcengine-provider
     natesclaw gateway restart
     ```
   </Step>

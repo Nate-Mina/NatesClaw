@@ -106,13 +106,13 @@ export type CronServiceDeps = {
   /**
    * Delay in ms between missed job executions on startup.
    * Prevents overwhelming the gateway when many jobs are overdue.
-   * See: https://github.com/natesclaw/natesclaw/issues/18892
+   * See: https://github.com/openclaw/natesclaw/issues/18892
    */
   missedJobStaggerMs?: number;
   /**
    * Maximum number of missed jobs to run immediately on startup.
    * Additional missed jobs will be rescheduled to fire gradually.
-   * See: https://github.com/natesclaw/natesclaw/issues/18892
+   * See: https://github.com/openclaw/natesclaw/issues/18892
    */
   maxMissedJobsPerRestart?: number;
   /**
@@ -177,7 +177,7 @@ export type CronServiceDeps = {
       /**
        * `true` when the isolated run already delivered its output to the target
        * channel (including matching messaging-tool sends). See:
-       * https://github.com/natesclaw/natesclaw/issues/15692
+       * https://github.com/openclaw/natesclaw/issues/15692
        */
       delivered?: boolean;
       deliveryError?: string;

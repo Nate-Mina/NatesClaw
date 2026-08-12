@@ -7,7 +7,7 @@ import {
   validateExternalCodePluginPackageJson,
 } from "./index.js";
 
-describe("@natesclaw/plugin-package-contract", () => {
+describe("@openclaw/plugin-package-contract", () => {
   it("normalizes the Natesclaw compatibility block for external plugins", () => {
     expect(
       normalizeExternalPluginCompatibility({
@@ -53,7 +53,7 @@ describe("@natesclaw/plugin-package-contract", () => {
 
   it("lists the required external code-plugin fields", () => {
     expect(EXTERNAL_CODE_PLUGIN_REQUIRED_FIELD_PATHS).toEqual([
-      "natesclaw.compat.pluginApi",
+      "openclaw.compat.pluginApi",
       "natesclaw.build.natesclawVersion",
     ]);
   });
@@ -67,13 +67,13 @@ describe("@natesclaw/plugin-package-contract", () => {
     };
 
     expect(listMissingExternalCodePluginFieldPaths(packageJson)).toEqual([
-      "natesclaw.compat.pluginApi",
+      "openclaw.compat.pluginApi",
       "natesclaw.build.natesclawVersion",
     ]);
     expect(validateExternalCodePluginPackageJson(packageJson).issues).toEqual([
       {
-        fieldPath: "natesclaw.compat.pluginApi",
-        message: "natesclaw.compat.pluginApi is required for external code plugin packages.",
+        fieldPath: "openclaw.compat.pluginApi",
+        message: "openclaw.compat.pluginApi is required for external code plugin packages.",
       },
       {
         fieldPath: "natesclaw.build.natesclawVersion",

@@ -8,7 +8,7 @@ import type {
   AcpRuntimeSessionMode,
   AcpRuntimeStatus,
   AcpRuntimeTurnAttachment,
-} from "@natesclaw/acp-core/runtime/types";
+} from "@openclaw/acp-core/runtime/types";
 import type {
   SessionAcpIdentity,
   AcpSessionRuntimeOptions,

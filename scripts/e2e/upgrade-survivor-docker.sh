@@ -369,7 +369,7 @@ fs.writeFileSync(
   path.join(root, "package.json"),
   `${JSON.stringify(
     {
-      name: "@natesclaw/brave-plugin",
+      name: "@openclaw/brave-plugin",
       version: "2026.5.2",
       natesclaw: { extensions: ["./index.js"] },
     },
@@ -411,7 +411,7 @@ fs.writeFileSync(
 );
 NODE
     tar -czf "$tarball" -C "$fixture_root" package
-    registry_args+=("@natesclaw/brave-plugin" "2026.5.2" "$tarball")
+    registry_args+=("@openclaw/brave-plugin" "2026.5.2" "$tarball")
   fi
 
   if [ "${#registry_args[@]}" -eq 0 ]; then
@@ -471,7 +471,7 @@ if [ "$update_status" -ne 0 ]; then
 fi
 if [ -n "${NATESCLAW_CLAWHUB_URL:-}" ]; then
   node "$NATESCLAW_UPGRADE_SURVIVOR_CLAWHUB_FIXTURE_SERVER" \
-    assert-prepublish-requests "$NATESCLAW_CLAWHUB_URL" "@natesclaw/whatsapp" "$package_version"
+    assert-prepublish-requests "$NATESCLAW_CLAWHUB_URL" "@openclaw/whatsapp" "$package_version"
 fi
 
 if [ "$UPDATE_RESTART_MODE" = "auto-auth" ]; then

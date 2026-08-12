@@ -1,5 +1,5 @@
 // Doctor cron warnings for model overrides and stale WhatsApp crontab health scripts.
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { normalizeOptionalString } from "../../../../packages/normalization-core/src/string-coerce.js";
 import { note } from "../../../../packages/terminal-core/src/note.js";
 import { normalizeChatChannelId } from "../../../channels/ids.js";

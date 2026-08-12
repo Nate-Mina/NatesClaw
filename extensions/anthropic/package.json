@@ -1,11 +1,11 @@
 {
-  "name": "@natesclaw/anthropic-provider",
+  "name": "@openclaw/anthropic-provider",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw Anthropic provider, Claude CLI, and native session catalog plugin",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

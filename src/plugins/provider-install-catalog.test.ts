@@ -102,11 +102,11 @@ function vllmPluginWithPackageInstall(): InstalledPluginIndexRecord {
       agentHarnesses: [],
     },
     compat: [],
-    packageName: "@natesclaw/vllm",
+    packageName: "@openclaw/vllm",
     packageInstall: {
       npm: {
-        spec: "@natesclaw/vllm-fork@1.0.0",
-        packageName: "@natesclaw/vllm-fork",
+        spec: "@openclaw/vllm-fork@1.0.0",
+        packageName: "@openclaw/vllm-fork",
         selector: "1.0.0",
         selectorKind: "exact-version",
         exactVersion: true,
@@ -173,12 +173,12 @@ describe("provider install catalog", () => {
             agentHarnesses: [],
           },
           compat: [],
-          packageName: "@natesclaw/openai",
+          packageName: "@openclaw/openai",
           packageInstall: {
             defaultChoice: "npm",
             npm: {
-              spec: "@natesclaw/openai@1.2.3",
-              packageName: "@natesclaw/openai",
+              spec: "@openclaw/openai@1.2.3",
+              packageName: "@openclaw/openai",
               selector: "1.2.3",
               selectorKind: "exact-version",
               exactVersion: true,
@@ -218,7 +218,7 @@ describe("provider install catalog", () => {
         label: "OpenAI",
         origin: "bundled",
         install: {
-          npmSpec: "@natesclaw/openai@1.2.3",
+          npmSpec: "@openclaw/openai@1.2.3",
           localPath: "extensions/openai",
           defaultChoice: "npm",
           expectedIntegrity: "sha512-openai",
@@ -226,8 +226,8 @@ describe("provider install catalog", () => {
         installSource: {
           defaultChoice: "npm",
           npm: {
-            spec: "@natesclaw/openai@1.2.3",
-            packageName: "@natesclaw/openai",
+            spec: "@openclaw/openai@1.2.3",
+            packageName: "@openclaw/openai",
             selector: "1.2.3",
             selectorKind: "exact-version",
             exactVersion: true,
@@ -249,8 +249,8 @@ describe("provider install catalog", () => {
         installRecords: {
           vllm: {
             source: "npm",
-            spec: "@natesclaw/vllm",
-            resolvedSpec: "@natesclaw/vllm@2.0.0",
+            spec: "@openclaw/vllm",
+            resolvedSpec: "@openclaw/vllm@2.0.0",
             integrity: "sha512-vllm",
           },
         },
@@ -269,15 +269,15 @@ describe("provider install catalog", () => {
       label: "vLLM",
       origin: "global",
       install: {
-        npmSpec: "@natesclaw/vllm@2.0.0",
+        npmSpec: "@openclaw/vllm@2.0.0",
         expectedIntegrity: "sha512-vllm",
         defaultChoice: "npm",
       },
       installSource: {
         defaultChoice: "npm",
         npm: {
-          spec: "@natesclaw/vllm@2.0.0",
-          packageName: "@natesclaw/vllm",
+          spec: "@openclaw/vllm@2.0.0",
+          packageName: "@openclaw/vllm",
           selector: "2.0.0",
           selectorKind: "exact-version",
           exactVersion: true,
@@ -407,12 +407,12 @@ describe("provider install catalog", () => {
             agentHarnesses: [],
           },
           compat: [],
-          packageName: "@natesclaw/openai",
+          packageName: "@openclaw/openai",
           packageInstall: {
             defaultChoice: "npm",
             npm: {
               spec: 12,
-              packageName: "@natesclaw/openai",
+              packageName: "@openclaw/openai",
               selectorKind: "exact-version",
               exactVersion: true,
               pinState: "exact-with-integrity",
@@ -500,9 +500,9 @@ describe("provider install catalog", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: "@natesclaw/plugin-moonshot",
+            package: "@openclaw/plugin-moonshot",
             install: {
-              npmSpec: "@natesclaw/plugin-moonshot@1.2.3",
+              npmSpec: "@openclaw/plugin-moonshot@1.2.3",
               defaultChoice: "npm",
               expectedIntegrity: "sha512-moonshot",
             },
@@ -533,15 +533,15 @@ describe("provider install catalog", () => {
       label: "Moonshot AI",
       origin: "bundled",
       install: {
-        npmSpec: "@natesclaw/plugin-moonshot@1.2.3",
+        npmSpec: "@openclaw/plugin-moonshot@1.2.3",
         defaultChoice: "npm",
         expectedIntegrity: "sha512-moonshot",
       },
       installSource: {
         defaultChoice: "npm",
         npm: {
-          spec: "@natesclaw/plugin-moonshot@1.2.3",
-          packageName: "@natesclaw/plugin-moonshot",
+          spec: "@openclaw/plugin-moonshot@1.2.3",
+          packageName: "@openclaw/plugin-moonshot",
           selector: "1.2.3",
           selectorKind: "exact-version",
           exactVersion: true,
@@ -556,7 +556,7 @@ describe("provider install catalog", () => {
   it("surfaces official external provider install metadata when the provider plugin is not installed", () => {
     listOfficialExternalProviderCatalogEntries.mockReturnValue([
       {
-        name: "@natesclaw/codex",
+        name: "@openclaw/codex",
         source: "official",
         kind: "provider",
         natesclaw: {
@@ -579,7 +579,7 @@ describe("provider install catalog", () => {
             },
           ],
           install: {
-            npmSpec: "@natesclaw/codex",
+            npmSpec: "@openclaw/codex",
             defaultChoice: "npm",
           },
         },
@@ -599,14 +599,14 @@ describe("provider install catalog", () => {
       label: "Codex",
       origin: "bundled",
       install: {
-        npmSpec: "@natesclaw/codex",
+        npmSpec: "@openclaw/codex",
         defaultChoice: "npm",
       },
       installSource: {
         defaultChoice: "npm",
         npm: {
-          spec: "@natesclaw/codex",
-          packageName: "@natesclaw/codex",
+          spec: "@openclaw/codex",
+          packageName: "@openclaw/codex",
           selectorKind: "none",
           exactVersion: false,
           pinState: "floating-without-integrity",
@@ -619,7 +619,7 @@ describe("provider install catalog", () => {
   it("preserves official external provider aliases for configured-plugin repair", () => {
     listOfficialExternalProviderCatalogEntries.mockReturnValue([
       {
-        name: "@natesclaw/gmi-provider",
+        name: "@openclaw/gmi-provider",
         source: "official",
         kind: "provider",
         natesclaw: {
@@ -639,7 +639,7 @@ describe("provider install catalog", () => {
             },
           ],
           install: {
-            npmSpec: "@natesclaw/gmi-provider",
+            npmSpec: "@openclaw/gmi-provider",
             defaultChoice: "npm",
           },
         },
@@ -656,7 +656,7 @@ describe("provider install catalog", () => {
   it("resolves deprecated official external auth choices before their plugin is installed", () => {
     listOfficialExternalProviderCatalogEntries.mockReturnValue([
       {
-        name: "@natesclaw/qwen-provider",
+        name: "@openclaw/qwen-provider",
         source: "official",
         kind: "provider",
         natesclaw: {
@@ -676,7 +676,7 @@ describe("provider install catalog", () => {
             },
           ],
           install: {
-            npmSpec: "@natesclaw/qwen-provider",
+            npmSpec: "@openclaw/qwen-provider",
             defaultChoice: "npm",
           },
         },
@@ -698,10 +698,10 @@ describe("provider install catalog", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: "@natesclaw/plugin-moonshot",
+            package: "@openclaw/plugin-moonshot",
             install: {
               clawhubSpec: "clawhub:natesclaw/moonshot@2026.5.2",
-              npmSpec: "@natesclaw/plugin-moonshot@2026.5.2",
+              npmSpec: "@openclaw/plugin-moonshot@2026.5.2",
               defaultChoice: "clawhub",
               expectedIntegrity: "sha512-moonshot",
             },
@@ -731,7 +731,7 @@ describe("provider install catalog", () => {
       origin: "bundled",
       install: {
         clawhubSpec: "clawhub:natesclaw/moonshot@2026.5.2",
-        npmSpec: "@natesclaw/plugin-moonshot@2026.5.2",
+        npmSpec: "@openclaw/plugin-moonshot@2026.5.2",
         defaultChoice: "clawhub",
         expectedIntegrity: "sha512-moonshot",
       },
@@ -744,8 +744,8 @@ describe("provider install catalog", () => {
           exactVersion: true,
         },
         npm: {
-          spec: "@natesclaw/plugin-moonshot@2026.5.2",
-          packageName: "@natesclaw/plugin-moonshot",
+          spec: "@openclaw/plugin-moonshot@2026.5.2",
+          packageName: "@openclaw/plugin-moonshot",
           selector: "2026.5.2",
           selectorKind: "exact-version",
           exactVersion: true,
@@ -792,9 +792,9 @@ describe("provider install catalog", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: "@natesclaw/plugin-moonshot",
+            package: "@openclaw/plugin-moonshot",
             install: {
-              npmSpec: "@natesclaw/plugin-moonshot@1.2.3",
+              npmSpec: "@openclaw/plugin-moonshot@1.2.3",
               expectedIntegrity: "sha512-moonshot",
             },
           },
@@ -847,9 +847,9 @@ describe("provider install catalog", () => {
           name: "Groq",
           plugin: {
             id: "groq",
-            package: "@natesclaw/plugin-groq",
+            package: "@openclaw/plugin-groq",
             install: {
-              npmSpec: "@natesclaw/plugin-groq@1.0.0",
+              npmSpec: "@openclaw/plugin-groq@1.0.0",
               defaultChoice: "npm",
             },
           },
@@ -866,10 +866,10 @@ describe("provider install catalog", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: "@natesclaw/plugin-moonshot",
+            package: "@openclaw/plugin-moonshot",
             install: {
               clawhubSpec: "clawhub:natesclaw/moonshot@2026.5.2",
-              npmSpec: "@natesclaw/plugin-moonshot@2026.5.2",
+              npmSpec: "@openclaw/plugin-moonshot@2026.5.2",
               defaultChoice: "clawhub",
             },
           },
@@ -886,10 +886,10 @@ describe("provider install catalog", () => {
           name: "vLLM",
           plugin: {
             id: "vllm",
-            package: "@natesclaw/plugin-vllm",
+            package: "@openclaw/plugin-vllm",
             install: {
               clawhubSpec: "clawhub:natesclaw/vllm@2026.5.2",
-              npmSpec: "@natesclaw/plugin-vllm@2026.5.2",
+              npmSpec: "@openclaw/plugin-vllm@2026.5.2",
               defaultChoice: "clawhub",
             },
           },
@@ -918,7 +918,7 @@ describe("provider install catalog", () => {
       origin: "bundled",
       install: {
         clawhubSpec: "clawhub:natesclaw/vllm@2026.5.2",
-        npmSpec: "@natesclaw/plugin-vllm@2026.5.2",
+        npmSpec: "@openclaw/plugin-vllm@2026.5.2",
         defaultChoice: "clawhub",
       },
       installSource: {
@@ -930,8 +930,8 @@ describe("provider install catalog", () => {
           exactVersion: true,
         },
         npm: {
-          spec: "@natesclaw/plugin-vllm@2026.5.2",
-          packageName: "@natesclaw/plugin-vllm",
+          spec: "@openclaw/plugin-vllm@2026.5.2",
+          packageName: "@openclaw/plugin-vllm",
           selector: "2026.5.2",
           selectorKind: "exact-version",
           exactVersion: true,

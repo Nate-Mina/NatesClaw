@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/gateway-client",
+  "name": "@openclaw/gateway-client",
   "version": "2026.8.1",
   "description": "Reference WebSocket client for the Natesclaw Gateway protocol",
   "keywords": [
@@ -8,15 +8,15 @@
     "natesclaw",
     "websocket"
   ],
-  "homepage": "https://github.com/natesclaw/natesclaw#readme",
+  "homepage": "https://github.com/openclaw/natesclaw#readme",
   "bugs": {
-    "url": "https://github.com/natesclaw/natesclaw/issues"
+    "url": "https://github.com/openclaw/natesclaw/issues"
   },
   "license": "MIT",
-  "author": "Natesclaw Foundation (https://natesclaw.org)",
+  "author": "Natesclaw Foundation (https://openclaw.org)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/natesclaw/natesclaw.git",
+    "url": "git+https://github.com/openclaw/natesclaw.git",
     "directory": "packages/gateway-client"
   },
   "files": [
@@ -60,7 +60,7 @@
     "build": "tsdown src/index.ts src/browser.ts src/readiness.ts src/timeouts.ts src/websocket-data.ts --no-config --platform node --format esm --dts --out-dir dist --clean"
   },
   "dependencies": {
-    "@natesclaw/gateway-protocol": "workspace:*",
+    "@openclaw/gateway-protocol": "workspace:*",
     "ipaddr.js": "2.4.0",
     "ws": "8.21.1"
   },

@@ -11,8 +11,8 @@ Adds Volcengine, Volcengine Plan model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/volcengine-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/volcengine-provider`
+- Package: `@openclaw/volcengine-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/volcengine-provider`
 
 ## Surface
 

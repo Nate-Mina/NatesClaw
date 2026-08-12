@@ -11,8 +11,8 @@ Adds OpenCode model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/opencode-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/opencode-provider`
+- Package: `@openclaw/opencode-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/opencode-provider`
 
 ## Surface
 

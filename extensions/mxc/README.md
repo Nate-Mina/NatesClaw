@@ -1,4 +1,4 @@
-# @natesclaw/mxc-sandbox
+# @openclaw/mxc-sandbox
 
 Official MXC sandbox execution plugin for Natesclaw.
 
@@ -8,7 +8,7 @@ ProcessContainer support.
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/mxc-sandbox
+natesclaw plugins install @openclaw/mxc-sandbox
 ```
 
 Restart the Gateway after installing or updating the plugin.
@@ -37,7 +37,7 @@ readiness behavior to change as MXC host support matures.
 ## Package
 
 - Plugin id: `mxc`
-- Package: `@natesclaw/mxc-sandbox`
+- Package: `@openclaw/mxc-sandbox`
 - Minimum Natesclaw host: `2026.6.11`
 
 ## Plugin config
@@ -105,7 +105,7 @@ help stay in sync with plugin runtime validation.
 
 This patch creates a default `main` agent, then adds a dedicated `mxc-test`
 agent so MXC testing does not change the default agent. It uses
-[`natesclaw config patch --stdin`](https://docs.natesclaw.ai/cli/config#config-patch)
+[`natesclaw config patch --stdin`](https://docs.openclaw.ai/cli/config#config-patch)
 so setup is one validated config write instead of several path-based
 `config set` commands.
 

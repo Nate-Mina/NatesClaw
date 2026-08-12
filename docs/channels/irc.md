@@ -14,7 +14,7 @@ Install the official IRC plugin, then configure it under `channels.irc`.
 1. Install the plugin:
 
 ```bash
-natesclaw plugins install @natesclaw/irc
+natesclaw plugins install @openclaw/irc
 ```
 
 2. Set at least host, nick, and the channels to join in `~/.natesclaw/natesclaw.json`:

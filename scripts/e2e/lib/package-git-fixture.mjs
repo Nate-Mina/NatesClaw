@@ -22,7 +22,7 @@ function withoutAiRuntimeDependency(value) {
   if (!Array.isArray(value)) {
     return value;
   }
-  const next = value.filter((entry) => entry !== "@natesclaw/ai");
+  const next = value.filter((entry) => entry !== "@openclaw/ai");
   return next.length > 0 ? next : undefined;
 }
 
@@ -55,7 +55,7 @@ function prepare(root) {
   fs.renameSync(aiRuntimeSource, aiRuntimeTarget);
 
   packageJson.dependencies ??= {};
-  packageJson.dependencies["@natesclaw/ai"] = "file:.natesclaw-fixture/packages/ai";
+  packageJson.dependencies["@openclaw/ai"] = "file:.natesclaw-fixture/packages/ai";
   packageJson.bundleDependencies = withoutAiRuntimeDependency(packageJson.bundleDependencies);
   packageJson.bundledDependencies = withoutAiRuntimeDependency(packageJson.bundledDependencies);
   if (packageJson.bundleDependencies === undefined) {

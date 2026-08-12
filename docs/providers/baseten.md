@@ -11,7 +11,7 @@ read_when:
 | Property        | Value                                                    |
 | --------------- | -------------------------------------------------------- |
 | Provider id     | `baseten`                                                |
-| Plugin          | official external package (`@natesclaw/baseten-provider`) |
+| Plugin          | official external package (`@openclaw/baseten-provider`) |
 | Auth env var    | `BASETEN_API_KEY`                                        |
 | Onboarding flag | `--auth-choice baseten-api-key`                          |
 | Direct CLI flag | `--baseten-api-key <key>`                                |
@@ -22,7 +22,7 @@ read_when:
 ## Install plugin
 
 ```bash
-natesclaw plugins install @natesclaw/baseten-provider
+natesclaw plugins install @openclaw/baseten-provider
 natesclaw gateway restart
 ```
 

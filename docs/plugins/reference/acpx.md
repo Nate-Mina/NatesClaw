@@ -11,7 +11,7 @@ Natesclaw ACP runtime backend with plugin-owned session and transport management
 
 ## Distribution
 
-- Package: `@natesclaw/acpx`
+- Package: `@openclaw/acpx`
 - Install route: npm; ClawHub
 
 ## Surface

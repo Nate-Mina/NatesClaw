@@ -1,6 +1,6 @@
 // Covers system event queue routing, draining, and formatting.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { drainFormattedSystemEvents } from "../auto-reply/reply/session-system-events.js";
 import type { NatesclawConfig } from "../config/config.js";

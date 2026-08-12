@@ -147,7 +147,7 @@ describe("installNatesclawInternalCorePackageNativeResolver", () => {
         moduleUrl: fixture.moduleUrl,
       });
 
-      expect(aliases).toContain("@natesclaw/markdown-core/code-spans");
+      expect(aliases).toContain("@openclaw/markdown-core/code-spans");
       expect(existsSync).not.toHaveBeenCalled();
     } finally {
       existsSync.mockRestore();
@@ -175,7 +175,7 @@ describe("installNatesclawInternalCorePackageNativeResolver", () => {
         moduleUrl: secondModuleUrl,
       });
 
-      expect(aliases).toContain("@natesclaw/markdown-core/code-spans");
+      expect(aliases).toContain("@openclaw/markdown-core/code-spans");
       expect(existsSync).not.toHaveBeenCalledWith(fixture.sourcePath);
       expect(readFileSync).toHaveBeenCalledExactlyOnceWith(
         path.join(fixture.root, "package.json"),
@@ -208,12 +208,12 @@ describe("installNatesclawInternalCorePackageNativeResolver", () => {
       expect(existsSync).toHaveBeenCalledWith(second.sourcePath);
       expect(
         fs.realpathSync(
-          createRequire(first.coreSourceParent).resolve("@natesclaw/markdown-core/code-spans"),
+          createRequire(first.coreSourceParent).resolve("@openclaw/markdown-core/code-spans"),
         ),
       ).toBe(fs.realpathSync(first.sourcePath));
       expect(
         fs.realpathSync(
-          createRequire(second.coreSourceParent).resolve("@natesclaw/markdown-core/code-spans"),
+          createRequire(second.coreSourceParent).resolve("@openclaw/markdown-core/code-spans"),
         ),
       ).toBe(fs.realpathSync(second.sourcePath));
     } finally {
@@ -555,66 +555,66 @@ describe("installNatesclawPluginSdkNativeResolver", () => {
       pluginSdkResolution: "dist",
     });
 
-    expect(installedAliases).toContain("@natesclaw/normalization-core/string-coerce");
-    expect(installedAliases).toContain("@natesclaw/normalization-core/boolean-coercion");
-    expect(installedAliases).toContain("@natesclaw/normalization-core/result");
-    expect(installedAliases).toContain("@natesclaw/normalization-core/agent-id");
-    expect(installedAliases).toContain("@natesclaw/media-core/mime");
-    expect(installedAliases).toContain("@natesclaw/markdown-core/code-spans");
-    expect(installedAliases).toContain("@natesclaw/ai/transports");
-    expect(installedAliases).toContain("@natesclaw/ai/internal/retry-after");
-    expect(installedAliases).toContain("@natesclaw/ai/internal/runtime");
-    expect(installedAliases).toContain("@natesclaw/acp-core/runtime/types");
-    expect(installedAliases).toContain("@natesclaw/llm-core");
+    expect(installedAliases).toContain("@openclaw/normalization-core/string-coerce");
+    expect(installedAliases).toContain("@openclaw/normalization-core/boolean-coercion");
+    expect(installedAliases).toContain("@openclaw/normalization-core/result");
+    expect(installedAliases).toContain("@openclaw/normalization-core/agent-id");
+    expect(installedAliases).toContain("@openclaw/media-core/mime");
+    expect(installedAliases).toContain("@openclaw/markdown-core/code-spans");
+    expect(installedAliases).toContain("@openclaw/ai/transports");
+    expect(installedAliases).toContain("@openclaw/ai/internal/retry-after");
+    expect(installedAliases).toContain("@openclaw/ai/internal/runtime");
+    expect(installedAliases).toContain("@openclaw/acp-core/runtime/types");
+    expect(installedAliases).toContain("@openclaw/llm-core");
     const requireFromCoreSource = createRequire(coreSourceParent);
     const requireFromPlugin = createRequire(externalPluginEntry);
     expect(
-      fs.realpathSync(requireFromCoreSource.resolve("@natesclaw/normalization-core/string-coerce")),
+      fs.realpathSync(requireFromCoreSource.resolve("@openclaw/normalization-core/string-coerce")),
     ).toBe(fs.realpathSync(normalizationSource));
     expect(
       fs.realpathSync(
-        requireFromCoreSource.resolve("@natesclaw/normalization-core/boolean-coercion"),
+        requireFromCoreSource.resolve("@openclaw/normalization-core/boolean-coercion"),
       ),
     ).toBe(fs.realpathSync(booleanCoercionSource));
     expect(
-      fs.realpathSync(requireFromCoreSource.resolve("@natesclaw/normalization-core/result")),
+      fs.realpathSync(requireFromCoreSource.resolve("@openclaw/normalization-core/result")),
     ).toBe(fs.realpathSync(resultSource));
     expect(
-      fs.realpathSync(requireFromCoreSource.resolve("@natesclaw/normalization-core/agent-id")),
+      fs.realpathSync(requireFromCoreSource.resolve("@openclaw/normalization-core/agent-id")),
     ).toBe(fs.realpathSync(agentIdSource));
-    expect(fs.realpathSync(requireFromCoreSource.resolve("@natesclaw/media-core/mime"))).toBe(
+    expect(fs.realpathSync(requireFromCoreSource.resolve("@openclaw/media-core/mime"))).toBe(
       fs.realpathSync(mediaCoreSource),
     );
     expect(
-      fs.realpathSync(requireFromCoreSource.resolve("@natesclaw/markdown-core/code-spans")),
+      fs.realpathSync(requireFromCoreSource.resolve("@openclaw/markdown-core/code-spans")),
     ).toBe(fs.realpathSync(markdownCoreSource));
-    expect(fs.realpathSync(requireFromCoreSource.resolve("@natesclaw/ai/transports"))).toBe(
+    expect(fs.realpathSync(requireFromCoreSource.resolve("@openclaw/ai/transports"))).toBe(
       fs.realpathSync(aiTransportsSource),
     );
     expect(
-      fs.realpathSync(requireFromCoreSource.resolve("@natesclaw/ai/internal/retry-after")),
+      fs.realpathSync(requireFromCoreSource.resolve("@openclaw/ai/internal/retry-after")),
     ).toBe(fs.realpathSync(aiRetryAfterSource));
-    expect(fs.realpathSync(requireFromCoreSource.resolve("@natesclaw/ai/internal/runtime"))).toBe(
+    expect(fs.realpathSync(requireFromCoreSource.resolve("@openclaw/ai/internal/runtime"))).toBe(
       fs.realpathSync(aiRuntimeSource),
     );
-    expect(fs.realpathSync(requireFromCoreSource.resolve("@natesclaw/acp-core/runtime/types"))).toBe(
+    expect(fs.realpathSync(requireFromCoreSource.resolve("@openclaw/acp-core/runtime/types"))).toBe(
       fs.realpathSync(acpCoreSource),
     );
-    expect(fs.realpathSync(requireFromCoreSource.resolve("@natesclaw/llm-core"))).toBe(
+    expect(fs.realpathSync(requireFromCoreSource.resolve("@openclaw/llm-core"))).toBe(
       fs.realpathSync(llmCoreSource),
     );
-    expect(() => requireFromPlugin.resolve("@natesclaw/normalization-core/string-coerce")).toThrow();
+    expect(() => requireFromPlugin.resolve("@openclaw/normalization-core/string-coerce")).toThrow();
     expect(() =>
-      requireFromPlugin.resolve("@natesclaw/normalization-core/boolean-coercion"),
+      requireFromPlugin.resolve("@openclaw/normalization-core/boolean-coercion"),
     ).toThrow();
-    expect(() => requireFromPlugin.resolve("@natesclaw/normalization-core/result")).toThrow();
-    expect(() => requireFromPlugin.resolve("@natesclaw/media-core/mime")).toThrow();
-    expect(() => requireFromPlugin.resolve("@natesclaw/markdown-core/code-spans")).toThrow();
-    expect(() => requireFromPlugin.resolve("@natesclaw/ai/transports")).toThrow();
-    expect(() => requireFromPlugin.resolve("@natesclaw/ai/internal/retry-after")).toThrow();
-    expect(() => requireFromPlugin.resolve("@natesclaw/ai/internal/runtime")).toThrow();
-    expect(() => requireFromPlugin.resolve("@natesclaw/acp-core/runtime/types")).toThrow();
-    expect(() => requireFromPlugin.resolve("@natesclaw/llm-core")).toThrow();
+    expect(() => requireFromPlugin.resolve("@openclaw/normalization-core/result")).toThrow();
+    expect(() => requireFromPlugin.resolve("@openclaw/media-core/mime")).toThrow();
+    expect(() => requireFromPlugin.resolve("@openclaw/markdown-core/code-spans")).toThrow();
+    expect(() => requireFromPlugin.resolve("@openclaw/ai/transports")).toThrow();
+    expect(() => requireFromPlugin.resolve("@openclaw/ai/internal/retry-after")).toThrow();
+    expect(() => requireFromPlugin.resolve("@openclaw/ai/internal/runtime")).toThrow();
+    expect(() => requireFromPlugin.resolve("@openclaw/acp-core/runtime/types")).toThrow();
+    expect(() => requireFromPlugin.resolve("@openclaw/llm-core")).toThrow();
   });
 
   it("does not register source-only SDK subpaths for native resolution", () => {

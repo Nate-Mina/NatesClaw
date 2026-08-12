@@ -11,7 +11,7 @@ describe("QQBot setup guidance", () => {
 
     expect(message).toContain("channels.qqbot.appId");
     expect(message).toContain("QQBOT_APP_ID and QQBOT_CLIENT_SECRET");
-    expect(message).toContain("https://docs.natesclaw.ai/channels/qqbot");
+    expect(message).toContain("https://docs.openclaw.ai/channels/qqbot");
   });
 
   it("directs named accounts to account-scoped config without default-only environment variables", () => {

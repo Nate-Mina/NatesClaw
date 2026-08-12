@@ -620,7 +620,7 @@ describe("loadNatesclawPlugins", () => {
       path.join(pluginRoot, "package.json"),
       JSON.stringify(
         {
-          name: "@natesclaw/discord",
+          name: "@openclaw/discord",
           version: "1.0.0",
           type: "module",
           natesclaw: { extensions: ["./index.js"] },
@@ -940,7 +940,7 @@ describe("loadNatesclawPlugins", () => {
   it("preserves package.json metadata for bundled memory plugins", () => {
     const registry = loadBundledMemoryPluginRegistry({
       packageMeta: {
-        name: "@natesclaw/memory-core",
+        name: "@openclaw/memory-core",
         version: "1.2.3",
         description: "Memory plugin package",
       },

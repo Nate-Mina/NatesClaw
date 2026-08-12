@@ -11,7 +11,7 @@ Natesclaw Slack channel plugin for channels, DMs, commands, and app events.
 
 ## Distribution
 
-- Package: `@natesclaw/slack`
+- Package: `@openclaw/slack`
 - Install route: npm; ClawHub
 
 ## Surface

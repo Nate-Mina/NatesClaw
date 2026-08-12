@@ -27,7 +27,7 @@ export type ExternalCodePluginValidationResult = {
 
 /** Required package.json field paths for external code plugin packages. */
 export const EXTERNAL_CODE_PLUGIN_REQUIRED_FIELD_PATHS = [
-  "natesclaw.compat.pluginApi",
+  "openclaw.compat.pluginApi",
   "natesclaw.build.natesclawVersion",
 ] as const;
 
@@ -35,7 +35,7 @@ export const EXTERNAL_CODE_PLUGIN_REQUIRED_FIELD_PATHS = [
 function readNatesclawBlock(packageJson: unknown) {
   const root = isRecord(packageJson) ? packageJson : undefined;
   const natesclaw = isRecord(root?.natesclaw) ? root.natesclaw : undefined;
-  const compat = isRecord(natesclaw?.compat) ? natesclaw.compat : undefined;
+  const compat = isRecord(natesclaw?.compat) ? openclaw.compat : undefined;
   const build = isRecord(natesclaw?.build) ? natesclaw.build : undefined;
   const install = isRecord(natesclaw?.install) ? natesclaw.install : undefined;
   return { root, natesclaw, compat, build, install };
@@ -78,7 +78,7 @@ export function listMissingExternalCodePluginFieldPaths(packageJson: unknown): s
   const { compat, build } = readNatesclawBlock(packageJson);
   const missing: string[] = [];
   if (!normalizeOptionalString(compat?.pluginApi)) {
-    missing.push("natesclaw.compat.pluginApi");
+    missing.push("openclaw.compat.pluginApi");
   }
   if (!normalizeOptionalString(build?.natesclawVersion)) {
     missing.push("natesclaw.build.natesclawVersion");

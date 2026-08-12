@@ -3,8 +3,8 @@ import {
   ErrorCodes,
   GatewayErrorDetailCodes,
   readMissingScopeError,
-} from "@natesclaw/gateway-client/browser";
-import { asNullableRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
+} from "@openclaw/gateway-client/browser";
+import { asNullableRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
 import { ConnectErrorDetailCodes } from "../../../packages/gateway-protocol/src/connect-error-details.js";
 import { resolveGatewayErrorDetailCode } from "../api/gateway.ts";
 

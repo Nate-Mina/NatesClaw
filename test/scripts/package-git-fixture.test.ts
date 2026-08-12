@@ -16,8 +16,8 @@ describe("package git fixture", () => {
       path.join(root, "package.json"),
       `${JSON.stringify(
         {
-          dependencies: { "@natesclaw/ai": "2026.6.11", chalk: "5.6.2" },
-          bundleDependencies: ["@natesclaw/ai", "chalk"],
+          dependencies: { "@openclaw/ai": "2026.6.11", chalk: "5.6.2" },
+          bundleDependencies: ["@openclaw/ai", "chalk"],
         },
         null,
         2,
@@ -25,7 +25,7 @@ describe("package git fixture", () => {
     );
     writeFileSync(
       path.join(root, "node_modules", "@natesclaw", "ai", "package.json"),
-      `${JSON.stringify({ name: "@natesclaw/ai", version: "2026.6.11" })}\n`,
+      `${JSON.stringify({ name: "@openclaw/ai", version: "2026.6.11" })}\n`,
     );
 
     const result = spawnSync(
@@ -39,7 +39,7 @@ describe("package git fixture", () => {
       expect.arrayContaining(["dist/", "node_modules", "**/node_modules/", "pnpm-lock.yaml"]),
     );
     const packageJson = JSON.parse(readFileSync(path.join(root, "package.json"), "utf8"));
-    expect(packageJson.dependencies["@natesclaw/ai"]).toBe("file:.natesclaw-fixture/packages/ai");
+    expect(packageJson.dependencies["@openclaw/ai"]).toBe("file:.natesclaw-fixture/packages/ai");
     expect(packageJson.bundleDependencies).toEqual(["chalk"]);
     expect(
       JSON.parse(
@@ -48,7 +48,7 @@ describe("package git fixture", () => {
           "utf8",
         ),
       ).name,
-    ).toBe("@natesclaw/ai");
+    ).toBe("@openclaw/ai");
 
     mkdirSync(path.join(root, "node_modules", "chalk"), { recursive: true });
     writeFileSync(path.join(root, "node_modules", "chalk", "package.json"), "{}\n");

@@ -1,8 +1,8 @@
 // User turn transcript helpers extract user-turn text from session transcripts.
 import { randomUUID } from "node:crypto";
-import { mimeTypeFromFilePath } from "@natesclaw/media-core/mime";
-import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { mimeTypeFromFilePath } from "@openclaw/media-core/mime";
+import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import type { AgentMessage } from "../../packages/agent-core/src/types.js";
 import {
   persistSessionTranscriptTurn,
@@ -151,7 +151,7 @@ export function buildPersistedUserTurnMessage(params: UserTurnInput): PersistedU
   // derived from each message's own `timestamp` field, so the current turn and
   // every historical turn serialize identically on the wire. Persisting a stamp
   // here would NOT match the bare-current arrival (the gateway no longer stamps
-  // the live turn) — see https://github.com/natesclaw/natesclaw/issues/3658.
+  // the live turn) — see https://github.com/openclaw/natesclaw/issues/3658.
   const senderMeta = buildUserTurnSenderMeta(params.sender);
   const NatesclawMeta = {
     // Privileged synthetic handoffs may execute owner tools but never author trusted memory.

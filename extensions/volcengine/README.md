@@ -6,8 +6,8 @@ plan, and Volcengine Speech text-to-speech.
 Install from Natesclaw:
 
 ```bash
-natesclaw plugins install @natesclaw/volcengine-provider
+natesclaw plugins install @openclaw/volcengine-provider
 natesclaw gateway restart
 ```
 
-See <https://docs.natesclaw.ai/providers/volcengine> for model and speech setup.
+See <https://docs.openclaw.ai/providers/volcengine> for model and speech setup.

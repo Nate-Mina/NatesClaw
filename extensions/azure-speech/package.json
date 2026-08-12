@@ -1,11 +1,11 @@
 {
-  "name": "@natesclaw/azure-speech",
+  "name": "@openclaw/azure-speech",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw Azure Speech plugin",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

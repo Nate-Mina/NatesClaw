@@ -2,16 +2,16 @@
 import "./fs-safe-defaults.js";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { ensureDirectoryWithinRoot, findExistingAncestor } from "@natesclaw/fs-safe/advanced";
-import { writeExternalFileWithinRoot as writeExternalFileWithinRootBase } from "@natesclaw/fs-safe/output";
+import { ensureDirectoryWithinRoot, findExistingAncestor } from "@openclaw/fs-safe/advanced";
+import { writeExternalFileWithinRoot as writeExternalFileWithinRootBase } from "@openclaw/fs-safe/output";
 import {
   root as fsSafeRoot,
   type ReadResult,
   type Root as FsSafeRoot,
   type RootDefaults,
-} from "@natesclaw/fs-safe/root";
+} from "@openclaw/fs-safe/root";
 
-export { FsSafeError, type FsSafeErrorCode } from "@natesclaw/fs-safe/errors";
+export { FsSafeError, type FsSafeErrorCode } from "@openclaw/fs-safe/errors";
 export {
   assertAbsolutePathInput,
   canonicalPathFromExistingAncestor,
@@ -23,11 +23,11 @@ export {
   type EnsureAbsoluteDirectoryResult,
   type ResolvedAbsolutePath,
   type ResolvedWritableAbsolutePath,
-} from "@natesclaw/fs-safe/advanced";
-export { isPathInside } from "@natesclaw/fs-safe/path";
-export { pathExists, pathExistsSync } from "@natesclaw/fs-safe/advanced";
-export { movePathToTrash, type MovePathToTrashOptions } from "@natesclaw/fs-safe/advanced";
-export { readLocalFileFromRoots, resolveLocalPathFromRootsSync } from "@natesclaw/fs-safe/advanced";
+} from "@openclaw/fs-safe/advanced";
+export { isPathInside } from "@openclaw/fs-safe/path";
+export { pathExists, pathExistsSync } from "@openclaw/fs-safe/advanced";
+export { movePathToTrash, type MovePathToTrashOptions } from "@openclaw/fs-safe/advanced";
+export { readLocalFileFromRoots, resolveLocalPathFromRootsSync } from "@openclaw/fs-safe/advanced";
 export {
   appendRegularFile,
   appendRegularFileSync,
@@ -36,28 +36,28 @@ export {
   resolveRegularFileAppendFlags,
   statRegularFile,
   statRegularFileSync,
-} from "@natesclaw/fs-safe/advanced";
+} from "@openclaw/fs-safe/advanced";
 export {
   openLocalFileSafely,
   readLocalFileSafely,
   resolveOpenedFileRealPathForHandle,
   type OpenResult,
   type ReadResult,
-} from "@natesclaw/fs-safe/root";
+} from "@openclaw/fs-safe/root";
 export { sanitizeUntrustedFileName } from "./fs-safe-advanced.js";
 export {
   readSecureFile,
   type SecureFileReadOptions,
   type SecureFileReadResult,
-} from "@natesclaw/fs-safe/secure-file";
+} from "@openclaw/fs-safe/secure-file";
 export {
   walkDirectory,
   walkDirectorySync,
   type WalkDirectoryEntry,
   type WalkDirectoryOptions,
   type WalkDirectoryResult,
-} from "@natesclaw/fs-safe/walk";
-export { withTimeout } from "@natesclaw/fs-safe/advanced";
+} from "@openclaw/fs-safe/walk";
+export { withTimeout } from "@openclaw/fs-safe/advanced";
 
 // The broad Plugin SDK infra barrel re-exports this facade. Keep fs-safe 0.5's
 // new Root.walk capability core-only until a dedicated plugin contract is approved.

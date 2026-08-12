@@ -2,7 +2,7 @@
 import type {
   WhatsAppQaDriverObservedMessage,
   WhatsAppQaDriverSession,
-} from "@natesclaw/whatsapp/api.js";
+} from "@openclaw/whatsapp/api.js";
 import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import type { startQaGatewayChild } from "../../gateway-child.js";
 

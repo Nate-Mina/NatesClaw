@@ -182,7 +182,7 @@ describe("handleBuzzInbound", () => {
 
   it("accepts a configured text mention when no native p tag is present", async () => {
     const runtime = createPluginRuntimeMock();
-    vi.mocked(runtime.channel.mentions.buildMentionRegexes).mockReturnValue([/@natesclaw/i]);
+    vi.mocked(runtime.channel.mentions.buildMentionRegexes).mockReturnValue([/@openclaw/i]);
     setBuzzRuntime(runtime);
 
     await handleBuzzInbound({
@@ -339,7 +339,7 @@ describe("handleBuzzInbound", () => {
         kind: BUZZ_DIFF_MESSAGE_KIND,
         text: diffText,
         diff: {
-          repoUrl: "https://github.com/natesclaw/natesclaw",
+          repoUrl: "https://github.com/openclaw/natesclaw",
           commitSha: "abcdef1",
           description: `line one\n${"x".repeat(1_100)}`,
           truncated: true,
@@ -358,7 +358,7 @@ describe("handleBuzzInbound", () => {
     });
     const bodyForAgent = context.BodyForAgent ?? "";
     expect(bodyForAgent).toContain("[Buzz structured diff]");
-    expect(bodyForAgent).toContain("Repository: https://github.com/natesclaw/natesclaw");
+    expect(bodyForAgent).toContain("Repository: https://github.com/openclaw/natesclaw");
     expect(bodyForAgent).toContain("Description: line one ");
     expect(bodyForAgent).toContain("Truncated: yes");
     expect(bodyForAgent).toContain("Unified diff:\n/status\n@@ -1 +1 @@\n-old\n+new");
@@ -379,7 +379,7 @@ describe("handleBuzzInbound", () => {
         kind: BUZZ_DIFF_MESSAGE_KIND,
         text: "+const owner = '@Natesclaw';",
         diff: {
-          repoUrl: "https://github.com/natesclaw/natesclaw",
+          repoUrl: "https://github.com/openclaw/natesclaw",
           commitSha: "abcdef1",
           truncated: false,
         },

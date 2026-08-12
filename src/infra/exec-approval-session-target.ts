@@ -1,5 +1,5 @@
 // Resolves approval delivery targets from sessions and turn sources.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { resolveSessionConversationRef } from "../channels/plugins/session-conversation.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { normalizeMessageChannel } from "../utils/message-channel.js";

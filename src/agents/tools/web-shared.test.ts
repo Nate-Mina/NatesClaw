@@ -1,6 +1,6 @@
 // Shared web helper tests cover timeout normalization, process-local cache
 // expiry guards, and bounded response body cleanup.
-import { MAX_TIMER_TIMEOUT_SECONDS } from "@natesclaw/normalization-core/number-coercion";
+import { MAX_TIMER_TIMEOUT_SECONDS } from "@openclaw/normalization-core/number-coercion";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   normalizeCacheKey,

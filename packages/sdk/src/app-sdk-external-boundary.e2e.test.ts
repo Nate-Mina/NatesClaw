@@ -7,7 +7,7 @@ describe("external preview App SDK boundary", () => {
     const consumer = await createPackedSdkConsumer();
     try {
       await consumer.run(`
-        import { GatewayClientTransport, Natesclaw, normalizeGatewayEvent } from "@natesclaw/sdk";
+        import { GatewayClientTransport, Natesclaw, normalizeGatewayEvent } from "@openclaw/sdk";
 
         if (typeof GatewayClientTransport !== "function") throw new Error("missing transport export");
         const event = normalizeGatewayEvent({

@@ -11,7 +11,7 @@ Local GGUF text inference and embeddings through node-llama-cpp.
 
 ## Distribution
 
-- Package: `@natesclaw/llama-cpp-provider`
+- Package: `@openclaw/llama-cpp-provider`
 - Install route: npm; ClawHub
 
 ## Surface

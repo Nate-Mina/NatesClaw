@@ -1,6 +1,6 @@
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
-import { MAX_TIMER_TIMEOUT_MS } from "@natesclaw/normalization-core/number-coercion";
+import { expectDefined } from "@openclaw/normalization-core";
+import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
 // Sessions tool tests cover list/send helpers, announce-target resolution,
 // and assistant-visible text sanitization.
 import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";

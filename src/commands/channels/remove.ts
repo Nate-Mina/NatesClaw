@@ -1,5 +1,5 @@
 // Implements guided and non-interactive disable/delete for channel accounts.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import {
   applyPreparedChannelAccountRemoval,
   type ChannelAccountMutationPlugin,

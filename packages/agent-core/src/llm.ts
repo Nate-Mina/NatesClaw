@@ -1,2 +1,2 @@
 // AI contract compatibility barrel for agent-core consumers.
-export * from "@natesclaw/ai";
+export * from "@openclaw/ai";

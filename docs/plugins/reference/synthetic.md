@@ -11,8 +11,8 @@ Adds Synthetic model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/synthetic-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/synthetic-provider`
+- Package: `@openclaw/synthetic-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/synthetic-provider`
 
 ## Surface
 

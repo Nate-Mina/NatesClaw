@@ -1,7 +1,7 @@
 /**
  * Resolves CLI runtime backends registered by plugins or setup metadata.
  */
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { ContextEngineHostCapability } from "../context-engine/types.js";
 import type {

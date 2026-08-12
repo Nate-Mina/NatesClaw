@@ -1977,14 +1977,14 @@ describe("scripts/crabbox-wrapper", () => {
     expect(result.status).toBe(2);
     expect(result.stdout).toBe("");
     expect(result.stderr).toContain("provider=aws requires a configured managed Crabbox broker");
-    expect(result.stderr).toContain("login --url https://crabbox.natesclaw.ai");
+    expect(result.stderr).toContain("login --url https://crabbox.openclaw.ai");
     expect(result.stderr).not.toContain("--provider aws");
     expect(result.stderr).not.toContain("NATESCLAW_CRABBOX_ALLOW_DIRECT_CLOUD");
   });
 
   it("fails closed for AWS proof when broker auth is stale", () => {
     const result = runDefaultWrapper(["run", "--provider", "aws", "--", "echo ok"], {
-      configJson: { coordinator: "https://crabbox.natesclaw.ai", brokerAuth: "configured" },
+      configJson: { coordinator: "https://crabbox.openclaw.ai", brokerAuth: "configured" },
       env: { NATESCLAW_FAKE_CRABBOX_WHOAMI_STATUS: "1" },
     });
 
@@ -2843,12 +2843,12 @@ describe("scripts/crabbox-wrapper", () => {
     const { output, remoteCommand } = runSuccessfulNativeWindows("aws", [
       "pnpm",
       "--filter",
-      "@natesclaw/discord",
+      "@openclaw/discord",
       "test",
     ]);
     expect(output.args).toContain("--shell");
     expect(remoteCommand).toContain("$natesclawModulesDir = $env:PNPM_CONFIG_MODULES_DIR");
-    expect(remoteCommand).toContain("pnpm --filter '@natesclaw/discord' test");
+    expect(remoteCommand).toContain("pnpm --filter '@openclaw/discord' test");
   });
 
   it("restores hydrated node_modules before POSIX run commands", () => {

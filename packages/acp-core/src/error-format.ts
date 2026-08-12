@@ -114,4 +114,4 @@ export function redactSensitiveText(value: string): string {
   return redacted.replaceAll(structuredAuthMarker, "[REDACTED]");
 }
 
-export { stringifyNonErrorCause } from "@natesclaw/normalization-core/error-coercion";
+export { stringifyNonErrorCause } from "@openclaw/normalization-core/error-coercion";

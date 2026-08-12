@@ -10,7 +10,7 @@ read_when:
 Install the official `comfy` plugin for workflow-driven ComfyUI runs:
 
 ```bash
-natesclaw plugins install @natesclaw/comfy-provider
+natesclaw plugins install @openclaw/comfy-provider
 natesclaw gateway restart
 ```
 

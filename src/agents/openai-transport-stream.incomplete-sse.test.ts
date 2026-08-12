@@ -2,7 +2,7 @@ import { createServer } from "node:http";
 import {
   createAzureOpenAIResponsesTransportStreamFn,
   createOpenAIResponsesTransportStreamFn,
-} from "@natesclaw/ai/transports";
+} from "@openclaw/ai/transports";
 import type { Model } from "natesclaw/plugin-sdk/llm";
 import { describe, expect, it } from "vitest";
 

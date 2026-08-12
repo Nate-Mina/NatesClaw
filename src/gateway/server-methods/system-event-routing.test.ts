@@ -1,7 +1,7 @@
 /** Targeted system-event routing and wake behavior. */
 
 import { randomUUID } from "node:crypto";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   SYSTEM_PRESENCE_CLEAR_LAST_INPUT_TAG,

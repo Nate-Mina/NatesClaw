@@ -1,7 +1,7 @@
 // Implements identity metadata updates for configured agents.
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { expectDefined } from "@openclaw/normalization-core";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import {
   listAgentIds,
   resolveAgentWorkspaceDir,

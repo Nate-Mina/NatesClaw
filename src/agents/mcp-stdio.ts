@@ -3,7 +3,7 @@
  * Accepts Natesclaw and upstream MCP config field names, keeping only
  * command/args/env/cwd needed to spawn a stdio server.
  */
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { redactSensitiveArgv } from "../config/redact-argv.js";
 import { toMcpEnvRecord, toMcpStringArray } from "./mcp-config-shared.js";
 

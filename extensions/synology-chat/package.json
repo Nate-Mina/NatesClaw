@@ -1,14 +1,14 @@
 {
-  "name": "@natesclaw/synology-chat",
+  "name": "@openclaw/synology-chat",
   "version": "2026.8.1",
   "description": "Synology Chat channel plugin for Natesclaw channels and direct messages.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
@@ -74,7 +74,7 @@
       }
     },
     "install": {
-      "npmSpec": "@natesclaw/synology-chat",
+      "npmSpec": "@openclaw/synology-chat",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     },

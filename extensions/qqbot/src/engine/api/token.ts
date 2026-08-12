@@ -35,7 +35,7 @@ const QQBOT_TOKEN_REQUEST_TIMEOUT_MS = 30_000;
  * (`QQBOT_MEDIA_SSRF_POLICY` in `../utils/file-utils.ts`) so the relaxation
  * stays narrowly host-scoped instead of weakening the global default.
  *
- * See https://github.com/natesclaw/natesclaw/issues/88984.
+ * See https://github.com/openclaw/natesclaw/issues/88984.
  */
 const QQBOT_TOKEN_SSRF_POLICY: SsrFPolicy = {
   hostnameAllowlist: ["bots.qq.com"],

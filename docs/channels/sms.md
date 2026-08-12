@@ -26,7 +26,7 @@ Status: official plugin, installed separately. SMS text and MMS attachments, dir
 
 You need:
 
-- The official SMS plugin installed with `natesclaw plugins install @natesclaw/sms`.
+- The official SMS plugin installed with `natesclaw plugins install @openclaw/sms`.
 - A Twilio account with an SMS-capable phone number, or a Twilio Messaging Service. MMS requires an MMS-capable sender; native MMS delivery also depends on the destination country and carrier.
 - The Twilio Account SID and Auth Token.
 - A public HTTPS URL that reaches your Natesclaw Gateway.
@@ -58,7 +58,7 @@ If Twilio rejects the Brand or Campaign during registration review, fix that in 
 <Steps>
   <Step title="Install the plugin">
     ```bash
-    natesclaw plugins install @natesclaw/sms
+    natesclaw plugins install @openclaw/sms
     ```
   </Step>
   <Step title="Create or choose a Twilio sender">

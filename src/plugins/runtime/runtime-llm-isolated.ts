@@ -1,5 +1,5 @@
 // Isolated plugin LLM completion policy validates and dispatches the zero-tool runtime mode.
-import { asFiniteNumber } from "@natesclaw/normalization-core/number-coercion";
+import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
 import type { IsolatedCompletionResult } from "../../agents/isolated-completion.js";
 import { buildConfiguredModelCatalog } from "../../agents/model-selection-shared.js";
 import { resolveEffectiveAgentRuntime } from "../../agents/thinking-runtime.js";

@@ -55,12 +55,12 @@ describe("renderAbout", () => {
 
     const links = Array.from(hero?.querySelectorAll<HTMLAnchorElement>(".about-hero__link") ?? []);
     expect(links.map((link) => link.getAttribute("href"))).toEqual([
-      "https://natesclaw.ai",
-      "https://docs.natesclaw.ai",
-      "https://github.com/natesclaw/natesclaw",
+      "https://openclaw.ai",
+      "https://docs.openclaw.ai",
+      "https://github.com/openclaw/natesclaw",
       "https://discord.gg/clawd",
       "https://x.com/natesclaw",
-      "https://docs.natesclaw.ai/releases",
+      "https://docs.openclaw.ai/releases",
     ]);
     for (const link of links) {
       expect(link.getAttribute("target")).toBe("_blank");

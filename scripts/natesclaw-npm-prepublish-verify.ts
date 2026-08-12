@@ -86,20 +86,20 @@ export function assertPreparedNatesclawAiDependency(params: {
   aiManifest: PackedPackageJson;
   rootManifest: PackedPackageJson;
 }): void {
-  if (params.aiManifest.name !== "@natesclaw/ai" || !params.aiManifest.version) {
-    throw new Error("Prepared dependency tarball must contain @natesclaw/ai with a version.");
+  if (params.aiManifest.name !== "@openclaw/ai" || !params.aiManifest.version) {
+    throw new Error("Prepared dependency tarball must contain @openclaw/ai with a version.");
   }
   if (params.rootManifest.name !== "natesclaw") {
     throw new Error("Prepared root tarball must contain the natesclaw package.");
   }
   if (!params.rootManifest.version || params.rootManifest.version !== params.aiManifest.version) {
     throw new Error(
-      `Prepared root and @natesclaw/ai tarballs must both be version ${params.aiManifest.version}.`,
+      `Prepared root and @openclaw/ai tarballs must both be version ${params.aiManifest.version}.`,
     );
   }
-  if (params.rootManifest.dependencies?.["@natesclaw/ai"] !== params.aiManifest.version) {
+  if (params.rootManifest.dependencies?.["@openclaw/ai"] !== params.aiManifest.version) {
     throw new Error(
-      `Prepared root tarball must depend on exact @natesclaw/ai@${params.aiManifest.version}.`,
+      `Prepared root tarball must depend on exact @openclaw/ai@${params.aiManifest.version}.`,
     );
   }
 }
@@ -151,7 +151,7 @@ function main(argv = process.argv.slice(2)): void {
           {
             private: true,
             dependencies: {
-              "@natesclaw/ai": pathToFileURL(aiTarballPath).href,
+              "@openclaw/ai": pathToFileURL(aiTarballPath).href,
               natesclaw: pathToFileURL(realpathSync(args.tarballPath)).href,
             },
           },

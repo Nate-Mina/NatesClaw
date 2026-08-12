@@ -6,15 +6,15 @@ read_when:
 title: "Matrix"
 ---
 
-Matrix is a downloadable channel plugin (`@natesclaw/matrix`) built on the official `matrix-js-sdk`. It supports DMs, rooms, threads, media, reactions, polls, location, and E2EE.
+Matrix is a downloadable channel plugin (`@openclaw/matrix`) built on the official `matrix-js-sdk`. It supports DMs, rooms, threads, media, reactions, polls, location, and E2EE.
 
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/matrix
+natesclaw plugins install @openclaw/matrix
 ```
 
-Bare plugin specs try ClawHub first, then npm fallback. Force a source with `natesclaw plugins install clawhub:@natesclaw/matrix` or `npm:@natesclaw/matrix`. From a local checkout: `natesclaw plugins install ./path/to/local/matrix-plugin`.
+Bare plugin specs try ClawHub first, then npm fallback. Force a source with `natesclaw plugins install clawhub:@openclaw/matrix` or `npm:@openclaw/matrix`. From a local checkout: `natesclaw plugins install ./path/to/local/matrix-plugin`.
 
 `plugins install` registers and enables the plugin; no separate `enable` step is needed. The channel still does nothing until configured below. See [Plugins](/tools/plugin) for general install rules.
 

@@ -1,5 +1,5 @@
 // Doctor-only runtime policy repair for migrated cron Codex model refs.
-import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
 import { tryResolveDefaultAgentId } from "../../../agents/agent-scope-config.js";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { normalizeAgentId } from "../../../routing/session-key.js";

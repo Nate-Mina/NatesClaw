@@ -2,8 +2,8 @@
 import { createHash, randomUUID } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import { z } from "zod";
 import { resolveStateDir } from "../config/paths.js";
 import { readFileDescriptorBoundedSync } from "../infra/boundary-file-read.js";
@@ -1266,7 +1266,7 @@ function createPrefilledGithubIssueUrl(title: string, body: string): string {
     body: urlBody,
     title,
   });
-  return `https://github.com/natesclaw/natesclaw/issues/new?${params.toString()}`;
+  return `https://github.com/openclaw/natesclaw/issues/new?${params.toString()}`;
 }
 
 function pruneCompletedSessionSqliteMigrationRuns(env: NodeJS.ProcessEnv): void {

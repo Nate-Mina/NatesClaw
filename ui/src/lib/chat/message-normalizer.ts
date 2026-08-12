@@ -2,8 +2,8 @@
  * Message normalization utilities for chat rendering.
  */
 
-import { mediaKindFromMime } from "@natesclaw/media-core/constants";
-import { asRecord as asMessageRecord, isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { mediaKindFromMime } from "@openclaw/media-core/constants";
+import { asRecord as asMessageRecord, isRecord } from "@openclaw/normalization-core/record-coerce";
 import { stripInboundMetadata } from "../../../../src/auto-reply/reply/strip-inbound-meta.js";
 import { extractCanvasShortcodes } from "../../../../src/chat/canvas-render.js";
 import {

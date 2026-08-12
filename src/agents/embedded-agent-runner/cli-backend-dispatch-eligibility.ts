@@ -6,7 +6,7 @@
  * routing from drifting apart. Kept separate from the dispatch module so
  * the plugin runtime surface does not eagerly load the run machinery.
  */
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resolveRuntimeCliBackends } from "../../plugins/cli-backends.runtime.js";
 import {

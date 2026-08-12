@@ -1,5 +1,5 @@
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { uniqueValues } from "@natesclaw/normalization-core/string-normalization";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { uniqueValues } from "@openclaw/normalization-core/string-normalization";
 import { parse, tokenizer } from "acorn";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { formatErrorMessage } from "../infra/errors.js";

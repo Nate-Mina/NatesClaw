@@ -1,6 +1,6 @@
 import fs from "node:fs";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalLowercaseString as normalizeString } from "@natesclaw/normalization-core/string-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalLowercaseString as normalizeString } from "@openclaw/normalization-core/string-coerce";
 import { resolveAgentDir } from "../../../agents/agent-scope.js";
 import {
   areOAuthCredentialsEquivalent,

@@ -1,5 +1,5 @@
 // Tests reset hook fallback behavior inside the get-reply directive pipeline.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import {
   buildNativeResetContext,

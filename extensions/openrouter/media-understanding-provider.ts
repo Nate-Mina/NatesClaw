@@ -118,7 +118,7 @@ async function transcribeOpenRouterAudio(
       defaultHeaders: {
         Authorization: `Bearer ${params.apiKey}`,
         "Content-Type": "application/json",
-        "HTTP-Referer": "https://natesclaw.ai",
+        "HTTP-Referer": "https://openclaw.ai",
         "X-OpenRouter-Title": "Natesclaw",
       },
       provider: "openrouter",

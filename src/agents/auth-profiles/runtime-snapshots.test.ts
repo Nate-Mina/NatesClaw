@@ -3,7 +3,7 @@
  * Verifies snapshots are cloned and isolated across agent-specific stores.
  */
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { describe, expect, it, vi } from "vitest";
 import {
   getPreparedRuntimeAuthMaterializations,

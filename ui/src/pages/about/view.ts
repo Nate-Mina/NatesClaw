@@ -1,5 +1,5 @@
 import "../../styles/lobster-pet.css";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { html, nothing, type TemplateResult } from "lit";
 import type { ControlUiBuildInfo } from "../../build-info.ts";
 import { icons } from "../../components/icons.ts";
@@ -38,10 +38,10 @@ const SHORT_COMMIT_LENGTH = 12;
 // Docs-first where a docs page exists; GitHub/Discord match the native
 // macOS/iOS About screens (AboutSettings.swift, SettingsProTabSections.swift).
 const ABOUT_LINKS: ReadonlyArray<{ href: string; icon: TemplateResult; label: () => string }> = [
-  { href: "https://natesclaw.ai", icon: icons.globe, label: () => t("aboutPage.linkWebsite") },
-  { href: "https://docs.natesclaw.ai", icon: icons.book, label: () => t("aboutPage.linkDocs") },
+  { href: "https://openclaw.ai", icon: icons.globe, label: () => t("aboutPage.linkWebsite") },
+  { href: "https://docs.openclaw.ai", icon: icons.book, label: () => t("aboutPage.linkDocs") },
   {
-    href: "https://github.com/natesclaw/natesclaw",
+    href: "https://github.com/openclaw/natesclaw",
     icon: brandIcons.github,
     label: () => t("aboutPage.linkGitHub"),
   },
@@ -56,7 +56,7 @@ const ABOUT_LINKS: ReadonlyArray<{ href: string; icon: TemplateResult; label: ()
     label: () => t("aboutPage.linkX"),
   },
   {
-    href: "https://docs.natesclaw.ai/releases",
+    href: "https://docs.openclaw.ai/releases",
     icon: icons.scrollText,
     label: () => t("aboutPage.linkChangelog"),
   },

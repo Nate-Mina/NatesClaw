@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/signal",
+  "name": "@openclaw/signal",
   "version": "2026.8.1",
   "description": "Natesclaw Signal channel plugin",
   "type": "module",
@@ -8,7 +8,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
@@ -89,8 +89,8 @@
       }
     },
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/signal",
-      "npmSpec": "@natesclaw/signal",
+      "clawhubSpec": "clawhub:@openclaw/signal",
+      "npmSpec": "@openclaw/signal",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.9",
       "allowInvalidConfigRecovery": true
@@ -109,6 +109,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   }
 }

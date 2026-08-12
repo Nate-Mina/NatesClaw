@@ -1,7 +1,7 @@
 /** Manifest-backed model catalog row loaders for `natesclaw models list`. */
-import { normalizeModelCatalogProviderId } from "@natesclaw/model-catalog-core/model-catalog-refs";
-import type { NormalizedModelCatalogRow } from "@natesclaw/model-catalog-core/model-catalog-types";
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { normalizeModelCatalogProviderId } from "@openclaw/model-catalog-core/model-catalog-refs";
+import type { NormalizedModelCatalogRow } from "@openclaw/model-catalog-core/model-catalog-types";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { planEffectiveModelCatalogRows } from "../../model-catalog/index.js";
 import type { ManifestModelCatalogRowSelection } from "../../model-catalog/manifest-planner.js";

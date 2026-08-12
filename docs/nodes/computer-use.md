@@ -114,7 +114,7 @@ On macOS, default-on means a paired gateway can drive pointer and keyboard input
 
 - Every layer (tool policy, gateway command policy, pairing, node-app setting, and platform permissions) must agree. For the current macOS fulfiller, that includes **Allow Computer Control**, Accessibility, and Screen Recording. Actions execute while those durable controls remain enabled; there is no per-action confirmation.
 - The macOS fulfiller posts text one grapheme at a time, so cancellation, disconnect, pause, disable, or endpoint replacement stops it before the next grapheme. The experimental CUA Driver fulfiller passes node cancellation to the SDK for each call.
-- Screenshots are model-only and never auto-sent to chat (issue [#44759](https://github.com/natesclaw/natesclaw/issues/44759)).
+- Screenshots are model-only and never auto-sent to chat (issue [#44759](https://github.com/openclaw/natesclaw/issues/44759)).
 - Treat screen content as untrusted; it can carry prompt injection.
 
 ## macOS permission troubleshooting

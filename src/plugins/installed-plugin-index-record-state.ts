@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import { safeParseJson } from "@natesclaw/normalization-core";
+import { safeParseJson } from "@openclaw/normalization-core";
 import {
   inspectPluginInstallRecordMap,
   type PluginInstallRecordMapState,

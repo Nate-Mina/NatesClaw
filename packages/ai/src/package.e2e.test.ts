@@ -17,7 +17,7 @@ const COMMAND_TIMEOUT_MS = 180_000;
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
 const compatibility = {
-  "@natesclaw/ai/provider-types": {
+  "@openclaw/ai/provider-types": {
     values: ["PROVIDER_CONTEXT_HANDOFF", "resolveProviderContext"],
     types: [
       "MediaContent",
@@ -32,7 +32,7 @@ const compatibility = {
       "VideoContent",
     ],
   },
-  "@natesclaw/ai/providers": {
+  "@openclaw/ai/providers": {
     values: [
       "BUILT_IN_API_PROVIDER_SOURCE_ID",
       "registerBuiltInApiProviders",
@@ -42,7 +42,7 @@ const compatibility = {
     ],
     types: [],
   },
-  "@natesclaw/ai/internal/anthropic": {
+  "@openclaw/ai/internal/anthropic": {
     values: [
       "streamAnthropic",
       "streamSimpleAnthropic",
@@ -96,7 +96,7 @@ const compatibility = {
       "AnthropicIterationUsageResult",
     ],
   },
-  "@natesclaw/ai/internal/openai": {
+  "@openclaw/ai/internal/openai": {
     values: [
       "streamOpenAICompletions",
       "streamSimpleOpenAICompletions",
@@ -269,7 +269,7 @@ function compatibilityTypeSource(): string {
     .join("\n");
 }
 
-describe("@natesclaw/ai packed package", () => {
+describe("@openclaw/ai packed package", () => {
   it("installs externally and preserves every published compatibility export", async () => {
     const repoRoot = process.cwd();
     const packageRoot = path.join(repoRoot, "packages", "ai");

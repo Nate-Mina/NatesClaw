@@ -1,6 +1,6 @@
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 // Directive tag helpers parse inline directive tags from user text.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { parseFenceSpans } from "../../packages/markdown-core/src/fences.js";
 
 export type InlineDirectiveParseResult = {

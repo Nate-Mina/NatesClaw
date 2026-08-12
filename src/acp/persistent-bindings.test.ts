@@ -1,5 +1,5 @@
 /** Tests configured channel-to-ACP binding resolution and generated session keys. */
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 import { resolveAgentWorkspaceDir } from "../agents/agent-scope.js";
 import type { ChannelConfiguredBindingProvider } from "../channels/plugins/types.adapters.js";

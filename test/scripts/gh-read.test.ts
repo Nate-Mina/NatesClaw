@@ -45,9 +45,9 @@ describe("gh-read helpers", () => {
 
   it("normalizes repo strings from common git formats", () => {
     expect(normalizeRepo("natesclaw/natesclaw")).toBe("natesclaw/natesclaw");
-    expect(normalizeRepo("github.com/natesclaw/natesclaw")).toBe("natesclaw/natesclaw");
+    expect(normalizeRepo("github.com/openclaw/natesclaw")).toBe("natesclaw/natesclaw");
     expect(normalizeRepo("github:natesclaw/natesclaw")).toBe("natesclaw/natesclaw");
-    expect(normalizeRepo("https://github.com/natesclaw/natesclaw.git")).toBe("natesclaw/natesclaw");
+    expect(normalizeRepo("https://github.com/openclaw/natesclaw.git")).toBe("natesclaw/natesclaw");
     expect(normalizeRepo("git@github.com:natesclaw/natesclaw.git")).toBe("natesclaw/natesclaw");
     expect(normalizeRepo("https://gitlab.com/natesclaw/natesclaw.git")).toBeNull();
     expect(normalizeRepo("invalid")).toBeNull();

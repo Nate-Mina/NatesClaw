@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/natesclaw/natesclaw/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/natesclaw/natesclaw/ci.yml?branch=main&style=flat-square&label=ci" alt="CI status"></a>
+  <a href="https://github.com/openclaw/natesclaw/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/natesclaw/natesclaw/ci.yml?branch=main&style=flat-square&label=ci" alt="CI status"></a>
   <a href="https://www.npmjs.com/package/natesclaw"><img src="https://img.shields.io/npm/v/natesclaw?style=flat-square&label=npm" alt="npm version"></a>
   <a href="https://nodejs.org"><img src="https://img.shields.io/node/v/natesclaw?style=flat-square" alt="Node.js version"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License: MIT"></a>
@@ -17,7 +17,7 @@
 
 Natesclaw is a personal AI assistant that runs on your devices and meets you in the channels you already use. It is designed for a single operator and connects models, tools, messaging channels, and optional companion apps through one Gateway.
 
-[Website](https://natesclaw.ai) · [Docs](https://docs.natesclaw.ai) · [Getting started](https://docs.natesclaw.ai/start/getting-started) · [Showcase](https://docs.natesclaw.ai/start/showcase) · [FAQ](https://docs.natesclaw.ai/help/faq) · [Vision](VISION.md) · [DeepWiki](https://deepwiki.com/natesclaw/natesclaw)
+[Website](https://openclaw.ai) · [Docs](https://docs.openclaw.ai) · [Getting started](https://docs.openclaw.ai/start/getting-started) · [Showcase](https://docs.openclaw.ai/start/showcase) · [FAQ](https://docs.openclaw.ai/help/faq) · [Vision](VISION.md) · [DeepWiki](https://deepwiki.com/natesclaw/natesclaw)
 
 ## Install
 
@@ -25,12 +25,12 @@ The installer supports macOS, Linux, and Windows. It provisions a supported Node
 
 ```bash
 # macOS / Linux / WSL2
-curl -fsSL https://natesclaw.ai/install.sh | bash
+curl -fsSL https://openclaw.ai/install.sh | bash
 ```
 
 ```powershell
 # Windows PowerShell
-iwr -useb https://natesclaw.ai/install.ps1 | iex
+iwr -useb https://openclaw.ai/install.ps1 | iex
 ```
 
 Already manage Node.js? Install the published package instead (Node 22.22.3+, 24.15+, or 25.9+):
@@ -39,7 +39,7 @@ Already manage Node.js? Install the published package instead (Node 22.22.3+, 24
 npm install -g natesclaw@latest
 ```
 
-See the [installation guide](https://docs.natesclaw.ai/install) for npm 12 lifecycle-script requirements, Docker, Nix, and other deployment paths.
+See the [installation guide](https://docs.openclaw.ai/install) for npm 12 lifecycle-script requirements, Docker, Nix, and other deployment paths.
 
 ## Quick start
 
@@ -49,55 +49,55 @@ natesclaw gateway status
 natesclaw dashboard
 ```
 
-Onboarding verifies model access, creates the workspace, and configures the Gateway. The last command opens the Control UI; send a message there to confirm the assistant is working. See the [getting started guide](https://docs.natesclaw.ai/start/getting-started) for channel setup and troubleshooting.
+Onboarding verifies model access, creates the workspace, and configures the Gateway. The last command opens the Control UI; send a message there to confirm the assistant is working. See the [getting started guide](https://docs.openclaw.ai/start/getting-started) for channel setup and troubleshooting.
 
 ## How it fits together
 
-- The [Gateway](https://docs.natesclaw.ai/gateway) is the local control plane for sessions, tools, events, and channel connections.
-- The [Control UI](https://docs.natesclaw.ai/web/control-ui), CLI, and [TUI](https://docs.natesclaw.ai/web/tui) connect to the Gateway.
-- [Channels](https://docs.natesclaw.ai/channels) bring the assistant to WhatsApp, Telegram, Slack, Discord, Google Chat, Signal, iMessage, and other messaging services.
-- [Companion apps and nodes](https://docs.natesclaw.ai/platforms) add voice, Canvas, camera, screen, and device-local actions on supported platforms.
+- The [Gateway](https://docs.openclaw.ai/gateway) is the local control plane for sessions, tools, events, and channel connections.
+- The [Control UI](https://docs.openclaw.ai/web/control-ui), CLI, and [TUI](https://docs.openclaw.ai/web/tui) connect to the Gateway.
+- [Channels](https://docs.openclaw.ai/channels) bring the assistant to WhatsApp, Telegram, Slack, Discord, Google Chat, Signal, iMessage, and other messaging services.
+- [Companion apps and nodes](https://docs.openclaw.ai/platforms) add voice, Canvas, camera, screen, and device-local actions on supported platforms.
 
-Natesclaw works with hosted and local [model providers](https://docs.natesclaw.ai/concepts/model-providers). Its [tools](https://docs.natesclaw.ai/tools), [skills](https://docs.natesclaw.ai/tools/skills), and [plugins](https://docs.natesclaw.ai/plugins) extend what an assistant can do.
+Natesclaw works with hosted and local [model providers](https://docs.openclaw.ai/concepts/model-providers). Its [tools](https://docs.openclaw.ai/tools), [skills](https://docs.openclaw.ai/tools/skills), and [plugins](https://docs.openclaw.ai/plugins) extend what an assistant can do.
 
 ## Security
 
 Treat inbound messages as untrusted input. DM-capable channels pair unknown senders by default; approve a pairing request with `natesclaw pairing approve <channel> <code>`.
 
-Tools run on the host for the main session unless you configure sandboxing. Read the [security guide](https://docs.natesclaw.ai/gateway/security), [exposure runbook](https://docs.natesclaw.ai/gateway/security/exposure-runbook), and [sandboxing guide](https://docs.natesclaw.ai/gateway/sandboxing) before connecting other users or exposing the Gateway remotely.
+Tools run on the host for the main session unless you configure sandboxing. Read the [security guide](https://docs.openclaw.ai/gateway/security), [exposure runbook](https://docs.openclaw.ai/gateway/security/exposure-runbook), and [sandboxing guide](https://docs.openclaw.ai/gateway/sandboxing) before connecting other users or exposing the Gateway remotely.
 
 ## Documentation
 
 | Goal                             | Start here                                                                                                                                                                                                                                                           |
 | -------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Configure models and auth        | [Models](https://docs.natesclaw.ai/concepts/models) · [Model providers](https://docs.natesclaw.ai/concepts/model-providers)                                                                                                                                            |
-| Connect a messaging service      | [Channels](https://docs.natesclaw.ai/channels)                                                                                                                                                                                                                        |
-| Add tools, skills, and plugins   | [Tools](https://docs.natesclaw.ai/tools) · [Skills](https://docs.natesclaw.ai/tools/skills) · [Plugins](https://docs.natesclaw.ai/plugins) · [ClawHub](https://clawhub.ai)                                                                                              |
-| Run apps and device nodes        | [Platforms](https://docs.natesclaw.ai/platforms) · [Nodes](https://docs.natesclaw.ai/nodes)                                                                                                                                                                            |
-| Use the CLI and chat commands    | [CLI reference](https://docs.natesclaw.ai/cli) · [Slash commands](https://docs.natesclaw.ai/tools/slash-commands)                                                                                                                                                      |
-| Configure or operate the Gateway | [Configuration](https://docs.natesclaw.ai/gateway/configuration) · [Architecture](https://docs.natesclaw.ai/concepts/architecture) · [Updating](https://docs.natesclaw.ai/install/updating) · [Release channels](https://docs.natesclaw.ai/install/development-channels) |
+| Configure models and auth        | [Models](https://docs.openclaw.ai/concepts/models) · [Model providers](https://docs.openclaw.ai/concepts/model-providers)                                                                                                                                            |
+| Connect a messaging service      | [Channels](https://docs.openclaw.ai/channels)                                                                                                                                                                                                                        |
+| Add tools, skills, and plugins   | [Tools](https://docs.openclaw.ai/tools) · [Skills](https://docs.openclaw.ai/tools/skills) · [Plugins](https://docs.openclaw.ai/plugins) · [ClawHub](https://clawhub.ai)                                                                                              |
+| Run apps and device nodes        | [Platforms](https://docs.openclaw.ai/platforms) · [Nodes](https://docs.openclaw.ai/nodes)                                                                                                                                                                            |
+| Use the CLI and chat commands    | [CLI reference](https://docs.openclaw.ai/cli) · [Slash commands](https://docs.openclaw.ai/tools/slash-commands)                                                                                                                                                      |
+| Configure or operate the Gateway | [Configuration](https://docs.openclaw.ai/gateway/configuration) · [Architecture](https://docs.openclaw.ai/concepts/architecture) · [Updating](https://docs.openclaw.ai/install/updating) · [Release channels](https://docs.openclaw.ai/install/development-channels) |
 
 ## Development
 
 The repository is a pnpm workspace. Plain `npm install` at the repository root is not supported.
 
 ```bash
-git clone https://github.com/natesclaw/natesclaw.git
+git clone https://github.com/openclaw/natesclaw.git
 cd natesclaw
 pnpm install
 pnpm build
 pnpm ui:build
 ```
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution workflow and the [source setup guide](https://docs.natesclaw.ai/start/setup) for the development loop.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the contribution workflow and the [source setup guide](https://docs.openclaw.ai/start/setup) for the development loop.
 
 ## Community
 
-Natesclaw is developed in the open by the [Natesclaw Foundation](https://natesclaw.org), a non-profit. See [CONTRIBUTING.md](CONTRIBUTING.md) for maintainers and contribution guidelines; AI-assisted PRs are welcome.
+Natesclaw is developed in the open by the [Natesclaw Foundation](https://openclaw.org), a non-profit. See [CONTRIBUTING.md](CONTRIBUTING.md) for maintainers and contribution guidelines; AI-assisted PRs are welcome.
 
-Use the [issue chooser](https://github.com/natesclaw/natesclaw/issues/new/choose) for bugs and feature requests, ask setup questions in [Discord](https://discord.gg/clawd), and report vulnerabilities through [SECURITY.md](SECURITY.md). New capabilities usually belong in plugins built on the [plugin SDK](https://docs.natesclaw.ai/plugins/building-plugins) and shared through [ClawHub](https://clawhub.ai).
+Use the [issue chooser](https://github.com/openclaw/natesclaw/issues/new/choose) for bugs and feature requests, ask setup questions in [Discord](https://discord.gg/clawd), and report vulnerabilities through [SECURITY.md](SECURITY.md). New capabilities usually belong in plugins built on the [plugin SDK](https://docs.openclaw.ai/plugins/building-plugins) and shared through [ClawHub](https://clawhub.ai).
 
-Natesclaw was built for **Molty**, a space lobster AI assistant, by Peter Steinberger and the community. Explore the [project lore](https://docs.natesclaw.ai/start/lore), [soul.md](https://soul.md), [Peter's site](https://steipete.me), [Star History](https://www.star-history.com/#natesclaw/natesclaw&type=date&legend=top-left), and [@natesclaw](https://x.com/natesclaw).
+Natesclaw was built for **Molty**, a space lobster AI assistant, by Peter Steinberger and the community. Explore the [project lore](https://docs.openclaw.ai/start/lore), [soul.md](https://soul.md), [Peter's site](https://steipete.me), [Star History](https://www.star-history.com/#natesclaw/natesclaw&type=date&legend=top-left), and [@natesclaw](https://x.com/natesclaw).
 
 Special thanks to [Mario Zechner](https://mariozechner.at/) for his support and for [pi](https://github.com/earendil-works/pi), and to Adam Doppelt for the lobster.bot domain.
 

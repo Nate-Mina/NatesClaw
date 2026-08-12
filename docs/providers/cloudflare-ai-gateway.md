@@ -11,7 +11,7 @@ read_when:
 | Property      | Value                                                                                    |
 | ------------- | ---------------------------------------------------------------------------------------- |
 | Provider      | `cloudflare-ai-gateway`                                                                  |
-| Plugin        | official external package (`@natesclaw/cloudflare-ai-gateway-provider`)                   |
+| Plugin        | official external package (`@openclaw/cloudflare-ai-gateway-provider`)                   |
 | Base URL      | `https://gateway.ai.cloudflare.com/v1/<account_id>/<gateway_id>/anthropic`               |
 | Default model | `cloudflare-ai-gateway/claude-sonnet-4-6`                                                |
 | API key       | `CLOUDFLARE_AI_GATEWAY_API_KEY` (your provider API key for requests through the Gateway) |
@@ -30,7 +30,7 @@ non-thinking prefill remains available.
 Install the official plugin, then restart Gateway:
 
 ```bash
-natesclaw plugins install @natesclaw/cloudflare-ai-gateway-provider
+natesclaw plugins install @openclaw/cloudflare-ai-gateway-provider
 natesclaw gateway restart
 ```
 

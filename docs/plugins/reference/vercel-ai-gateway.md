@@ -11,8 +11,8 @@ Adds Vercel AI Gateway model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/vercel-ai-gateway-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/vercel-ai-gateway-provider`
+- Package: `@openclaw/vercel-ai-gateway-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/vercel-ai-gateway-provider`
 
 ## Surface
 

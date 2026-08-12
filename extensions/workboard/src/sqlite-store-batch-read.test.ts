@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import type { WorkboardCard } from "@natesclaw/workboard-contract";
+import type { WorkboardCard } from "@openclaw/workboard-contract";
 import { describe, expect, it, vi } from "vitest";
 import { createWorkboardSqliteStores } from "./sqlite-store.js";
 

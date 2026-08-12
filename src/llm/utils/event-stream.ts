@@ -1,2 +1,2 @@
 // Core facade uses the public package so all runtimes share constructor identity.
-export * from "@natesclaw/ai/event-stream";
+export * from "@openclaw/ai/event-stream";

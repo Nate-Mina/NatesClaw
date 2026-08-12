@@ -1,5 +1,5 @@
 // Coverage for agent tool runtime execution and scoped authority.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { describe, expect, it, vi } from "vitest";
 import "./test-helpers/fast-coding-tools.js";
 import "./test-helpers/fast-natesclaw-tools.js";

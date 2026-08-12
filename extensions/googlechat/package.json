@@ -1,10 +1,10 @@
 {
-  "name": "@natesclaw/googlechat",
+  "name": "@openclaw/googlechat",
   "version": "2026.8.1",
   "description": "Natesclaw Google Chat channel plugin for spaces and direct messages.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -12,7 +12,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*",
+    "@openclaw/plugin-sdk": "workspace:*",
     "natesclaw": "workspace:*"
   },
   "peerDependencies": {
@@ -128,7 +128,7 @@
       }
     },
     "install": {
-      "npmSpec": "@natesclaw/googlechat",
+      "npmSpec": "@openclaw/googlechat",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     },

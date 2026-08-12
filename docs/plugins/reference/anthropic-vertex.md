@@ -11,7 +11,7 @@ Natesclaw Anthropic Vertex provider plugin for Claude models on Google Vertex AI
 
 ## Distribution
 
-- Package: `@natesclaw/anthropic-vertex-provider`
+- Package: `@openclaw/anthropic-vertex-provider`
 - Install route: npm; ClawHub
 
 ## Surface

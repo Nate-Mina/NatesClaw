@@ -1,5 +1,5 @@
 // Captures plugin registrations for controlled registry assembly.
-import { normalizeStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type {
   AgentToolResultMiddleware,

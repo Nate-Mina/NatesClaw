@@ -1,5 +1,5 @@
 /** Loads manifest and installed-index contributions used to build plugin registry snapshots. */
-import { normalizeSortedUniqueStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeSortedUniqueStringEntries } from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   normalizePluginsConfigWithResolverCore,

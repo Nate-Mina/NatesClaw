@@ -95,7 +95,7 @@ function metadataSnapshot(enabled: boolean) {
   return {
     index: {
       plugins: [
-        { pluginId: "workboard", packageName: "@natesclaw/workboard", origin: "bundled", enabled },
+        { pluginId: "workboard", packageName: "@openclaw/workboard", origin: "bundled", enabled },
       ],
       installRecords: {},
     },

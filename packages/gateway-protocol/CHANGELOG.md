@@ -1,4 +1,4 @@
-# Changelog — @natesclaw/gateway-protocol
+# Changelog — @openclaw/gateway-protocol
 
 Wire-protocol and schema contracts for the Natesclaw Gateway (WebSocket JSON-RPC-style
 frames, handshake, and method/event payload schemas). Protocol version is negotiated

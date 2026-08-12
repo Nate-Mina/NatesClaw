@@ -1,5 +1,5 @@
 // Shares plugin config normalization helpers across control-plane paths.
-import { normalizeArrayBackedTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeArrayBackedTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
 import { normalizeChatChannelId } from "../channels/ids.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { normalizeSlotValue, resolveSlotSelection } from "./slots.js";

@@ -11,8 +11,8 @@ Adds DeepSeek model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/deepseek-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/deepseek-provider`
+- Package: `@openclaw/deepseek-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/deepseek-provider`
 
 ## Surface
 

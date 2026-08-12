@@ -1,7 +1,7 @@
 // Qa Lab tests cover Crabline local-provider transport integration behavior.
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { NatesclawCrablineChannelDriverSelection } from "@natesclaw/crabline";
+import type { NatesclawCrablineChannelDriverSelection } from "@openclaw/crabline";
 import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
 import { withTempDir } from "natesclaw/plugin-sdk/test-env";
 import { afterEach, describe, expect, it, vi } from "vitest";

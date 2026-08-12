@@ -1,5 +1,5 @@
 /** Diagnostic helpers for embedded-agent compaction. */
-import type { ApiRegistry } from "@natesclaw/ai";
+import type { ApiRegistry } from "@openclaw/ai";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { generateSecureToken } from "../../infra/secure-random.js";
 import type { ProviderRuntimeModel } from "../../plugins/provider-runtime-model.types.js";

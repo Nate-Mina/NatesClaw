@@ -1,5 +1,5 @@
 // Openai tests cover index plugin behavior.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
 import { requireRegisteredProvider } from "natesclaw/plugin-sdk/plugin-test-runtime";

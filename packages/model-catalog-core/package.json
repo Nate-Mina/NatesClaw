@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/model-catalog-core",
+  "name": "@openclaw/model-catalog-core",
   "version": "0.0.0-private",
   "private": true,
   "files": [
@@ -9,7 +9,7 @@
   "main": "./dist/index.mjs",
   "types": "./dist/index.d.mts",
   "dependencies": {
-    "@natesclaw/normalization-core": "workspace:*",
+    "@openclaw/normalization-core": "workspace:*",
     "zod": "4.4.3"
   },
   "exports": {

@@ -175,7 +175,7 @@ natesclaw browser tab new --label docs
 natesclaw browser tab label t1 docs
 natesclaw browser tab select 2
 natesclaw browser tab close 2
-natesclaw browser open https://docs.natesclaw.ai --label docs
+natesclaw browser open https://docs.openclaw.ai --label docs
 natesclaw browser focus docs
 natesclaw browser close t1
 ```

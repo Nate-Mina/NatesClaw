@@ -3,7 +3,7 @@ import type {
   BoardCommandEvent,
   BoardOp,
   BoardSnapshot,
-} from "@natesclaw/gateway-protocol";
+} from "@openclaw/gateway-protocol";
 import type { GatewayBrowserClient } from "../../api/gateway.ts";
 import { t } from "../../i18n/index.ts";
 import {

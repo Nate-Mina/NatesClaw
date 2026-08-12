@@ -18,7 +18,7 @@ describe("session branch diff stats", () => {
   let root: string;
 
   const git = (...args: string[]) =>
-    execFileAsync("git", ["-c", "user.email=test@natesclaw.ai", "-c", "user.name=Test", ...args], {
+    execFileAsync("git", ["-c", "user.email=test@openclaw.ai", "-c", "user.name=Test", ...args], {
       cwd: root,
     });
 
@@ -152,7 +152,7 @@ describe("session branch diff stats", () => {
       branch: "feature",
       additions: 4,
       deletions: 1,
-      createUrl: "https://github.com/natesclaw/natesclaw/pull/new/feature",
+      createUrl: "https://github.com/openclaw/natesclaw/pull/new/feature",
     });
   });
 
@@ -241,7 +241,7 @@ describe("session branch diff stats", () => {
       base: { ref: "release", repo: { name: "natesclaw", owner: { login: "natesclaw" } } },
     });
     // A release-branch merge leaves the default-branch Create PR available.
-    expect(result.branch?.createUrl).toBe("https://github.com/natesclaw/natesclaw/pull/new/feature");
+    expect(result.branch?.createUrl).toBe("https://github.com/openclaw/natesclaw/pull/new/feature");
   });
 
   it("suppresses the row via local HEAD when the merged remote ref was pruned", async () => {
@@ -286,7 +286,7 @@ describe("session branch diff stats", () => {
       branch: "feature",
       additions: 1,
       deletions: 0,
-      createUrl: "https://github.com/natesclaw/natesclaw/pull/new/feature",
+      createUrl: "https://github.com/openclaw/natesclaw/pull/new/feature",
     });
   });
 
@@ -326,7 +326,7 @@ describe("session branch diff stats", () => {
       branch: "feature",
       additions: 1,
       deletions: 0,
-      createUrl: "https://github.com/natesclaw/natesclaw/pull/new/feature",
+      createUrl: "https://github.com/openclaw/natesclaw/pull/new/feature",
     });
   });
 

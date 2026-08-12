@@ -5,7 +5,7 @@ import http from "node:http";
 import type { AddressInfo } from "node:net";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { maxBytesForKind } from "@natesclaw/media-core/constants";
+import { maxBytesForKind } from "@openclaw/media-core/constants";
 import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from "vitest";
 import {
   createNoisyPngBuffer as createNoisyPngFixtureBuffer,

@@ -1,6 +1,6 @@
 import { createHash, randomUUID } from "node:crypto";
-import { stableStringify } from "@natesclaw/normalization-core";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { stableStringify } from "@openclaw/normalization-core";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { formatErrorMessage } from "../infra/errors.js";
 import { NODE_FS_LIST_DIR_COMMAND } from "../infra/node-commands.js";
 import { emitSessionLifecycleEvent } from "../sessions/session-lifecycle-events.js";

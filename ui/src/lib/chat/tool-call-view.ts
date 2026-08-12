@@ -6,8 +6,8 @@
  * the Natesclaw session tools and foreign harnesses (Claude/Codex style).
  */
 
-import { asNullableRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
-import { readNonBlankString } from "@natesclaw/normalization-core/string-coerce";
+import { asNullableRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
+import { readNonBlankString } from "@openclaw/normalization-core/string-coerce";
 import {
   buildWriteDiffLines,
   computeLineDiff,

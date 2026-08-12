@@ -1,5 +1,5 @@
-import { isHttpsUrl, isHttpUrl } from "@natesclaw/net-policy/url-protocol";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { isHttpsUrl, isHttpUrl } from "@openclaw/net-policy/url-protocol";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import { z } from "zod";
 import type { GatewayRemoteConfig } from "./types.gateway.js";
 import { MemorySearchSchema } from "./zod-schema.agent-runtime.js";

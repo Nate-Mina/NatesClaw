@@ -172,12 +172,12 @@ function createNpmPackPluginInstallResult(
     targetDir: cliInstallPath(pluginId),
     version: "1.2.3",
     extensions: ["dist/index.js"],
-    manifestName: `@natesclaw/${pluginId}`,
+    manifestName: `@openclaw/${pluginId}`,
     npmTarballName: `natesclaw-${pluginId}-1.2.3.tgz`,
     npmResolution: {
-      name: `@natesclaw/${pluginId}`,
+      name: `@openclaw/${pluginId}`,
       version: "1.2.3",
-      resolvedSpec: `@natesclaw/${pluginId}@1.2.3`,
+      resolvedSpec: `@openclaw/${pluginId}@1.2.3`,
       integrity: "sha512-pack-demo",
       shasum: "packdemosha",
       resolvedAt: "2026-05-06T00:00:00.000Z",
@@ -1870,13 +1870,13 @@ describe("plugins cli install", () => {
       lookup: { kind: "pluginId", value: "brave" },
     });
     expect(installPluginFromClawHubMock).not.toHaveBeenCalled();
-    expect(npmInstallCall().spec).toBe("@natesclaw/brave-plugin");
+    expect(npmInstallCall().spec).toBe("@openclaw/brave-plugin");
     expect(npmInstallCall().expectedPluginId).toBe("brave");
     expect(npmInstallCall().trustedSourceLinkedOfficialInstall).toBe(true);
     expect(runtimeLogsContain("outside ClawHub review")).toBe(false);
     const record = persistedInstallRecord("brave");
     expect(record.source).toBe("npm");
-    expect(record.spec).toBe("@natesclaw/brave-plugin");
+    expect(record.spec).toBe("@openclaw/brave-plugin");
     expect(record.installPath).toBe(cliInstallPath("brave"));
     expect(record.version).toBe("1.2.3");
     expect(configWriteMock).toHaveBeenCalledWith(enabledCfg);
@@ -2022,7 +2022,7 @@ describe("plugins cli install", () => {
     expect(installPluginFromNpmSpecMock).not.toHaveBeenCalled();
     const record = persistedInstallRecord("demo");
     expect(record.source).toBe("npm");
-    expect(record.spec).toBe("@natesclaw/demo@1.2.3");
+    expect(record.spec).toBe("@openclaw/demo@1.2.3");
     expect(record.sourcePath).toBe(archivePath);
     expect(record.installPath).toBe(cliInstallPath("demo"));
     expect(record.version).toBe("1.2.3");
@@ -2052,9 +2052,9 @@ describe("plugins cli install", () => {
     primeSuccessfulPluginPersistence("discord");
     installPluginFromNpmSpecMock.mockResolvedValue(createNpmPluginInstallResult("discord"));
 
-    await runPluginsCommand(["plugins", "install", "npm:@natesclaw/discord"]);
+    await runPluginsCommand(["plugins", "install", "npm:@openclaw/discord"]);
 
-    expect(npmInstallCall().spec).toBe("@natesclaw/discord");
+    expect(npmInstallCall().spec).toBe("@openclaw/discord");
     expect(npmInstallCall().expectedPluginId).toBe("discord");
     expect(npmInstallCall().trustedSourceLinkedOfficialInstall).toBe(true);
     expect(runtimeLogsContain("outside ClawHub review")).toBe(false);
@@ -2066,9 +2066,9 @@ describe("plugins cli install", () => {
     findBundledPluginSourceMock.mockReturnValue(undefined);
     installPluginFromNpmSpecMock.mockResolvedValue(createNpmPluginInstallResult("discord"));
 
-    await runPluginsCommand(["plugins", "install", "@natesclaw/discord"]);
+    await runPluginsCommand(["plugins", "install", "@openclaw/discord"]);
 
-    expect(npmInstallCall().spec).toBe("@natesclaw/discord");
+    expect(npmInstallCall().spec).toBe("@openclaw/discord");
     expect(npmInstallCall().expectedPluginId).toBe("discord");
     expect(npmInstallCall().trustedSourceLinkedOfficialInstall).toBe(true);
     expect(installPluginFromClawHubMock).not.toHaveBeenCalled();
@@ -2081,11 +2081,11 @@ describe("plugins cli install", () => {
       const { lookup } = params as {
         lookup: { kind: "pluginId" | "npmSpec"; value: string };
       };
-      return lookup.kind === "npmSpec" && lookup.value === "@natesclaw/discord"
+      return lookup.kind === "npmSpec" && lookup.value === "@openclaw/discord"
         ? {
             pluginId: "discord",
             localPath: bundledPath,
-            npmSpec: "@natesclaw/discord",
+            npmSpec: "@openclaw/discord",
             version: "2026.5.24-beta.2",
           }
         : undefined;
@@ -2093,25 +2093,25 @@ describe("plugins cli install", () => {
     await runPluginsCommand([
       "plugins",
       "install",
-      "@natesclaw/discord@2026.5.20",
+      "@openclaw/discord@2026.5.20",
       "--pin",
       "--force",
     ]);
 
     expect(installPluginFromNpmSpecMock).not.toHaveBeenCalled();
     expect(findBundledPluginSourceMock).toHaveBeenCalledWith({
-      lookup: { kind: "npmSpec", value: "@natesclaw/discord@2026.5.20" },
+      lookup: { kind: "npmSpec", value: "@openclaw/discord@2026.5.20" },
     });
     expect(findBundledPluginSourceMock).toHaveBeenCalledWith({
-      lookup: { kind: "npmSpec", value: "@natesclaw/discord" },
+      lookup: { kind: "npmSpec", value: "@openclaw/discord" },
     });
     const record = persistedInstallRecord("discord");
     expect(record.source).toBe("path");
-    expect(record.spec).toBe("@natesclaw/discord@2026.5.20");
+    expect(record.spec).toBe("@openclaw/discord@2026.5.20");
     expect(record.sourcePath).toBe(bundledPath);
     expect(record.installPath).toBe(bundledPath);
     expect(runtimeLogsContain("ships with the current Natesclaw build")).toBe(true);
-    expect(runtimeLogsContain("npm:@natesclaw/discord@2026.5.20")).toBe(true);
+    expect(runtimeLogsContain("npm:@openclaw/discord@2026.5.20")).toBe(true);
   });
 
   it("marks catalog npm package installs with alternate selectors as trusted", async () => {
@@ -2227,7 +2227,7 @@ describe("plugins cli install", () => {
     });
 
     await expect(
-      runAcknowledgedPluginsInstallCommand(["plugins", "install", "npm:@natesclaw/whatsapp"]),
+      runAcknowledgedPluginsInstallCommand(["plugins", "install", "npm:@openclaw/whatsapp"]),
     ).rejects.toThrow("__exit__:1");
 
     expect(installPluginFromClawHubMock).not.toHaveBeenCalled();

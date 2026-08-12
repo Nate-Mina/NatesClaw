@@ -61,7 +61,7 @@ approval.
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/buzz
+natesclaw plugins install @openclaw/buzz
 ```
 
 Restart the Gateway after installing or updating the plugin.

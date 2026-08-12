@@ -89,7 +89,7 @@ fi
 if [[ "${packed_mode}" == "true" ]]; then
   package_name="${EXPECTED_CLAWHUB_PACKAGE_NAME:-}"
   package_version="${EXPECTED_CLAWHUB_PACKAGE_VERSION:-}"
-  if [[ ! "${package_name}" =~ ^@natesclaw/[a-z0-9][a-z0-9._-]*$ ]]; then
+  if [[ ! "${package_name}" =~ ^@openclaw/[a-z0-9][a-z0-9._-]*$ ]]; then
     echo "EXPECTED_CLAWHUB_PACKAGE_NAME is invalid." >&2
     exit 2
   fi

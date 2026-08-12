@@ -3,7 +3,7 @@ import {
   PROVIDER_POST_DISPATCH_AMBIGUITY_ERROR_CODE,
   type Api,
   type ProviderReplayState,
-} from "@natesclaw/llm-core";
+} from "@openclaw/llm-core";
 import type {
   FunctionTool,
   ResponseCreateParamsStreaming,

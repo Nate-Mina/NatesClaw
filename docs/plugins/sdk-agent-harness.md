@@ -355,7 +355,7 @@ New harnesses should implement `AgentHarnessV2` and type prepared attempts as
 `AgentHarnessAttemptParamsV2`, `EmbeddedRunAttemptParamsV2`, and
 `AgentHarnessSideQuestionParamsV2`; those contracts require
 `hostCapabilities`. Packages adopting V2 must declare
-`natesclaw.compat.pluginApi: ">=2026.8.1"` (or a newer floor) so older hosts
+`openclaw.compat.pluginApi: ">=2026.8.1"` (or a newer floor) so older hosts
 reject them before load. Import the parameter types from the runtime subpath:
 
 ```typescript

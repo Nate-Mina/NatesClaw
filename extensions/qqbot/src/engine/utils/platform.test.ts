@@ -157,7 +157,7 @@ describe("qqbot local media path remapping", () => {
   });
 });
 
-// Regression coverage for https://github.com/natesclaw/natesclaw/issues/83562 —
+// Regression coverage for https://github.com/openclaw/natesclaw/issues/83562 —
 // when HOME and NATESCLAW_HOME diverge (Docker, multi-user hosts), QQ Bot media
 // paths must be anchored on NATESCLAW_HOME so files written under
 // `$NATESCLAW_HOME/.natesclaw/media/qqbot/` are accepted by the outbound

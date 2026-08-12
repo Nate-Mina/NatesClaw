@@ -1,7 +1,7 @@
 /**
  * Resolves fast-mode state from agent config and runtime defaults.
  */
-import type { FastMode } from "@natesclaw/normalization-core/string-coerce";
+import type { FastMode } from "@openclaw/normalization-core/string-coerce";
 import { normalizeFastMode } from "../auto-reply/thinking.shared.js";
 import type { SessionEntry } from "../config/sessions.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

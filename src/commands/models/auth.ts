@@ -7,13 +7,13 @@ import {
   select as clackSelect,
   text as clackText,
 } from "@clack/prompts";
-import { readByteStreamWithLimit } from "@natesclaw/media-core/read-byte-stream-with-limit";
-import { expectDefined } from "@natesclaw/normalization-core";
-import { resolveExpiresAtMsFromDurationMs } from "@natesclaw/normalization-core/number-coercion";
+import { readByteStreamWithLimit } from "@openclaw/media-core/read-byte-stream-with-limit";
+import { expectDefined } from "@openclaw/normalization-core";
+import { resolveExpiresAtMsFromDurationMs } from "@openclaw/normalization-core/number-coercion";
 import {
   normalizeOptionalString,
   normalizeStringifiedOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import { styleSelectParams } from "../../../packages/terminal-core/src/prompt-select-styled-params.js";
 import { stylePromptMessage } from "../../../packages/terminal-core/src/prompt-style.js";
 import {
@@ -981,7 +981,7 @@ function maybeLogOpenAICodexNativeSearchTip(runtime: RuntimeEnv, providerId: str
     return;
   }
   runtime.log(
-    `Tip: Codex-capable models can use native Codex web search. Configure the \`web_search\` tool with \`${formatCliCommand("natesclaw configure --section web")}\`. Docs: https://docs.natesclaw.ai/tools/web`,
+    `Tip: Codex-capable models can use native Codex web search. Configure the \`web_search\` tool with \`${formatCliCommand("natesclaw configure --section web")}\`. Docs: https://docs.openclaw.ai/tools/web`,
   );
 }
 

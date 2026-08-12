@@ -1,4 +1,4 @@
-import { failTransportStream, finalizeTransportStream } from "@natesclaw/ai/transports";
+import { failTransportStream, finalizeTransportStream } from "@openclaw/ai/transports";
 import { describe, expect, it, vi } from "vitest";
 import {
   isRestartAbortTailArtifact,

@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/qa-channel",
+  "name": "@openclaw/qa-channel",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw QA synthetic channel plugin",
@@ -15,7 +15,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*",
+    "@openclaw/plugin-sdk": "workspace:*",
     "natesclaw": "workspace:*"
   },
   "peerDependencies": {

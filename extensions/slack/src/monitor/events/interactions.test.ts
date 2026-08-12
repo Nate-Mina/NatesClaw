@@ -3746,13 +3746,13 @@ describe("registerSlackInteractionEvents", () => {
               email_block: {
                 email_input: {
                   type: "email_text_input",
-                  value: "team@natesclaw.ai",
+                  value: "team@openclaw.ai",
                 },
               },
               url_block: {
                 url_input: {
                   type: "url_text_input",
-                  value: "https://docs.natesclaw.ai",
+                  value: "https://docs.openclaw.ai",
                 },
               },
               richtext_block: {
@@ -3834,11 +3834,11 @@ describe("registerSlackInteractionEvents", () => {
     });
     expectRecordFields(inputByActionId(inputs, "email_input"), {
       inputKind: "email",
-      inputEmail: "team@natesclaw.ai",
+      inputEmail: "team@openclaw.ai",
     });
     expectRecordFields(inputByActionId(inputs, "url_input"), {
       inputKind: "url",
-      inputUrl: "https://docs.natesclaw.ai/",
+      inputUrl: "https://docs.openclaw.ai/",
     });
     expectRecordFields(inputByActionId(inputs, "richtext_input"), {
       inputKind: "rich_text",

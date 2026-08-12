@@ -11,7 +11,7 @@ Natesclaw Amazon Bedrock provider plugin with model discovery, embeddings, and g
 
 ## Distribution
 
-- Package: `@natesclaw/amazon-bedrock-provider`
+- Package: `@openclaw/amazon-bedrock-provider`
 - Install route: npm; ClawHub
 
 ## Surface

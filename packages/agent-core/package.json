@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/agent-core",
+  "name": "@openclaw/agent-core",
   "version": "0.0.0-private",
   "private": true,
   "files": [
@@ -63,9 +63,9 @@
     }
   },
   "dependencies": {
-    "@natesclaw/ai": "workspace:*",
-    "@natesclaw/llm-core": "workspace:*",
-    "@natesclaw/normalization-core": "workspace:*",
+    "@openclaw/ai": "workspace:*",
+    "@openclaw/llm-core": "workspace:*",
+    "@openclaw/normalization-core": "workspace:*",
     "typebox": "1.3.6"
   }
 }

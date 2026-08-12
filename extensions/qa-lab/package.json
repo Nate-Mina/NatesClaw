@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/qa-lab",
+  "name": "@openclaw/qa-lab",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw QA lab plugin with private debugger UI and scenario runner",
@@ -7,7 +7,7 @@
   "dependencies": {
     "@copilotkit/aimock": "1.37.4",
     "@modelcontextprotocol/sdk": "1.30.0",
-    "@natesclaw/crabline": "0.1.11",
+    "@openclaw/crabline": "0.1.11",
     "p-limit": "7.3.1",
     "p-map": "7.0.6",
     "playwright-core": "1.62.0",
@@ -18,11 +18,11 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@natesclaw/discord": "workspace:*",
-    "@natesclaw/matrix": "workspace:*",
-    "@natesclaw/plugin-sdk": "workspace:*",
-    "@natesclaw/slack": "workspace:*",
-    "@natesclaw/whatsapp": "workspace:*",
+    "@openclaw/discord": "workspace:*",
+    "@openclaw/matrix": "workspace:*",
+    "@openclaw/plugin-sdk": "workspace:*",
+    "@openclaw/slack": "workspace:*",
+    "@openclaw/whatsapp": "workspace:*",
     "natesclaw": "workspace:*",
     "vite": "8.1.5"
   },

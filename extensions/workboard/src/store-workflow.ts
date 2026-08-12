@@ -6,7 +6,7 @@ import type {
   WorkboardClaim,
   WorkboardNotification,
   WorkboardRunAttempt,
-} from "@natesclaw/workboard-contract";
+} from "@openclaw/workboard-contract";
 import { isFutureDateTimestampMs } from "natesclaw/plugin-sdk/number-runtime";
 import { safeEqualSecret } from "natesclaw/plugin-sdk/security-runtime";
 import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";

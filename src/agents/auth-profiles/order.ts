@@ -6,7 +6,7 @@
 import {
   findNormalizedProviderValue,
   normalizeProviderId,
-} from "@natesclaw/model-catalog-core/provider-id";
+} from "@openclaw/model-catalog-core/provider-id";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   type ProviderAuthAliasLookupParams,

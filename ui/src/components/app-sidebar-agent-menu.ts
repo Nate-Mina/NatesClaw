@@ -28,15 +28,15 @@ const IDENTITY_MENU_LINKS: ReadonlyArray<{
   icon: IconName;
   label: () => string;
 }> = [
-  { href: "https://docs.natesclaw.ai", icon: "book", label: () => t("common.docs") },
+  { href: "https://docs.openclaw.ai", icon: "book", label: () => t("common.docs") },
   {
-    href: "https://docs.natesclaw.ai/help",
+    href: "https://docs.openclaw.ai/help",
     icon: "messageSquare",
     label: () => t("agentChip.getHelp"),
   },
   { href: "https://discord.gg/clawd", icon: "users", label: () => t("agentChip.discord") },
   {
-    href: "https://docs.natesclaw.ai/releases",
+    href: "https://docs.openclaw.ai/releases",
     icon: "scrollText",
     label: () => t("agentChip.viewChangelog"),
   },

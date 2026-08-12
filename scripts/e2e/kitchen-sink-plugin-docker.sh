@@ -12,8 +12,8 @@ CLAW_HUB_FIXTURE_WAIT_ATTEMPTS="$(
 )"
 
 NATESCLAW_TEST_STATE_SCRIPT_B64="$(docker_e2e_test_state_shell_b64 kitchen-sink-plugin empty)"
-KITCHEN_SINK_NPM_SPEC="${NATESCLAW_KITCHEN_SINK_NPM_SPEC:-npm:@natesclaw/kitchen-sink@latest}"
-KITCHEN_SINK_NPM_MISSING_SPEC="${NATESCLAW_KITCHEN_SINK_NPM_MISSING_SPEC:-npm:@natesclaw/kitchen-sink@beta}"
+KITCHEN_SINK_NPM_SPEC="${NATESCLAW_KITCHEN_SINK_NPM_SPEC:-npm:@openclaw/kitchen-sink@latest}"
+KITCHEN_SINK_NPM_MISSING_SPEC="${NATESCLAW_KITCHEN_SINK_NPM_MISSING_SPEC:-npm:@openclaw/kitchen-sink@beta}"
 
 DEFAULT_KITCHEN_SINK_SCENARIOS="$(
   cat <<SCENARIOS
@@ -21,9 +21,9 @@ npm-latest-full|${KITCHEN_SINK_NPM_SPEC}|natesclaw-kitchen-sink-fixture|npm|succ
 npm-latest-conformance|${KITCHEN_SINK_NPM_SPEC}|natesclaw-kitchen-sink-fixture|npm|success|conformance|conformance
 npm-latest-adversarial|${KITCHEN_SINK_NPM_SPEC}|natesclaw-kitchen-sink-fixture|npm|success|adversarial|adversarial
 npm-beta|${KITCHEN_SINK_NPM_MISSING_SPEC}|natesclaw-kitchen-sink-fixture|npm|failure|none
-clawhub-latest|clawhub:@natesclaw/kitchen-sink@latest|natesclaw-kitchen-sink-fixture|clawhub|success|basic
-clawhub-beta|clawhub:@natesclaw/kitchen-sink@beta|natesclaw-kitchen-sink-fixture|clawhub|failure|none
-npm-to-clawhub|clawhub:@natesclaw/kitchen-sink@latest|natesclaw-kitchen-sink-fixture|clawhub|success|basic||${KITCHEN_SINK_NPM_SPEC}
+clawhub-latest|clawhub:@openclaw/kitchen-sink@latest|natesclaw-kitchen-sink-fixture|clawhub|success|basic
+clawhub-beta|clawhub:@openclaw/kitchen-sink@beta|natesclaw-kitchen-sink-fixture|clawhub|failure|none
+npm-to-clawhub|clawhub:@openclaw/kitchen-sink@latest|natesclaw-kitchen-sink-fixture|clawhub|success|basic||${KITCHEN_SINK_NPM_SPEC}
 SCENARIOS
 )"
 KITCHEN_SINK_SCENARIOS="${NATESCLAW_KITCHEN_SINK_PLUGIN_SCENARIOS:-$DEFAULT_KITCHEN_SINK_SCENARIOS}"

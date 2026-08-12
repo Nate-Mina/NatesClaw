@@ -1,6 +1,6 @@
 import { HTTPFetchError } from "@line/bot-sdk";
 // Line tests cover send plugin behavior.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { isChannelPartialDeliveryError } from "natesclaw/plugin-sdk/channel-inbound";
 import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 

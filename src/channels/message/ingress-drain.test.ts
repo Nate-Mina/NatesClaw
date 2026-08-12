@@ -1,5 +1,5 @@
 // Durable ingress drain contract tests for lifecycle reliability invariants.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { closeNatesclawStateDatabaseForTest } from "../../state/natesclaw-state-db.js";
 import {

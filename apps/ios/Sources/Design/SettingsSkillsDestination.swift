@@ -766,7 +766,7 @@ struct SettingsSkillsDestination: View {
                 skillKey: "github",
                 primaryEnv: nil,
                 emoji: "🐙",
-                homepage: "https://docs.natesclaw.ai/tools/skills",
+                homepage: "https://docs.openclaw.ai/tools/skills",
                 always: false,
                 disabled: false,
                 eligible: true,

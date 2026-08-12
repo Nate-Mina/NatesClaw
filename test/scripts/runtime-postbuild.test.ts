@@ -120,7 +120,7 @@ describe("runtime postbuild static assets", () => {
     await fs.writeFile(
       path.join(packageDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/demo",
+        name: "@openclaw/demo",
         natesclaw: {
           build: {
             staticAssets: [
@@ -151,7 +151,7 @@ describe("runtime postbuild static assets", () => {
     await fs.writeFile(
       path.join(packageDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/external-demo",
+        name: "@openclaw/external-demo",
         natesclaw: {
           build: {
             bundledDist: false,
@@ -177,7 +177,7 @@ describe("runtime postbuild static assets", () => {
     await fs.writeFile(
       path.join(packageDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/external-demo",
+        name: "@openclaw/external-demo",
         natesclaw: {
           build: {
             bundledDist: false,
@@ -230,7 +230,7 @@ describe("runtime postbuild static assets", () => {
     await fs.writeFile(
       path.join(rootDir, "extensions", "diffs", "package.json"),
       JSON.stringify({
-        name: "@natesclaw/diffs",
+        name: "@openclaw/diffs",
         natesclaw: {
           extensions: ["./index.ts"],
           build: {
@@ -368,7 +368,7 @@ describe("runtime postbuild static assets", () => {
     await fs.writeFile(
       path.join(distPluginDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/diffs",
+        name: "@openclaw/diffs",
         natesclaw: {
           extensions: ["./index.js"],
           build: {
@@ -399,7 +399,7 @@ describe("runtime postbuild static assets", () => {
     await fs.writeFile(
       path.join(rootDir, "extensions", "diffs", "package.json"),
       JSON.stringify({
-        name: "@natesclaw/diffs",
+        name: "@openclaw/diffs",
         natesclaw: {
           extensions: ["./index.ts"],
           build: {

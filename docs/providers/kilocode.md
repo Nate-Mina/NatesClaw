@@ -18,7 +18,7 @@ Kilo Gateway routes requests to many models behind a single OpenAI-compatible en
 ## Install plugin
 
 ```bash
-natesclaw plugins install @natesclaw/kilocode-provider
+natesclaw plugins install @openclaw/kilocode-provider
 natesclaw gateway restart
 ```
 

@@ -1,5 +1,5 @@
-import { asNullableRecord as recordOrNull } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalString as stringValue } from "@natesclaw/normalization-core/string-coerce";
+import { asNullableRecord as recordOrNull } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalString as stringValue } from "@openclaw/normalization-core/string-coerce";
 import type { GatewaySessionRow, SessionRunStatus, SessionsListResult } from "../../api/types.ts";
 import { isSessionRunActive } from "../session-run-state.ts";
 import {

@@ -116,7 +116,7 @@ pnpm natesclaw qa mantis desktop-browser-smoke \
 ```
 
 Leases or reuses a Crabbox desktop, launches a browser inside the VNC session
-pointed at `--browser-url` (default `https://natesclaw.ai`) or a rendered
+pointed at `--browser-url` (default `https://openclaw.ai`) or a rendered
 `--html-file`, waits, screenshots with `scrot`, optionally records an MP4 with
 `ffmpeg`, and rsyncs `desktop-browser-smoke.png` / `.mp4` / `remote-metadata.json`
 back to `--output-dir`.
@@ -296,7 +296,7 @@ creates a new one. Required env:
 - `MANTIS_ARTIFACT_R2_BUCKET` (workflows set `natesclaw-crabbox-artifacts`)
 - `MANTIS_ARTIFACT_R2_ENDPOINT`
 - `MANTIS_ARTIFACT_R2_REGION` (workflows set `auto`)
-- `MANTIS_ARTIFACT_R2_PUBLIC_BASE_URL` (workflows set `https://artifacts.natesclaw.ai`)
+- `MANTIS_ARTIFACT_R2_PUBLIC_BASE_URL` (workflows set `https://artifacts.openclaw.ai`)
 
 Comments post through the Mantis GitHub App (`MANTIS_GITHUB_APP_ID` /
 `MANTIS_GITHUB_APP_PRIVATE_KEY`), not `github-actions[bot]`, using a hidden

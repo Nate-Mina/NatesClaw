@@ -1,11 +1,11 @@
 {
-  "name": "@natesclaw/fal-provider",
+  "name": "@openclaw/fal-provider",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw fal provider plugin",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

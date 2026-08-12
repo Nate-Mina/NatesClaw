@@ -1,6 +1,6 @@
-import type { NormalizedModelCatalogRow } from "@natesclaw/model-catalog-core/model-catalog-types";
+import type { NormalizedModelCatalogRow } from "@openclaw/model-catalog-core/model-catalog-types";
 /** Dependency-light model catalog snapshots for default model-list views. */
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 import type { ModelCatalogEntry, ModelCatalogSnapshot } from "../../agents/model-catalog.types.js";
 import { modelKey } from "../../agents/model-ref-shared.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";

@@ -1,4 +1,4 @@
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { MemorySearchResult } from "../../memory-host-sdk/host/types.js";

@@ -1,15 +1,15 @@
-import type { MediaKind } from "@natesclaw/media-core/constants";
+import type { MediaKind } from "@openclaw/media-core/constants";
 import {
   getFileExtension,
   kindFromMime,
   mimeTypeFromFilePath,
   normalizeMimeType,
-} from "@natesclaw/media-core/mime";
+} from "@openclaw/media-core/mime";
 import {
   asFiniteNumberInRange,
   asPositiveSafeInteger as normalizePositiveInteger,
-} from "@natesclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import type { PromptImageOrderEntry } from "./prompt-image-order.js";
 
 /** One ordered runtime attachment; array position is its alignment identity. */

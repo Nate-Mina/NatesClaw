@@ -13,7 +13,7 @@ import { readPluginInstallRecords } from "../../../../scripts/e2e/lib/plugin-ind
 import { startLocalOtlpReceiver } from "./otel-test-support.js";
 
 const execFileAsync = promisify(execFile);
-const PACKAGE_NAME = "@natesclaw/diagnostics-otel";
+const PACKAGE_NAME = "@openclaw/diagnostics-otel";
 
 type MutableConfig = {
   diagnostics?: unknown;

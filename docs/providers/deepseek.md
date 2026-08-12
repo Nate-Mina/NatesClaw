@@ -20,7 +20,7 @@ read_when:
 Install the official plugin, then restart Gateway:
 
 ```bash
-natesclaw plugins install @natesclaw/deepseek-provider
+natesclaw plugins install @openclaw/deepseek-provider
 natesclaw gateway restart
 ```
 

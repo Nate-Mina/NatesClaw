@@ -67,7 +67,7 @@ channel is the communication surface.
 
 ## Requirements
 
-- The official `@natesclaw/codex` plugin installed. Include `codex` in
+- The official `@openclaw/codex` plugin installed. Include `codex` in
   `plugins.allow` if your config uses an allowlist.
 - Codex app-server `0.147.0`. The plugin ships and manages `@openai/codex`
   `0.147.0` by default, so a `codex` command on `PATH` does not affect normal
@@ -88,7 +88,7 @@ model discovery, and the full config field list, see
 Install the official plugin, then sign in with Codex OAuth:
 
 ```bash
-natesclaw plugins install @natesclaw/codex
+natesclaw plugins install @openclaw/codex
 natesclaw models auth login --provider openai
 ```
 

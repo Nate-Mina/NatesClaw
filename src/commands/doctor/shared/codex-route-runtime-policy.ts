@@ -1,7 +1,7 @@
-import { AGENT_MODEL_CONFIG_KEYS } from "@natesclaw/model-catalog-core/configured-model-refs";
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
-import { asOptionalRecord as asMutableRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalLowercaseString as normalizeString } from "@natesclaw/normalization-core/string-coerce";
+import { AGENT_MODEL_CONFIG_KEYS } from "@openclaw/model-catalog-core/configured-model-refs";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { asOptionalRecord as asMutableRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalLowercaseString as normalizeString } from "@openclaw/normalization-core/string-coerce";
 import { resolveModelRuntimePolicy } from "../../../agents/model-runtime-policy.js";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { normalizeAgentId } from "../../../routing/session-key.js";

@@ -1,10 +1,10 @@
 {
-  "name": "@natesclaw/google-meet",
+  "name": "@openclaw/google-meet",
   "version": "2026.8.1",
   "description": "Natesclaw Google Meet participant plugin for joining calls through Chrome or Twilio transports.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -13,7 +13,7 @@
     "typebox": "1.3.6"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*",
+    "@openclaw/plugin-sdk": "workspace:*",
     "natesclaw": "workspace:*"
   },
   "peerDependencies": {
@@ -29,7 +29,7 @@
       "./index.ts"
     ],
     "install": {
-      "npmSpec": "@natesclaw/google-meet",
+      "npmSpec": "@openclaw/google-meet",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.20"
     },

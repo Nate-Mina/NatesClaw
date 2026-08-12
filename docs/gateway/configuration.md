@@ -326,7 +326,7 @@ candidate contains a redacted secret placeholder such as `***` or `[redacted]`.
   </Accordion>
 
   <Accordion title="Enable relay-backed push for official iOS builds">
-    Relay-backed push for public App Store builds uses the hosted Natesclaw relay: `https://ios-push-relay.natesclaw.ai`.
+    Relay-backed push for public App Store builds uses the hosted Natesclaw relay: `https://ios-push-relay.openclaw.ai`.
 
     Custom relay deployments require a deliberately separate iOS build/deployment path whose relay URL matches the gateway relay URL. If you are using a custom relay build, set this in gateway config:
 

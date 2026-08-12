@@ -10,7 +10,7 @@ import { ensureClawHubPackageTrustAcknowledged } from "../../src/infra/clawhub-i
 import { useAutoCleanupTempDirTracker } from "../helpers/temp-dir.js";
 
 const SCRIPT_PATH = path.resolve("scripts/e2e/lib/clawhub-fixture-server.cjs");
-const PACKAGE_NAME = "@natesclaw/kitchen-sink";
+const PACKAGE_NAME = "@openclaw/kitchen-sink";
 const PACKAGE_PATH = `/api/v1/packages/${encodeURIComponent(PACKAGE_NAME)}`;
 const KITCHEN_SINK_VERSION = "0.2.5";
 type FixtureServerChild = ChildProcessByStdio<null, Readable, Readable>;
@@ -233,7 +233,7 @@ describe("ClawHub fixture server", () => {
     mkdirSync(packageDir);
     writeFileSync(
       path.join(packageDir, "package.json"),
-      `${JSON.stringify({ name: "@natesclaw/whatsapp", version })}\n`,
+      `${JSON.stringify({ name: "@openclaw/whatsapp", version })}\n`,
     );
     writeFileSync(
       path.join(packageDir, "natesclaw.plugin.json"),
@@ -248,7 +248,7 @@ describe("ClawHub fixture server", () => {
     writeFileSync(
       manifestPath,
       `${JSON.stringify({
-        packages: [{ name: "@natesclaw/whatsapp", version, tarball, sha256 }],
+        packages: [{ name: "@openclaw/whatsapp", version, tarball, sha256 }],
       })}\n`,
     );
 
@@ -258,7 +258,7 @@ describe("ClawHub fixture server", () => {
       isolatedCwd,
     );
     expect(runNoRequestsAssertion(baseUrl, isolatedCwd).status).toBe(0);
-    const whatsappPath = `/api/v1/packages/${encodeURIComponent("@natesclaw/whatsapp")}`;
+    const whatsappPath = `/api/v1/packages/${encodeURIComponent("@openclaw/whatsapp")}`;
     const detail = await fetchJson(baseUrl, whatsappPath);
     expect(detail.package).toMatchObject({
       latestVersion: version,
@@ -283,19 +283,19 @@ describe("ClawHub fixture server", () => {
       return response;
     });
     const trust = await ensureClawHubPackageTrustAcknowledged({
-      subject: { kind: "plugin", packageName: "@natesclaw/whatsapp" },
+      subject: { kind: "plugin", packageName: "@openclaw/whatsapp" },
       version,
       baseUrl,
       mode: "update",
     });
     expect(security).toEqual({
       package: {
-        name: "@natesclaw/whatsapp",
-        displayName: "@natesclaw/whatsapp",
+        name: "@openclaw/whatsapp",
+        displayName: "@openclaw/whatsapp",
         family: "code-plugin",
       },
       release: {
-        releaseId: `fixture:@natesclaw/whatsapp@${version}`,
+        releaseId: `fixture:@openclaw/whatsapp@${version}`,
         version,
         artifactKind: "npm-pack",
         artifactSha256: sha256,
@@ -331,13 +331,13 @@ describe("ClawHub fixture server", () => {
       `GET ${whatsappPath}/versions/${version}/artifact/download`,
     ]);
     expect(
-      runPrepublishAssertion(baseUrl, "@natesclaw/whatsapp", version, undefined, isolatedCwd).status,
+      runPrepublishAssertion(baseUrl, "@openclaw/whatsapp", version, undefined, isolatedCwd).status,
     ).toBe(0);
     const unexpectedStartupRequest = runNoRequestsAssertion(baseUrl, isolatedCwd);
     expect(unexpectedStartupRequest.status).toBe(1);
     expect(unexpectedStartupRequest.stderr).toContain("unexpected ClawHub fixture requests");
     expect((await fetch(`${baseUrl}${whatsappPath}/versions/0.0.0/artifact`)).status).toBe(404);
-    const mismatch = runPrepublishAssertion(baseUrl, "@natesclaw/whatsapp", version);
+    const mismatch = runPrepublishAssertion(baseUrl, "@openclaw/whatsapp", version);
     expect(mismatch.status).toBe(1);
     expect(mismatch.stderr).toContain("unexpected ClawHub fixture requests");
   });

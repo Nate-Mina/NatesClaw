@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { listAgentEntries } from "../../../agents/agent-scope-config.js";
 import type { AgentRouteBinding } from "../../../config/types.agents.js";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";

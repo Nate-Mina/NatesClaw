@@ -1,9 +1,9 @@
-import type { ErrorShape, EventFrame, HelloOk } from "@natesclaw/gateway-protocol";
+import type { ErrorShape, EventFrame, HelloOk } from "@openclaw/gateway-protocol";
 import {
   isGatewayEventFrame,
   isGatewayResponseFrame,
-} from "@natesclaw/gateway-protocol/frame-guards";
-import { RetrySupervisor, sleepWithAbort } from "@natesclaw/retry";
+} from "@openclaw/gateway-protocol/frame-guards";
+import { RetrySupervisor, sleepWithAbort } from "@openclaw/retry";
 import { GatewayEventListeners } from "./event-listeners.js";
 import { GatewayPendingRequests, type GatewayProtocolRequestTiming } from "./pending-request.js";
 import {

@@ -1874,7 +1874,7 @@ A surface is a product area such as Gateway runtime, Discord, or the macOS app. 
   <Accordion title="Natesclaw App SDK - M2 Alpha - 6 areas">
     <a id="natesclaw-app-sdk" />
 
-    Natesclaw App SDK is a distinct external app contract separate from Gateway runtime and Plugin SDK. Current scoring shows a real `@natesclaw/sdk` path with gaps around public packaging, auto-discovery, approvals, helpers, and compatibility.
+    Natesclaw App SDK is a distinct external app contract separate from Gateway runtime and Plugin SDK. Current scoring shows a real `@openclaw/sdk` path with gaps around public packaging, auto-discovery, approvals, helpers, and compatibility.
 
     <div className="maturity-surface-rollup"><span>Coverage Experimental - 0%</span><span>Quality Alpha - 54%</span><span>Completeness Alpha - 53%</span><span><span className="maturity-lts maturity-lts-none">None</span></span></div>
 

@@ -42,7 +42,7 @@ export function formatUnresolvedNatesclawPeerLinkError(packageName: string): str
 }
 
 const MISSING_EXTENSIONS_ERROR =
-  'package.json missing natesclaw.extensions; update the plugin package to include natesclaw.extensions (for example ["./dist/index.js"]). See https://docs.natesclaw.ai/help/troubleshooting#plugin-install-fails-with-missing-natesclaw-extensions';
+  'package.json missing natesclaw.extensions; update the plugin package to include natesclaw.extensions (for example ["./dist/index.js"]). See https://docs.openclaw.ai/help/troubleshooting#plugin-install-fails-with-missing-natesclaw-extensions';
 function validateNatesclawPackageCompatibility(params: {
   pluginId: string;
   currentHostVersion: string;
@@ -52,7 +52,7 @@ function validateNatesclawPackageCompatibility(params: {
   if (!pluginApiRangeCheck.ok) {
     return {
       ok: false,
-      error: `invalid package.json natesclaw.compat.pluginApi: ${pluginApiRangeCheck.error}`,
+      error: `invalid package.json openclaw.compat.pluginApi: ${pluginApiRangeCheck.error}`,
       code: PLUGIN_INSTALL_ERROR_CODE.INVALID_PLUGIN_API,
     };
   }

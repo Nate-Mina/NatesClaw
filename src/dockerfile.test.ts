@@ -432,8 +432,8 @@ describe("Dockerfile", () => {
     expect(dockerfile).toContain(
       'NATESCLAW_EXTENSIONS="$(cat /tmp/natesclaw-selected-plugin-dirs)" NATESCLAW_BUNDLED_PLUGIN_DIR="$NATESCLAW_BUNDLED_PLUGIN_DIR" node scripts/prune-docker-plugin-dist.mjs',
     );
-    expect(dockerfile).toContain("readlink -f /app/node_modules/@natesclaw/ai");
-    expect(dockerfile).toContain('mv "$ai_runtime_tmp/ai" /app/node_modules/@natesclaw/ai');
+    expect(dockerfile).toContain("readlink -f /app/node_modules/@openclaw/ai");
+    expect(dockerfile).toContain('mv "$ai_runtime_tmp/ai" /app/node_modules/@openclaw/ai');
     expect(dockerfile).toContain("CI=true pnpm prune --prod \\");
     expect(dockerfile.indexOf("CI=true pnpm prune --prod \\")).toBeLessThan(
       dockerfile.indexOf(

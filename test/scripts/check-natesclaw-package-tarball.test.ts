@@ -25,7 +25,7 @@ const FIRST_CODE_MODE_WORKER_VERSION = "2026.5.14-beta.2";
 const FLAT_PLUGIN_SDK_DECLARATION = "dist/plugin-sdk/provider-entry.d.ts";
 const DEEP_PLUGIN_SDK_DECLARATION = "dist/plugin-sdk/src/plugin-sdk/provider-entry.d.ts";
 const AI_RUNTIME_PACKAGE_JSON = JSON.stringify({
-  name: "@natesclaw/ai",
+  name: "@openclaw/ai",
   version: "2026.6.11",
   exports: {
     ".": { import: "./dist/index.mjs" },
@@ -35,7 +35,7 @@ const AI_RUNTIME_PACKAGE_JSON = JSON.stringify({
   },
 });
 const LEGACY_AI_RUNTIME_PACKAGE_JSON = JSON.stringify({
-  name: "@natesclaw/ai",
+  name: "@openclaw/ai",
   version: "2026.7.2-beta.4",
   exports: {
     ".": { import: "./dist/index.mjs" },
@@ -628,11 +628,11 @@ describe("check-natesclaw-package-tarball", () => {
 
         expect(result.status).not.toBe(0);
         expect(result.stderr).toContain(
-          "package.json dependencies.@natesclaw/ai must not use workspace protocol workspace:*",
+          "package.json dependencies.@openclaw/ai must not use workspace protocol workspace:*",
         );
       },
       "2026.6.11",
-      { packageJson: { dependencies: { "@natesclaw/ai": "workspace:*" } } },
+      { packageJson: { dependencies: { "@openclaw/ai": "workspace:*" } } },
     );
   });
 
@@ -708,7 +708,7 @@ describe("check-natesclaw-package-tarball", () => {
         expect(result.stdout).toContain("Natesclaw package tarball integrity passed.");
       },
       "2026.6.11",
-      { packageJson: { dependencies: { "@natesclaw/ai": "2026.6.11" } } },
+      { packageJson: { dependencies: { "@openclaw/ai": "2026.6.11" } } },
     );
   });
 
@@ -725,14 +725,14 @@ describe("check-natesclaw-package-tarball", () => {
 
         expect(result.status).not.toBe(0);
         expect(result.stderr).toContain(
-          "package.json dependencies.@natesclaw/ai must be listed in bundleDependencies because it is private to the Natesclaw workspace",
+          "package.json dependencies.@openclaw/ai must be listed in bundleDependencies because it is private to the Natesclaw workspace",
         );
         expect(result.stderr).toContain(
-          "package.json dependencies.@natesclaw/ai must be bundled in node_modules/@natesclaw/ai",
+          "package.json dependencies.@openclaw/ai must be bundled in node_modules/@openclaw/ai",
         );
       },
       "2026.6.11",
-      { packageJson: { dependencies: { "@natesclaw/ai": "2026.6.11" } } },
+      { packageJson: { dependencies: { "@openclaw/ai": "2026.6.11" } } },
     );
   });
 
@@ -741,7 +741,7 @@ describe("check-natesclaw-package-tarball", () => {
       ["dist/index.js"],
       {
         "dist/index.js": "export {};\n",
-        "node_modules/@natesclaw/ai/package.json": AI_RUNTIME_PACKAGE_JSON,
+        "node_modules/@openclaw/ai/package.json": AI_RUNTIME_PACKAGE_JSON,
       },
       (tarball) => {
         const result = spawnSync(
@@ -752,20 +752,20 @@ describe("check-natesclaw-package-tarball", () => {
 
         expect(result.status).not.toBe(0);
         expect(result.stderr).toContain(
-          "bundled @natesclaw/ai is missing required runtime entry dist/index.mjs",
+          "bundled @openclaw/ai is missing required runtime entry dist/index.mjs",
         );
         expect(result.stderr).toContain(
-          "bundled @natesclaw/ai is missing required runtime entry dist/providers.mjs",
+          "bundled @openclaw/ai is missing required runtime entry dist/providers.mjs",
         );
         expect(result.stderr).toContain(
-          "bundled @natesclaw/ai is missing required runtime entry dist/internal/runtime.mjs",
+          "bundled @openclaw/ai is missing required runtime entry dist/internal/runtime.mjs",
         );
       },
       "2026.6.11",
       {
         packageJson: {
-          dependencies: { "@natesclaw/ai": "2026.6.11" },
-          bundleDependencies: ["@natesclaw/ai"],
+          dependencies: { "@openclaw/ai": "2026.6.11" },
+          bundleDependencies: ["@openclaw/ai"],
         },
       },
     );
@@ -776,11 +776,11 @@ describe("check-natesclaw-package-tarball", () => {
       ["dist/index.js"],
       {
         "dist/index.js": "export {};\n",
-        "node_modules/@natesclaw/ai/package.json": AI_RUNTIME_PACKAGE_JSON,
-        "node_modules/@natesclaw/ai/dist/index.mjs": "export {};\n",
-        "node_modules/@natesclaw/ai/dist/providers.mjs": "export {};\n",
-        "node_modules/@natesclaw/ai/dist/transports.mjs": "export {};\n",
-        "node_modules/@natesclaw/ai/dist/internal/runtime.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/package.json": AI_RUNTIME_PACKAGE_JSON,
+        "node_modules/@openclaw/ai/dist/index.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/dist/providers.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/dist/transports.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/dist/internal/runtime.mjs": "export {};\n",
       },
       (tarball) => {
         const result = spawnSync(
@@ -795,8 +795,8 @@ describe("check-natesclaw-package-tarball", () => {
       "2026.6.11",
       {
         packageJson: {
-          dependencies: { "@natesclaw/ai": "2026.6.11" },
-          bundleDependencies: ["@natesclaw/ai"],
+          dependencies: { "@openclaw/ai": "2026.6.11" },
+          bundleDependencies: ["@openclaw/ai"],
         },
       },
     );
@@ -807,10 +807,10 @@ describe("check-natesclaw-package-tarball", () => {
       ["dist/index.js"],
       {
         "dist/index.js": "export {};\n",
-        "node_modules/@natesclaw/ai/package.json": LEGACY_AI_RUNTIME_PACKAGE_JSON,
-        "node_modules/@natesclaw/ai/dist/index.mjs": "export {};\n",
-        "node_modules/@natesclaw/ai/dist/providers.mjs": "export {};\n",
-        "node_modules/@natesclaw/ai/dist/internal/runtime.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/package.json": LEGACY_AI_RUNTIME_PACKAGE_JSON,
+        "node_modules/@openclaw/ai/dist/index.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/dist/providers.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/dist/internal/runtime.mjs": "export {};\n",
       },
       (tarball) => {
         const result = spawnSync(
@@ -825,8 +825,8 @@ describe("check-natesclaw-package-tarball", () => {
       "2026.7.2-beta.4",
       {
         packageJson: {
-          dependencies: { "@natesclaw/ai": "2026.7.2-beta.4" },
-          bundleDependencies: ["@natesclaw/ai"],
+          dependencies: { "@openclaw/ai": "2026.7.2-beta.4" },
+          bundleDependencies: ["@openclaw/ai"],
         },
       },
     );
@@ -837,10 +837,10 @@ describe("check-natesclaw-package-tarball", () => {
       ["dist/index.js"],
       {
         "dist/index.js": "export {};\n",
-        "node_modules/@natesclaw/ai/package.json": AI_RUNTIME_PACKAGE_JSON,
-        "node_modules/@natesclaw/ai/dist/index.mjs": "export {};\n",
-        "node_modules/@natesclaw/ai/dist/transports.mjs": "export {};\n",
-        "node_modules/@natesclaw/ai/dist/internal/runtime.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/package.json": AI_RUNTIME_PACKAGE_JSON,
+        "node_modules/@openclaw/ai/dist/index.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/dist/transports.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/dist/internal/runtime.mjs": "export {};\n",
       },
       (tarball) => {
         const result = spawnSync(
@@ -851,14 +851,14 @@ describe("check-natesclaw-package-tarball", () => {
 
         expect(result.status).not.toBe(0);
         expect(result.stderr).toContain(
-          "bundled @natesclaw/ai is missing required runtime entry dist/providers.mjs",
+          "bundled @openclaw/ai is missing required runtime entry dist/providers.mjs",
         );
       },
       "2026.6.11",
       {
         packageJson: {
-          dependencies: { "@natesclaw/ai": "2026.6.11" },
-          bundleDependencies: ["@natesclaw/ai"],
+          dependencies: { "@openclaw/ai": "2026.6.11" },
+          bundleDependencies: ["@openclaw/ai"],
         },
       },
     );
@@ -869,8 +869,8 @@ describe("check-natesclaw-package-tarball", () => {
       ["dist/index.js"],
       {
         "dist/index.js": "export {};\n",
-        "node_modules/@natesclaw/ai/package.json": JSON.stringify({
-          name: "@natesclaw/ai",
+        "node_modules/@openclaw/ai/package.json": JSON.stringify({
+          name: "@openclaw/ai",
           version: "2026.6.11",
           exports: {
             ".": "./dist/index.mjs",
@@ -878,10 +878,10 @@ describe("check-natesclaw-package-tarball", () => {
             "./internal/*": "./dist/internal/*.mjs",
           },
         }),
-        "node_modules/@natesclaw/ai/dist/index.mjs": "export {};\n",
-        "node_modules/@natesclaw/ai/dist/providers.mjs": "export {};\n",
-        "node_modules/@natesclaw/ai/dist/transports.mjs": "export {};\n",
-        "node_modules/@natesclaw/ai/dist/internal/runtime.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/dist/index.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/dist/providers.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/dist/transports.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/dist/internal/runtime.mjs": "export {};\n",
       },
       (tarball) => {
         const result = spawnSync(
@@ -892,14 +892,14 @@ describe("check-natesclaw-package-tarball", () => {
 
         expect(result.status).not.toBe(0);
         expect(result.stderr).toContain(
-          "bundled @natesclaw/ai runtime specifier @natesclaw/ai/providers is not resolvable",
+          "bundled @openclaw/ai runtime specifier @openclaw/ai/providers is not resolvable",
         );
       },
       "2026.6.11",
       {
         packageJson: {
-          dependencies: { "@natesclaw/ai": "2026.6.11" },
-          bundleDependencies: ["@natesclaw/ai"],
+          dependencies: { "@openclaw/ai": "2026.6.11" },
+          bundleDependencies: ["@openclaw/ai"],
         },
       },
     );
@@ -910,10 +910,10 @@ describe("check-natesclaw-package-tarball", () => {
       ["dist/index.js"],
       {
         "dist/index.js": "export {};\n",
-        "node_modules/@natesclaw/ai/package.json": AI_RUNTIME_PACKAGE_JSON,
-        "node_modules/@natesclaw/ai/dist/index.mjs": "export {};\n",
-        "node_modules/@natesclaw/ai/dist/providers.mjs": "export {};\n",
-        "node_modules/@natesclaw/ai/dist/internal/runtime.mjs": 'export * from "./missing.mjs";\n',
+        "node_modules/@openclaw/ai/package.json": AI_RUNTIME_PACKAGE_JSON,
+        "node_modules/@openclaw/ai/dist/index.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/dist/providers.mjs": "export {};\n",
+        "node_modules/@openclaw/ai/dist/internal/runtime.mjs": 'export * from "./missing.mjs";\n',
       },
       (tarball) => {
         const result = spawnSync(
@@ -924,14 +924,14 @@ describe("check-natesclaw-package-tarball", () => {
 
         expect(result.status).not.toBe(0);
         expect(result.stderr).toContain(
-          "bundled @natesclaw/ai dist/internal/runtime.mjs imports missing dist/internal/missing.mjs",
+          "bundled @openclaw/ai dist/internal/runtime.mjs imports missing dist/internal/missing.mjs",
         );
       },
       "2026.6.11",
       {
         packageJson: {
-          dependencies: { "@natesclaw/ai": "2026.6.11" },
-          bundleDependencies: ["@natesclaw/ai"],
+          dependencies: { "@openclaw/ai": "2026.6.11" },
+          bundleDependencies: ["@openclaw/ai"],
         },
       },
     );

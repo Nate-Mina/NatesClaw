@@ -12,7 +12,7 @@ read_when:
 | Property        | Value                                               |
 | --------------- | --------------------------------------------------- |
 | Provider id     | `fireworks` (alias: `fireworks-ai`)                 |
-| Package         | `@natesclaw/fireworks-provider`                      |
+| Package         | `@openclaw/fireworks-provider`                      |
 | Auth env var    | `FIREWORKS_API_KEY`                                 |
 | Onboarding flag | `--auth-choice fireworks-api-key`                   |
 | Direct CLI flag | `--fireworks-api-key <key>`                         |
@@ -26,7 +26,7 @@ read_when:
 <Steps>
   <Step title="Install the plugin">
     ```bash
-    natesclaw plugins install @natesclaw/fireworks-provider
+    natesclaw plugins install @openclaw/fireworks-provider
     ```
   </Step>
   <Step title="Set the Fireworks API key">

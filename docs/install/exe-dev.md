@@ -28,7 +28,7 @@ This guide assumes exe.dev's default **exeuntu** image. Map packages accordingly
 Shelley, exe.dev's agent, can install Natesclaw from a prompt:
 
 ```text
-Set up Natesclaw (https://docs.natesclaw.ai/install) on this VM. Use the non-interactive and accept-risk flags for natesclaw onboarding. Add the supplied auth or token as needed. Configure nginx to forward from the default port 18789 to the root location on the default enabled site config, making sure to enable Websocket support. Pairing is done by "natesclaw devices list" and "natesclaw devices approve <request id>". Make sure the dashboard shows that Natesclaw's health is OK. exe.dev handles forwarding from port 8000 to port 80/443 and HTTPS for us, so the final "reachable" should be <vm-name>.exe.xyz, without port specification.
+Set up Natesclaw (https://docs.openclaw.ai/install) on this VM. Use the non-interactive and accept-risk flags for natesclaw onboarding. Add the supplied auth or token as needed. Configure nginx to forward from the default port 18789 to the root location on the default enabled site config, making sure to enable Websocket support. Pairing is done by "natesclaw devices list" and "natesclaw devices approve <request id>". Make sure the dashboard shows that Natesclaw's health is OK. exe.dev handles forwarding from port 8000 to port 80/443 and HTTPS for us, so the final "reachable" should be <vm-name>.exe.xyz, without port specification.
 ```
 
 ## Manual installation
@@ -62,7 +62,7 @@ Set up Natesclaw (https://docs.natesclaw.ai/install) on this VM. Use the non-int
 
   <Step title="Install Natesclaw">
     ```bash
-    curl -fsSL https://natesclaw.ai/install.sh | bash
+    curl -fsSL https://openclaw.ai/install.sh | bash
     ```
   </Step>
 

@@ -35,7 +35,7 @@ describe("project protocol schemas", () => {
             id: "natesclaw",
             displayName: "Natesclaw",
             repoRoot: "/repo/natesclaw",
-            originUrl: "https://github.com/natesclaw/natesclaw.git",
+            originUrl: "https://github.com/openclaw/natesclaw.git",
             source: "registered",
           },
         ],

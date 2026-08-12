@@ -29,7 +29,7 @@ import { createManagedWorktree } from "../../lib/worktrees/create-worktree.ts";
 import { GatewayPageController } from "../../lit/gateway-page-controller.ts";
 import { NatesclawLightDomElement } from "../../lit/natesclaw-element.ts";
 
-const WORKTREES_DOCS_URL = "https://docs.natesclaw.ai/concepts/managed-worktrees";
+const WORKTREES_DOCS_URL = "https://docs.openclaw.ai/concepts/managed-worktrees";
 
 type WorktreesListResult = { worktrees: WorktreeRecord[] };
 type WorktreesRemoveResult = { removed: boolean; snapshotError?: string };

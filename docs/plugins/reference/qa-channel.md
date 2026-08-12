@@ -11,7 +11,7 @@ Adds the QA Channel surface for sending and receiving Natesclaw messages.
 
 ## Distribution
 
-- Package: `@natesclaw/qa-channel`
+- Package: `@openclaw/qa-channel`
 - Install route: source checkout only
 
 ## Surface

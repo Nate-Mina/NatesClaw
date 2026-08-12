@@ -49,7 +49,7 @@ function createInstalledRuntimePluginDir(
   fs.writeFileSync(
     path.join(pluginRoot, "package.json"),
     JSON.stringify({
-      name: `@natesclaw/${pluginId}`,
+      name: `@openclaw/${pluginId}`,
       version: "0.0.0",
       natesclaw: {
         extensions: ["./runtime-api.js"],

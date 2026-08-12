@@ -6,7 +6,7 @@ API.
 Install from Natesclaw:
 
 ```bash
-natesclaw plugins install @natesclaw/cohere-provider
+natesclaw plugins install @openclaw/cohere-provider
 natesclaw gateway restart
 ```
 

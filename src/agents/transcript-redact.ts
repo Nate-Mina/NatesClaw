@@ -3,7 +3,7 @@
  *
  * Applies logging redaction rules to persisted messages while preserving unchanged object identity.
  */
-import { findNormalizedProviderValue } from "@natesclaw/model-catalog-core/provider-id";
+import { findNormalizedProviderValue } from "@openclaw/model-catalog-core/provider-id";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { readLoggingConfig } from "../logging/config.js";
 import {

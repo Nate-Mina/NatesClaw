@@ -51,7 +51,7 @@ type SecretsStoreViewProps = {
   onDelete: (entry: SecretStoreEntry) => void;
 };
 
-const DOCS_URL = "https://docs.natesclaw.ai/gateway/secrets#shared-secret-store";
+const DOCS_URL = "https://docs.openclaw.ai/gateway/secrets#shared-secret-store";
 const SECRET_MASK = "••••••••";
 
 function updatedLabel(entry: SecretStoreEntry): string {

@@ -4,7 +4,7 @@ import path from "node:path";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import { createAgent } from "../agents/agent-create.js";
 import {
   resolveAgentDir,
@@ -407,7 +407,7 @@ export async function agentsAddCommand(
         await prompter.note(
           [
             "Routing unchanged. Add bindings when you're ready.",
-            "Docs: https://docs.natesclaw.ai/concepts/multi-agent",
+            "Docs: https://docs.openclaw.ai/concepts/multi-agent",
           ].join("\n"),
           "Routing",
         );

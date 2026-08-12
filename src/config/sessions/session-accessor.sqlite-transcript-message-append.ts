@@ -1,7 +1,7 @@
 import { randomUUID } from "node:crypto";
 import { isDeepStrictEqual } from "node:util";
-import { resolveTimestampMsToIsoString } from "@natesclaw/normalization-core/number-coercion";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { resolveTimestampMsToIsoString } from "@openclaw/normalization-core/number-coercion";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import type { NatesclawAgentDatabase } from "../../state/natesclaw-agent-db.js";
 import type {
   TranscriptMessageAppendOptions,

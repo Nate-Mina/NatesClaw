@@ -1,9 +1,9 @@
 // Doctor warnings and repairs for legacy OpenAI Codex model/provider routing.
-import { asOptionalRecord as asMutableRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asOptionalRecord as asMutableRecord } from "@openclaw/normalization-core/record-coerce";
 import {
   normalizeFastMode,
   normalizeOptionalLowercaseString as normalizeString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import {
   isAgentRuntimeModelParam,
   resolveModelExtraParamSources,

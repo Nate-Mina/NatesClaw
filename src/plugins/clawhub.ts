@@ -4,7 +4,7 @@ import fs from "node:fs/promises";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import JSZip from "jszip";
 import { visibleWidth } from "../../packages/terminal-core/src/ansi.js";
 import { sanitizeTerminalText } from "../../packages/terminal-core/src/safe-text.js";
@@ -202,8 +202,8 @@ function isTrustedSourceLinkedOfficialPackage(pkg: NonNullable<ClawHubPackageDet
     pkg.isOfficial &&
     pkg.verification?.tier === "source-linked" &&
     (sourceRepo === "natesclaw/natesclaw" ||
-      sourceRepo === "github.com/natesclaw/natesclaw" ||
-      sourceRepo === "https://github.com/natesclaw/natesclaw")
+      sourceRepo === "github.com/openclaw/natesclaw" ||
+      sourceRepo === "https://github.com/openclaw/natesclaw")
   );
 }
 

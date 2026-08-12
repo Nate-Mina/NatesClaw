@@ -38,7 +38,7 @@ function createMissingLlamaCppProviderError(): Error {
     [
       "Unknown memory embedding provider: local.",
       "Local GGUF embeddings are provided by the official llama.cpp provider plugin.",
-      "Install it with: natesclaw plugins install @natesclaw/llama-cpp-provider",
+      "Install it with: natesclaw plugins install @openclaw/llama-cpp-provider",
       "Then restart Natesclaw and retry: natesclaw memory status --deep",
     ].join("\n"),
   );

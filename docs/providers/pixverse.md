@@ -12,7 +12,7 @@ Natesclaw provides `pixverse` as an official external plugin for hosted PixVerse
 | Property           | Value                                                                |
 | ------------------ | -------------------------------------------------------------------- |
 | Provider id        | `pixverse`                                                           |
-| Plugin package     | `@natesclaw/pixverse-provider`                                        |
+| Plugin package     | `@openclaw/pixverse-provider`                                        |
 | Auth env var       | `PIXVERSE_API_KEY`                                                   |
 | Onboarding flag    | `--auth-choice pixverse-api-key`                                     |
 | Direct CLI flag    | `--pixverse-api-key <key>`                                           |
@@ -25,7 +25,7 @@ Natesclaw provides `pixverse` as an official external plugin for hosted PixVerse
 <Steps>
   <Step title="Install the plugin">
     ```bash
-    natesclaw plugins install @natesclaw/pixverse-provider
+    natesclaw plugins install @openclaw/pixverse-provider
     natesclaw gateway restart
     ```
   </Step>

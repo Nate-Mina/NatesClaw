@@ -11,8 +11,8 @@ Natesclaw LongCat provider plugin.
 
 ## Distribution
 
-- Package: `@natesclaw/longcat-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/longcat-provider`
+- Package: `@openclaw/longcat-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/longcat-provider`
 
 ## Surface
 

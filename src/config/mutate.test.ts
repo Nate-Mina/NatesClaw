@@ -542,7 +542,7 @@ describe("config mutate helpers", () => {
         nextConfig: { gateway: { port: 19001 } },
       }),
     ).rejects.toThrow(
-      "Agent-first Nix setup: https://github.com/natesclaw/nix-natesclaw#quick-start",
+      "Agent-first Nix setup: https://github.com/openclaw/nix-natesclaw#quick-start",
     );
 
     expect(ioMocks.writeConfigFile).not.toHaveBeenCalled();
@@ -565,7 +565,7 @@ describe("config mutate helpers", () => {
           draft.gateway = { ...draft.gateway, port: 19001 };
         },
       }),
-    ).rejects.toThrow("Natesclaw Nix overview: https://docs.natesclaw.ai/install/nix");
+    ).rejects.toThrow("Natesclaw Nix overview: https://docs.openclaw.ai/install/nix");
 
     expect(ioMocks.writeConfigFile).not.toHaveBeenCalled();
   });

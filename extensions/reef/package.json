@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/reef",
+  "name": "@openclaw/reef",
   "version": "2026.8.1",
   "description": "Natesclaw Reef channel plugin — guarded end-to-end encrypted claw-to-claw messaging",
   "type": "module",
@@ -33,6 +33,6 @@
     }
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   }
 }

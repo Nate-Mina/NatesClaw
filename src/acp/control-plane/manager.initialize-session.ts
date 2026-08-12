@@ -2,8 +2,8 @@
 import {
   createIdentityFromEnsure,
   mergeSessionIdentity,
-} from "@natesclaw/acp-core/runtime/session-identity";
-import type { AcpRuntime, AcpRuntimeHandle } from "@natesclaw/acp-core/runtime/types";
+} from "@openclaw/acp-core/runtime/session-identity";
+import type { AcpRuntime, AcpRuntimeHandle } from "@openclaw/acp-core/runtime/types";
 import { resolveRuntimeConfigCacheKey } from "../../config/runtime-snapshot.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { logVerbose } from "../../globals.js";

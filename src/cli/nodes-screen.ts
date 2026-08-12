@@ -1,6 +1,6 @@
 // Screen-recording payload helpers for node media commands.
 import * as path from "node:path";
-import { extnameFromAnyPath } from "@natesclaw/media-core/file-name";
+import { extnameFromAnyPath } from "@openclaw/media-core/file-name";
 import { writeBase64ToFile } from "./nodes-camera.js";
 import { asRecord, readStringValue, resolveTempPathParts } from "./nodes-media-utils.js";
 

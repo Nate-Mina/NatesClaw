@@ -11,8 +11,8 @@ Adds Fireworks model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/fireworks-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/fireworks-provider`
+- Package: `@openclaw/fireworks-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/fireworks-provider`
 
 ## Surface
 

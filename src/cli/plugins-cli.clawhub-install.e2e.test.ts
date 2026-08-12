@@ -10,7 +10,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../test/helpers/temp-dir.js";
 import { loadInstalledPluginIndexInstallRecords } from "../plugins/installed-plugin-index-records.js";
 
-const PACKAGE_NAME = "@natesclaw/telemetry-demo";
+const PACKAGE_NAME = "@openclaw/telemetry-demo";
 const PACKAGE_VERSION = "1.0.0";
 const PLUGIN_ID = "telemetry-demo";
 const ENCODED_PACKAGE_NAME = encodeURIComponent(PACKAGE_NAME);

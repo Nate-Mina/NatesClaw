@@ -5,8 +5,8 @@ const hoisted = vi.hoisted(() => ({
   resolveImageSanitizationLimits: vi.fn(() => ({ maxDimensionPx: 2048 })),
 }));
 
-vi.mock("@natesclaw/media-core/constants", async (importOriginal) => ({
-  ...(await importOriginal<typeof import("@natesclaw/media-core/constants")>()),
+vi.mock("@openclaw/media-core/constants", async (importOriginal) => ({
+  ...(await importOriginal<typeof import("@openclaw/media-core/constants")>()),
   MAX_IMAGE_BYTES: 1_234,
   mediaKindFromMime: (mime?: string) =>
     mime ? (mime.startsWith("image/") ? "image" : "unknown") : undefined,

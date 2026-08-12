@@ -2,7 +2,7 @@
 import {
   parseStrictPositiveInteger,
   resolveIntegerOption,
-} from "@natesclaw/normalization-core/number-coercion";
+} from "@openclaw/normalization-core/number-coercion";
 import { isVitestRuntimeEnv } from "../../infra/env.js";
 
 const DEFAULT_MAX_PREAUTH_CONNECTIONS_PER_IP = 32;

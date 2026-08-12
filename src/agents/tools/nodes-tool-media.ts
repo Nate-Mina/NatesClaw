@@ -4,13 +4,13 @@
  * Captures camera/photos/screen media from paired nodes and formats media-safe tool results.
  */
 import crypto from "node:crypto";
-import { extnameFromAnyPath } from "@natesclaw/media-core/file-name";
-import { imageMimeFromFormat } from "@natesclaw/media-core/mime";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { extnameFromAnyPath } from "@openclaw/media-core/file-name";
+import { imageMimeFromFormat } from "@openclaw/media-core/mime";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import {
   cameraTempPath,
   parseCameraClipPayload,

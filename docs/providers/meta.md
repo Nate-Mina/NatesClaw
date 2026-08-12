@@ -13,7 +13,7 @@ plugin.
 | Property                   | Value                              |
 | -------------------------- | ---------------------------------- |
 | Provider id                | `meta`                             |
-| Plugin                     | `@natesclaw/meta-provider`          |
+| Plugin                     | `@openclaw/meta-provider`          |
 | Auth env var               | `MODEL_API_KEY`                    |
 | Onboarding flag            | `--auth-choice meta-api-key`       |
 | Direct CLI flag            | `--meta-api-key <key>`             |
@@ -27,7 +27,7 @@ plugin.
 <Steps>
   <Step title="Install the plugin">
     ```bash
-    natesclaw plugins install @natesclaw/meta-provider
+    natesclaw plugins install @openclaw/meta-provider
     natesclaw gateway restart
     ```
   </Step>

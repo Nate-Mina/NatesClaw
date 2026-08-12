@@ -1,7 +1,7 @@
 // Covers session-message sanitization for empty blocks, tool ids, and
 // thought-signature replay rules.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { AgentMessage } from "natesclaw/plugin-sdk/agent-core";
 import type { AssistantMessage, ToolResultMessage, UserMessage } from "natesclaw/plugin-sdk/llm";
 import { describe, expect, it } from "vitest";

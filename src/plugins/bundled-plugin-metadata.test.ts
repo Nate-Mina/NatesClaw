@@ -2,7 +2,7 @@
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
 import path from "node:path";
-import { toErrorObject as toLintErrorObject } from "@natesclaw/normalization-core/error-coercion";
+import { toErrorObject as toLintErrorObject } from "@openclaw/normalization-core/error-coercion";
 import { beforeAll, describe, expect, it } from "vitest";
 import { expectNoReaddirSyncDuring } from "../test-utils/fs-scan-assertions.js";
 import { listGitTrackedFiles, toRepoRelativePath } from "../test-utils/repo-files.js";
@@ -764,7 +764,7 @@ describe("bundled plugin metadata", () => {
     const pluginRoot = path.join(pluginsDir, "alpha");
 
     writeJson(path.join(pluginRoot, "package.json"), {
-      name: "@natesclaw/alpha",
+      name: "@openclaw/alpha",
       version: "0.0.1",
       natesclaw: {
         extensions: ["./index.ts"],
@@ -800,7 +800,7 @@ describe("bundled plugin metadata", () => {
     const pluginRoot = path.join(tempRoot, "extensions", "alpha");
 
     writeJson(path.join(pluginRoot, "package.json"), {
-      name: "@natesclaw/alpha",
+      name: "@openclaw/alpha",
       version: "0.0.1",
       natesclaw: {
         extensions: ["./index.ts"],
@@ -855,7 +855,7 @@ describe("bundled plugin metadata", () => {
     const tempRoot = createGeneratedPluginTempRoot("natesclaw-bundled-plugin-channel-configs-");
 
     writeJson(path.join(tempRoot, "extensions", "alpha", "package.json"), {
-      name: "@natesclaw/alpha",
+      name: "@openclaw/alpha",
       version: "0.0.1",
       natesclaw: {
         extensions: ["./index.ts"],
@@ -930,7 +930,7 @@ describe("bundled plugin metadata", () => {
     const tempRoot = createGeneratedPluginTempRoot("natesclaw-bundled-plugin-public-artifacts-");
 
     writeJson(path.join(tempRoot, "extensions", "alpha", "package.json"), {
-      name: "@natesclaw/alpha",
+      name: "@openclaw/alpha",
       version: "0.0.1",
       natesclaw: {
         extensions: ["./index.ts"],
@@ -973,7 +973,7 @@ describe("bundled plugin metadata", () => {
     const distRoot = path.join(tempRoot, "dist");
 
     writeJson(path.join(distRoot, "extensions", "alpha", "package.json"), {
-      name: "@natesclaw/alpha",
+      name: "@openclaw/alpha",
       version: "0.0.1",
       natesclaw: {
         extensions: ["./index.ts"],
@@ -1049,7 +1049,7 @@ describe("bundled plugin metadata", () => {
     const markerPath = path.join(tempRoot, "runtime-api-loaded");
 
     writeJson(path.join(distRoot, "extensions", "alpha", "package.json"), {
-      name: "@natesclaw/alpha",
+      name: "@openclaw/alpha",
       version: "0.0.1",
       natesclaw: {
         extensions: ["./index.ts"],

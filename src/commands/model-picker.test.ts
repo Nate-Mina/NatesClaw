@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { NormalizedModelCatalogRow } from "@natesclaw/model-catalog-core/model-catalog-types";
+import type { NormalizedModelCatalogRow } from "@openclaw/model-catalog-core/model-catalog-types";
 // Model picker tests cover catalog rows, provider metadata, backend defaults, and prompt choices.
 import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";

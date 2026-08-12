@@ -1,5 +1,5 @@
 // Verifies transport-aware model stream aliases and fail-closed boundaries.
-import type { Api, Model } from "@natesclaw/llm-core";
+import type { Api, Model } from "@openclaw/llm-core";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import { configureAiTransportHost, getAiTransportHost } from "../host.js";
 import { isOpenAICodexResponsesModel } from "./openai-transport-params.js";

@@ -11,7 +11,7 @@ Adds Copilot Proxy model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/copilot-proxy`
+- Package: `@openclaw/copilot-proxy`
 - Install route: included in Natesclaw
 
 ## Surface

@@ -11,8 +11,8 @@ Adds Novita, Novita AI, Novitaai model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/novita-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/novita-provider`
+- Package: `@openclaw/novita-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/novita-provider`
 
 ## Surface
 

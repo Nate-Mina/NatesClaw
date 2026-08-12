@@ -1,4 +1,4 @@
-# @natesclaw/nostr
+# @openclaw/nostr
 
 Nostr DM channel plugin for Natesclaw using NIP-04 encrypted direct messages.
 
@@ -13,7 +13,7 @@ This extension adds Nostr as a messaging channel to Natesclaw. It enables your b
 ## Installation
 
 ```bash
-natesclaw plugins install @natesclaw/nostr
+natesclaw plugins install @openclaw/nostr
 ```
 
 ## Quick Setup

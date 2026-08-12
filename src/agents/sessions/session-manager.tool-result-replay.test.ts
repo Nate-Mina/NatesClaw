@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import { streamAnthropic } from "@natesclaw/ai/internal/anthropic";
+import { streamAnthropic } from "@openclaw/ai/internal/anthropic";
 import { afterEach, describe, expect, it } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../../test/helpers/temp-dir.js";
 import type { Context, Message, Model } from "../../llm/types.js";

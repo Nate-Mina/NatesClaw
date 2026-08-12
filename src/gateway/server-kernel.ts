@@ -86,7 +86,7 @@ function formatRuntimeGatewayAuthTokenWarning(): string {
   return [
     base,
     "In Nix mode, set gateway.auth.token in your Nix-managed Natesclaw config and rebuild.",
-    "For the first-party Nix flow, see https://github.com/natesclaw/nix-natesclaw#quick-start and https://docs.natesclaw.ai/install/nix.",
+    "For the first-party Nix flow, see https://github.com/openclaw/nix-natesclaw#quick-start and https://docs.openclaw.ai/install/nix.",
   ].join(" ");
 }
 

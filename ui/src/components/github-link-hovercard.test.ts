@@ -76,7 +76,7 @@ describe("natesclaw-github-link-hovercard-provider", () => {
       title: "fix(agents): derive conversation scope from trusted group facts",
       updatedAt: "2026-07-05T09:55:00Z",
     });
-    const href = "https://github.com/natesclaw/natesclaw/pull/99816";
+    const href = "https://github.com/openclaw/natesclaw/pull/99816";
     const { anchor, provider } = createLink(href, "#99816");
     provider.client = { request } as unknown as GatewayBrowserClient;
 
@@ -128,7 +128,7 @@ describe("natesclaw-github-link-hovercard-provider", () => {
       updatedAt: "2026-07-05T09:55:00Z",
     });
     const { anchor, provider } = createLink(
-      "https://github.com/natesclaw/natesclaw/issues/99815",
+      "https://github.com/openclaw/natesclaw/issues/99815",
       "#99815",
     );
     provider.client = { request } as unknown as GatewayBrowserClient;
@@ -144,14 +144,14 @@ describe("natesclaw-github-link-hovercard-provider", () => {
 
   it("ignores unsupported GitHub links and shows a quiet unavailable state", async () => {
     const request = vi.fn().mockRejectedValue(new Error("Not Found"));
-    const unsupportedLink = createLink("https://github.com/natesclaw/natesclaw", "repository");
+    const unsupportedLink = createLink("https://github.com/openclaw/natesclaw", "repository");
     unsupportedLink.provider.client = { request } as unknown as GatewayBrowserClient;
 
     await hover(unsupportedLink.anchor);
     expect(request).not.toHaveBeenCalled();
     expect(document.querySelector(".github-link-hovercard")).toBeNull();
 
-    const missingLink = createLink("https://github.com/natesclaw/natesclaw/issues/999999", "missing");
+    const missingLink = createLink("https://github.com/openclaw/natesclaw/issues/999999", "missing");
     missingLink.provider.client = { request } as unknown as GatewayBrowserClient;
     await hover(missingLink.anchor);
     expect(document.querySelector(".github-link-hovercard")?.textContent).toContain(
@@ -160,8 +160,8 @@ describe("natesclaw-github-link-hovercard-provider", () => {
   });
 
   it.each([
-    "http://github.com/natesclaw/natesclaw/issues/99815",
-    "https://user:password@github.com/natesclaw/natesclaw/issues/99815",
+    "http://github.com/openclaw/natesclaw/issues/99815",
+    "https://user:password@github.com/openclaw/natesclaw/issues/99815",
     "https://example.com/natesclaw/natesclaw/issues/99815",
     "javascript:alert(1)",
   ])("does not preview an untrusted item URL: %s", async (href) => {
@@ -177,7 +177,7 @@ describe("natesclaw-github-link-hovercard-provider", () => {
 
   it("preserves an existing description when hover ends before opening", async () => {
     const request = vi.fn();
-    const { anchor, provider } = createLink("https://github.com/natesclaw/natesclaw/issues/99815");
+    const { anchor, provider } = createLink("https://github.com/openclaw/natesclaw/issues/99815");
     provider.client = { request } as unknown as GatewayBrowserClient;
     anchor.setAttribute("aria-describedby", "existing-description");
 
@@ -211,7 +211,7 @@ describe("natesclaw-github-link-hovercard-provider", () => {
     } as unknown as GatewayBrowserClient;
     const route = document.createElement("main");
     const anchor = document.createElement("a");
-    anchor.href = "https://github.com/natesclaw/natesclaw/issues/99815";
+    anchor.href = "https://github.com/openclaw/natesclaw/issues/99815";
     route.append(anchor);
     provider.append(route);
     document.body.append(provider);
@@ -242,7 +242,7 @@ describe("natesclaw-github-link-hovercard-provider", () => {
       updatedAt: "2026-07-05T09:55:00Z",
     });
     const { anchor, provider } = createLink(
-      "https://github.com/natesclaw/natesclaw/issues/99815",
+      "https://github.com/openclaw/natesclaw/issues/99815",
       "#99815",
     );
     provider.client = { request } as unknown as GatewayBrowserClient;

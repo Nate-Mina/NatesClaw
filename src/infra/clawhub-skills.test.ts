@@ -1,5 +1,5 @@
 // Verifies ClawHub skill icons, telemetry, metadata, verification, and cards.
-import { MAX_TIMER_TIMEOUT_MS } from "@natesclaw/normalization-core/number-coercion";
+import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { reportClawHubPluginInstallTelemetry } from "./clawhub-packages.js";
 import {
@@ -110,14 +110,14 @@ describe("clawhub skills", () => {
 
     await reportClawHubPluginInstallTelemetry({
       token: "test-token",
-      packageName: "@natesclaw/voice-call",
+      packageName: "@openclaw/voice-call",
       version: "2026.7.23",
       fetchImpl,
     });
 
     expect(requestBody).toEqual({
       event: "plugin_install",
-      packageName: "@natesclaw/voice-call",
+      packageName: "@openclaw/voice-call",
       version: "2026.7.23",
     });
   });
@@ -128,7 +128,7 @@ describe("clawhub skills", () => {
 
     await reportClawHubPluginInstallTelemetry({
       token: "test-token",
-      packageName: "@natesclaw/voice-call",
+      packageName: "@openclaw/voice-call",
       fetchImpl,
     });
 
@@ -273,7 +273,7 @@ describe("clawhub skills", () => {
               path: "skills/weather",
               commit: "a".repeat(40),
               contentHash: "sha256:approved",
-              sourceUrl: "https://github.com/natesclaw/skills",
+              sourceUrl: "https://github.com/openclaw/skills",
             },
           }),
           { headers: { "content-type": "application/json" } },

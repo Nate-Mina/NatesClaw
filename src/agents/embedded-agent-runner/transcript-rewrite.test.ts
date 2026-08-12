@@ -3,7 +3,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { AgentMessage } from "natesclaw/plugin-sdk/agent-core";
 import { SessionManager } from "natesclaw/plugin-sdk/agent-sessions";
 import { beforeAll, describe, expect, it } from "vitest";

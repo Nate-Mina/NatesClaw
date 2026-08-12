@@ -1,5 +1,5 @@
 // Builds provider-aware auth-choice options and grouped onboarding menus.
-import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveProviderSetupFlowContributions } from "../flows/provider-flow.js";

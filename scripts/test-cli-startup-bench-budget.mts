@@ -1,7 +1,7 @@
 // Compares CLI startup benchmark reports against checked-in budgets.
 import { spawnSync } from "node:child_process";
 import fs from "node:fs";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { z } from "zod";
 import { booleanFlag, intFlag, parseFlagArgs, stringFlag } from "./lib/arg-utils.mts";
 import { budgetFloatFlag, readBudgetEnvNumber } from "./lib/budget-number-args.mts";

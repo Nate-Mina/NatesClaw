@@ -5,7 +5,7 @@
  * union with approval assertions and the audit log.
  */
 import { createHash } from "node:crypto";
-import { stableStringify } from "@natesclaw/normalization-core";
+import { stableStringify } from "@openclaw/normalization-core";
 import { Type } from "typebox";
 import type { RuntimeEnv } from "../../runtime.js";
 import {

@@ -45,8 +45,8 @@ struct PushBuildConfig {
     let proofPolicy: PushProofPolicy
 
     static let current = PushBuildConfig()
-    static let NatesclawHostedRelayHost = "ios-push-relay.natesclaw.ai"
-    static let NatesclawSandboxRelayHost = "ios-push-relay-sandbox.natesclaw.ai"
+    static let NatesclawHostedRelayHost = "ios-push-relay.openclaw.ai"
+    static let NatesclawSandboxRelayHost = "ios-push-relay-sandbox.openclaw.ai"
 
     var usesNatesclawHostedRelay: Bool {
         guard self.transport == .relay, self.distribution == .official else { return false }

@@ -1,5 +1,5 @@
 import { consume } from "@lit/context";
-import type { SystemChangeEntry, SystemChangesListResult } from "@natesclaw/gateway-protocol";
+import type { SystemChangeEntry, SystemChangesListResult } from "@openclaw/gateway-protocol";
 import { html, nothing, type PropertyValues } from "lit";
 import { property, state } from "lit/decorators.js";
 import type { GatewayBrowserClient } from "../../api/gateway.ts";

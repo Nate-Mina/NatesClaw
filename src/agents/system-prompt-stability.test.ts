@@ -1,7 +1,7 @@
 // System prompt stability tests cover deterministic workspace bootstrap file
 // loading so prompt-cache inputs stay byte-stable.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { describe, expect, it, beforeEach } from "vitest";
 import { makeTempWorkspace, writeWorkspaceFile } from "../test-helpers/workspace.js";
 import {

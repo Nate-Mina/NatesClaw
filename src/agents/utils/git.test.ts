@@ -5,7 +5,7 @@ import { parseGitUrl } from "./git.js";
 
 describe("parseGitUrl", () => {
   it("parses ordinary hosted git sources", () => {
-    expect(parseGitUrl("git:github.com/natesclaw/example-plugin")).toMatchObject({
+    expect(parseGitUrl("git:github.com/openclaw/example-plugin")).toMatchObject({
       type: "git",
       host: "github.com",
       path: "natesclaw/example-plugin",
@@ -17,7 +17,7 @@ describe("parseGitUrl", () => {
   });
 
   it.each([
-    ["git:https://github.com/natesclaw/example-plugin.git@v1.2.3", "github.com"],
+    ["git:https://github.com/openclaw/example-plugin.git@v1.2.3", "github.com"],
     ["git:git@github.com:natesclaw/example-plugin.git@feature/foo", "github.com"],
     ["git:example.com/natesclaw/example-plugin@main", "example.com"],
     ["git:gitlab.com/natesclaw/example-plugin@feature/foo", "gitlab.com"],
@@ -32,8 +32,8 @@ describe("parseGitUrl", () => {
     expect(parseGitUrl("git:https://example.com/natesclaw/../outside")).toBeNull();
     expect(parseGitUrl("git:git@example.com:natesclaw/../outside")).toBeNull();
     expect(parseGitUrl("git:example.com/natesclaw/./outside")).toBeNull();
-    expect(parseGitUrl("git:https://github.com/natesclaw/../outside@feature/foo")).toBeNull();
-    expect(parseGitUrl("git:https://github.com/natesclaw/%2e%2e/outside")).toBeNull();
-    expect(parseGitUrl("git:https://github.com/natesclaw/repo\\..\\outside")).toBeNull();
+    expect(parseGitUrl("git:https://github.com/openclaw/../outside@feature/foo")).toBeNull();
+    expect(parseGitUrl("git:https://github.com/openclaw/%2e%2e/outside")).toBeNull();
+    expect(parseGitUrl("git:https://github.com/openclaw/repo\\..\\outside")).toBeNull();
   });
 });

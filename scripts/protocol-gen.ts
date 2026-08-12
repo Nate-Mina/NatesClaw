@@ -42,7 +42,7 @@ async function writeJsonSchema(jsonSchemaPath: string) {
 
   const rootSchema = {
     $schema: "http://json-schema.org/draft-07/schema#",
-    $id: "https://natesclaw.ai/protocol.schema.json",
+    $id: "https://openclaw.ai/protocol.schema.json",
     title: "Natesclaw Gateway Protocol",
     description: "Handshake, request/response, and event frames for the Gateway WebSocket.",
     oneOf: [

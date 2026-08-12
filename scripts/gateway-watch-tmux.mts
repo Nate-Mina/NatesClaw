@@ -3,7 +3,7 @@
 import { spawnSync, type SpawnSyncOptions, type SpawnSyncReturns } from "node:child_process";
 import process from "node:process";
 import { pathToFileURL } from "node:url";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 
 type TextWriter = {
   write: (message: string) => unknown;

@@ -1,5 +1,5 @@
 /** Heartbeat prompt defaults, token stripping, task parsing, and due-time helpers. */
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { escapeRegExp } from "../shared/regexp.js";
 import { HEARTBEAT_TOKEN } from "./tokens.js";
 

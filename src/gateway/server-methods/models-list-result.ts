@@ -1,7 +1,7 @@
 // Model list result building resolves visible model catalogs for an agent and
 // strips runtime-only provider params before sending the browse API payload.
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
-import { asPositiveSafeInteger as resolvePositiveSafeInteger } from "@natesclaw/normalization-core/number-coercion";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { asPositiveSafeInteger as resolvePositiveSafeInteger } from "@openclaw/normalization-core/number-coercion";
 import type { ModelChoice } from "../../../packages/gateway-protocol/src/schema/agents-models-skills.js";
 import type { PreparedAgentCredentialModes } from "../../agents/agent-auth-credentials.js";
 import {

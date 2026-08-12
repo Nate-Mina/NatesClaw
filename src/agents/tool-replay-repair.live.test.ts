@@ -1,7 +1,7 @@
 // Live tool replay repair tests validate repaired historical transcripts across
 // selected real model providers.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { AgentMessage } from "natesclaw/plugin-sdk/agent-core";
 import { SessionManager } from "natesclaw/plugin-sdk/agent-sessions";
 import type { Context, Model } from "natesclaw/plugin-sdk/llm";

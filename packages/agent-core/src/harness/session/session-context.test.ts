@@ -1,4 +1,4 @@
-import type { AssistantMessage, ProviderReplayState } from "@natesclaw/llm-core";
+import type { AssistantMessage, ProviderReplayState } from "@openclaw/llm-core";
 import { describe, expect, it } from "vitest";
 import { convertToLlm } from "../messages.js";
 import type { SessionTreeEntry } from "../types.js";

@@ -11,8 +11,8 @@ Connect Natesclaw agents to Buzz rooms.
 
 ## Distribution
 
-- Package: `@natesclaw/buzz`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/buzz`
+- Package: `@openclaw/buzz`
+- Install route: npm; ClawHub: `clawhub:@openclaw/buzz`
 
 ## Surface
 

@@ -40,7 +40,7 @@ function createDualPublishPluginRepo() {
   mkdirSync(packageDir, { recursive: true });
   writeJsonFile(join(repoDir, "package.json"), { name: "natesclaw-test-root", type: "module" });
   writeJsonFile(join(packageDir, "package.json"), {
-    name: "@natesclaw/demo-plugin",
+    name: "@openclaw/demo-plugin",
     version: "2026.4.10",
     type: "module",
     repository: {
@@ -56,7 +56,7 @@ function createDualPublishPluginRepo() {
         natesclawVersion: "2026.4.10",
       },
       install: {
-        npmSpec: "@natesclaw/demo-plugin",
+        npmSpec: "@openclaw/demo-plugin",
       },
       release: {
         publishToClawHub: true,
@@ -81,7 +81,7 @@ describe("scripts/plugin-release-pretag-pack-check.ts", () => {
     expect(collectPluginReleasePretagPackTargets(repoDir)).toEqual([
       {
         packageDir: "extensions/demo-plugin",
-        packageName: "@natesclaw/demo-plugin",
+        packageName: "@openclaw/demo-plugin",
         packClawHub: true,
         packNpm: true,
       },

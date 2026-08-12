@@ -1,22 +1,22 @@
 {
-  "name": "@natesclaw/volcengine-provider",
+  "name": "@openclaw/volcengine-provider",
   "version": "2026.8.1",
   "description": "Natesclaw Volcengine provider plugin.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/volcengine-provider",
-      "npmSpec": "@natesclaw/volcengine-provider",
+      "clawhubSpec": "clawhub:@openclaw/volcengine-provider",
+      "npmSpec": "@openclaw/volcengine-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.7.2"
     },

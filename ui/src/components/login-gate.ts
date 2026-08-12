@@ -99,7 +99,7 @@ function buildFeedback(params: {
   stepParams?: Record<string, string>;
   refreshAction?: { label: string };
 }): LoginFailureFeedback {
-  const docsHref = params.docsHref ?? "https://docs.natesclaw.ai/web/dashboard";
+  const docsHref = params.docsHref ?? "https://docs.openclaw.ai/web/dashboard";
   return {
     kind: params.kind,
     title: t(params.titleKey, params.stepParams),
@@ -128,7 +128,7 @@ function resolveLoginFailureFeedback(
     return buildFeedback({
       kind: "pairing-required",
       rawError,
-      docsHref: "https://docs.natesclaw.ai/web/control-ui#device-pairing-first-connection",
+      docsHref: "https://docs.openclaw.ai/web/control-ui#device-pairing-first-connection",
       titleKey:
         pairing.kind === "scope-upgrade-pending"
           ? "login.failure.pairing.scopeTitle"
@@ -175,7 +175,7 @@ function resolveLoginFailureFeedback(
     return buildFeedback({
       kind: "insecure-context",
       rawError,
-      docsHref: "https://docs.natesclaw.ai/web/control-ui#insecure-http",
+      docsHref: "https://docs.openclaw.ai/web/control-ui#insecure-http",
       titleKey: "login.failure.insecure.title",
       summaryKey: "login.failure.insecure.summary",
       stepKeys: ["login.failure.insecure.stepHttps", "login.failure.insecure.stepAvoidDisable"],
@@ -190,7 +190,7 @@ function resolveLoginFailureFeedback(
       kind: "origin-not-allowed",
       rawError,
       docsHref:
-        "https://docs.natesclaw.ai/web/control-ui#debuggingtesting-dev-server--remote-gateway",
+        "https://docs.openclaw.ai/web/control-ui#debuggingtesting-dev-server--remote-gateway",
       titleKey: "login.failure.origin.title",
       summaryKey: "login.failure.origin.summary",
       stepKeys: [
@@ -206,7 +206,7 @@ function resolveLoginFailureFeedback(
       kind: "protocol-mismatch",
       rawError,
       docsHref:
-        "https://docs.natesclaw.ai/web/control-ui#debuggingtesting-dev-server--remote-gateway",
+        "https://docs.openclaw.ai/web/control-ui#debuggingtesting-dev-server--remote-gateway",
       titleKey: "login.failure.protocol.title",
       summaryKey: "login.failure.protocol.summary",
       refreshAction: { label: t("login.failure.protocol.refresh") },
@@ -435,7 +435,7 @@ function renderLoginGate(props: LoginGateProps) {
           <div class="login-gate__docs">
             <a
               class="session-link"
-              href="https://docs.natesclaw.ai/web/dashboard"
+              href="https://docs.openclaw.ai/web/dashboard"
               target="_blank"
               rel="noreferrer"
               >${t("connection.help.docsLink")}</a

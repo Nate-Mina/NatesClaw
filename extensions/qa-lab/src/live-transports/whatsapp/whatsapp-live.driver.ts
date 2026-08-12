@@ -3,7 +3,7 @@ import {
   startWhatsAppQaDriverSession,
   type WhatsAppQaDriverObservedMessage,
   type WhatsAppQaDriverSession,
-} from "@natesclaw/whatsapp/api.js";
+} from "@openclaw/whatsapp/api.js";
 import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import type { WhatsAppQaMessageScenarioContext } from "./whatsapp-live.contracts.js";
 import {

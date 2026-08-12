@@ -1,6 +1,6 @@
 // Runs a Vitest config and enforces wall-time regression budgets.
 import { pathToFileURL } from "node:url";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { booleanFlag, parseFlagArgs, stringFlag, type FlagSpec } from "./lib/arg-utils.mts";
 import {
   budgetFloatFlag,

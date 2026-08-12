@@ -2,7 +2,7 @@
  * Shared gateway-token session rotation tests.
  */
 import fs from "node:fs/promises";
-import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
 import { afterAll, beforeAll, describe, expect, it } from "vitest";
 import {
   loadGatewayConfig,

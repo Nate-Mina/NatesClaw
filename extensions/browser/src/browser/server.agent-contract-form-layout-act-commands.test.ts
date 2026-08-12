@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 // Browser tests cover server.agent contract form layout act commands plugin behavior.
 import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { beforeAll, describe, expect, it } from "vitest";

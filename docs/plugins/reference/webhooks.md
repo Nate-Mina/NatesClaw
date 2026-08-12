@@ -11,7 +11,7 @@ Authenticated inbound webhooks that bind external automation to Natesclaw TaskFl
 
 ## Distribution
 
-- Package: `@natesclaw/webhooks`
+- Package: `@openclaw/webhooks`
 - Install route: included in Natesclaw
 
 ## Surface

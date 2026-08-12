@@ -1,5 +1,5 @@
 // Discord message processing coverage split by cohesive behavior.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { DEFAULT_EMOJIS, DEFAULT_TIMING } from "natesclaw/plugin-sdk/channel-feedback";
 import { describe, expect, it, vi } from "vitest";
 import {

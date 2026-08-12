@@ -23,12 +23,12 @@ function pullRequest(
     repo: "natesclaw",
     branch: "claude/browser-tabs-tighter-header",
     title: "fix(macos): tighten the link-browser tab header",
-    url: "https://github.com/natesclaw/natesclaw/pull/103469",
+    url: "https://github.com/openclaw/natesclaw/pull/103469",
     state: "open",
     additions: 4,
     deletions: 3,
     checks: { state: "passing", passed: 5, failed: 0, skipped: 1, running: 0 },
-    checksUrl: "https://github.com/natesclaw/natesclaw/pull/103469/checks",
+    checksUrl: "https://github.com/openclaw/natesclaw/pull/103469/checks",
     ...overrides,
   };
 }
@@ -40,7 +40,7 @@ function sessionBranch(overrides: Partial<ControlUiSessionBranch> = {}): Control
     branch: "claude/cloud-workers-live-events",
     additions: 2819,
     deletions: 205,
-    createUrl: "https://github.com/natesclaw/natesclaw/pull/new/claude/cloud-workers-live-events",
+    createUrl: "https://github.com/openclaw/natesclaw/pull/new/claude/cloud-workers-live-events",
     ...overrides,
   };
 }
@@ -120,7 +120,7 @@ describe("renderChatPullRequests", () => {
     const checks = chip?.querySelector<HTMLDetailsElement>(".chat-pr__checks");
     expect(checks?.getAttribute("data-checks")).toBe("passing");
     expect(chip?.querySelector(".chat-pr__link")?.getAttribute("href")).toBe(
-      "https://github.com/natesclaw/natesclaw/pull/103469",
+      "https://github.com/openclaw/natesclaw/pull/103469",
     );
     expect(chip?.querySelector(".chat-pr__warning")).toBeNull();
     expect(chip?.querySelector(".chat-pr__state")).toBeNull();
@@ -151,7 +151,7 @@ describe("renderChatPullRequests", () => {
     // Zero-count states stay out of the popover.
     expect(menu?.querySelector(".chat-pr__checks-row--running")).toBeNull();
     expect(menu?.querySelector<HTMLAnchorElement>("a")?.href).toBe(
-      "https://github.com/natesclaw/natesclaw/pull/103469/checks",
+      "https://github.com/openclaw/natesclaw/pull/103469/checks",
     );
     expect(container.querySelector(".chat-pr__checks")?.getAttribute("data-checks")).toBe(
       "failing",
@@ -267,7 +267,7 @@ describe("renderChatPullRequests", () => {
     );
     const create = row?.querySelector<HTMLAnchorElement>(".chat-pr__create");
     expect(create?.getAttribute("href")).toBe(
-      "https://github.com/natesclaw/natesclaw/pull/new/claude/cloud-workers-live-events",
+      "https://github.com/openclaw/natesclaw/pull/new/claude/cloud-workers-live-events",
     );
     expect(create?.textContent?.trim()).toBe("Create PR");
     expect(row?.querySelector(".chat-pr__warning")).toBeNull();

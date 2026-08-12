@@ -224,7 +224,7 @@ describe("persistPluginInstall", () => {
     setInstalledPluginIndexInstallRecords({
       codex: {
         source: "clawhub",
-        spec: "clawhub:@natesclaw/codex",
+        spec: "clawhub:@openclaw/codex",
         installPath: "/tmp/natesclaw/extensions/codex",
       },
     });
@@ -261,8 +261,8 @@ describe("persistPluginInstall", () => {
       pluginId: "codex",
       install: {
         source: "npm",
-        spec: "@natesclaw/codex",
-        installPath: "/tmp/natesclaw/npm/node_modules/@natesclaw/codex",
+        spec: "@openclaw/codex",
+        installPath: "/tmp/natesclaw/npm/node_modules/@openclaw/codex",
       },
     });
 
@@ -272,7 +272,7 @@ describe("persistPluginInstall", () => {
           installs: {
             codex: {
               source: "clawhub",
-              spec: "clawhub:@natesclaw/codex",
+              spec: "clawhub:@openclaw/codex",
               installPath: "/tmp/natesclaw/extensions/codex",
             },
           },
@@ -312,8 +312,8 @@ describe("persistPluginInstall", () => {
     setInstalledPluginIndexInstallRecords({
       codex: {
         source: "npm",
-        spec: "@natesclaw/codex",
-        installPath: "/tmp/natesclaw/npm/node_modules/@natesclaw/codex",
+        spec: "@openclaw/codex",
+        installPath: "/tmp/natesclaw/npm/node_modules/@openclaw/codex",
       },
     });
 
@@ -326,8 +326,8 @@ describe("persistPluginInstall", () => {
       pluginId: "codex",
       install: {
         source: "npm",
-        spec: "@natesclaw/codex@latest",
-        installPath: "/tmp/natesclaw/npm/node_modules/@natesclaw/codex",
+        spec: "@openclaw/codex@latest",
+        installPath: "/tmp/natesclaw/npm/node_modules/@openclaw/codex",
       },
     });
 
@@ -371,7 +371,7 @@ describe("persistPluginInstall", () => {
     setInstalledPluginIndexInstallRecords({
       codex: {
         source: "npm",
-        spec: "@natesclaw/codex@1.0.0",
+        spec: "@openclaw/codex@1.0.0",
         installPath: previousInstallPath,
       },
     });
@@ -395,7 +395,7 @@ describe("persistPluginInstall", () => {
         cleanup: {
           kind: "npm",
           npmRoot: previousProjectRoot,
-          packageName: "@natesclaw/codex",
+          packageName: "@openclaw/codex",
         },
       },
     });
@@ -410,7 +410,7 @@ describe("persistPluginInstall", () => {
         pluginId: "codex",
         install: {
           source: "npm",
-          spec: "@natesclaw/codex@2.0.0",
+          spec: "@openclaw/codex@2.0.0",
           installPath: nextInstallPath,
         },
       });
@@ -421,7 +421,7 @@ describe("persistPluginInstall", () => {
             installs: {
               codex: {
                 source: "npm",
-                spec: "@natesclaw/codex@1.0.0",
+                spec: "@openclaw/codex@1.0.0",
                 installPath: previousInstallPath,
               },
             },
@@ -473,8 +473,8 @@ describe("persistPluginInstall", () => {
       pluginId: "discord",
       install: {
         source: "npm",
-        spec: "@natesclaw/discord",
-        installPath: "/tmp/natesclaw/npm/node_modules/@natesclaw/discord/index.ts",
+        spec: "@openclaw/discord",
+        installPath: "/tmp/natesclaw/npm/node_modules/@openclaw/discord/index.ts",
       },
     });
 
@@ -491,7 +491,7 @@ describe("persistPluginInstall", () => {
       "active config source: /tmp/natesclaw-upstream/extensions/discord/index.ts",
     );
     expect(pluginsCliRuntimeLogs.join("\n")).toContain(
-      "installed npm source: /tmp/natesclaw/npm/node_modules/@natesclaw/discord/index.ts",
+      "installed npm source: /tmp/natesclaw/npm/node_modules/@openclaw/discord/index.ts",
     );
     expect(pluginsCliRuntimeLogs.join("\n")).toContain("natesclaw plugins doctor");
   });
@@ -516,7 +516,7 @@ describe("persistPluginInstall", () => {
         {
           id: "discord",
           origin: "config",
-          source: "/tmp/natesclaw/npm/node_modules/@natesclaw/discord/dist/index.js",
+          source: "/tmp/natesclaw/npm/node_modules/@openclaw/discord/dist/index.js",
           status: "loaded",
         },
       ],
@@ -532,8 +532,8 @@ describe("persistPluginInstall", () => {
       pluginId: "discord",
       install: {
         source: "npm",
-        spec: "@natesclaw/discord",
-        installPath: "/tmp/natesclaw/npm/node_modules/@natesclaw/discord",
+        spec: "@openclaw/discord",
+        installPath: "/tmp/natesclaw/npm/node_modules/@openclaw/discord",
       },
     });
 

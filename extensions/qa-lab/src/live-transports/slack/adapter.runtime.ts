@@ -5,7 +5,7 @@ import {
   createSlackWebClient,
   createSlackWriteClient,
   resolveSlackWebClientOptions,
-} from "@natesclaw/slack/api.js";
+} from "@openclaw/slack/api.js";
 import type { FetchFunction } from "@slack/web-api";
 import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { acquireDebugProxyCaptureStore } from "natesclaw/plugin-sdk/proxy-capture";

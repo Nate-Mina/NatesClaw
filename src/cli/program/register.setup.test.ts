@@ -178,7 +178,7 @@ describe("registerSetupCommand", () => {
         valid: true,
         path: "/tmp/natesclaw.json",
         sourceConfig: {
-          $schema: "https://natesclaw.ai/config.json",
+          $schema: "https://openclaw.ai/config.json",
           meta: { updatedBy: "fixture" },
           wizard: { securityAcknowledgedAt: "2026-08-02T00:00:00.000Z", accessMode },
         },

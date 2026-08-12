@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/openai-provider",
+  "name": "@openclaw/openai-provider",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw OpenAI provider plugins",
@@ -11,7 +11,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

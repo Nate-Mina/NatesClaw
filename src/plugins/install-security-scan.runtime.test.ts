@@ -68,7 +68,7 @@ describe("install security scan official bypass", () => {
     const sourceDir = makeTempDir();
     const result = await scanBundleInstallSourceRuntime({
       logger: {},
-      pluginId: "@natesclaw/matrix",
+      pluginId: "@openclaw/matrix",
       sourceDir,
       source: { kind: "clawhub", authority: "official", mutable: false, network: true },
     });
@@ -98,8 +98,8 @@ describe("install security scan official bypass", () => {
   it("runs only operator policy for official immutable npm sources", async () => {
     const result = await preflightPluginNpmInstallPolicyRuntime({
       logger: {},
-      packageName: "@natesclaw/matrix",
-      requestedSpecifier: "@natesclaw/matrix@latest",
+      packageName: "@openclaw/matrix",
+      requestedSpecifier: "@openclaw/matrix@latest",
       source: { kind: "npm", authority: "official", mutable: false, network: true },
       sourcePath: "/tmp/natesclaw-official-npm",
       sourcePathKind: "directory",
@@ -120,7 +120,7 @@ describe("install security scan official bypass", () => {
     const sourceDir = makeTempDir();
     const result = await scanBundleInstallSourceRuntime({
       logger: {},
-      pluginId: "@natesclaw/matrix",
+      pluginId: "@openclaw/matrix",
       sourceDir,
       source: { kind: "clawhub", authority: "official", mutable: false, network: true },
     });
@@ -141,7 +141,7 @@ describe("install security scan official bypass", () => {
     await expect(
       scanBundleInstallSourceRuntime({
         logger: {},
-        pluginId: "@natesclaw/matrix",
+        pluginId: "@openclaw/matrix",
         sourceDir,
         source: { kind: "clawhub", authority: "official", mutable: false, network: true },
       }),
@@ -158,7 +158,7 @@ describe("install security scan official bypass", () => {
         extensions: ["index.js"],
         logger: {},
         packageDir,
-        pluginId: "@natesclaw/matrix",
+        pluginId: "@openclaw/matrix",
         source: { kind: "npm", authority: "official", mutable: false, network: true },
         trustedSourceLinkedOfficialInstall: true,
       }),
@@ -239,7 +239,7 @@ describe("installed dependency tree scan", () => {
       }),
       "utf8",
     );
-    await fs.writeFile(path.join(outsideRoot, "package.json"), '{"name":"natesclaw"}', "utf8");
+    await fs.writeFile(path.join(outsideRoot, "package.json"), '{"name": "openclaw"}', "utf8");
     await fs.symlink(outsideRoot, hostLink, "junction");
 
     await expect(

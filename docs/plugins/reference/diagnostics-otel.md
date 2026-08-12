@@ -11,8 +11,8 @@ Natesclaw diagnostics OpenTelemetry exporter for metrics, traces, and logs.
 
 ## Distribution
 
-- Package: `@natesclaw/diagnostics-otel`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/diagnostics-otel`
+- Package: `@openclaw/diagnostics-otel`
+- Install route: npm; ClawHub: `clawhub:@openclaw/diagnostics-otel`
 
 ## Surface
 

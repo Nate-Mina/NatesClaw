@@ -3,7 +3,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { DatabaseSync } from "node:sqlite";
-import { WORKBOARD_STATUSES } from "@natesclaw/workboard-contract";
+import { WORKBOARD_STATUSES } from "@openclaw/workboard-contract";
 import { MAX_DATE_TIMESTAMP_MS } from "natesclaw/plugin-sdk/number-runtime";
 import { describe, expect, it, vi } from "vitest";
 import type {

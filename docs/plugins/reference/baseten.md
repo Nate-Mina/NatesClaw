@@ -11,8 +11,8 @@ Natesclaw Baseten provider plugin.
 
 ## Distribution
 
-- Package: `@natesclaw/baseten-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/baseten-provider`
+- Package: `@openclaw/baseten-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/baseten-provider`
 
 ## Surface
 

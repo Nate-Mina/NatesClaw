@@ -1,6 +1,6 @@
 /** Classifies terminal assistant visibility and provider retry eligibility. */
-import { asFiniteNumber } from "@natesclaw/normalization-core/number-coercion";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import { isSilentReplyPayloadText, SILENT_REPLY_TOKEN } from "../../../auto-reply/tokens.js";
 import {
   isStrictAgenticSupportedProviderModel,

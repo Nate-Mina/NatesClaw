@@ -6,7 +6,7 @@ import {
   type NatesclawCrablineChannelDriverSelection,
   type NatesclawCrablineInbound,
   type StartedNatesclawCrablineAdapter,
-} from "@natesclaw/crabline";
+} from "@openclaw/crabline";
 import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { fetchWithSsrFGuard } from "natesclaw/plugin-sdk/ssrf-runtime";
 import {

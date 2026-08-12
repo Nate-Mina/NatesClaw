@@ -1,4 +1,4 @@
-import { stripOpenAIResponsesCompactionReplayCheckpoint } from "@natesclaw/ai/transports";
+import { stripOpenAIResponsesCompactionReplayCheckpoint } from "@openclaw/ai/transports";
 import type { AgentMessage } from "../../types.js";
 import {
   asAgentMessage,

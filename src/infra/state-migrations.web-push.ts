@@ -1,6 +1,6 @@
 import path from "node:path";
 import type { DatabaseSync } from "node:sqlite";
-import { root, type Root } from "@natesclaw/fs-safe";
+import { root, type Root } from "@openclaw/fs-safe";
 import { runNatesclawStateWriteTransaction } from "../state/natesclaw-state-db.js";
 import {
   executeSqliteQuerySync,

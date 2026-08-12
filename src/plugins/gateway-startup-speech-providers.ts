@@ -1,6 +1,6 @@
 // Collects startup speech provider metadata from plugin manifests.
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import { listAgentEntries } from "../agents/agent-scope-config.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveEffectiveTtsConfig } from "../tts/tts-config.js";

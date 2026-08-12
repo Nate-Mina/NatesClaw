@@ -3,7 +3,7 @@
  * Exercises exec and process behavior through the shared exported tool factory.
  */
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { drainFormattedSystemEvents } from "../auto-reply/reply/session-system-events.js";
 import type { NatesclawConfig } from "../config/config.js";

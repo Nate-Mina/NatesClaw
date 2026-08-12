@@ -1,5 +1,5 @@
 // Telegram tests cover bot message context.typing plugin behavior.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { buildChannelInboundEventContext } from "natesclaw/plugin-sdk/channel-inbound";
 import { describe, expect, it, vi } from "vitest";
 import { buildTelegramMessageContextForTest } from "./bot-message-context.test-harness.js";

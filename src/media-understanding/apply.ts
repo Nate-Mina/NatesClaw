@@ -3,9 +3,9 @@
 import {
   attachmentClassFromMime,
   type AttachmentClassification,
-} from "@natesclaw/media-core/attachment-classify";
-import { mimeTypeFromFilePath, normalizeMimeType } from "@natesclaw/media-core/mime";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/media-core/attachment-classify";
+import { mimeTypeFromFilePath, normalizeMimeType } from "@openclaw/media-core/mime";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import pMap from "p-map";
 import type { ActiveMediaModel } from "../../packages/media-understanding-common/src/active-model.js";
 import {

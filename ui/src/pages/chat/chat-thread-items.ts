@@ -1,5 +1,5 @@
-import { readSessionMessageIdentity } from "@natesclaw/gateway-client/browser";
-import { asNullableRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
+import { readSessionMessageIdentity } from "@openclaw/gateway-client/browser";
+import { asNullableRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
 import { resolveToolUseId } from "../../../../src/chat/tool-content.js";
 import { escapeRegExp } from "../../../../src/shared/regexp.js";
 import type { ChatItem, ChatQueueItem, ToolCard } from "../../lib/chat/chat-types.ts";

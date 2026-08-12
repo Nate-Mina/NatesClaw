@@ -187,7 +187,7 @@ describe("resolveArchiveSourcePath", () => {
 
 describe("resolveNpmSpecMetadata", () => {
   const npmViewMetadata = {
-    name: "@natesclaw/codex",
+    name: "@openclaw/codex",
     version: "2026.6.11",
     "dist.integrity": "placeholder",
     "dist.shasum": "placeholder",
@@ -202,14 +202,14 @@ describe("resolveNpmSpecMetadata", () => {
   ])("normalizes npm $npmVersion view JSON", async ({ stdout }) => {
     mockPackCommandResult({ stdout });
 
-    const result = await resolveNpmSpecMetadata({ spec: "@natesclaw/codex" });
+    const result = await resolveNpmSpecMetadata({ spec: "@openclaw/codex" });
 
     expect(result).toEqual({
       ok: true,
       metadata: {
-        name: "@natesclaw/codex",
+        name: "@openclaw/codex",
         version: "2026.6.11",
-        resolvedSpec: "@natesclaw/codex@2026.6.11",
+        resolvedSpec: "@openclaw/codex@2026.6.11",
         integrity: "placeholder",
         shasum: "placeholder",
         packageNatesclaw: {
@@ -241,7 +241,7 @@ describe("resolveNpmSpecMetadata", () => {
       ]),
     });
 
-    await expect(resolveNpmSpecMetadata({ spec: "@natesclaw/codex@^2026.6.0" })).resolves.toEqual({
+    await expect(resolveNpmSpecMetadata({ spec: "@openclaw/codex@^2026.6.0" })).resolves.toEqual({
       ok: true,
       metadata: expect.objectContaining({
         version: "2026.6.12",
@@ -268,7 +268,7 @@ describe("resolveNpmSpecMetadata", () => {
       ]),
     });
 
-    await expect(resolveNpmSpecMetadata({ spec: "@natesclaw/codex@^2026.6.0" })).resolves.toEqual({
+    await expect(resolveNpmSpecMetadata({ spec: "@openclaw/codex@^2026.6.0" })).resolves.toEqual({
       ok: true,
       metadata: expect.objectContaining({
         version: "2026.6.12",
@@ -288,7 +288,7 @@ describe("resolveNpmSpecMetadata", () => {
       ]),
     });
 
-    await expect(resolveNpmSpecMetadata({ spec: "@natesclaw/codex@^2026.6.0" })).resolves.toEqual({
+    await expect(resolveNpmSpecMetadata({ spec: "@openclaw/codex@^2026.6.0" })).resolves.toEqual({
       ok: false,
       error: "npm view produced incomplete package metadata (missing: name, version)",
       category: "metadata-env",
@@ -300,7 +300,7 @@ describe("resolveNpmSpecMetadata", () => {
       stdout: JSON.stringify([npmViewMetadata, { ...npmViewMetadata, version: "2026.6.12" }]),
     });
 
-    const result = await resolveNpmSpecMetadata({ spec: "@natesclaw/codex@latest" });
+    const result = await resolveNpmSpecMetadata({ spec: "@openclaw/codex@latest" });
 
     expect(result).toEqual({
       ok: true,
@@ -311,20 +311,20 @@ describe("resolveNpmSpecMetadata", () => {
   it("normalizes nested dist metadata", async () => {
     mockPackCommandResult({
       stdout: JSON.stringify({
-        name: "@natesclaw/codex",
+        name: "@openclaw/codex",
         version: "2026.6.11",
         dist: { integrity: "nested-placeholder", shasum: "nested-placeholder" },
       }),
     });
 
-    const result = await resolveNpmSpecMetadata({ spec: "@natesclaw/codex" });
+    const result = await resolveNpmSpecMetadata({ spec: "@openclaw/codex" });
 
     expect(result).toEqual({
       ok: true,
       metadata: {
-        name: "@natesclaw/codex",
+        name: "@openclaw/codex",
         version: "2026.6.11",
-        resolvedSpec: "@natesclaw/codex@2026.6.11",
+        resolvedSpec: "@openclaw/codex@2026.6.11",
         integrity: "nested-placeholder",
         shasum: "nested-placeholder",
       },
@@ -335,14 +335,14 @@ describe("resolveNpmSpecMetadata", () => {
     const { natesclaw: _natesclaw, ...withoutNatesclaw } = npmViewMetadata;
     mockPackCommandResult({ stdout: JSON.stringify(withoutNatesclaw) });
 
-    const result = await resolveNpmSpecMetadata({ spec: "@natesclaw/codex" });
+    const result = await resolveNpmSpecMetadata({ spec: "@openclaw/codex" });
 
     expect(result).toEqual({
       ok: true,
       metadata: {
-        name: "@natesclaw/codex",
+        name: "@openclaw/codex",
         version: "2026.6.11",
-        resolvedSpec: "@natesclaw/codex@2026.6.11",
+        resolvedSpec: "@openclaw/codex@2026.6.11",
         integrity: "placeholder",
         shasum: "placeholder",
       },
@@ -352,7 +352,7 @@ describe("resolveNpmSpecMetadata", () => {
   it("reports which required metadata fields are missing", async () => {
     mockPackCommandResult({ stdout: JSON.stringify({ version: "2026.6.11" }) });
 
-    await expect(resolveNpmSpecMetadata({ spec: "@natesclaw/codex" })).resolves.toEqual({
+    await expect(resolveNpmSpecMetadata({ spec: "@openclaw/codex" })).resolves.toEqual({
       ok: false,
       error: "npm view produced incomplete package metadata (missing: name)",
       category: "metadata-env",
@@ -508,15 +508,15 @@ describe("packNpmSpecToArchive", () => {
     const cwd = await createFixtureDir();
     mockPackCommandResult({
       stdout: "",
-      stderr: "npm error code E404\nnpm error 404  '@natesclaw/whatsapp@*' is not in this registry.",
+      stderr: "npm error code E404\nnpm error 404  '@openclaw/whatsapp@*' is not in this registry.",
       code: 1,
     });
 
-    const result = await runPack("@natesclaw/whatsapp", cwd);
+    const result = await runPack("@openclaw/whatsapp", cwd);
     expectPackError(result, [
       "Package not found on npm",
-      "@natesclaw/whatsapp",
-      "docs.natesclaw.ai/tools/plugin",
+      "@openclaw/whatsapp",
+      "docs.openclaw.ai/tools/plugin",
     ]);
   });
 
@@ -542,18 +542,18 @@ describe("packNpmSpecToArchive", () => {
         "npm notice creating package\n" +
         JSON.stringify([
           {
-            id: "@natesclaw/plugin-demo@2.0.0",
+            id: "@openclaw/plugin-demo@2.0.0",
             filename: "natesclaw-plugin-demo-2.0.0.tgz",
           },
         ]),
     });
 
-    const result = await runPack("@natesclaw/plugin-demo@2.0.0", cwd);
+    const result = await runPack("@openclaw/plugin-demo@2.0.0", cwd);
     expect(result).toEqual({
       ok: true,
       archivePath: path.join(cwd, "natesclaw-plugin-demo-2.0.0.tgz"),
       metadata: {
-        resolvedSpec: "@natesclaw/plugin-demo@2.0.0",
+        resolvedSpec: "@openclaw/plugin-demo@2.0.0",
       },
     });
   });

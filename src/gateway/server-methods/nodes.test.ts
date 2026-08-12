@@ -1,4 +1,4 @@
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   captureNodePairingGeneration,
@@ -531,7 +531,7 @@ describe("nodeHandlers node.pair.remove", () => {
       nodeId,
       transport: "direct",
       token: "ABCD1234ABCD1234ABCD1234ABCD1234",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
     });
     await seedNodeWakeState(nodeId);
@@ -560,7 +560,7 @@ describe("nodeHandlers node.pair.remove", () => {
       nodeId,
       transport: "direct",
       token: "ABCD1234ABCD1234ABCD1234ABCD1234",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
     });
 
@@ -578,7 +578,7 @@ describe("nodeHandlers node.pair.remove", () => {
           nodeId,
           transport: "direct",
           token: "DCBA4321DCBA4321DCBA4321DCBA4321",
-          topic: "ai.natesclaw.ios",
+          topic: "ai.openclaw.ios",
           environment: "sandbox",
           expectedPairingGeneration: replacementGeneration.key,
         });
@@ -751,7 +751,7 @@ describe("nodeHandlers node.pair.remove", () => {
       nodeId,
       transport: "direct",
       token: "ABCD1234ABCD1234ABCD1234ABCD1234",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
     });
 

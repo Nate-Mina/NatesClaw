@@ -11,8 +11,8 @@ Natesclaw Matrix channel plugin for rooms and direct messages.
 
 ## Distribution
 
-- Package: `@natesclaw/matrix`
-- Install route: ClawHub: `clawhub:@natesclaw/matrix`; npm
+- Package: `@openclaw/matrix`
+- Install route: ClawHub: `clawhub:@openclaw/matrix`; npm
 
 ## Surface
 

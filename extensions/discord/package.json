@@ -1,10 +1,10 @@
 {
-  "name": "@natesclaw/discord",
+  "name": "@openclaw/discord",
   "version": "2026.8.1",
   "description": "Natesclaw Discord channel plugin for channels, DMs, commands, and app events.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -20,7 +20,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*",
+    "@openclaw/plugin-sdk": "workspace:*",
     "natesclaw": "workspace:*"
   },
   "peerDependencies": {
@@ -90,7 +90,7 @@
       }
     },
     "install": {
-      "npmSpec": "@natesclaw/discord",
+      "npmSpec": "@openclaw/discord",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.5.26",
       "allowInvalidConfigRecovery": true

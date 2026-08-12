@@ -1,4 +1,4 @@
-import type { UiCommandParams } from "@natesclaw/gateway-protocol";
+import type { UiCommandParams } from "@openclaw/gateway-protocol";
 
 export const TERMINAL_PANEL_TOGGLE_EVENT = "natesclaw:terminal-toggle";
 export const BROWSER_PANEL_TOGGLE_EVENT = "natesclaw:browser-toggle";

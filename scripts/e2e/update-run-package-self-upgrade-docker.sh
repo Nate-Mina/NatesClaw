@@ -48,7 +48,7 @@ prepare_qa_channel_fixture() {
       --filter=blob:none \
       --single-branch \
       --branch "$SOURCE_TAG" \
-      https://github.com/natesclaw/natesclaw.git \
+      https://github.com/openclaw/natesclaw.git \
       "$clone_root"
     source_repo="$clone_root"
     source_ref="HEAD"

@@ -32,9 +32,9 @@ describe("scripts/natesclaw-release-clawhub-runtime-state.ts", () => {
     expect(JSON.parse(result.stdout)).toEqual({
       verifierArgs: ["--plugin-clawhub-run", "123", "--plugin-clawhub-bootstrap-run", "456"],
       proofLines: {
-        normal: "- plugin ClawHub publish: https://github.com/natesclaw/natesclaw/actions/runs/123",
+        normal: "- plugin ClawHub publish: https://github.com/openclaw/natesclaw/actions/runs/123",
         bootstrap:
-          "- plugin ClawHub bootstrap: https://github.com/natesclaw/natesclaw/actions/runs/456",
+          "- plugin ClawHub bootstrap: https://github.com/openclaw/natesclaw/actions/runs/456",
       },
     });
     expect(result.stderr).toBe("");

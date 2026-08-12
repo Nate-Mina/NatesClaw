@@ -4,9 +4,9 @@ import type {
   AcpRuntimeCapabilities,
   AcpRuntimeHandle,
   AcpRuntimeStatus,
-} from "@natesclaw/acp-core/runtime/types";
-import { asNullableRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/acp-core/runtime/types";
+import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import {
   AcpRuntimeError,
   formatAcpErrorChain,

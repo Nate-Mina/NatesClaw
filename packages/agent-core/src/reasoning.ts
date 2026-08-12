@@ -4,7 +4,7 @@ import {
   resolveClaudeSonnet5ModelIdentity,
   type Model,
   type SimpleStreamOptions,
-} from "@natesclaw/llm-core";
+} from "@openclaw/llm-core";
 import type { ThinkingLevel } from "./types.js";
 
 type EnabledThinkingLevel = Exclude<NonNullable<SimpleStreamOptions["reasoning"]>, "off">;

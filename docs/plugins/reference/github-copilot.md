@@ -11,7 +11,7 @@ Adds GitHub Copilot model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/github-copilot-provider`
+- Package: `@openclaw/github-copilot-provider`
 - Install route: included in Natesclaw
 
 ## Surface

@@ -1,5 +1,5 @@
-import type { ModelCatalogAlias } from "@natesclaw/model-catalog-core/model-catalog-types";
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import type { ModelCatalogAlias } from "@openclaw/model-catalog-core/model-catalog-types";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 import type { ModelProviderConfig } from "../../config/types.models.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { planManifestModelCatalogSuppressions } from "../../model-catalog/manifest-planner.js";

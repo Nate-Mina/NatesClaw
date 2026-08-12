@@ -309,7 +309,7 @@ export function describeChannelPluginCatalogEntriesContract() {
           createTemporaryCatalogFile(
             "natesclaw-catalog-",
             createCatalogEntry({
-              packageName: "@natesclaw/demo-channel",
+              packageName: "@openclaw/demo-channel",
               channelId: "demo-channel",
               label: "Demo Channel",
               blurb: "Demo entry",
@@ -392,7 +392,7 @@ export function describeChannelPluginCatalogEntriesContract() {
         catalogPaths: [
           createTemporaryCatalogFile("natesclaw-catalog-prerelease-", {
             ...createCatalogEntry({
-              packageName: "@natesclaw/prerelease-demo-channel",
+              packageName: "@openclaw/prerelease-demo-channel",
               channelId: "prerelease-demo",
               label: "Prerelease Demo",
               blurb: "Prerelease package pinning fixture",
@@ -401,11 +401,11 @@ export function describeChannelPluginCatalogEntriesContract() {
           }),
         ],
         expected: {
-          install: { npmSpec: "@natesclaw/prerelease-demo-channel@2026.5.3-beta.1" },
+          install: { npmSpec: "@openclaw/prerelease-demo-channel@2026.5.3-beta.1" },
           installSource: {
             npm: {
-              spec: "@natesclaw/prerelease-demo-channel@2026.5.3-beta.1",
-              packageName: "@natesclaw/prerelease-demo-channel",
+              spec: "@openclaw/prerelease-demo-channel@2026.5.3-beta.1",
+              packageName: "@openclaw/prerelease-demo-channel",
               selector: "2026.5.3-beta.1",
               selectorKind: "exact-version",
               exactVersion: true,
@@ -441,7 +441,7 @@ export function describeChannelPluginCatalogPathResolutionContract() {
           writeCatalogFile(
             path.join(home, "catalog.json"),
             createCatalogEntry({
-              packageName: "@natesclaw/env-demo-channel",
+              packageName: "@openclaw/env-demo-channel",
               channelId: "env-demo-channel",
               label: "Env Demo Channel",
               blurb: "Env demo entry",
@@ -470,7 +470,7 @@ export function describeChannelPluginCatalogPathResolutionContract() {
           writeCatalogFile(
             catalogPath,
             createCatalogEntry({
-              packageName: "@natesclaw/default-env-demo",
+              packageName: "@openclaw/default-env-demo",
               channelId: "default-env-demo",
               label: "Default Env Demo",
               blurb: "Default env demo entry",

@@ -20,7 +20,7 @@ Reasons to prefer it over a one-off provider wrapper:
 Copy and paste this to an agent:
 
 ```text
-Read https://docs.natesclaw.ai/cli/infer, then create a skill that routes my common workflows to `natesclaw infer`.
+Read https://docs.openclaw.ai/cli/infer, then create a skill that routes my common workflows to `natesclaw infer`.
 Focus on model runs, image generation, video generation, audio transcription, TTS, web search, and embeddings.
 ```
 
@@ -253,7 +253,7 @@ Search and fetch.
 ```bash
 natesclaw infer web search --query "Natesclaw docs" --json
 natesclaw infer web search --query "Natesclaw infer web providers" --json
-natesclaw infer web fetch --url https://docs.natesclaw.ai/cli/infer --json
+natesclaw infer web fetch --url https://docs.openclaw.ai/cli/infer --json
 natesclaw infer web providers --json
 ```
 

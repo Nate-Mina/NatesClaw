@@ -1105,7 +1105,7 @@ describe("skills cli commands", () => {
       path: "agentreceipt",
     };
     const verifiedSourceUrl =
-      "https://github.com/natesclaw/skills/tree/0123456789abcdef0123456789abcdef01234567/agentreceipt";
+      "https://github.com/openclaw/skills/tree/0123456789abcdef0123456789abcdef01234567/agentreceipt";
     readVerifiedClawHubSkillSourceUrlMock.mockReturnValueOnce(verifiedSourceUrl);
     primeSkillVerification({
       skill: { slug: "agentreceipt", displayName: "Agent Receipt" },

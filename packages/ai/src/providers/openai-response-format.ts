@@ -1,4 +1,4 @@
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 
 const JSON_SCHEMA_RESPONSE_FORMAT_NAME = "natesclaw_response";
 const OLLAMA_CLOUD_ORIGIN = "https://ollama.com";

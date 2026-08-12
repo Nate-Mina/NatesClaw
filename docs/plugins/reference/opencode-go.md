@@ -11,7 +11,7 @@ Adds OpenCode Go model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/opencode-go-provider`
+- Package: `@openclaw/opencode-go-provider`
 - Install route: included in Natesclaw
 
 ## Surface

@@ -350,7 +350,7 @@ describe("collectBundledExtensionManifestErrors", () => {
           id: "broken",
           packageJson: {
             natesclaw: {
-              install: { npmSpec: "@natesclaw/broken", minHostVersion: "2026.3.14" },
+              install: { npmSpec: "@openclaw/broken", minHostVersion: "2026.3.14" },
             },
           },
         },
@@ -408,12 +408,12 @@ describe("bundled plugin package dependency checks", () => {
       mkdirSync(join(tempRoot, "dist", "extensions", "memory-lancedb"), { recursive: true });
       writeFileSync(
         join(tempRoot, "package.json"),
-        `{"name":"natesclaw","dependencies":{}}\n`,
+        `{"name": "openclaw","dependencies":{}}\n`,
         "utf8",
       );
       writeFileSync(
         join(tempRoot, "dist", "extensions", "memory-lancedb", "package.json"),
-        `{"name":"@natesclaw/memory-lancedb","dependencies":{"root-owned-test-dep":"^1.0.0"}}\n`,
+        `{"name":"@openclaw/memory-lancedb","dependencies":{"root-owned-test-dep":"^1.0.0"}}\n`,
         "utf8",
       );
       writeFileSync(
@@ -435,12 +435,12 @@ describe("bundled plugin package dependency checks", () => {
       mkdirSync(join(tempRoot, "dist", "extensions", "memory-lancedb"), { recursive: true });
       writeFileSync(
         join(tempRoot, "package.json"),
-        `{"name":"natesclaw","dependencies":{}}\n`,
+        `{"name": "openclaw","dependencies":{}}\n`,
         "utf8",
       );
       writeFileSync(
         join(tempRoot, "dist", "extensions", "memory-lancedb", "package.json"),
-        `{"name":"@natesclaw/memory-lancedb","dependencies":{"root-owned-test-dep":"^1.0.0"}}\n`,
+        `{"name":"@openclaw/memory-lancedb","dependencies":{"root-owned-test-dep":"^1.0.0"}}\n`,
         "utf8",
       );
       writeFileSync(
@@ -889,7 +889,7 @@ describe("createPackedPluginSdkTypescriptSmokeProject", () => {
       );
 
       expect(packageJson.dependencies?.natesclaw).toBe(`file:${packageRoot}`);
-      expect(packageJson.dependencies?.["@natesclaw/ai"]).toBe("file:/tmp/natesclaw-ai.tgz");
+      expect(packageJson.dependencies?.["@openclaw/ai"]).toBe("file:/tmp/natesclaw-ai.tgz");
       expect(tsconfig.compilerOptions?.skipLibCheck).toBe(true);
       expect(source).toBe(fixtureSource);
       expect(source).toContain('"natesclaw/plugin-sdk/core"');
@@ -948,7 +948,7 @@ describe("resolveNpmJsonEntries", () => {
     expect(resolveNpmJsonEntries([entry])).toEqual([entry]);
     expect(resolveNpmJsonEntries(entry)).toEqual([entry]);
     expect(resolveNpmJsonEntries({ natesclaw: entry })).toEqual([entry]);
-    expect(resolveNpmJsonEntries({ "@natesclaw/demo": entry })).toEqual([entry]);
+    expect(resolveNpmJsonEntries({ "@openclaw/demo": entry })).toEqual([entry]);
     expect(resolveNpmJsonEntries({ natesclaw: entry })).toEqual(
       resolveRuntimeNpmJsonEntries({ natesclaw: entry }),
     );

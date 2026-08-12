@@ -1,4 +1,4 @@
-# @natesclaw/zoom-meetings
+# @openclaw/zoom-meetings
 
 Official Zoom browser meeting participant plugin for Natesclaw.
 
@@ -8,7 +8,7 @@ as a Chrome browser guest.
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/zoom-meetings
+natesclaw plugins install @openclaw/zoom-meetings
 ```
 
 Restart the Gateway after installing or updating the plugin.
@@ -18,11 +18,11 @@ Restart the Gateway after installing or updating the plugin.
 Follow the Zoom meetings guide for Chrome profiles, paired nodes, audio routing,
 and guest join setup:
 
-- https://docs.natesclaw.ai/plugins/zoom-meetings
+- https://docs.openclaw.ai/plugins/zoom-meetings
 
 ## Package
 
 - Plugin id: `zoom-meetings`
 - Tool: `zoom_meetings`
-- Package: `@natesclaw/zoom-meetings`
+- Package: `@openclaw/zoom-meetings`
 - Minimum Natesclaw host: `2026.7.2`

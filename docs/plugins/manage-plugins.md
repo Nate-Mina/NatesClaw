@@ -112,7 +112,7 @@ natesclaw plugins install clawhub:<package>@beta
 # Install from npm.
 natesclaw plugins install npm:<package>
 natesclaw plugins install npm:@scope/natesclaw-plugin@1.2.3
-natesclaw plugins install npm:@natesclaw/codex
+natesclaw plugins install npm:@openclaw/codex
 
 # Install from a local npm-pack artifact.
 natesclaw plugins install npm-pack:<path.tgz>

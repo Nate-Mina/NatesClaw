@@ -143,7 +143,7 @@ describe("configureProgramHelp", () => {
     expect(version).toBe(testProgramContext.programVersion);
     expect(options?.mode).toBe("default");
     expect(help).toContain("Examples:");
-    expect(help).toContain("https://docs.natesclaw.ai/cli");
+    expect(help).toContain("https://docs.openclaw.ai/cli");
   });
 
   it("formats parse errors from the exact Commander command path", async () => {

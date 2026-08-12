@@ -11,7 +11,7 @@ Natesclaw Feishu/Lark channel plugin for chats and workplace tools (community ma
 
 ## Distribution
 
-- Package: `@natesclaw/feishu`
+- Package: `@openclaw/feishu`
 - Install route: npm; ClawHub
 
 ## Surface

@@ -365,7 +365,7 @@ describe("provider attribution", () => {
       product: "Natesclaw",
       version: "2026.3.22",
       headers: {
-        "HTTP-Referer": "https://natesclaw.ai",
+        "HTTP-Referer": "https://openclaw.ai",
         "X-OpenRouter-Title": "Natesclaw",
         "X-OpenRouter-Categories":
           "cli-agent,cloud-agent,programming-app,creative-writing,writing-assistant,general-chat,personal-agent",
@@ -421,7 +421,7 @@ describe("provider attribution", () => {
         NATESCLAW_VERSION: "2026.3.22",
       })?.headers,
     ).toEqual({
-      "HTTP-Referer": "https://natesclaw.ai",
+      "HTTP-Referer": "https://openclaw.ai",
       "X-OpenRouter-Title": "Natesclaw",
       "X-OpenRouter-Categories":
         "cli-agent,cloud-agent,programming-app,creative-writing,writing-assistant,general-chat,personal-agent",

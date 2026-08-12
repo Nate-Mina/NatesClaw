@@ -121,11 +121,11 @@ See [Configuration Reference](/gateway/configuration-reference).
 
 ## Plugin setup for acpx backend
 
-Packaged installs use the official `@natesclaw/acpx` runtime plugin for ACP.
+Packaged installs use the official `@openclaw/acpx` runtime plugin for ACP.
 Install and enable it before using ACP harness sessions:
 
 ```bash
-natesclaw plugins install @natesclaw/acpx
+natesclaw plugins install @openclaw/acpx
 natesclaw config set plugins.entries.acpx.enabled true
 ```
 
@@ -141,7 +141,7 @@ If you disabled `acpx`, denied it via `plugins.allow` / `plugins.deny`, or want
 to switch back to the packaged plugin, use the explicit package path:
 
 ```bash
-natesclaw plugins install @natesclaw/acpx
+natesclaw plugins install @openclaw/acpx
 natesclaw config set plugins.entries.acpx.enabled true
 ```
 

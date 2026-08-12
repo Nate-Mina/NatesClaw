@@ -1,4 +1,4 @@
-# @natesclaw/tokenjuice
+# @openclaw/tokenjuice
 
 Official Tokenjuice output compaction plugin for Natesclaw.
 
@@ -7,7 +7,7 @@ Tokenjuice compacts noisy `exec` and `bash` tool results after commands run, bef
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/tokenjuice
+natesclaw plugins install @openclaw/tokenjuice
 ```
 
 Restart the Gateway after installing or updating the plugin.
@@ -26,10 +26,10 @@ natesclaw plugins enable tokenjuice
 
 ## Docs
 
-- https://docs.natesclaw.ai/tools/tokenjuice
+- https://docs.openclaw.ai/tools/tokenjuice
 
 ## Package
 
 - Plugin id: `tokenjuice`
-- Package: `@natesclaw/tokenjuice`
+- Package: `@openclaw/tokenjuice`
 - Minimum Natesclaw host: `2026.5.28`

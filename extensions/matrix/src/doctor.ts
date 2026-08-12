@@ -22,7 +22,7 @@ export async function collectMatrixInstallPathWarnings(cfg: NatesclawConfig): Pr
   return formatPluginInstallPathIssue({
     issue,
     pluginLabel: "Matrix",
-    defaultInstallCommand: "natesclaw plugins install @natesclaw/matrix",
+    defaultInstallCommand: "natesclaw plugins install @openclaw/matrix",
   }).map((entry) => `- ${entry}`);
 }
 

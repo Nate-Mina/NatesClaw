@@ -6,7 +6,7 @@ OpenAI-compatible API.
 Install from Natesclaw:
 
 ```bash
-natesclaw plugins install @natesclaw/longcat-provider
+natesclaw plugins install @openclaw/longcat-provider
 natesclaw gateway restart
 ```
 

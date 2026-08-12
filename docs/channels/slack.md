@@ -357,7 +357,7 @@ channel and sender policy continues to apply to channel messages.
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/slack
+natesclaw plugins install @openclaw/slack
 ```
 
 `plugins install` registers and enables the plugin. It does nothing until you configure the Slack app and channel settings below. See [Plugins](/tools/plugin) for general plugin install rules.

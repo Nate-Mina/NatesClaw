@@ -9,13 +9,13 @@ Status: production-ready via WhatsApp Web (Baileys). The gateway owns the linked
 
 ## Install
 
-`natesclaw onboard` and `natesclaw channels add --channel whatsapp` prompt to install the plugin the first time you select it; `natesclaw channels login --channel whatsapp` offers the same install flow if the plugin is missing. Dev checkouts use the local plugin path; stable/beta installs `@natesclaw/whatsapp` from ClawHub first, falling back to npm. The WhatsApp runtime ships outside the core Natesclaw npm package, so its runtime dependencies stay with the external plugin. Manual install:
+`natesclaw onboard` and `natesclaw channels add --channel whatsapp` prompt to install the plugin the first time you select it; `natesclaw channels login --channel whatsapp` offers the same install flow if the plugin is missing. Dev checkouts use the local plugin path; stable/beta installs `@openclaw/whatsapp` from ClawHub first, falling back to npm. The WhatsApp runtime ships outside the core Natesclaw npm package, so its runtime dependencies stay with the external plugin. Manual install:
 
 ```bash
-natesclaw plugins install clawhub:@natesclaw/whatsapp
+natesclaw plugins install clawhub:@openclaw/whatsapp
 ```
 
-Use the bare npm package (`@natesclaw/whatsapp`) only for the registry fallback; pin an exact version only for a reproducible install.
+Use the bare npm package (`@openclaw/whatsapp`) only for the registry fallback; pin an exact version only for a reproducible install.
 
 <CardGroup cols={3}>
   <Card title="Pairing" icon="link" href="/channels/pairing">

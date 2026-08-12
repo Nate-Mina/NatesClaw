@@ -1425,7 +1425,7 @@ describe("TUI PTY real backends", () => {
               path.join(pluginDir, "package.json"),
               `${JSON.stringify(
                 {
-                  name: "@natesclaw/t05-local-auth-fixture",
+                  name: "@openclaw/t05-local-auth-fixture",
                   version: "0.0.0",
                   type: "module",
                   natesclaw: { extensions: ["./index.js"] },

@@ -24,7 +24,7 @@ const validCloseoutParams = {
   mainChangelog: changelog,
   tagChangelog: changelog,
   mainAppcast:
-    "https://github.com/natesclaw/natesclaw/releases/download/v2026.6.8/Natesclaw-2026.6.8.zip\n",
+    "https://github.com/openclaw/natesclaw/releases/download/v2026.6.8/Natesclaw-2026.6.8.zip\n",
   release,
   releaseTagSha: "tag-sha",
   mainSha: "main-sha",
@@ -144,7 +144,7 @@ describe("stable release closeout", () => {
         assets: [{ name: "natesclaw-2026.6.8-dependency-evidence.zip" }],
       },
       mainAppcast:
-        "https://github.com/natesclaw/natesclaw/releases/download/v2026.6.8/natesclaw-2026.6.8-dependency-evidence.zip\n",
+        "https://github.com/openclaw/natesclaw/releases/download/v2026.6.8/natesclaw-2026.6.8-dependency-evidence.zip\n",
       nowMs: Date.parse("2026-06-17T00:00:00Z"),
     });
 
@@ -171,7 +171,7 @@ describe("stable release closeout", () => {
       tagChangelog: changelog.replaceAll("2026.6.8", "2026.6.8-2"),
       release: correctionRelease,
       mainAppcast:
-        "https://github.com/natesclaw/natesclaw/releases/download/v2026.6.8-2/Natesclaw-2026.6.8-2.zip\n",
+        "https://github.com/openclaw/natesclaw/releases/download/v2026.6.8-2/Natesclaw-2026.6.8-2.zip\n",
       nowMs: Date.parse("2026-06-17T00:00:00Z"),
     });
 
@@ -193,7 +193,7 @@ describe("stable release closeout", () => {
         tagName: "v2026.6.8-2",
       },
       mainAppcast:
-        "https://github.com/natesclaw/natesclaw/releases/download/v2026.6.8-2/Natesclaw-2026.6.8.zip\n",
+        "https://github.com/openclaw/natesclaw/releases/download/v2026.6.8-2/Natesclaw-2026.6.8.zip\n",
       nowMs: Date.parse("2026-06-17T00:00:00Z"),
     });
 

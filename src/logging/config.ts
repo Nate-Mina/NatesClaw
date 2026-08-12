@@ -1,6 +1,6 @@
 // Logging config helpers read and normalize logger configuration.
 import fs from "node:fs";
-import { isRecord as isObjectRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord as isObjectRecord } from "@openclaw/normalization-core/record-coerce";
 import { getCommandPathWithRootOptions } from "../cli/argv.js";
 import { resolveConfigEnvVars } from "../config/env-substitution.js";
 import { resolveConfigIncludes, resolveConfigIncludesForTopLevelKey } from "../config/includes.js";

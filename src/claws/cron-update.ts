@@ -1,5 +1,5 @@
 import { createHash } from "node:crypto";
-import { stableStringify } from "@natesclaw/normalization-core";
+import { stableStringify } from "@openclaw/normalization-core";
 import type { NatesclawStateDatabaseOptions } from "../state/natesclaw-state-db.js";
 import {
   CLAW_CRON_REF_SCHEMA_VERSION,

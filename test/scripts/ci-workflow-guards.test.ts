@@ -15,7 +15,7 @@ import {
 import { tmpdir } from "node:os";
 import path from "node:path";
 import { runInNewContext } from "node:vm";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, describe, expect, it } from "vitest";
 import { parse } from "yaml";
 import { createVitestCacheWarmGroups } from "../../scripts/lib/ci-node-test-plan.mts";
@@ -954,7 +954,7 @@ function runProtocolSinceFixture(checkout: string, baseSha: string) {
     JSON.stringify({
       compilerOptions: {
         paths: {
-          "@natesclaw/normalization-core/record-coerce": [
+          "@openclaw/normalization-core/record-coerce": [
             "./packages/normalization-core/src/record-coerce.ts",
           ],
         },
@@ -1206,12 +1206,12 @@ function runGeneratedPublisherScenario(
       "      else",
       '        head="$(git --git-dir="$FAKE_ORIGIN" rev-parse refs/heads/automation/locale)"',
       "      fi",
-      '      printf "https://github.com/natesclaw/natesclaw/pull/1\\t%s\\n" "$head"',
+      '      printf "https://github.com/openclaw/natesclaw/pull/1\\t%s\\n" "$head"',
       "    fi",
       "    ;;",
       "  pr:create)",
       '    : > "$FAKE_PR_STATE"',
-      '    printf "%s\\n" "https://github.com/natesclaw/natesclaw/pull/1"',
+      '    printf "%s\\n" "https://github.com/openclaw/natesclaw/pull/1"',
       "    ;;",
       "  pr:edit) exit 0 ;;",
       "  pr:view)",
@@ -2223,7 +2223,7 @@ NODE
       const result = runGeneratedPublisherScenario(null, { autoMerge: true });
 
       expect(result.branchExists).toBe(true);
-      expect(result.mergeCalls).toContain("pr merge https://github.com/natesclaw/natesclaw/pull/1");
+      expect(result.mergeCalls).toContain("pr merge https://github.com/openclaw/natesclaw/pull/1");
       expect(result.mergeCalls).toContain("--auto --squash --match-head-commit");
       expect(result.summary).toContain("Enabled squash auto-merge for exact generated head");
     },

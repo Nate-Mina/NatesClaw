@@ -1,7 +1,7 @@
 // Stores and resolves the last TUI session per workspace.
 import { createHash } from "node:crypto";
 import fs from "node:fs";
-import { normalizeLowercaseStringOrEmpty as normalizeMarker } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty as normalizeMarker } from "@openclaw/normalization-core/string-coerce";
 import {
   executeSqliteQuerySync,
   executeSqliteQueryTakeFirstSync,

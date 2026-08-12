@@ -1,5 +1,5 @@
 // Directory cache stores short-lived projections partitioned by config identity.
-import { resolveNonNegativeIntegerOption } from "@natesclaw/normalization-core/number-coercion";
+import { resolveNonNegativeIntegerOption } from "@openclaw/normalization-core/number-coercion";
 import type { ChannelDirectoryEntryKind, ChannelId } from "../../channels/plugins/types.public.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { pruneMapToMaxSize } from "../map-size.js";

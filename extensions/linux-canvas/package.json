@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/linux-canvas",
+  "name": "@openclaw/linux-canvas",
   "version": "2026.8.1",
   "description": "Natesclaw Linux desktop canvas bridge",
   "type": "module",
@@ -7,7 +7,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

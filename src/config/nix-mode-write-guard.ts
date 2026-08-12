@@ -2,9 +2,9 @@
 import { resolveIsNixMode } from "./paths.js";
 
 /** Agent-first Nix install docs shown when runtime config writes are blocked. */
-const NIX_NATESCLAW_AGENT_FIRST_URL = "https://github.com/natesclaw/nix-natesclaw#quick-start";
+const NIX_NATESCLAW_AGENT_FIRST_URL = "https://github.com/openclaw/nix-natesclaw#quick-start";
 /** Public Natesclaw Nix overview shown with immutable-config errors. */
-const NATESCLAW_NIX_OVERVIEW_URL = "https://docs.natesclaw.ai/install/nix";
+const NATESCLAW_NIX_OVERVIEW_URL = "https://docs.openclaw.ai/install/nix";
 
 /** Error thrown when a mutating config path is attempted while Nix owns config state. */
 export class NixModeConfigMutationError extends Error {

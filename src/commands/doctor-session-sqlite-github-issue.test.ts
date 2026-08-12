@@ -27,7 +27,7 @@ describe("createSessionSqliteGithubIssue", () => {
     const result = createSessionSqliteGithubIssue({
       body: "sanitized body",
       title: "Session SQLite migration recovery report",
-      url: "https://github.com/natesclaw/natesclaw/issues/new?title=recovery",
+      url: "https://github.com/openclaw/natesclaw/issues/new?title=recovery",
     });
 
     expect(spawnSyncMock).toHaveBeenCalledWith(
@@ -51,7 +51,7 @@ describe("createSessionSqliteGithubIssue", () => {
       },
     );
     expect(result).toEqual({
-      fallbackUrl: "https://github.com/natesclaw/natesclaw/issues/new?title=recovery",
+      fallbackUrl: "https://github.com/openclaw/natesclaw/issues/new?title=recovery",
       message: "spawnSync gh ETIMEDOUT",
       ok: false,
     });

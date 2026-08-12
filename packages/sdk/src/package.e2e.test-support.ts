@@ -1,4 +1,4 @@
-// Shared test-only support for packed @natesclaw/sdk consumers.
+// Shared test-only support for packed @openclaw/sdk consumers.
 import { spawn, spawnSync, type SpawnOptionsWithoutStdio } from "node:child_process";
 import { createReadStream } from "node:fs";
 import fs from "node:fs/promises";
@@ -187,7 +187,7 @@ function runNpmCommand(
 }
 
 function resolveWorkspacePackageRoot(repoRoot: string, packageName: string): string {
-  const prefix = "@natesclaw/";
+  const prefix = "@openclaw/";
   if (!packageName.startsWith(prefix)) {
     throw new Error(`unsupported workspace package name: ${packageName}`);
   }
@@ -210,7 +210,7 @@ async function normalizeWorkspaceDependencies(
   const normalized: Record<string, string> = {};
   for (const [name, spec] of Object.entries(dependencies)) {
     normalized[name] =
-      name.startsWith("@natesclaw/") && spec.startsWith("workspace:")
+      name.startsWith("@openclaw/") && spec.startsWith("workspace:")
         ? (await readRawPackageManifest(resolveWorkspacePackageRoot(repoRoot, name))).version
         : spec;
   }
@@ -384,9 +384,9 @@ export async function createPackedSdkConsumer(): Promise<PackedSdkConsumer> {
       }
     });
     const sdkTarball =
-      packedPackages.find((pkg) => pkg.manifest.name === "@natesclaw/sdk")?.tarball ?? "";
+      packedPackages.find((pkg) => pkg.manifest.name === "@openclaw/sdk")?.tarball ?? "";
     if (!sdkTarball) {
-      throw new Error("packed @natesclaw/sdk tarball was not created");
+      throw new Error("packed @openclaw/sdk tarball was not created");
     }
     const registry = await startNatesclawRegistry(packedPackages);
     await fs.writeFile(

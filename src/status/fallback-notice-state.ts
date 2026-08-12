@@ -1,5 +1,5 @@
 // Fallback notice state helpers track fallback notices shown to users.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { areRuntimeModelRefsEquivalent } from "../agents/model-runtime-aliases.js";
 import type { SessionEntry } from "../config/sessions.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

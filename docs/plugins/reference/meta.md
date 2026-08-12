@@ -11,8 +11,8 @@ Adds Meta model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/meta-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/meta-provider`
+- Package: `@openclaw/meta-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/meta-provider`
 
 ## Surface
 

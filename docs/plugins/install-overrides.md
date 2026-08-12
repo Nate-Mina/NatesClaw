@@ -27,7 +27,7 @@ Overrides are disabled unless both variables are set:
 export NATESCLAW_ALLOW_PLUGIN_INSTALL_OVERRIDES=1
 export NATESCLAW_PLUGIN_INSTALL_OVERRIDES='{
   "codex": "npm-pack:/tmp/natesclaw-codex-2026.5.8.tgz",
-  "natesclaw-web-search": "npm:@natesclaw/web-search@2026.5.8"
+  "natesclaw-web-search": "npm:@openclaw/web-search@2026.5.8"
 }'
 ```
 
@@ -71,8 +71,8 @@ pnpm natesclaw onboard --mode local
 Verify the installed package under the state directory:
 
 ```bash
-find "$NATESCLAW_STATE_DIR/npm/projects" -path '*/node_modules/@natesclaw/codex/package.json' -print
-grep -R '"@natesclaw/codex"' "$NATESCLAW_STATE_DIR/npm/projects"/*/package-lock.json
+find "$NATESCLAW_STATE_DIR/npm/projects" -path '*/node_modules/@openclaw/codex/package.json' -print
+grep -R '"@openclaw/codex"' "$NATESCLAW_STATE_DIR/npm/projects"/*/package-lock.json
 ```
 
 For live provider E2E, source the real API key from a trusted shell or CI

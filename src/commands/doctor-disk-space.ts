@@ -1,6 +1,6 @@
 // Doctor contribution for low disk space around the Natesclaw state directory.
 import os from "node:os";
-import { expectDefined, formatByteSize } from "@natesclaw/normalization-core";
+import { expectDefined, formatByteSize } from "@openclaw/normalization-core";
 import { note } from "../../packages/terminal-core/src/note.js";
 import type { NatesclawConfig } from "../config/config.js";
 import { resolveStateDir } from "../config/paths.js";

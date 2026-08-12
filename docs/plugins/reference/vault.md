@@ -11,7 +11,7 @@ HashiCorp Vault SecretRef provider integration.
 
 ## Distribution
 
-- Package: `@natesclaw/vault`
+- Package: `@openclaw/vault`
 - Install route: included in Natesclaw
 
 ## Surface

@@ -13,7 +13,7 @@ replaceable runtime. This keeps process ownership, readiness, failure recovery,
 and upgrades explicit without depending on Natesclaw's private state layout.
 
 For client authentication and reconnect state, read
-[Building a Gateway client](https://docs.natesclaw.ai/gateway/clients).
+[Building a Gateway client](https://docs.openclaw.ai/gateway/clients).
 
 ## Start the child with an embedding preset
 
@@ -103,7 +103,7 @@ sidecars are still pending, `connect` returns a retryable `UNAVAILABLE` error wi
 `details.reason: "startup-sidecars"`, a bounded `retryAfterMs`, and then closes
 with code `1013` and reason `gateway starting`. Use
 `resolveGatewayStartupRetryAfterMs` from
-`@natesclaw/gateway-protocol/startup-unavailable` or the reference client's built-in
+`@openclaw/gateway-protocol/startup-unavailable` or the reference client's built-in
 policy, then reconnect.
 
 ## Interpret restart and shutdown
@@ -155,7 +155,7 @@ bundle, or vendor selected extension files.
 
 ## Related
 
-- [Building a Gateway client](https://docs.natesclaw.ai/gateway/clients)
-- [Gateway protocol](https://docs.natesclaw.ai/gateway/protocol)
-- [Gateway CLI](https://docs.natesclaw.ai/cli/gateway)
-- [Gateway integrations for external apps](https://docs.natesclaw.ai/gateway/external-apps)
+- [Building a Gateway client](https://docs.openclaw.ai/gateway/clients)
+- [Gateway protocol](https://docs.openclaw.ai/gateway/protocol)
+- [Gateway CLI](https://docs.openclaw.ai/cli/gateway)
+- [Gateway integrations for external apps](https://docs.openclaw.ai/gateway/external-apps)

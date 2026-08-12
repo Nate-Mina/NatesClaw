@@ -5,8 +5,8 @@ Official Natesclaw provider plugin for Baseten Model APIs, including Thinking Ma
 Install from Natesclaw:
 
 ```bash
-natesclaw plugins install @natesclaw/baseten-provider
+natesclaw plugins install @openclaw/baseten-provider
 natesclaw gateway restart
 ```
 
-See <https://docs.natesclaw.ai/providers/baseten> for setup and configuration.
+See <https://docs.openclaw.ai/providers/baseten> for setup and configuration.

@@ -31,7 +31,7 @@ export function registerAuditCommand(program: Command): void {
     .addHelpText(
       "after",
       () =>
-        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/audit", "docs.natesclaw.ai/cli/audit")}\n`,
+        `\n${theme.muted("Docs:")} ${formatDocsLink("/cli/audit", "docs.openclaw.ai/cli/audit")}\n`,
     )
     .action(async (opts) => {
       await runCommandWithRuntime(defaultRuntime, async () => {

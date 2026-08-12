@@ -3,13 +3,13 @@ name: gitcrawl
 description: "GitHub archive: issue/PR search, sync freshness, duplicate clusters, gh-shim PR status, and Gitcrawl repo work."
 metadata:
   natesclaw:
-    homepage: https://github.com/natesclaw/gitcrawl
+    homepage: https://github.com/openclaw/gitcrawl
     requires:
       bins:
         - gitcrawl
     install:
       - kind: go
-        module: github.com/natesclaw/gitcrawl/cmd/gitcrawl@latest
+        module: github.com/openclaw/gitcrawl/cmd/gitcrawl@latest
         bins:
           - gitcrawl
 ---

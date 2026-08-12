@@ -152,7 +152,7 @@ function createTelegramCfg(botToken: string, enabled?: boolean): NatesclawConfig
 function createMSTeamsCatalogEntry(): ChannelPluginCatalogEntry {
   return {
     id: "external-chat",
-    pluginId: "@natesclaw/external-chat-plugin",
+    pluginId: "@openclaw/external-chat-plugin",
     meta: {
       id: "external-chat",
       label: "External Chat",
@@ -161,7 +161,7 @@ function createMSTeamsCatalogEntry(): ChannelPluginCatalogEntry {
       blurb: "external chat channel",
     },
     install: {
-      npmSpec: "@natesclaw/external-chat",
+      npmSpec: "@openclaw/external-chat",
     },
   };
 }
@@ -311,7 +311,7 @@ type PatchedSetupAdapterFields = {
 
 function createMSTeamsPluginRegistryEntry(params?: { includeSetupWizard?: boolean }) {
   return {
-    pluginId: "@natesclaw/external-chat-plugin",
+    pluginId: "@openclaw/external-chat-plugin",
     source: "test",
     plugin: {
       id: "external-chat",
@@ -858,7 +858,7 @@ describe("setupChannels", () => {
         },
         plugins: {
           entries: {
-            "@natesclaw/external-chat-plugin": { enabled: true },
+            "@openclaw/external-chat-plugin": { enabled: true },
           },
         },
       } as NatesclawConfig,
@@ -867,7 +867,7 @@ describe("setupChannels", () => {
 
     expectCalledWithFields(vi.mocked(loadChannelSetupPluginRegistrySnapshotForChannel), {
       channel: "external-chat",
-      pluginId: "@natesclaw/external-chat-plugin",
+      pluginId: "@openclaw/external-chat-plugin",
     });
     expect(multiselect).not.toHaveBeenCalled();
   });

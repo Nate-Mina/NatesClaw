@@ -11,7 +11,7 @@ Advertise the local Natesclaw gateway over Bonjour/mDNS.
 
 ## Distribution
 
-- Package: `@natesclaw/bonjour`
+- Package: `@openclaw/bonjour`
 - Install route: included in Natesclaw
 
 ## Surface

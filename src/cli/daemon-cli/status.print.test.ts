@@ -956,8 +956,8 @@ describe("printDaemonStatus", () => {
               installedVersion: "2026.6.9",
               gatewayVersion: "2026.6.10-beta.1",
               source: "npm",
-              packageName: "@natesclaw/brave-plugin",
-              spec: "@natesclaw/brave-plugin@2026.6.9",
+              packageName: "@openclaw/brave-plugin",
+              spec: "@openclaw/brave-plugin@2026.6.9",
             },
           ],
         },
@@ -969,7 +969,7 @@ describe("printDaemonStatus", () => {
     expectMockLineContains(runtime.log, "- brave: 2026.6.9 (npm)");
     expectMockLineContains(
       runtime.log,
-      "natesclaw plugins update @natesclaw/brave-plugin@2026.6.10-beta.1",
+      "natesclaw plugins update @openclaw/brave-plugin@2026.6.10-beta.1",
     );
     expectMockLineContains(runtime.log, "natesclaw gateway restart");
   });

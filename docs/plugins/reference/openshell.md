@@ -11,7 +11,7 @@ Natesclaw sandbox backend for the NVIDIA OpenShell CLI with mirrored local works
 
 ## Distribution
 
-- Package: `@natesclaw/openshell-sandbox`
+- Package: `@openclaw/openshell-sandbox`
 - Install route: npm; ClawHub
 
 ## Surface

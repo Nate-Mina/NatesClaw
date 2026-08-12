@@ -1,8 +1,8 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { createAssistantMessageEventStream } from "@natesclaw/llm-core";
-import { MAX_VIDEO_BYTES } from "@natesclaw/media-core/constants";
+import { createAssistantMessageEventStream } from "@openclaw/llm-core";
+import { MAX_VIDEO_BYTES } from "@openclaw/media-core/constants";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
   PROVIDER_CONTEXT_HANDOFF,

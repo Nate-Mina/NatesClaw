@@ -11,7 +11,7 @@ Generic JSON-only LLM tool for structured tasks callable from workflows.
 
 ## Distribution
 
-- Package: `@natesclaw/llm-task`
+- Package: `@openclaw/llm-task`
 - Install route: included in Natesclaw
 
 ## Surface

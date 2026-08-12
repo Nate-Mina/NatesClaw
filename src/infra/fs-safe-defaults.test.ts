@@ -5,7 +5,7 @@ const { configureFsSafeNative } = vi.hoisted(() => ({
   configureFsSafeNative: vi.fn(),
 }));
 
-vi.mock("@natesclaw/fs-safe/config", () => ({
+vi.mock("@openclaw/fs-safe/config", () => ({
   configureFsSafeNative,
 }));
 

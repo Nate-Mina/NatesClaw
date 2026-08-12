@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
-import { stripSystemPromptCacheBoundary } from "@natesclaw/ai/internal/shared";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { stripSystemPromptCacheBoundary } from "@openclaw/ai/internal/shared";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { formatErrorMessage } from "../../infra/errors.js";
 import type {
   CliOutput,

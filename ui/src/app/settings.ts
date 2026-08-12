@@ -1,5 +1,5 @@
-import { gatewayOriginScope } from "@natesclaw/gateway-client/browser";
-import { safeParseJson } from "@natesclaw/normalization-core";
+import { gatewayOriginScope } from "@openclaw/gateway-client/browser";
+import { safeParseJson } from "@openclaw/normalization-core";
 import {
   DEFAULT_SIDEBAR_ENTRIES,
   normalizeSidebarEntries,

@@ -61,7 +61,7 @@ describe("plugin management catalog lifecycle", () => {
         source: "hosted",
         entries: [
           {
-            id: "@natesclaw/diffs",
+            id: "@openclaw/diffs",
             title: "Diffs",
             state: "available",
             featured: true,
@@ -70,7 +70,7 @@ describe("plugin management catalog lifecycle", () => {
               candidates: [
                 {
                   sourceRef: "public-clawhub",
-                  package: "@natesclaw/diffs",
+                  package: "@openclaw/diffs",
                   version: "2026.6.11",
                   integrity: `sha256:${"a".repeat(64)}`,
                 },

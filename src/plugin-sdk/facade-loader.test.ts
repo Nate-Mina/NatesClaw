@@ -82,7 +82,7 @@ function writeFixturePackageJson(
   type: "commonjs" | "module" = "module",
 ): void {
   writeJsonFile(path.join(pluginRoot, "package.json"), {
-    name: `@natesclaw/${pluginId}`,
+    name: `@openclaw/${pluginId}`,
     version: "0.0.0",
     type,
   });

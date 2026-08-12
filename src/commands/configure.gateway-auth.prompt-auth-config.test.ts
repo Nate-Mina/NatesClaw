@@ -1,5 +1,5 @@
 // Configure gateway auth prompt tests cover interactive auth selection and model-aware auth config.
-import type { NormalizedModelCatalogRow } from "@natesclaw/model-catalog-core/model-catalog-types";
+import type { NormalizedModelCatalogRow } from "@openclaw/model-catalog-core/model-catalog-types";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { RuntimeEnv } from "../runtime.js";

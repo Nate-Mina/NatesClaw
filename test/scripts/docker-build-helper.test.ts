@@ -2437,9 +2437,9 @@ docker_e2e_docker_run_cmd run demo
       publishedRunner.indexOf("phase assert-prepublish-requests node"),
     );
     expect(publishedRunner).toContain('if [ "$candidate_version" = "2026.6.35" ]; then');
-    expect(publishedRunner).toContain('prepublish_package="@natesclaw/whatsapp"');
+    expect(publishedRunner).toContain('prepublish_package="@openclaw/whatsapp"');
     expect(publishedRunner).toContain('if [ "$SCENARIO" = "configured-plugin-installs" ]; then');
-    expect(publishedRunner).toContain('prepublish_package="@natesclaw/matrix"');
+    expect(publishedRunner).toContain('prepublish_package="@openclaw/matrix"');
     expect(publishedRunner).toContain(
       'assert-prepublish-requests "$NATESCLAW_CLAWHUB_URL" "$prepublish_package" "$candidate_version"',
     );
@@ -2449,7 +2449,7 @@ docker_e2e_docker_run_cmd run demo
     expect(publishedRunner).toContain('FIXTURE_PACKAGE_VERSION="$candidate_version"');
     expect(publishedRunner).toContain("version,");
     expect(publishedRunner).toContain(
-      'registry_args+=("@natesclaw/brave-plugin" "$candidate_version" "$tarball")',
+      'registry_args+=("@openclaw/brave-plugin" "$candidate_version" "$tarball")',
     );
     expect(publishedRunner).toContain('"$clawhub_security_mode"');
     expect(publishedRunner.indexOf("phase assert-prepublish-requests node")).toBeLessThan(
@@ -2457,12 +2457,12 @@ docker_e2e_docker_run_cmd run demo
     );
     expect(runner.indexOf('natesclaw "${update_args[@]}"')).toBeLessThan(
       runner.indexOf(
-        'assert-prepublish-requests "$NATESCLAW_CLAWHUB_URL" "@natesclaw/whatsapp" "$package_version"',
+        'assert-prepublish-requests "$NATESCLAW_CLAWHUB_URL" "@openclaw/whatsapp" "$package_version"',
       ),
     );
     expect(
       runner.indexOf(
-        'assert-prepublish-requests "$NATESCLAW_CLAWHUB_URL" "@natesclaw/whatsapp" "$package_version"',
+        'assert-prepublish-requests "$NATESCLAW_CLAWHUB_URL" "@openclaw/whatsapp" "$package_version"',
       ),
     ).toBeLessThan(runner.indexOf("natesclaw doctor --fix --non-interactive"));
     expect(runner).toContain(
@@ -5080,7 +5080,7 @@ source "$ROOT_DIR/scripts/lib/docker-e2e-logs.sh"
       'plugins install "$dir_plugin" --force',
       "plugins update demo-plugin-dir",
       "start_npm_fixture_registry",
-      'plugins install "npm:@natesclaw/demo-plugin-npm@0.0.1" --force',
+      'plugins install "npm:@openclaw/demo-plugin-npm@0.0.1" --force',
       "plugins update demo-plugin-npm",
       'plugins install "git:$git_update_repo_url@main" --force',
       "plugins update demo-plugin-git-update",
@@ -5124,7 +5124,7 @@ source "$ROOT_DIR/scripts/lib/docker-e2e-logs.sh"
       'plugins update "$CLAWHUB_PLUGIN_ID"',
       "run_plugins_natesclaw_logged install-clawhub",
       'natesclaw_e2e_maybe_timeout "$NATESCLAW_PLUGINS_CLI_TIMEOUT"',
-      "clawhub:@natesclaw/kitchen-sink",
+      "clawhub:@openclaw/kitchen-sink",
     ]);
   });
 });

@@ -534,7 +534,7 @@ async function runRuntimeInspect(params: {
 
 async function runPluginLifecycleMatrix() {
   const pluginId = "lifecycle-claw";
-  const packageName = "@natesclaw/lifecycle-claw";
+  const packageName = "@openclaw/lifecycle-claw";
   const resourceDir = tempDirs.make("natesclaw-plugin-lifecycle-matrix-");
   const npmPrefix = "/tmp/npm-prefix";
   const env = createMatrixStateEnv(resourceDir);

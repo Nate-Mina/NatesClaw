@@ -1,7 +1,7 @@
 // Natesclaw SDK helper module supports normalize behavior.
-import { asFiniteNumber } from "@natesclaw/normalization-core/number-coercion";
-import { asRecord } from "@natesclaw/normalization-core/record-coerce";
-import { readNonEmptyStringPreservingWhitespace as readNonEmptyString } from "@natesclaw/normalization-core/string-coerce";
+import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
+import { asRecord } from "@openclaw/normalization-core/record-coerce";
+import { readNonEmptyStringPreservingWhitespace as readNonEmptyString } from "@openclaw/normalization-core/string-coerce";
 import type { GatewayEvent, JsonObject, NatesclawEvent, NatesclawEventType } from "./types.js";
 
 function readLowerString(value: unknown): string | undefined {

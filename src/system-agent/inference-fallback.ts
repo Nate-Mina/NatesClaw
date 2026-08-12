@@ -1,5 +1,5 @@
 // Provider-neutral live inference ladder for Natesclaw sessions.
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 import { listAgentIds, tryResolveDefaultAgentId } from "../agents/agent-scope.js";
 import { hasAvailableAuthForProvider } from "../agents/model-auth.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

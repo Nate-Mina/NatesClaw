@@ -1,9 +1,9 @@
 /**
  * Detects message-tool sends that delivered a visible reply to the current source.
  */
-import { safeParseJson } from "@natesclaw/normalization-core";
-import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
-import { hasNonEmptyString, readStringValue } from "@natesclaw/normalization-core/string-coerce";
+import { safeParseJson } from "@openclaw/normalization-core";
+import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
+import { hasNonEmptyString, readStringValue } from "@openclaw/normalization-core/string-coerce";
 import type { SourceReplyDeliveryMode } from "../auto-reply/get-reply-options.types.js";
 import {
   isMessageToolConversationCreateActionName,

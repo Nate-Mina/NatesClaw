@@ -93,7 +93,7 @@ Fix in the plugin package:
 
 ```json
 {
-  "name": "@natesclaw/my-plugin",
+  "name": "@openclaw/my-plugin",
   "version": "1.2.3",
   "natesclaw": {
     "extensions": ["./dist/index.js"]
@@ -109,14 +109,14 @@ Update finishes but plugins are stale, disabled, or show `blocked by install
 policy`, `install policy failed closed`, or `Disabled "<plugin>" after plugin
 update failure`: check `security.installPolicy`.
 
-Install policy runs on plugin installs and updates. `@natesclaw/*` plugin
+Install policy runs on plugin installs and updates. `@openclaw/*` plugin
 versions normally move with the Natesclaw release, so an Natesclaw update can
 need a matching plugin update during post-update sync.
 
 Avoid these policy shapes unless you also maintain the matching upgrade rule:
 
 - Freezing Natesclaw-owned plugins to one exact old version (for example, only
-  `@natesclaw/*@2026.5.3`).
+  `@openclaw/*@2026.5.3`).
 - Blocking by source kind alone (every npm, network, or `request.mode:
 "update"` request).
 - Treating the policy command as optional: when `security.installPolicy` is
@@ -125,7 +125,7 @@ Avoid these policy shapes unless you also maintain the matching upgrade rule:
 - Approving versions without checking the request's `natesclawVersion` against
   plugin candidate metadata.
 
-Prefer rules that allow trusted `@natesclaw/*` updates compatible with the
+Prefer rules that allow trusted `@openclaw/*` updates compatible with the
 current host, instead of pinning one release forever. If you block npm by
 default, add a narrow exception for the plugin ids you use, and apply the same
 trust rule to `request.mode: "update"` as to installs.

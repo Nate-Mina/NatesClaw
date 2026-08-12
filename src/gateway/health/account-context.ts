@@ -1,4 +1,4 @@
-import { asNullableRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
 import { inspectChannelAccount } from "../../channels/account-inspection.js";
 import {
   resolveChannelAccountConfigured,

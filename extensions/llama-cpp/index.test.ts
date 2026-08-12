@@ -1,6 +1,6 @@
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { NatesclawPluginService } from "natesclaw/plugin-sdk/plugin-entry";
 import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
 import {
@@ -439,7 +439,7 @@ describe("llama.cpp provider plugin", () => {
     });
 
     expect(llamaCppEmbeddingProviderAdapter.formatSetupError?.(err)).toContain(
-      "natesclaw plugins install @natesclaw/llama-cpp-provider",
+      "natesclaw plugins install @openclaw/llama-cpp-provider",
     );
   });
 });

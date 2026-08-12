@@ -11,7 +11,7 @@ read_when:
 | Property        | Value                                                     |
 | --------------- | --------------------------------------------------------- |
 | Provider id     | `cerebras`                                                |
-| Plugin          | official external package (`@natesclaw/cerebras-provider`) |
+| Plugin          | official external package (`@openclaw/cerebras-provider`) |
 | Auth env var    | `CEREBRAS_API_KEY`                                        |
 | Onboarding flag | `--auth-choice cerebras-api-key`                          |
 | Direct CLI flag | `--cerebras-api-key <key>`                                |
@@ -22,7 +22,7 @@ read_when:
 ## Install plugin
 
 ```bash
-natesclaw plugins install @natesclaw/cerebras-provider
+natesclaw plugins install @openclaw/cerebras-provider
 natesclaw gateway restart
 ```
 

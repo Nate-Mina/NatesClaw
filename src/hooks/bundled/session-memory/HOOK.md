@@ -1,7 +1,7 @@
 ---
 name: session-memory
 description: "Save session context to memory on manual or automatic reset"
-homepage: https://docs.natesclaw.ai/automation/hooks#session-memory
+homepage: https://docs.openclaw.ai/automation/hooks#session-memory
 metadata:
   {
     "natesclaw":

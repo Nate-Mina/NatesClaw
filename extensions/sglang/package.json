@@ -1,11 +1,11 @@
 {
-  "name": "@natesclaw/sglang-provider",
+  "name": "@openclaw/sglang-provider",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw SGLang provider plugin",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

@@ -4,7 +4,7 @@
  * This module owns port/bind/auth validation and existing-setting preservation
  * before the final config write happens.
  */
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { formatCliCommand } from "../../../cli/command-format.js";
 import { formatInvalidPortOption } from "../../../cli/error-format.js";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";

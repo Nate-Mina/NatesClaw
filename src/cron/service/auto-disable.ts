@@ -1,5 +1,5 @@
 /** Shared state and owner-notification policy for cron auto-disable transitions. */
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import { parseAgentSessionKey } from "../../routing/session-key.js";
 import { cronFailureDetailLines } from "../failure-notification-text.js";
 import type { CronJob, CronJobState } from "../types.js";

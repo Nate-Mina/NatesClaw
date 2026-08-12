@@ -1,4 +1,4 @@
-import { resolveTimerTimeoutMs } from "@natesclaw/normalization-core/number-coercion";
+import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
 import { getRuntimeConfig } from "../../config/io.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { NodePairingGeneration } from "../../infra/device-pairing-node-state.js";

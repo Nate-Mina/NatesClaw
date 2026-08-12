@@ -98,7 +98,7 @@ const fs = require("node:fs");
 const args = process.argv.slice(2);
 fs.appendFileSync(process.env.MOCK_GH_CALLS, JSON.stringify(args) + "\\n");
 if (args[0] === "workflow" && args[1] === "run") {
-  console.log("https://github.com/natesclaw/natesclaw/actions/runs/123");
+  console.log("https://github.com/openclaw/natesclaw/actions/runs/123");
 } else if (args[0] === "api" && args.at(-1).endsWith("/actions/runs/123")) {
   console.log(JSON.stringify({ status: "completed", conclusion: "success", head_sha: process.env.MOCK_WORKFLOW_SHA }));
 } else {
@@ -433,7 +433,7 @@ describe("full-release-validation-at-sha", () => {
       expect(result.stdout).toContain(`Validation SHA: ${fixture.targetSha}`);
       expect(result.stdout).toContain(`Tooling SHA: ${fixture.workflowSha}`);
       expect(result.stdout).toContain(
-        "Parent run: https://github.com/natesclaw/natesclaw/actions/runs/123",
+        "Parent run: https://github.com/openclaw/natesclaw/actions/runs/123",
       );
       expect(result.stdout.indexOf("Parent run:")).toBeLessThan(
         result.stdout.indexOf("Parent run status:"),

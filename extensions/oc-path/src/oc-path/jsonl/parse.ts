@@ -4,7 +4,7 @@
  * natesclaw session logs actually emit). Soft-error policy: malformed
  * lines surface as `kind: 'malformed'` AST entries plus a diagnostic.
  *
- * @module @natesclaw/oc-path/jsonl/parse
+ * @module @openclaw/oc-path/jsonl/parse
  */
 
 import type { Diagnostic } from "../ast.js";

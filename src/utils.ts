@@ -13,7 +13,7 @@ import { isPlainObject } from "./infra/plain-object.js";
 import { escapeRegExp as escapeRegExpValue } from "./shared/regexp.js";
 export { escapeRegExp } from "./shared/regexp.js";
 export { sleep } from "./utils/sleep.js";
-export { isRecord } from "@natesclaw/normalization-core/record-coerce";
+export { isRecord } from "@openclaw/normalization-core/record-coerce";
 export { resolveUserPath };
 
 /** Creates a directory tree if it does not already exist. */
@@ -58,7 +58,7 @@ export function normalizeE164(number: string): string {
 // Surrogate-safe slicing helpers live in a node-free leaf module so browser/UI
 // bundles can import them without pulling in filesystem code. Re-exported here
 // to preserve the historical `utils.ts` import surface.
-export { sliceUtf16Safe, truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+export { sliceUtf16Safe, truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 
 /** Resolves the Natesclaw config directory from state/config env overrides or home. */
 export function resolveConfigDir(

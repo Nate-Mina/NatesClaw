@@ -720,7 +720,7 @@ describe("release candidate checklist", () => {
     mkdirSync(packageDir, { recursive: true });
     writeFileSync(
       join(packageDir, "package.json"),
-      `${JSON.stringify({ name: "@natesclaw/codex", version: "2026.7.1-beta.3" })}\n`,
+      `${JSON.stringify({ name: "@openclaw/codex", version: "2026.7.1-beta.3" })}\n`,
     );
     execFileSync("tar", ["-czf", tarballPath, "-C", sourceDir, "package"]);
     rmSync(sourceDir, { force: true, recursive: true });
@@ -730,7 +730,7 @@ describe("release candidate checklist", () => {
       schema: "natesclaw.plugin-publication-artifact/v1",
       schemaVersion: 1,
       targetSha: "candidate-sha",
-      package: { name: "@natesclaw/codex", version: "2026.7.1-beta.3" },
+      package: { name: "@openclaw/codex", version: "2026.7.1-beta.3" },
       artifact: {
         name: "plugin-npm-package-codex",
         tarball: tarballName,
@@ -746,7 +746,7 @@ describe("release candidate checklist", () => {
       }),
     ).toMatchObject({
       artifactName: "plugin-npm-package-codex",
-      packageName: "@natesclaw/codex",
+      packageName: "@openclaw/codex",
       packageVersion: "2026.7.1-beta.3",
       tarballPath,
       tarballSha256,
@@ -754,7 +754,7 @@ describe("release candidate checklist", () => {
     mkdirSync(packageDir, { recursive: true });
     writeFileSync(
       join(packageDir, "package.json"),
-      `${JSON.stringify({ name: "@natesclaw/matrix", version: "2026.7.1-beta.3" })}\n`,
+      `${JSON.stringify({ name: "@openclaw/matrix", version: "2026.7.1-beta.3" })}\n`,
     );
     execFileSync("tar", ["-czf", tarballPath, "-C", sourceDir, "package"]);
     rmSync(sourceDir, { force: true, recursive: true });
@@ -790,7 +790,7 @@ describe("release candidate checklist", () => {
       tarballSha256: "root-sha",
       dependencyTarballs: [
         {
-          packageName: "@natesclaw/ai",
+          packageName: "@openclaw/ai",
           packageVersion: "2026.7.1-beta.3",
           tarballName: "natesclaw-ai-2026.7.1-beta.3.tgz",
           tarballSha256: "ai-sha",
@@ -825,13 +825,13 @@ describe("release candidate checklist", () => {
 
   it("prefers the complete core package tarball set with legacy manifest fallback", () => {
     const legacyTarball = {
-      packageName: "@natesclaw/ai",
+      packageName: "@openclaw/ai",
       packageVersion: "2026.7.1-beta.3",
       tarballName: "natesclaw-ai-2026.7.1-beta.3.tgz",
       tarballSha256: "ai-sha",
     };
     const gatewayProtocolTarball = {
-      packageName: "@natesclaw/gateway-protocol",
+      packageName: "@openclaw/gateway-protocol",
       packageVersion: "2026.7.1-beta.3",
       tarballName: "natesclaw-gateway-protocol-2026.7.1-beta.3.tgz",
       tarballSha256: "protocol-sha",
@@ -856,19 +856,19 @@ describe("release candidate checklist", () => {
 
   it("passes only root dependency tarballs to Parallels with legacy fallback", () => {
     const aiTarball = {
-      packageName: "@natesclaw/ai",
+      packageName: "@openclaw/ai",
       packageVersion: "2026.7.1-beta.3",
       tarballName: "natesclaw-ai-2026.7.1-beta.3.tgz",
       tarballSha256: "ai-sha",
     };
     const gatewayProtocolTarball = {
-      packageName: "@natesclaw/gateway-protocol",
+      packageName: "@openclaw/gateway-protocol",
       packageVersion: "2026.7.1-beta.3",
       tarballName: "natesclaw-gateway-protocol-2026.7.1-beta.3.tgz",
       tarballSha256: "protocol-sha",
     };
     const gatewayClientTarball = {
-      packageName: "@natesclaw/gateway-client",
+      packageName: "@openclaw/gateway-client",
       packageVersion: "2026.7.1-beta.3",
       tarballName: "natesclaw-gateway-client-2026.7.1-beta.3.tgz",
       tarballSha256: "client-sha",
@@ -1223,7 +1223,7 @@ describe("release candidate checklist", () => {
         tag_name: "v0.6.3",
         draft: false,
         prerelease: false,
-        html_url: "https://github.com/natesclaw/natesclaw-windows-node/releases/tag/v0.6.3",
+        html_url: "https://github.com/openclaw/natesclaw-windows-node/releases/tag/v0.6.3",
         assets,
       });
     });
@@ -1236,7 +1236,7 @@ describe("release candidate checklist", () => {
       }),
     ).resolves.toEqual({
       tag: "v0.6.3",
-      url: "https://github.com/natesclaw/natesclaw-windows-node/releases/tag/v0.6.3",
+      url: "https://github.com/openclaw/natesclaw-windows-node/releases/tag/v0.6.3",
       assets,
     });
   });
@@ -1283,7 +1283,7 @@ describe("release candidate checklist", () => {
         tag_name: "v0.6.3",
         draft: false,
         prerelease: false,
-        html_url: "https://github.com/natesclaw/natesclaw-windows-node/releases/tag/v0.6.3",
+        html_url: "https://github.com/openclaw/natesclaw-windows-node/releases/tag/v0.6.3",
         assets: [
           {
             name: "NatesclawCompanion-Setup-x64.exe",
@@ -1341,7 +1341,7 @@ describe("release candidate checklist", () => {
         "--plugin-publish-scope",
         "selected",
         "--plugins",
-        "@natesclaw/diffs",
+        "@openclaw/diffs",
       ]),
     ).toThrow("release candidates publish Natesclaw with --plugin-publish-scope all-publishable");
   });
@@ -1349,7 +1349,7 @@ describe("release candidate checklist", () => {
   it("extracts a workflow run id from gh dispatch output", () => {
     expect(
       parseRunIdFromDispatchOutput(
-        "https://github.com/natesclaw/natesclaw/actions/runs/25922042055\n",
+        "https://github.com/openclaw/natesclaw/actions/runs/25922042055\n",
       ),
     ).toBe("25922042055");
   });

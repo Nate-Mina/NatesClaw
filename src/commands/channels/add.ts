@@ -1,5 +1,5 @@
 // Implements guided and non-interactive `natesclaw channels add` account setup.
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../../agents/agent-scope.js";
 import {
   applyPreparedChannelAccountConfiguration,

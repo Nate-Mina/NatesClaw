@@ -1,5 +1,5 @@
 // Model probe RPC tests cover validation, normalization, bounded execution, and redacted mapping.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AuthProbeSummary } from "../../commands/models/list.probe.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";

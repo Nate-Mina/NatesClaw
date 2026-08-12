@@ -1,4 +1,4 @@
-# @natesclaw/diagnostics-otel
+# @openclaw/diagnostics-otel
 
 Official OpenTelemetry diagnostics exporter for Natesclaw.
 
@@ -7,7 +7,7 @@ This plugin exports Natesclaw Gateway traces, metrics, and logs to an OTLP colle
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/diagnostics-otel
+natesclaw plugins install @openclaw/diagnostics-otel
 ```
 
 Restart the Gateway after installing or updating the plugin.
@@ -18,10 +18,10 @@ Enable the plugin and set the OTLP endpoint in `plugins.entries.diagnostics-otel
 
 The full config surface, metric names, span names, and collector examples live in the docs:
 
-- https://docs.natesclaw.ai/gateway/opentelemetry
+- https://docs.openclaw.ai/gateway/opentelemetry
 
 ## Package
 
 - Plugin id: `diagnostics-otel`
-- Package: `@natesclaw/diagnostics-otel`
+- Package: `@openclaw/diagnostics-otel`
 - Minimum Natesclaw host: `2026.4.25`

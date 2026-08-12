@@ -11,7 +11,7 @@ Adds fal model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/fal-provider`
+- Package: `@openclaw/fal-provider`
 - Install route: included in Natesclaw
 
 ## Surface

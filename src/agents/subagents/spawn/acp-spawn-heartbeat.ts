@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { DEFAULT_HEARTBEAT_EVERY } from "../../../auto-reply/heartbeat.js";
 import { parseDurationMs } from "../../../cli/parse-duration.js";
 import { resolveSessionStorePathCore } from "../../../config/sessions/paths.js";

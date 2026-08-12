@@ -1,5 +1,5 @@
-import { normalizeAgentId } from "@natesclaw/normalization-core/agent-id";
-import { normalizeNullableString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeAgentId } from "@openclaw/normalization-core/agent-id";
+import { normalizeNullableString } from "@openclaw/normalization-core/string-coerce";
 
 // Control UI session URL grammar shared by browser and plugin consumers.
 export type ControlUiSessionNamespace = "chat" | "dashboard";

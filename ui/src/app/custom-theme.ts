@@ -1,5 +1,5 @@
-import { asNullableRecord as readThemeRecord } from "@natesclaw/normalization-core/record-coerce";
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { asNullableRecord as readThemeRecord } from "@openclaw/normalization-core/record-coerce";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 // Control UI module implements custom theme behavior.
 import { normalizeOptionalString } from "../lib/string-coerce.ts";
 

@@ -92,7 +92,7 @@ function writePublishablePluginPackage(repoDir: string): string {
   const packageDir = join(repoDir, "extensions", "diffs");
   mkdirSync(packageDir, { recursive: true });
   writeJsonFile(join(packageDir, "package.json"), {
-    name: "@natesclaw/diffs",
+    name: "@openclaw/diffs",
     version: "2026.5.3",
     type: "module",
     natesclaw: {
@@ -415,7 +415,7 @@ describe("plugin npm package manifest staging", () => {
     });
     expect(resolved.changed).toBe(true);
     expect(resolved.packageJson).toEqual({
-      name: "@natesclaw/diffs",
+      name: "@openclaw/diffs",
       version: "2026.5.3",
       type: "module",
       bundledDependencies: [],
@@ -605,14 +605,14 @@ process.stdout.write("PACKED_PLUGIN_CHANNEL_STATE_OK\\n");
       optionalDependencySpec: "file:../../deps/optional-platform-dep",
     });
     writeJsonFile(join(packageDir, "package.json"), {
-      name: "@natesclaw/diffs",
+      name: "@openclaw/diffs",
       version: "2026.5.3",
       type: "module",
       dependencies: {
         "local-runtime-dep": "file:./deps/local-runtime-dep",
       },
       devDependencies: {
-        "@natesclaw/plugin-sdk": "workspace:*",
+        "@openclaw/plugin-sdk": "workspace:*",
       },
       natesclaw: {
         extensions: ["./index.ts"],
@@ -715,7 +715,7 @@ withAugmentedPluginNpmManifestForPackage(
     writeFileText(join(packageDir, "dist", "setup-entry.js"), "export {};\n");
     writeLocalDependencyPackage(packageDir);
     writeJsonFile(join(packageDir, "package.json"), {
-      name: "@natesclaw/diffs",
+      name: "@openclaw/diffs",
       version: "2026.5.3",
       type: "module",
       dependencies: {
@@ -776,7 +776,7 @@ withAugmentedPluginNpmManifestForPackage(
     writeFileText(join(packageDir, "dist", "index.js"), "export {};\n");
     writeFileText(join(packageDir, "dist", "setup-entry.js"), "export {};\n");
     writeJsonFile(join(packageDir, "package.json"), {
-      name: "@natesclaw/diffs",
+      name: "@openclaw/diffs",
       version: "2026.5.3",
       type: "module",
       files: ["dist/**", "!dist/setup-entry.js"],

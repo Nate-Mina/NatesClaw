@@ -1,4 +1,4 @@
-import { err as resultError, ok, type Result } from "@natesclaw/normalization-core/result";
+import { err as resultError, ok, type Result } from "@openclaw/normalization-core/result";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { DEFAULT_ACCOUNT_ID, normalizeAccountId } from "../../routing/session-key.js";
 import type { RuntimeEnv } from "../../runtime.js";

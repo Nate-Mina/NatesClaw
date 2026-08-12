@@ -2,7 +2,7 @@
 import {
   resolveNonNegativeIntegerOption,
   resolveOptionalIntegerOption,
-} from "@natesclaw/normalization-core/number-coercion";
+} from "@openclaw/normalization-core/number-coercion";
 import type { InboundDebounceByProvider } from "../config/types.messages.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { toErrorObject } from "../infra/errors.js";

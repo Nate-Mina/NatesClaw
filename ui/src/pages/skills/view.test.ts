@@ -1,6 +1,6 @@
 /* @vitest-environment jsdom */
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { render } from "lit";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { AgentsListResult, SkillStatusEntry, SkillStatusReport } from "../../api/types.ts";
@@ -926,7 +926,7 @@ describe("renderSkills", () => {
     await Promise.resolve();
 
     expect(normalizeText(container)).toContain("Review");
-    expect(normalizeText(container)).toContain("@natesclaw/agentreceipt@1.2.3");
+    expect(normalizeText(container)).toContain("@openclaw/agentreceipt@1.2.3");
     expect(normalizeText(container)).toContain("security.suspicious");
     expect(
       container.querySelector<HTMLAnchorElement>('a[href*="security-audit"]')?.textContent?.trim(),

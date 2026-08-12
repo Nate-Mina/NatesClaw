@@ -11,8 +11,8 @@ Adds Vydra model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/vydra-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/vydra-provider`
+- Package: `@openclaw/vydra-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/vydra-provider`
 
 ## Surface
 

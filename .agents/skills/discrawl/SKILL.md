@@ -3,13 +3,13 @@ name: discrawl
 description: "Discord archive: search, sync freshness, DMs, summaries, TUI, repo/release work."
 metadata:
   natesclaw:
-    homepage: https://github.com/natesclaw/discrawl
+    homepage: https://github.com/openclaw/discrawl
     requires:
       bins:
         - discrawl
     install:
       - kind: go
-        module: github.com/natesclaw/discrawl/cmd/discrawl@latest
+        module: github.com/openclaw/discrawl/cmd/discrawl@latest
         bins:
           - discrawl
 ---
@@ -162,7 +162,7 @@ discrawl-sandbox messages --channel clawtributors --days 7 --all
 discrawl-sandbox status --json
 ```
 
-This reader imports `https://github.com/natesclaw/discord-store.git` into
+This reader imports `https://github.com/openclaw/discord-store.git` into
 `/root/clawsweeper-sandbox-workspace/.discrawl/discrawl.db` with
 `discord.token_source = "none"`. The published Git snapshot is public-channel
 filtered; do not use `/root/.discrawl/config.toml` or the rich writer DB from

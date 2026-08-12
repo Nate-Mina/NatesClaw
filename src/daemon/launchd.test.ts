@@ -1,7 +1,7 @@
 // Launchd tests cover macOS service plist generation and command handling.
 import fs from "node:fs/promises";
 import { PassThrough } from "node:stream";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { PortListener } from "../infra/ports-types.js";
 import { deleteTestEnvValue, setTestEnvValue } from "../test-utils/env.js";
@@ -865,7 +865,7 @@ describe("launchctl list detection", () => {
     async () => {
       const env = createDefaultLaunchdEnv();
       const updaterLabel = "ai.natesclaw.tayoun.update.20260625T201026-0400";
-      const gatewayLikeLabel = "ai.natesclaw.dev.team.update.20260625T201026-0400";
+      const gatewayLikeLabel = "ai.openclaw.dev.team.update.20260625T201026-0400";
       const nonNatesclawLabel = "ai.natesclaw.fake.update.20260625T201026-0400";
       const prefixedCliLabel = "ai.natesclaw.helper.update.20260625T201026-0400";
       state.listOutput = [
@@ -1009,7 +1009,7 @@ describe("launchctl list detection", () => {
         ...createDefaultLaunchdEnv(),
         NATESCLAW_UPDATE_RUN_HANDOFF: "1",
       };
-      const gatewayLikeLabel = "ai.natesclaw.dev.team.update.20260625T201026-0400";
+      const gatewayLikeLabel = "ai.openclaw.dev.team.update.20260625T201026-0400";
       state.listOutput = `9876 0 ${gatewayLikeLabel}`;
       setLaunchAgentPlist({
         env,
@@ -1206,7 +1206,7 @@ describe("launchctl list detection", () => {
     "requires plist proof for a configured label preserved by an update handoff",
     async () => {
       const env = createDefaultLaunchdEnv();
-      const label = "ai.natesclaw.dev.team.update.20260625T201026-0400";
+      const label = "ai.openclaw.dev.team.update.20260625T201026-0400";
       setLaunchAgentPlist({
         env,
         label,
@@ -3806,7 +3806,7 @@ describe("launchd install", () => {
     }
     expect(message).toContain("logged-in macOS GUI session");
     expect(message).toContain("wrong user (including sudo)");
-    expect(message).toContain("https://docs.natesclaw.ai/gateway");
+    expect(message).toContain("https://docs.openclaw.ai/gateway");
   });
 
   it("surfaces generic bootstrap failures without GUI-specific guidance", async () => {

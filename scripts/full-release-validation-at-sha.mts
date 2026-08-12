@@ -408,7 +408,7 @@ function waitForWorkflowRun(parentRunId: string, workflowSha: string) {
         return suite;
       }
       throw new Error(
-        `Full Release Validation concluded ${stringValue(suite.conclusion, "unknown").toLowerCase()}: https://github.com/natesclaw/natesclaw/actions/runs/${parentRunId}`,
+        `Full Release Validation concluded ${stringValue(suite.conclusion, "unknown").toLowerCase()}: https://github.com/openclaw/natesclaw/actions/runs/${parentRunId}`,
       );
     }
     const remainingMs = deadline - Date.now();
@@ -423,7 +423,7 @@ function waitForWorkflowRun(parentRunId: string, workflowSha: string) {
     );
   }
   throw new Error(
-    `Timed out after ${FULL_RELEASE_WAIT_TIMEOUT_MINUTES} minutes waiting for Full Release Validation: https://github.com/natesclaw/natesclaw/actions/runs/${parentRunId}`,
+    `Timed out after ${FULL_RELEASE_WAIT_TIMEOUT_MINUTES} minutes waiting for Full Release Validation: https://github.com/openclaw/natesclaw/actions/runs/${parentRunId}`,
   );
 }
 
@@ -590,12 +590,12 @@ function main() {
       throw new Error("Could not determine Full Release Validation run id.");
     }
 
-    console.log(`Parent run: https://github.com/natesclaw/natesclaw/actions/runs/${parentRunId}`);
+    console.log(`Parent run: https://github.com/openclaw/natesclaw/actions/runs/${parentRunId}`);
     const completedRun = waitForWorkflowRun(parentRunId, workflowSha);
     parentConclusion = stringValue(completedRun.conclusion);
     if (parentConclusion !== "success") {
       throw new Error(
-        `Full Release Validation concluded ${parentConclusion.toLowerCase() || "without a conclusion"}: https://github.com/natesclaw/natesclaw/actions/runs/${parentRunId}`,
+        `Full Release Validation concluded ${parentConclusion.toLowerCase() || "without a conclusion"}: https://github.com/openclaw/natesclaw/actions/runs/${parentRunId}`,
       );
     }
     verifyReleaseEvidence(parentRunId, workflowSha);

@@ -1,5 +1,5 @@
-import { createAssistantMessageEventStream } from "@natesclaw/llm-core";
-import type { Api, AssistantMessageEventStreamContract, Model, StreamFn } from "@natesclaw/llm-core";
+import { createAssistantMessageEventStream } from "@openclaw/llm-core";
+import type { Api, AssistantMessageEventStreamContract, Model, StreamFn } from "@openclaw/llm-core";
 // Simple completion transport tests cover provider-specific stream alias
 // selection before the generic completion helper invokes the LLM layer.
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";

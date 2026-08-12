@@ -10,7 +10,7 @@
       "required": true,
       "productImpact": "P2",
       "qaImpact": "P0",
-      "issue": "https://github.com/natesclaw/natesclaw/issues/80319",
+      "issue": "https://github.com/openclaw/natesclaw/issues/80319",
       "ownerAction": "Fix product or harness before claiming the tool-defaults gate is trusted.",
       "labels": ["qa-lab", "runtime-parity", "codex"]
     },
@@ -22,7 +22,7 @@
       "required": true,
       "productImpact": "P1",
       "qaImpact": "P0",
-      "issue": "https://github.com/natesclaw/natesclaw/issues/80319",
+      "issue": "https://github.com/openclaw/natesclaw/issues/80319",
       "ownerAction": "Investigate any hard failure as an Natesclaw dynamic integration or QA loading regression.",
       "labels": ["qa-lab", "runtime-parity", "natesclaw-dynamic-tools"]
     },
@@ -36,7 +36,7 @@
       "skipBackfillLane": "natesclaw-dynamic-tools-searchable-live",
       "productImpact": "P4",
       "qaImpact": "P2",
-      "issue": "https://github.com/natesclaw/natesclaw/issues/80319",
+      "issue": "https://github.com/openclaw/natesclaw/issues/80319",
       "ownerAction": "Keep as report-only until searchable/deferred tool modeling has no mock-only ambiguity.",
       "labels": ["qa-lab", "runtime-parity", "searchable-tools"]
     },

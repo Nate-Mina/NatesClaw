@@ -11,8 +11,8 @@ Adds Kimi, Kimi Coding model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/kimi-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/kimi-provider`
+- Package: `@openclaw/kimi-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/kimi-provider`
 
 ## Surface
 

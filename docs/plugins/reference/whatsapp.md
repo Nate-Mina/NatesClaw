@@ -11,8 +11,8 @@ Natesclaw WhatsApp channel plugin for WhatsApp Web chats.
 
 ## Distribution
 
-- Package: `@natesclaw/whatsapp`
-- Install route: ClawHub: `clawhub:@natesclaw/whatsapp`; npm
+- Package: `@openclaw/whatsapp`
+- Install route: ClawHub: `clawhub:@openclaw/whatsapp`; npm
 
 ## Surface
 

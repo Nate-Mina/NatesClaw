@@ -1,7 +1,7 @@
 // Post-core plugin convergence tests cover update convergence checks after core updates.
 import fs from "node:fs";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { useAutoCleanupTempDirTracker } from "../../../test/helpers/temp-dir.js";
 
@@ -95,7 +95,7 @@ describe("runPostCorePluginConvergence", () => {
     fs.writeFileSync(
       path.join(pluginDir, "package.json"),
       JSON.stringify({
-        name: `@natesclaw/${pluginId}`,
+        name: `@openclaw/${pluginId}`,
         version,
       }),
       "utf8",
@@ -412,19 +412,19 @@ describe("runPostCorePluginConvergence", () => {
     writeBundledPlugin(bundledRoot, "codex", VERSION);
     const npmRoot = resolvePluginNpmGenerationProjectDir({
       npmDir: path.join(stateDir, "npm"),
-      packageName: "@natesclaw/codex",
-      generationKey: "@natesclaw/codex@2026.7.2-beta.7",
+      packageName: "@openclaw/codex",
+      generationKey: "@openclaw/codex@2026.7.2-beta.7",
     });
     const packageDir = path.join(npmRoot, "node_modules", "@natesclaw", "codex");
     fs.mkdirSync(packageDir, { recursive: true });
     fs.writeFileSync(
       path.join(npmRoot, "package.json"),
-      JSON.stringify({ dependencies: { "@natesclaw/codex": "2026.7.2-beta.7" } }),
+      JSON.stringify({ dependencies: { "@openclaw/codex": "2026.7.2-beta.7" } }),
       "utf8",
     );
     fs.writeFileSync(
       path.join(packageDir, "package.json"),
-      JSON.stringify({ name: "@natesclaw/codex", version: "2026.7.2-beta.7" }),
+      JSON.stringify({ name: "@openclaw/codex", version: "2026.7.2-beta.7" }),
       "utf8",
     );
     fs.writeFileSync(
@@ -481,7 +481,7 @@ describe("runPostCorePluginConvergence", () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValue({
       changes: [],
       warnings: [
-        'Failed to install missing configured plugin "discord" from @natesclaw/discord: ENETUNREACH.',
+        'Failed to install missing configured plugin "discord" from @openclaw/discord: ENETUNREACH.',
       ],
       records: {},
     });
@@ -495,9 +495,9 @@ describe("runPostCorePluginConvergence", () => {
     expect(result.warnings).toStrictEqual([
       {
         reason:
-          'Failed to install missing configured plugin "discord" from @natesclaw/discord: ENETUNREACH.',
+          'Failed to install missing configured plugin "discord" from @openclaw/discord: ENETUNREACH.',
         message:
-          'Failed to install missing configured plugin "discord" from @natesclaw/discord: ENETUNREACH.',
+          'Failed to install missing configured plugin "discord" from @openclaw/discord: ENETUNREACH.',
         guidance: ["Run `natesclaw update repair` to retry plugin repair."],
       },
     ]);
@@ -507,7 +507,7 @@ describe("runPostCorePluginConvergence", () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValue({
       changes: [],
       warnings: [
-        'Failed to install missing configured plugin "matrix" from clawhub:@natesclaw/matrix@beta: ClawHub ClawPack download for @natesclaw/matrix@2026.6.1-beta.1 body stalled after 30000ms.',
+        'Failed to install missing configured plugin "matrix" from clawhub:@openclaw/matrix@beta: ClawHub ClawPack download for @openclaw/matrix@2026.6.1-beta.1 body stalled after 30000ms.',
       ],
       failedPluginIds: ["matrix"],
       records: {},
@@ -522,9 +522,9 @@ describe("runPostCorePluginConvergence", () => {
     expect(result.warnings).toStrictEqual([
       {
         reason:
-          'Failed to install missing configured plugin "matrix" from clawhub:@natesclaw/matrix@beta: ClawHub ClawPack download for @natesclaw/matrix@2026.6.1-beta.1 body stalled after 30000ms.',
+          'Failed to install missing configured plugin "matrix" from clawhub:@openclaw/matrix@beta: ClawHub ClawPack download for @openclaw/matrix@2026.6.1-beta.1 body stalled after 30000ms.',
         message:
-          'Failed to install missing configured plugin "matrix" from clawhub:@natesclaw/matrix@beta: ClawHub ClawPack download for @natesclaw/matrix@2026.6.1-beta.1 body stalled after 30000ms.',
+          'Failed to install missing configured plugin "matrix" from clawhub:@openclaw/matrix@beta: ClawHub ClawPack download for @openclaw/matrix@2026.6.1-beta.1 body stalled after 30000ms.',
         guidance: ["Run `natesclaw update repair` to retry plugin repair."],
       },
     ]);
@@ -538,7 +538,7 @@ describe("runPostCorePluginConvergence", () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValue({
       changes: [],
       warnings: [
-        'Failed to install missing configured plugin "discord" from @natesclaw/discord: ENETUNREACH.',
+        'Failed to install missing configured plugin "discord" from @openclaw/discord: ENETUNREACH.',
       ],
       failedPluginIds: ["discord"],
       records: {
@@ -569,7 +569,7 @@ describe("runPostCorePluginConvergence", () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValue({
       changes: ['Installed missing configured plugin "discord".'],
       notices: [
-        'ClawHub trust warning for "@natesclaw/discord@1.2.3": ClawHub has not completed a fresh clean security check for this release. Status: security scan is pending. Review the package before enabling it.',
+        'ClawHub trust warning for "@openclaw/discord@1.2.3": ClawHub has not completed a fresh clean security check for this release. Status: security scan is pending. Review the package before enabling it.',
       ],
       warnings: [],
       records: { discord: { source: "clawhub", installPath: "/p/discord" } },
@@ -585,9 +585,9 @@ describe("runPostCorePluginConvergence", () => {
     expect(result.notices).toStrictEqual([
       {
         reason:
-          'ClawHub trust warning for "@natesclaw/discord@1.2.3": ClawHub has not completed a fresh clean security check for this release. Status: security scan is pending. Review the package before enabling it.',
+          'ClawHub trust warning for "@openclaw/discord@1.2.3": ClawHub has not completed a fresh clean security check for this release. Status: security scan is pending. Review the package before enabling it.',
         message:
-          'ClawHub trust warning for "@natesclaw/discord@1.2.3": ClawHub has not completed a fresh clean security check for this release. Status: security scan is pending. Review the package before enabling it.',
+          'ClawHub trust warning for "@openclaw/discord@1.2.3": ClawHub has not completed a fresh clean security check for this release. Status: security scan is pending. Review the package before enabling it.',
         guidance: [],
       },
     ]);
@@ -1024,7 +1024,7 @@ describe("filterRecordsToActive", () => {
     const records = {
       codex: {
         source: "npm" as const,
-        spec: "@natesclaw/codex",
+        spec: "@openclaw/codex",
         installPath: "/p/codex",
         trustedSourceLinkedOfficial: true,
       },

@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { stableStringify } from "@natesclaw/normalization-core";
+import { stableStringify } from "@openclaw/normalization-core";
 import { redactConfigObject } from "../../config/redact-snapshot.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 

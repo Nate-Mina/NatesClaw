@@ -50,7 +50,7 @@ class McpServersCard extends NatesclawLightDomElement {
 
   @property() pluginsHref = "";
 
-  @property() docsUrl = "https://docs.natesclaw.ai/tools/mcp";
+  @property() docsUrl = "https://docs.openclaw.ai/tools/mcp";
 
   @state() private rows: McpServerSummary[] | null = null;
   @state() private busy = false;

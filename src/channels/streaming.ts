@@ -1,8 +1,8 @@
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 // Channel streaming config normalization and progress-draft formatting helpers.
-import { asNullableRecord as asObjectRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
-import { normalizeTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
+import { asNullableRecord as asObjectRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
 import {
   formatToolDetail,
   isCommandBearingToolCall,
@@ -191,7 +191,7 @@ function isAgentPlanStepStatus(value: unknown): value is AgentPlanStepStatus {
 /**
  * TODO(remove): normalizes the pre-2026.7.2 string plan-step wire shape to
  * pending typed steps. Bundled producers all emit typed steps, and
- * @natesclaw/codex is force-updated with core, so this only covers a plugin
+ * @openclaw/codex is force-updated with core, so this only covers a plugin
  * pinned against an update. Delete once that cannot happen.
  */
 export function normalizeAgentPlanSteps(value: unknown): AgentPlanStep[] | undefined {

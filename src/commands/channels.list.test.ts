@@ -103,7 +103,7 @@ function createCatalogEntry(id: string, label: string): ChannelPluginCatalogEntr
   return {
     id,
     label,
-    pluginId: `@natesclaw/${id}`,
+    pluginId: `@openclaw/${id}`,
     origin: "official",
     meta: {
       id,
@@ -112,7 +112,7 @@ function createCatalogEntry(id: string, label: string): ChannelPluginCatalogEntr
       docsPath: `/channels/${id}`,
       blurb: label,
     },
-    install: { npmSpec: `@natesclaw/${id}` },
+    install: { npmSpec: `@openclaw/${id}` },
   } as unknown as ChannelPluginCatalogEntry;
 }
 
@@ -386,11 +386,11 @@ describe("channels list", () => {
       pluginId: "discord",
       channelId: "discord",
       label: "Discord",
-      installSpec: "@natesclaw/discord",
-      installCommand: "natesclaw plugins install @natesclaw/discord",
+      installSpec: "@openclaw/discord",
+      installCommand: "natesclaw plugins install @openclaw/discord",
       doctorFixCommand: "natesclaw doctor --fix",
       repairHint:
-        "Install the official external plugin with: natesclaw plugins install @natesclaw/discord, or run: natesclaw doctor --fix.",
+        "Install the official external plugin with: natesclaw plugins install @openclaw/discord, or run: natesclaw doctor --fix.",
     });
     mocks.readConfigFileSnapshot.mockResolvedValue({
       ...baseConfigSnapshot,
@@ -420,7 +420,7 @@ describe("channels list", () => {
     expect(output).toContain("configured");
     expect(output).toContain("disabled");
     expect(output).toContain(
-      "run natesclaw plugins install @natesclaw/discord or natesclaw doctor --fix",
+      "run natesclaw plugins install @openclaw/discord or natesclaw doctor --fix",
     );
     expect(output).not.toContain("no configured chat channels");
   });
@@ -436,11 +436,11 @@ describe("channels list", () => {
       pluginId: "discord",
       channelId: "discord",
       label: "Discord",
-      installSpec: "@natesclaw/discord",
-      installCommand: "natesclaw plugins install @natesclaw/discord",
+      installSpec: "@openclaw/discord",
+      installCommand: "natesclaw plugins install @openclaw/discord",
       doctorFixCommand: "natesclaw doctor --fix",
       repairHint:
-        "Install the official external plugin with: natesclaw plugins install @natesclaw/discord, or run: natesclaw doctor --fix.",
+        "Install the official external plugin with: natesclaw plugins install @openclaw/discord, or run: natesclaw doctor --fix.",
     });
     mocks.readConfigFileSnapshot.mockResolvedValue({
       ...baseConfigSnapshot,

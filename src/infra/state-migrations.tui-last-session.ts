@@ -1,7 +1,7 @@
 // Doctor-only import for the retired TUI last-session JSON store.
 import fs from "node:fs";
 import path from "node:path";
-import { isRecord as isObjectRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord as isObjectRecord } from "@openclaw/normalization-core/record-coerce";
 import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import {
   openNatesclawStateDatabase,

@@ -23,7 +23,7 @@ vi.mock("./install-source-utils.js", async () => {
 });
 
 describe("installFromNpmSpecArchiveWithInstaller", () => {
-  const baseSpec = "@natesclaw/test@1.0.0";
+  const baseSpec = "@openclaw/test@1.0.0";
   const baseArchivePath = "/tmp/natesclaw-test.tgz";
 
   const mockPackedSuccess = (overrides?: {
@@ -106,7 +106,7 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
   });
 
   it("returns resolution metadata and installer result on success", async () => {
-    mockPackedSuccess({ name: "@natesclaw/test", version: "1.0.0" });
+    mockPackedSuccess({ name: "@openclaw/test", version: "1.0.0" });
     const installFromArchive = vi.fn(async () => ({ ok: true as const, target: "done" }));
 
     const result = await runInstall({
@@ -156,7 +156,7 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
 
     expect(result).toEqual({
       ok: false,
-      error: "aborted: npm package integrity drift detected for @natesclaw/test@1.0.0",
+      error: "aborted: npm package integrity drift detected for @openclaw/test@1.0.0",
     });
     expect(installFromArchive).not.toHaveBeenCalled();
   });
@@ -174,10 +174,10 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
 
     expect(result).toEqual({
       ok: false,
-      error: "aborted: npm package integrity drift detected for @natesclaw/test@1.0.0",
+      error: "aborted: npm package integrity drift detected for @openclaw/test@1.0.0",
     });
     expect(warn).toHaveBeenCalledWith(
-      "Integrity drift detected for @natesclaw/test@1.0.0: expected sha512-old, got sha512-new",
+      "Integrity drift detected for @openclaw/test@1.0.0: expected sha512-old, got sha512-new",
     );
     expect(installFromArchive).not.toHaveBeenCalled();
   });
@@ -197,13 +197,13 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
 
   it("rejects prerelease resolutions unless explicitly requested", async () => {
     mockPackedSuccess({
-      resolvedSpec: "@natesclaw/test@latest",
+      resolvedSpec: "@openclaw/test@latest",
       version: "1.1.0-beta.1",
     });
     const installFromArchive = vi.fn(async () => ({ ok: true as const }));
 
     const result = await runInstall({
-      spec: "@natesclaw/test@latest",
+      spec: "@openclaw/test@latest",
       installFromArchive,
     });
 
@@ -217,13 +217,13 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
 
   it("allows prerelease resolutions when explicitly requested by tag", async () => {
     mockPackedSuccess({
-      resolvedSpec: "@natesclaw/test@beta",
+      resolvedSpec: "@openclaw/test@beta",
       version: "1.1.0-beta.1",
     });
     const installFromArchive = vi.fn(async () => ({ ok: true as const, pluginId: "beta-plugin" }));
 
     const result = await runInstall({
-      spec: "@natesclaw/test@beta",
+      spec: "@openclaw/test@beta",
       installFromArchive,
     });
 
@@ -236,7 +236,7 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
       ok: true,
       archivePath: "/tmp/natesclaw-plugin.tgz",
       metadata: {
-        resolvedSpec: "@natesclaw/voice-call@1.0.0",
+        resolvedSpec: "@openclaw/voice-call@1.0.0",
         integrity: "sha512-same",
       },
     });
@@ -247,7 +247,7 @@ describe("installFromNpmSpecArchiveWithInstaller", () => {
 
     const result = await installFromNpmSpecArchiveWithInstaller({
       tempDirPrefix: "natesclaw-test-",
-      spec: "@natesclaw/voice-call@1.0.0",
+      spec: "@openclaw/voice-call@1.0.0",
       timeoutMs: 1000,
       installFromArchive,
       archiveInstallParams: { pluginId: "voice-call" },
@@ -280,7 +280,7 @@ describe("finalizeNpmSpecArchiveInstall", () => {
       ok: true,
       installResult: { ok: false, error: "install failed" },
       npmResolution: {
-        resolvedSpec: "@natesclaw/test@1.0.0",
+        resolvedSpec: "@openclaw/test@1.0.0",
         integrity: "sha512-same",
         resolvedAt: "2026-01-01T00:00:00.000Z",
       },
@@ -296,7 +296,7 @@ describe("finalizeNpmSpecArchiveInstall", () => {
       ok: true,
       installResult: { ok: true, pluginId: "voice-call" },
       npmResolution: {
-        resolvedSpec: "@natesclaw/voice-call@1.0.0",
+        resolvedSpec: "@openclaw/voice-call@1.0.0",
         integrity: "sha512-same",
         resolvedAt: "2026-01-01T00:00:00.000Z",
       },
@@ -310,7 +310,7 @@ describe("finalizeNpmSpecArchiveInstall", () => {
       ok: true,
       pluginId: "voice-call",
       npmResolution: {
-        resolvedSpec: "@natesclaw/voice-call@1.0.0",
+        resolvedSpec: "@openclaw/voice-call@1.0.0",
         integrity: "sha512-same",
         resolvedAt: "2026-01-01T00:00:00.000Z",
       },

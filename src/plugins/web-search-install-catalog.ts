@@ -1,6 +1,6 @@
 // Builds web-search install catalog entries from plugin metadata.
-import { normalizeOptionalString as normalizeString } from "@natesclaw/normalization-core/string-coerce";
-import { normalizeTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeOptionalString as normalizeString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { isRecord } from "../utils.js";
 import { enablePluginInConfig } from "./enable.js";

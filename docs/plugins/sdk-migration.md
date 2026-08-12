@@ -551,7 +551,7 @@ package exports are generated from the public subset.
 Reserved bundled-plugin helper seams have been retired from the public SDK
 export map except for explicitly documented compatibility facades such as the
 deprecated `plugin-sdk/discord` shim retained for external plugins that still
-import the published `@natesclaw/discord` package directly. Owner-specific
+import the published `@openclaw/discord` package directly. Owner-specific
 helpers live inside the owning plugin package; shared host behavior moves
 through generic SDK contracts such as `plugin-sdk/gateway-runtime`,
 `plugin-sdk/security-runtime`, and the injected plugin API.
@@ -868,7 +868,7 @@ timeline for current status.
 
     `natesclaw plugins inspect --all --runtime` reports non-bundled plugins whose
     load errors or diagnostics still reference these removed file APIs. The
-    `@natesclaw/plugin-inspector` advisory sweep must use version `0.3.17` or
+    `@openclaw/plugin-inspector` advisory sweep must use version `0.3.17` or
     newer so external package scans also flag whole-store session helpers,
     session file-path helpers, legacy transcript file targets, and low-level
     transcript helpers before release.
@@ -881,7 +881,7 @@ timeline for current status.
     `AgentHarnessSideQuestionParamsV2`. The V2 parameter types require
     `hostCapabilities`, matching what core supplies at the selected-harness
     boundary. A plugin that adopts these V2 contracts must declare
-    `natesclaw.compat.pluginApi: ">=2026.8.1"` (or a newer floor) in its package
+    `openclaw.compat.pluginApi: ">=2026.8.1"` (or a newer floor) in its package
     manifest so an older host rejects the plugin before loading it.
 
     Existing plugins may continue implementing `AgentHarness` and constructing

@@ -257,7 +257,7 @@ describe("bundled plugin build entries", () => {
       fs.writeFileSync(
         path.join(pluginDir, "package.json"),
         `${JSON.stringify({
-          name: `@natesclaw/${pluginId}`,
+          name: `@openclaw/${pluginId}`,
           natesclaw: {
             extensions: ["./index.ts"],
             build: { bundledDist: false },

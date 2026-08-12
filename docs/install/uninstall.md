@@ -31,7 +31,7 @@ Non-interactive (automation / npx). Use with caution and only after confirming s
 
 ```bash
 natesclaw uninstall --all --yes --non-interactive
-npx -y natesclaw uninstall --all --yes --non-interactive
+npx -y openclaw uninstall --all --yes --non-interactive
 ```
 
 Flags: `--service`, `--state`, `--workspace`, `--app` select individual scopes; `--all` selects all four.
@@ -128,7 +128,7 @@ If you used a profile, delete the matching task name and the `gateway.cmd` /
 
 ### Normal install (install.sh / npm / pnpm / bun)
 
-If you used `https://natesclaw.ai/install.sh` or `install.ps1`, the CLI was installed with `npm install -g natesclaw@latest`.
+If you used `https://openclaw.ai/install.sh` or `install.ps1`, the CLI was installed with `npm install -g natesclaw@latest`.
 Remove it with `npm rm -g natesclaw` (or `pnpm remove -g` / `bun remove -g` if you installed that way).
 
 ### Source checkout (git clone)

@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/google-plugin",
+  "name": "@openclaw/google-plugin",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw Google plugin",
@@ -10,7 +10,7 @@
     "google-auth-library": "10.9.1"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

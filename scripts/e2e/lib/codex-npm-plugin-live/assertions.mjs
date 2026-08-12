@@ -363,7 +363,7 @@ function normalizePluginSpec(spec) {
 }
 
 function assertPlugin() {
-  const spec = process.argv[3] || "npm:@natesclaw/codex";
+  const spec = process.argv[3] || "npm:@openclaw/codex";
   const list = readJson("/tmp/natesclaw-codex-plugins-list.json");
   const inspect = readJson("/tmp/natesclaw-codex-plugin-inspect.json");
   const plugin = (list.plugins || []).find((entry) => entry.id === "codex");
@@ -439,7 +439,7 @@ function codexInstallPath() {
 }
 
 function codexNpmProjectRoot() {
-  return npmProjectRootForInstalledPackage(codexInstallPath(), "@natesclaw/codex");
+  return npmProjectRootForInstalledPackage(codexInstallPath(), "@openclaw/codex");
 }
 
 function findCodexPackageJson(packageName) {
@@ -452,13 +452,13 @@ function assertNpmDeps() {
   const installPath = codexInstallPath();
   const pluginPackageJson = path.join(installPath, "package.json");
   if (!fs.existsSync(pluginPackageJson)) {
-    throw new Error(`missing npm-installed @natesclaw/codex package.json: ${pluginPackageJson}`);
+    throw new Error(`missing npm-installed @openclaw/codex package.json: ${pluginPackageJson}`);
   }
   assertPathInside(npmRoot, installPath, "codex plugin install path");
   assertPathInside(npmRoot, pluginPackageJson, "codex plugin package");
 
   const pluginPackage = readJson(pluginPackageJson);
-  if (pluginPackage.name !== "@natesclaw/codex") {
+  if (pluginPackage.name !== "@openclaw/codex") {
     throw new Error(`unexpected codex package name: ${pluginPackage.name}`);
   }
 

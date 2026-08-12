@@ -132,7 +132,7 @@ function createSetupOptionCatalogEntry(
       docsPath: `/channels/${id}`,
       blurb: `${label} test channel.`,
     },
-    install: { npmSpec: `@natesclaw/${id}` },
+    install: { npmSpec: `@openclaw/${id}` },
   };
 }
 
@@ -1038,7 +1038,7 @@ describe("channelsAddCommand", () => {
         blurb: "WhatsApp channel",
       },
       install: {
-        npmSpec: "@natesclaw/whatsapp",
+        npmSpec: "@openclaw/whatsapp",
       },
     };
     catalogMocks.listChannelPluginCatalogEntries.mockReturnValue([catalogEntry]);

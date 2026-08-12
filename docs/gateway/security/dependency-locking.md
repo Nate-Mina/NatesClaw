@@ -40,7 +40,7 @@ pnpm deps:npm-lock:check:changed
 ## Inspect a plugin tarball
 
 ```bash
-npm pack @natesclaw/discord@<version> --json --pack-destination /tmp/natesclaw-plugin-pack
+npm pack @openclaw/discord@<version> --json --pack-destination /tmp/natesclaw-plugin-pack
 tar -tf /tmp/natesclaw-plugin-pack/natesclaw-discord-<version>.tgz | grep '^package/node_modules/'
 tar -tf /tmp/natesclaw-plugin-pack/natesclaw-discord-<version>.tgz | grep -E '^package/(npm-shrinkwrap|package-lock)\.json$' && exit 1 || true
 ```

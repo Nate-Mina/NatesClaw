@@ -2298,7 +2298,7 @@ describe("qa bundled plugin dir", () => {
     );
     await writeFile(
       path.join(repoRoot, "dist", "extensions", "qa-channel", "package.json"),
-      JSON.stringify({ name: "@natesclaw/qa-channel", type: "module" }, null, 2),
+      JSON.stringify({ name: "@openclaw/qa-channel", type: "module" }, null, 2),
       "utf8",
     );
     await writeFile(
@@ -2347,7 +2347,7 @@ describe("qa bundled plugin dir", () => {
       path.join(repoRoot, ".artifacts", "qa-runtime", path.basename(tempRoot)),
     );
     await expect(readFile(path.join(stagedRoot, "package.json"), "utf8")).resolves.toContain(
-      '"name": "natesclaw"',
+      '"name": "openclaw"',
     );
     const qaChannel = (await import(
       `${pathToFileURL(path.join(bundledPluginsDir, "qa-channel", "index.js")).href}?t=${Date.now()}`
@@ -2401,7 +2401,7 @@ describe("qa bundled plugin dir", () => {
     );
     await writeFile(
       path.join(repoRoot, "dist-runtime", "extensions", "runtime-only", "package.json"),
-      JSON.stringify({ name: "@natesclaw/runtime-only", type: "module" }, null, 2),
+      JSON.stringify({ name: "@openclaw/runtime-only", type: "module" }, null, 2),
       "utf8",
     );
     await writeFile(
@@ -2513,7 +2513,7 @@ describe("qa bundled plugin dir", () => {
     await mkdir(path.join(repoRoot, "extensions", "qa-channel"), { recursive: true });
     await writeFile(
       path.join(repoRoot, "extensions", "qa-channel", "package.json"),
-      JSON.stringify({ name: "@natesclaw/qa-channel", type: "module" }, null, 2),
+      JSON.stringify({ name: "@openclaw/qa-channel", type: "module" }, null, 2),
       "utf8",
     );
     await writeFile(

@@ -17,7 +17,7 @@ describe("managed npm retention", () => {
   it("cleans retired generations while preserving the active install root", async () => {
     const stateDir = fs.mkdtempSync(path.join(os.tmpdir(), "natesclaw-retention-"));
     const npmDir = path.join(stateDir, "npm");
-    const packageName = "@natesclaw/codex";
+    const packageName = "@openclaw/codex";
     const oldProjectRoot = resolvePluginNpmGenerationProjectDir({
       npmDir,
       packageName,
@@ -87,7 +87,7 @@ describe("managed npm retention", () => {
           ? npmDir
           : resolvePluginNpmGenerationProjectDir({
               npmDir,
-              packageName: "@natesclaw/kept-plugin",
+              packageName: "@openclaw/kept-plugin",
               generationKey: "kept-plugin-v1",
             });
       const packageDir = path.join(projectRoot, "node_modules", "@natesclaw", "kept-plugin");

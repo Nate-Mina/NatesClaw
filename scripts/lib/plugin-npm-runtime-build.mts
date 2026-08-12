@@ -294,7 +294,7 @@ function resolvePluginNpmRuntimePackagePeerMetadata(plan: {
   const natesclawPeerRange = resolveNatesclawPeerRange(plan.packageJson, plan.rootPackageJson);
   if (!natesclawPeerRange) {
     throw new Error(
-      `cannot infer natesclaw peerDependency range for ${plan.pluginDir}; set natesclaw.compat.pluginApi or package version`,
+      `cannot infer natesclaw peerDependency range for ${plan.pluginDir}; set openclaw.compat.pluginApi or package version`,
     );
   }
   const existingPeerDependencies = getStringRecord(plan.packageJson.peerDependencies);

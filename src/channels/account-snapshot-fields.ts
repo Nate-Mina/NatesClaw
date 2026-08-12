@@ -2,11 +2,11 @@
  * Status-safe channel account projection helpers for CLI, status APIs, and plugin SDK callers.
  * This file is the redaction boundary between runtime account objects and public snapshots.
  */
-import { redactSensitiveUrlLikeString } from "@natesclaw/net-policy/redact-sensitive-url";
-import { stripUrlUserInfo } from "@natesclaw/net-policy/url-userinfo";
-import { asFiniteNumber } from "@natesclaw/normalization-core/number-coercion";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
-import { normalizeStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { redactSensitiveUrlLikeString } from "@openclaw/net-policy/redact-sensitive-url";
+import { stripUrlUserInfo } from "@openclaw/net-policy/url-userinfo";
+import { asFiniteNumber } from "@openclaw/normalization-core/number-coercion";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
 import { isRecord } from "../utils.js";
 import { asBoolean } from "../utils/boolean.js";
 import type { ChannelAccountSnapshot } from "./plugins/types.core.js";

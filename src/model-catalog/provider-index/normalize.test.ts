@@ -13,10 +13,10 @@ describe("Natesclaw provider index", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: " @natesclaw/plugin-moonshot ",
+            package: " @openclaw/plugin-moonshot ",
             install: {
               clawhubSpec: " clawhub:natesclaw/moonshot@2026.5.2 ",
-              npmSpec: " @natesclaw/plugin-moonshot@1.2.3 ",
+              npmSpec: " @openclaw/plugin-moonshot@1.2.3 ",
               defaultChoice: "clawhub",
               expectedIntegrity: " sha512-moonshot ",
             },
@@ -64,10 +64,10 @@ describe("Natesclaw provider index", () => {
           name: "Moonshot AI",
           plugin: {
             id: "moonshot",
-            package: "@natesclaw/plugin-moonshot",
+            package: "@openclaw/plugin-moonshot",
             install: {
               clawhubSpec: "clawhub:natesclaw/moonshot@2026.5.2",
-              npmSpec: "@natesclaw/plugin-moonshot@1.2.3",
+              npmSpec: "@openclaw/plugin-moonshot@1.2.3",
               defaultChoice: "clawhub",
               expectedIntegrity: "sha512-moonshot",
             },

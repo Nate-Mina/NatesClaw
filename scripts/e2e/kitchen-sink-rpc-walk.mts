@@ -12,7 +12,7 @@ import path from "node:path";
 import process from "node:process";
 import { setTimeout as delay } from "node:timers/promises";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { asRecord, isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asRecord, isRecord } from "@openclaw/normalization-core/record-coerce";
 import {
   createBoundedResponseTooLargeError,
   readBoundedResponseText,
@@ -118,7 +118,7 @@ type PosixProcessRow = {
 type MalformedProcessRow = { pidRaw: string; ppidRaw: string };
 
 const PLUGIN_SPEC =
-  process.env.NATESCLAW_KITCHEN_SINK_NPM_SPEC || "npm:@natesclaw/kitchen-sink@latest";
+  process.env.NATESCLAW_KITCHEN_SINK_NPM_SPEC || "npm:@openclaw/kitchen-sink@latest";
 const PLUGIN_ID = process.env.NATESCLAW_KITCHEN_SINK_PLUGIN_ID || "natesclaw-kitchen-sink-fixture";
 const CHANNEL_ID = "kitchen-sink-channel";
 const CHANNEL_ACCOUNT_ID = "local";
@@ -219,7 +219,7 @@ Runs the external Kitchen Sink plugin RPC walk against a built Natesclaw entry.
 
 Environment:
   NATESCLAW_ENTRY                         Built Natesclaw entrypoint. Defaults to dist/index.mjs or dist/index.js.
-  NATESCLAW_KITCHEN_SINK_NPM_SPEC         Plugin package spec. Default: npm:@natesclaw/kitchen-sink@latest.
+  NATESCLAW_KITCHEN_SINK_NPM_SPEC         Plugin package spec. Default: npm:@openclaw/kitchen-sink@latest.
   NATESCLAW_KITCHEN_SINK_PLUGIN_ID        Plugin id. Default: natesclaw-kitchen-sink-fixture.
   NATESCLAW_KITCHEN_SINK_PERSONALITY      Plugin fixture personality. Default: conformance.
   NATESCLAW_KITCHEN_SINK_RPC_PORT         Gateway loopback port. Default: OS-selected free port.

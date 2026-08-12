@@ -1,4 +1,4 @@
-import type { ModelCatalog } from "@natesclaw/model-catalog-core/model-catalog-types";
+import type { ModelCatalog } from "@openclaw/model-catalog-core/model-catalog-types";
 import type { ChannelConfigRuntimeSchema } from "../channels/plugins/types.config.js";
 import type { ConfigUiPresentation } from "../shared/config-ui-hints-types.js";
 import type { JsonSchemaObject } from "../shared/json-schema.types.js";

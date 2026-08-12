@@ -1,5 +1,5 @@
-import { expectDefined } from "@natesclaw/normalization-core";
-import { MAX_DATE_TIMESTAMP_MS } from "@natesclaw/normalization-core/number-coercion";
+import { expectDefined } from "@openclaw/normalization-core";
+import { MAX_DATE_TIMESTAMP_MS } from "@openclaw/normalization-core/number-coercion";
 import { describe, expect, it, vi } from "vitest";
 import { FAILOVER_REASONS } from "../../packages/gateway-protocol/src/failover-reasons.js";
 import { saveTaskRegistryStateToSqlite } from "../tasks/task-registry.store.sqlite.js";

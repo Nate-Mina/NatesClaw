@@ -326,7 +326,7 @@ export async function startQaLabServer(
     adapterFactories?: readonly QaTransportAdapterFactory[],
   ) => {
     const crabline =
-      selection.channelDriver === "crabline" ? await import("@natesclaw/crabline") : undefined;
+      selection.channelDriver === "crabline" ? await import("@openclaw/crabline") : undefined;
     return resolveQaLabRunPlan({
       selection,
       scenarios: scenarioCatalog.scenarios,
@@ -801,7 +801,7 @@ export async function startQaLabServer(
               const [{ runQaSuite }, channelDriverSelection] = await Promise.all([
                 import("./suite-launch.runtime.js"),
                 selection.channelDriver === "crabline" && selection.channel
-                  ? import("@natesclaw/crabline").then((module) =>
+                  ? import("@openclaw/crabline").then((module) =>
                       module.resolveNatesclawCrablineChannelDriverSelection({
                         channel: selection.channel!,
                       }),

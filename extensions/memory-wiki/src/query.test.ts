@@ -2,7 +2,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { filterMemorySearchHitsBySessionVisibility } from "@natesclaw/memory-core/api.js";
+import { filterMemorySearchHitsBySessionVisibility } from "@openclaw/memory-core/api.js";
 import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import type { NatesclawConfig } from "../api.js";
 import { compileMemoryWikiVault } from "./compile.js";
@@ -31,7 +31,7 @@ vi.mock("natesclaw/plugin-sdk/memory-host-search", () => ({
   getActiveMemorySearchManager: getActiveMemorySearchManagerMock,
 }));
 
-vi.mock("@natesclaw/memory-core/api.js", { spy: true });
+vi.mock("@openclaw/memory-core/api.js", { spy: true });
 
 vi.mock("natesclaw/plugin-sdk/memory-host-core", () => ({
   resolveDefaultAgentId: resolveDefaultAgentIdMock,

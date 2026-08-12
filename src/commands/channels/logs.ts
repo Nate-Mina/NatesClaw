@@ -1,6 +1,6 @@
 // Implements channel-scoped tailing of the Natesclaw log file.
 import fs from "node:fs/promises";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import { theme } from "../../../packages/terminal-core/src/theme.js";
 import { normalizeChatChannelId as normalizeBundledChannelId } from "../../channels/registry.js";
 import { readFileWindowFully } from "../../infra/file-read.js";

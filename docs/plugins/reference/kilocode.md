@@ -11,8 +11,8 @@ Adds Kilocode model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/kilocode-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/kilocode-provider`
+- Package: `@openclaw/kilocode-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/kilocode-provider`
 
 ## Surface
 

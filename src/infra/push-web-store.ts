@@ -14,7 +14,7 @@ import {
 } from "./kysely-sync.js";
 
 export const WEB_PUSH_VAPID_KEY_ID = "default";
-export const DEFAULT_WEB_PUSH_VAPID_SUBJECT = "https://natesclaw.ai";
+export const DEFAULT_WEB_PUSH_VAPID_SUBJECT = "https://openclaw.ai";
 const WEB_PUSH_MAX_ENDPOINT_LENGTH = 2048;
 const WEB_PUSH_MAX_KEY_LENGTH = 512;
 

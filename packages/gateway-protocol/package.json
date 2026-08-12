@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/gateway-protocol",
+  "name": "@openclaw/gateway-protocol",
   "version": "2026.8.1",
   "description": "Typed schemas and runtime validators for the Natesclaw Gateway WebSocket protocol",
   "keywords": [
@@ -9,15 +9,15 @@
     "typebox",
     "websocket"
   ],
-  "homepage": "https://github.com/natesclaw/natesclaw#readme",
+  "homepage": "https://github.com/openclaw/natesclaw#readme",
   "bugs": {
-    "url": "https://github.com/natesclaw/natesclaw/issues"
+    "url": "https://github.com/openclaw/natesclaw/issues"
   },
   "license": "MIT",
-  "author": "Natesclaw Foundation (https://natesclaw.org)",
+  "author": "Natesclaw Foundation (https://openclaw.org)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/natesclaw/natesclaw.git",
+    "url": "git+https://github.com/openclaw/natesclaw.git",
     "directory": "packages/gateway-protocol"
   },
   "files": [

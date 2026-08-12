@@ -1,6 +1,6 @@
 // Control UI module implements activity model behavior.
-import { asNullableObjectRecord as readRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeNullableString as toTrimmedString } from "@natesclaw/normalization-core/string-coerce";
+import { asNullableObjectRecord as readRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeNullableString as toTrimmedString } from "@openclaw/normalization-core/string-coerce";
 import { formatUnknownText, truncateText } from "../../lib/format.ts";
 
 const ACTIVITY_ENTRY_LIMIT = 100;

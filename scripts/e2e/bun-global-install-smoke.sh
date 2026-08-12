@@ -46,13 +46,13 @@ prepare_ai_candidate() {
   if [ -z "$PACK_DIR" ]; then
     PACK_DIR="$(mktemp -d "${TMPDIR:-/tmp}/natesclaw-bun-pack.XXXXXX")"
   fi
-  echo "==> Extract bundled candidate @natesclaw/ai package"
+  echo "==> Extract bundled candidate @openclaw/ai package"
   ai_package_dir="$PACK_DIR/ai-candidate"
   mkdir -p "$ai_package_dir"
   tar -xzf "$PACKAGE_TGZ" \
     -C "$ai_package_dir" \
     --strip-components=4 \
-    package/node_modules/@natesclaw/ai
+    package/node_modules/@openclaw/ai
   root_manifest="$PACK_DIR/natesclaw-package.json"
   ai_manifest="$ai_package_dir/package.json"
   tar -xOf "$PACKAGE_TGZ" package/package.json >"$root_manifest"
@@ -64,7 +64,7 @@ prepare_ai_candidate() {
   npm pack --ignore-scripts --silent --pack-destination "$PACK_DIR" "$ai_package_dir" >/dev/null
   ai_tarballs=("$PACK_DIR"/natesclaw-ai-*.tgz)
   if [ "${#ai_tarballs[@]}" -ne 1 ] || [ ! -f "${ai_tarballs[0]}" ]; then
-    echo "expected one packed @natesclaw/ai candidate in $PACK_DIR" >&2
+    echo "expected one packed @openclaw/ai candidate in $PACK_DIR" >&2
     exit 1
   fi
   AI_PACKAGE_TGZ="${ai_tarballs[0]}"
@@ -147,7 +147,7 @@ main() {
   export NO_COLOR=1
   mkdir -p "$HOME" "$BUN_INSTALL/bin" "$BUN_INSTALL/install/global" "$XDG_CACHE_HOME"
   export PATH="$BUN_INSTALL/bin:$(dirname "$(command -v node)"):$PATH"
-  # Release publishes @natesclaw/ai first. Bun 1.3.14 ignores bundled deps in
+  # Release publishes @openclaw/ai first. Bun 1.3.14 ignores bundled deps in
   # local tarballs, so resolve that one package from the exact candidate bytes.
   node --input-type=module - \
     "$BUN_INSTALL/install/global/package.json" \
@@ -157,7 +157,7 @@ import fs from "node:fs";
 const [, , packageJsonPath, aiPackageTarball] = process.argv;
 fs.writeFileSync(
   packageJsonPath,
-  `${JSON.stringify({ private: true, overrides: { "@natesclaw/ai": `file:${aiPackageTarball}` } })}\n`,
+  `${JSON.stringify({ private: true, overrides: { "@openclaw/ai": `file:${aiPackageTarball}` } })}\n`,
 );
 NODE
 

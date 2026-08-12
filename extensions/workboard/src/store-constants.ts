@@ -1,4 +1,4 @@
-import type { WorkboardClaim } from "@natesclaw/workboard-contract";
+import type { WorkboardClaim } from "@openclaw/workboard-contract";
 import {
   MAX_DATE_TIMESTAMP_MS,
   resolveExpiresAtMsFromDurationMs,

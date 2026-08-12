@@ -9,7 +9,7 @@ export function buildMissingXSearchApiKeyPayload() {
     error: "missing_xai_api_key",
     message:
       "x_search needs xAI credentials. Run `natesclaw onboard --auth-choice xai-oauth` to sign in with Grok, run `natesclaw onboard --auth-choice xai-api-key`, set `XAI_API_KEY` in the Gateway environment, or configure `plugins.entries.xai.config.webSearch.apiKey`.",
-    docs: "https://docs.natesclaw.ai/tools/web",
+    docs: "https://docs.openclaw.ai/tools/web",
   };
 }
 

@@ -12,7 +12,7 @@ function pullRequest(overrides: Partial<ControlUiSessionPullRequest>): ControlUi
     repo: "natesclaw",
     branch: "feature/demo",
     title: "Demo",
-    url: "https://github.com/natesclaw/natesclaw/pull/1",
+    url: "https://github.com/openclaw/natesclaw/pull/1",
     state: "open",
     ...overrides,
   };

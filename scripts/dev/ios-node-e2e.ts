@@ -1,6 +1,6 @@
 // Ios Node E2E script supports Natesclaw repository automation.
 import { randomUUID } from "node:crypto";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import {
   MIN_CLIENT_PROTOCOL_VERSION,
   PROTOCOL_VERSION,

@@ -1,8 +1,8 @@
 // Gateway setup prompt shared constants.
 // Provides Tailscale copy and Control UI origin updates for CLI setup flows.
-import { isIpv6Address, parseCanonicalIpAddress } from "@natesclaw/net-policy/ip";
-import { expectDefined } from "@natesclaw/normalization-core";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { isIpv6Address, parseCanonicalIpAddress } from "@openclaw/net-policy/ip";
+import { expectDefined } from "@openclaw/normalization-core";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { getTailnetHostname } from "../infra/tailscale.js";
 
@@ -30,8 +30,8 @@ export const TAILSCALE_MISSING_BIN_NOTE_LINES = [
 
 export const TAILSCALE_DOCS_LINES = [
   "Docs:",
-  "https://docs.natesclaw.ai/gateway/tailscale",
-  "https://docs.natesclaw.ai/web",
+  "https://docs.openclaw.ai/gateway/tailscale",
+  "https://docs.openclaw.ai/web",
 ] as const;
 
 function normalizeTailnetHostForUrl(rawHost: string): string | null {

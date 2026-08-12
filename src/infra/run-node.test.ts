@@ -3,7 +3,7 @@ import { EventEmitter } from "node:events";
 import fsSync from "node:fs";
 import fs from "node:fs/promises";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import {
   bundledDistPluginFile,
   bundledPluginFile,
@@ -155,7 +155,7 @@ async function writeRuntimePostBuildScaffold(tmp: string): Promise<void> {
     [DIST_LEGACY_CLI_EXIT_COMPAT]: "export function hasMemoryRuntime() { return false; }\n",
     [DIST_LEGACY_CLI_EXIT_COMPAT_ALT]: "export function hasMemoryRuntime() { return false; }\n",
     [DIST_NATESCLAW_ALIAS_PACKAGE]:
-      '{"name":"natesclaw","type":"module","exports":{"./plugin-sdk/core":"./plugin-sdk/core.js"}}\n',
+      '{"name": "openclaw","type":"module","exports":{"./plugin-sdk/core":"./plugin-sdk/core.js"}}\n',
     [DIST_NATESCLAW_ALIAS_PLUGIN_SDK_CORE]: "export * from '../../../../plugin-sdk/core.js';\n",
   });
   await touchProjectFiles(
@@ -1804,7 +1804,7 @@ describe("run-node script", () => {
           '{"name":"natesclaw-test","exports":{"./plugin-sdk/core":"./dist/plugin-sdk/core.js"}}\n',
         [DIST_PLUGIN_SDK_CORE]: "export const core = true;\n",
         [DIST_NATESCLAW_ALIAS_PACKAGE]:
-          '{"name":"natesclaw","type":"module","exports":{"./plugin-sdk/core":"./plugin-sdk/core.js"}}\n',
+          '{"name": "openclaw","type":"module","exports":{"./plugin-sdk/core":"./plugin-sdk/core.js"}}\n',
         [DIST_NATESCLAW_ALIAS_PLUGIN_SDK_CORE]: "export * from '../../../../plugin-sdk/core.js';\n",
         [RUNTIME_POSTBUILD_STAMP]: '{"head":"abc123"}\n',
       },
@@ -1846,7 +1846,7 @@ describe("run-node script", () => {
         "dist/plugin-sdk/string-coerce-runtime.js": "export const publicRuntime = true;\n",
         "dist/plugin-sdk/ssrf-runtime-internal.js": "export const internal = true;\n",
         [DIST_NATESCLAW_ALIAS_PACKAGE]:
-          '{"name":"natesclaw","type":"module","exports":{"./plugin-sdk/string-coerce-runtime":"./plugin-sdk/string-coerce-runtime.js"}}\n',
+          '{"name": "openclaw","type":"module","exports":{"./plugin-sdk/string-coerce-runtime":"./plugin-sdk/string-coerce-runtime.js"}}\n',
         [DIST_NATESCLAW_ALIAS_PLUGIN_SDK_STRING_COERCE]:
           "export * from '../../../../plugin-sdk/string-coerce-runtime.js';\n",
         [RUNTIME_POSTBUILD_STAMP]: '{"head":"abc123"}\n',

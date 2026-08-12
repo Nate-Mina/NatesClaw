@@ -115,7 +115,7 @@ describe("npm registry provenance verification", () => {
       buildDefinition: {
         externalParameters: {
           workflow: {
-            repository: "https://github.com/natesclaw/natesclaw",
+            repository: "https://github.com/openclaw/natesclaw",
             path: ".github/workflows/natesclaw-npm-release.yml",
             ref: workflowRef,
           },
@@ -237,7 +237,7 @@ describe("npm registry provenance verification", () => {
     expect(verificationPolicy).toEqual({
       certificateIssuer: "https://token.actions.githubusercontent.com",
       certificateIdentityURI:
-        "https://github.com/natesclaw/natesclaw/.github/workflows/natesclaw-npm-release.yml@refs/heads/release/2026.3.23",
+        "https://github.com/openclaw/natesclaw/.github/workflows/natesclaw-npm-release.yml@refs/heads/release/2026.3.23",
     });
 
     verificationPolicy = undefined;
@@ -269,7 +269,7 @@ describe("npm registry provenance verification", () => {
                         },
                         resolvedDependencies: [
                           {
-                            uri: `git+https://github.com/natesclaw/natesclaw@${protectedWorkflowRef}`,
+                            uri: `git+https://github.com/openclaw/natesclaw@${protectedWorkflowRef}`,
                             digest: { gitCommit: protectedWorkflowSha },
                           },
                         ],
@@ -291,7 +291,7 @@ describe("npm registry provenance verification", () => {
     ).resolves.toBeUndefined();
     expect(verificationPolicy).toEqual({
       certificateIssuer: "https://token.actions.githubusercontent.com",
-      certificateIdentityURI: `https://github.com/natesclaw/natesclaw/.github/workflows/natesclaw-npm-release.yml@${protectedWorkflowRef}`,
+      certificateIdentityURI: `https://github.com/openclaw/natesclaw/.github/workflows/natesclaw-npm-release.yml@${protectedWorkflowRef}`,
     });
 
     await expect(
@@ -320,7 +320,7 @@ describe("npm registry provenance verification", () => {
                         },
                         resolvedDependencies: [
                           {
-                            uri: `git+https://github.com/natesclaw/natesclaw@${protectedWorkflowRef}`,
+                            uri: `git+https://github.com/openclaw/natesclaw@${protectedWorkflowRef}`,
                             digest: { gitCommit: protectedWorkflowSha },
                           },
                         ],
@@ -405,7 +405,7 @@ describe("npm registry provenance verification", () => {
       ).resolves.toBeUndefined();
       expect(verificationPolicy).toEqual({
         certificateIssuer: "https://token.actions.githubusercontent.com",
-        certificateIdentityURI: `https://github.com/natesclaw/natesclaw/.github/workflows/natesclaw-npm-release.yml@${workflowRef}`,
+        certificateIdentityURI: `https://github.com/openclaw/natesclaw/.github/workflows/natesclaw-npm-release.yml@${workflowRef}`,
       });
     },
   );

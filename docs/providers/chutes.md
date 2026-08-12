@@ -13,7 +13,7 @@ OpenAI-compatible API. Natesclaw supports both browser OAuth and API-key auth.
 | Property         | Value                                                   |
 | ---------------- | ------------------------------------------------------- |
 | Provider         | `chutes`                                                |
-| Plugin           | official external package (`@natesclaw/chutes-provider`) |
+| Plugin           | official external package (`@openclaw/chutes-provider`) |
 | API              | OpenAI-compatible                                       |
 | Base URL         | `https://llm.chutes.ai/v1`                              |
 | Auth             | OAuth or API key (see below)                            |
@@ -25,7 +25,7 @@ OpenAI-compatible API. Natesclaw supports both browser OAuth and API-key auth.
 ## Install plugin
 
 ```bash
-natesclaw plugins install @natesclaw/chutes-provider
+natesclaw plugins install @openclaw/chutes-provider
 natesclaw gateway restart
 ```
 

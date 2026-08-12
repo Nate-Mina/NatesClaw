@@ -22,7 +22,7 @@ trims the output before it goes back into the active harness session.
 Install once:
 
 ```bash
-natesclaw plugins install clawhub:@natesclaw/tokenjuice
+natesclaw plugins install clawhub:@openclaw/tokenjuice
 ```
 
 Then enable it:

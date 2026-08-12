@@ -499,7 +499,7 @@ describe("thread-level session keys", () => {
       account,
       message: buildChannelMessage({
         channel: "C0AHZFCAS1K",
-        text: "https://github.com/natesclaw/natesclaw/issues/50621",
+        text: "https://github.com/openclaw/natesclaw/issues/50621",
         ts: "1777244714.000100",
         thread_ts: rootTs,
         parent_user_id: "U1",
@@ -542,7 +542,7 @@ describe("thread-level session keys", () => {
       account,
       message: buildChannelMessage({
         channel: "C0AHZFCAS1K",
-        text: "https://github.com/natesclaw/natesclaw/issues/50621",
+        text: "https://github.com/openclaw/natesclaw/issues/50621",
         ts: "1777244714.000100",
         thread_ts: rootTs,
       }),

@@ -1,9 +1,9 @@
 // Artifact gateway methods collect generated artifacts from session transcripts
 // and expose list/get/download RPCs scoped by session, run, task, or agent.
 import { createHash } from "node:crypto";
-import { isHttpUrl } from "@natesclaw/net-policy/url-protocol";
-import { asOptionalRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalString as asNonEmptyString } from "@natesclaw/normalization-core/string-coerce";
+import { isHttpUrl } from "@openclaw/net-policy/url-protocol";
+import { asOptionalRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalString as asNonEmptyString } from "@openclaw/normalization-core/string-coerce";
 import {
   ErrorCodes,
   errorShape,

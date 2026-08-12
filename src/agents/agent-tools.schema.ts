@@ -1,7 +1,7 @@
 import {
   normalizeToolParameterSchema,
   type ToolParameterSchemaOptions,
-} from "@natesclaw/ai/internal/openai";
+} from "@openclaw/ai/internal/openai";
 /**
  * Tool schema normalization wrappers.
  * Applies provider-compatible parameter schema cleanup while preserving

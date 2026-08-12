@@ -1,7 +1,7 @@
 // Context-engine delegates bridge custom engines to built-in compaction and memory prompt paths.
 import path from "node:path";
-import { normalizeStructuredPromptSection } from "@natesclaw/ai/internal/shared";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeStructuredPromptSection } from "@openclaw/ai/internal/shared";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { parseSqliteSessionFileMarker } from "../config/sessions/legacy-sqlite-marker.js";
 import { listSessionEntriesCore, loadSessionEntry } from "../config/sessions/session-accessor.js";
 import {

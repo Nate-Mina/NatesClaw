@@ -11,7 +11,7 @@ Adds media understanding provider support.
 
 ## Distribution
 
-- Package: `@natesclaw/senseaudio-provider`
+- Package: `@openclaw/senseaudio-provider`
 - Install route: included in Natesclaw
 
 ## Surface

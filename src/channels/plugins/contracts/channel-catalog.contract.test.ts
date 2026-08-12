@@ -10,7 +10,7 @@ import {
 
 describeChannelCatalogEntryContract({
   channelId: "msteams",
-  npmSpec: "@natesclaw/msteams",
+  npmSpec: "@openclaw/msteams",
   alias: "teams",
 });
 
@@ -41,8 +41,8 @@ const whatsappOfficialFallbackNpmSpec = isPrereleaseSemverVersion(whatsappVersio
 
 describeBundledMetadataOnlyChannelCatalogContract({
   pluginId: "whatsapp",
-  packageName: "@natesclaw/whatsapp",
-  npmSpec: "@natesclaw/whatsapp",
+  packageName: "@openclaw/whatsapp",
+  npmSpec: "@openclaw/whatsapp",
   meta: whatsappMeta,
   defaultChoice: "npm",
 });
@@ -51,7 +51,7 @@ describeOfficialFallbackChannelCatalogContract({
   channelId: "whatsapp",
   npmSpec: whatsappOfficialFallbackNpmSpec,
   meta: whatsappMeta,
-  packageName: "@natesclaw/whatsapp",
+  packageName: "@openclaw/whatsapp",
   pluginId: "whatsapp",
   externalNpmSpec: "@vendor/whatsapp-fork",
   externalLabel: "WhatsApp Fork",

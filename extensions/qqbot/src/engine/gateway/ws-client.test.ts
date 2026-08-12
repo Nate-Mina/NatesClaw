@@ -22,7 +22,7 @@ let createQQWSClient: CreateQQWSClient;
 let priorProxyEnv: Partial<Record<ProxyEnvKey, string | undefined>> = {};
 
 beforeAll(async () => {
-  vi.doMock("@natesclaw/proxyline", () => ({
+  vi.doMock("@openclaw/proxyline", () => ({
     createAmbientNodeProxyAgent: proxyAgentCtorMock,
     hasAmbientNodeProxyConfigured: vi.fn(() =>
       Boolean(

@@ -13,7 +13,7 @@ import {
 
 const SOURCE_SHA = "a".repeat(40);
 const VERSION = "2026.8.1-beta.1";
-const PACKAGE_NAME = "@natesclaw/discord";
+const PACKAGE_NAME = "@openclaw/discord";
 const TARBALL = "natesclaw-discord-2026.8.1-beta.1.tgz";
 const SCRIPT = path.resolve("scripts/prepublish-plugin-registry-artifact.mjs");
 const tempDirs: string[] = [];
@@ -83,7 +83,7 @@ function firstPackage(paths: ReturnType<typeof fixture>) {
 }
 
 function addCompanionPackage(paths: ReturnType<typeof fixture>) {
-  const name = "@natesclaw/feishu";
+  const name = "@openclaw/feishu";
   const tarball = "natesclaw-feishu-2026.8.1-beta.1.tgz";
   const archiveRoot = path.join(path.dirname(paths.artifactDir), "feishu-package");
   const packageRoot = path.join(archiveRoot, "package");
@@ -188,8 +188,8 @@ describe("prepublish plugin registry artifact", () => {
     addCompanionPackage(paths);
 
     expect(validate(paths).manifest.packages.map((entry) => entry.name)).toEqual([
-      "@natesclaw/discord",
-      "@natesclaw/feishu",
+      "@openclaw/discord",
+      "@openclaw/feishu",
     ]);
   });
 
@@ -202,12 +202,12 @@ describe("prepublish plugin registry artifact", () => {
         artifactDir: paths.artifactDir,
         candidateVersion: VERSION,
         manifestSha256: sha256(paths.manifestPath),
-        requiredPackages: ["@natesclaw/feishu"],
+        requiredPackages: ["@openclaw/feishu"],
         sourceSha: SOURCE_SHA,
       }),
     ).toEqual([
       {
-        name: "@natesclaw/feishu",
+        name: "@openclaw/feishu",
         tarballPath: path.join(paths.artifactDir, "natesclaw-feishu-2026.8.1-beta.1.tgz"),
       },
     ]);
@@ -313,7 +313,7 @@ describe("prepublish plugin registry artifact", () => {
     duplicate.manifest.packages.push({ ...firstPackage(duplicate) });
     duplicate.writeManifest();
     expect(() =>
-      validate(duplicate, { requiredPackages: [PACKAGE_NAME, "@natesclaw/feishu"] }),
+      validate(duplicate, { requiredPackages: [PACKAGE_NAME, "@openclaw/feishu"] }),
     ).toThrow("duplicate package");
   });
 
@@ -333,9 +333,9 @@ describe("prepublish plugin registry artifact", () => {
     expect(() => validate(hash)).toThrow("tarball SHA-256 mismatch");
 
     const identity = fixture();
-    firstPackage(identity).name = "@natesclaw/feishu";
+    firstPackage(identity).name = "@openclaw/feishu";
     identity.writeManifest();
-    expect(() => validate(identity, { requiredPackages: ["@natesclaw/feishu"] })).toThrow(
+    expect(() => validate(identity, { requiredPackages: ["@openclaw/feishu"] })).toThrow(
       "tarball identity mismatch",
     );
 
@@ -350,7 +350,7 @@ describe("prepublish plugin registry artifact", () => {
     );
 
     const required = fixture();
-    expect(() => validate(required, { requiredPackages: ["@natesclaw/feishu"] })).toThrow(
+    expect(() => validate(required, { requiredPackages: ["@openclaw/feishu"] })).toThrow(
       "missing Docker-plan package",
     );
   });

@@ -1,9 +1,9 @@
-import { ensureSystemPromptCacheBoundary } from "@natesclaw/ai/internal/shared";
+import { ensureSystemPromptCacheBoundary } from "@openclaw/ai/internal/shared";
 /**
  * Prepares CLI backend run context: backend config, prompts, bootstrap context,
  * MCP, auth epoch, and reusable session metadata.
  */
-import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import { messageToolOwnsVisibleReply } from "../../auto-reply/source-reply-delivery-mode.js";
 import { getRuntimeConfig } from "../../config/config.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";

@@ -59,7 +59,7 @@ describe("legacy Web Push Doctor migration", () => {
       ...createWebPushVapidKeyPair(
         "legacy-public-key",
         "legacy-private-key",
-        "https://natesclaw.ai",
+        "https://openclaw.ai",
       ),
       ...overrides,
     };
@@ -398,7 +398,7 @@ describe("legacy Web Push Doctor migration", () => {
     const canonical = subscription({ keys: { p256dh: "canonical", auth: "canonical" } });
     seedSubscription(hashWebPushEndpoint(canonical.endpoint), canonical);
     seedVapid(
-      createWebPushVapidKeyPair("canonical-public", "canonical-private", "https://natesclaw.ai"),
+      createWebPushVapidKeyPair("canonical-public", "canonical-private", "https://openclaw.ai"),
     );
     const paths = await writeLegacyState({
       stateDir,
@@ -423,7 +423,7 @@ describe("legacy Web Push Doctor migration", () => {
   it("rolls back subscription changes when only VAPID conflicts", async () => {
     const stateDir = useStateDir();
     seedVapid(
-      createWebPushVapidKeyPair("canonical-public", "canonical-private", "https://natesclaw.ai"),
+      createWebPushVapidKeyPair("canonical-public", "canonical-private", "https://openclaw.ai"),
     );
     await writeLegacyState({
       stateDir,

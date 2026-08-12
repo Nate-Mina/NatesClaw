@@ -2,7 +2,7 @@
  * Submits or skips the prompt after build/preflight and before stream execution.
  * It may assume prompt context is assembled and admission state is published.
  */
-import { MAX_IMAGE_BYTES } from "@natesclaw/media-core/constants";
+import { MAX_IMAGE_BYTES } from "@openclaw/media-core/constants";
 import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
 import type { ImageContent } from "../../../llm/types.js";
 import { readPersistedMediaFacts } from "../../../media/media-facts.js";

@@ -1,5 +1,5 @@
 /** ACP streaming and projection settings derived from config. */
-import type { AcpSessionUpdateTag } from "@natesclaw/acp-core/runtime/types";
+import type { AcpSessionUpdateTag } from "@openclaw/acp-core/runtime/types";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resolveEffectiveBlockStreamingConfig } from "./block-streaming.js";
 

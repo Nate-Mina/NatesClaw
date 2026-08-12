@@ -1,5 +1,5 @@
 /** Configured provider rows own exact model ids before plugin normalization. */
-import { findNormalizedProviderValue } from "@natesclaw/model-catalog-core/provider-id";
+import { findNormalizedProviderValue } from "@openclaw/model-catalog-core/provider-id";
 import type { ModelProviderConfig } from "../config/types.models.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { normalizePluginsConfig } from "../plugins/config-state.js";

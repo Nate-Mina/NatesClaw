@@ -2,7 +2,7 @@
 // replacement session cannot be initialized. These drive the real transcript
 // store so the assertion is the persisted boundary, not a mock call count.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resetCommandQueueStateForTest } from "../../process/command-queue.test-support.js";

@@ -1,6 +1,6 @@
 // Voice Call tests cover realtime handler plugin behavior.
 import http from "node:http";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { createDeferred } from "natesclaw/plugin-sdk/extension-shared";
 import type {
   RealtimeVoiceBridge,

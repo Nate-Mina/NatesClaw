@@ -1,5 +1,5 @@
 // Builds model picker choices and endpoint labels for model directives.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { findNormalizedProviderValue, normalizeProviderId } from "../../agents/model-selection.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 

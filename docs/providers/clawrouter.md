@@ -21,7 +21,7 @@ you only need an issued ClawRouter credential.
 | Provider      | `clawrouter`                             |
 | Plugin        | bundled (included in Natesclaw)           |
 | Auth          | `CLAWROUTER_API_KEY`                     |
-| Default URL   | `https://clawrouter.natesclaw.ai`         |
+| Default URL   | `https://clawrouter.openclaw.ai`         |
 | Model catalog | Credential-scoped via `/v1/catalog`      |
 | Quotas        | Monthly budget and usage via `/v1/usage` |
 
@@ -43,7 +43,7 @@ you only need an issued ClawRouter credential.
     `clawrouter` is bundled and enabled by default. If your configuration sets
     `plugins.allow`, add `clawrouter` to that list before enabling it. For a
     custom deployment, set `models.providers.clawrouter.baseUrl` to the
-    ClawRouter origin; the default is `https://clawrouter.natesclaw.ai`.
+    ClawRouter origin; the default is `https://clawrouter.openclaw.ai`.
 
   </Step>
   <Step title="List granted models">

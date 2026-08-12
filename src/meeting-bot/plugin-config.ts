@@ -1,13 +1,13 @@
 import {
   asPositiveFiniteNumber,
   resolvePositiveTimerTimeoutMs,
-} from "@natesclaw/normalization-core/number-coercion";
-import { asRecord } from "@natesclaw/normalization-core/record-coerce";
+} from "@openclaw/normalization-core/number-coercion";
+import { asRecord } from "@openclaw/normalization-core/record-coerce";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
-import { normalizeOptionalTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
+} from "@openclaw/normalization-core/string-coerce";
+import { normalizeOptionalTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawPluginConfigSchema } from "../plugins/plugin-config-schema.types.js";
 import {
   resolveRealtimeVoiceAgentConsultToolPolicy,

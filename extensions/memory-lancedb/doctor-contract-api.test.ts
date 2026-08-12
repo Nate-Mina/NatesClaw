@@ -1,7 +1,7 @@
 import path from "node:path";
 import { pathToFileURL } from "node:url";
 import * as lancedb from "@lancedb/lancedb";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { PluginDoctorStateMigrationContext } from "natesclaw/plugin-sdk/runtime-doctor-migrations";
 import { describe, expect, test } from "vitest";
 import {

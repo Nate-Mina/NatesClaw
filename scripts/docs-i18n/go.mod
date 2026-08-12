@@ -1,4 +1,4 @@
-module github.com/natesclaw/natesclaw/scripts/docs-i18n
+module github.com/openclaw/natesclaw/scripts/docs-i18n
 
 go 1.25.0
 

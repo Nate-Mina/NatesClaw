@@ -946,7 +946,7 @@ Example:
 
 ```json
 {
-  "name": "@natesclaw/nextcloud-talk",
+  "name": "@openclaw/nextcloud-talk",
   "natesclaw": {
     "extensions": ["./index.ts"],
     "channel": {
@@ -960,7 +960,7 @@ Example:
       "aliases": ["nc-talk", "nc"]
     },
     "install": {
-      "npmSpec": "@natesclaw/nextcloud-talk",
+      "npmSpec": "@openclaw/nextcloud-talk",
       "localPath": "<bundled-plugin-local-path>",
       "defaultChoice": "npm"
     }

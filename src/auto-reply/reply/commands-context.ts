@@ -2,7 +2,7 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import { normalizeAnyChannelId } from "../../channels/registry.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { resolveCommandAuthorization } from "../command-auth.js";

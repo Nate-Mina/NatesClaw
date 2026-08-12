@@ -1,11 +1,11 @@
 /** Reads ACP session status from the runtime and reconciles persisted identity metadata. */
-import { resolveSessionIdentityFromMeta } from "@natesclaw/acp-core/runtime/session-identity";
+import { resolveSessionIdentityFromMeta } from "@openclaw/acp-core/runtime/session-identity";
 import type {
   AcpRuntime,
   AcpRuntimeCapabilities,
   AcpRuntimeHandle,
   AcpRuntimeStatus,
-} from "@natesclaw/acp-core/runtime/types";
+} from "@openclaw/acp-core/runtime/types";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { withAcpRuntimeErrorBoundary } from "../runtime/errors.js";
 import type {

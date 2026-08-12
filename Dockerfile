@@ -179,12 +179,12 @@ RUN --mount=type=cache,id=natesclaw-pnpm-store,target=/root/.local/share/pnpm/st
     NATESCLAW_EXTENSIONS="$(cat /tmp/natesclaw-selected-plugin-dirs)" NATESCLAW_BUNDLED_PLUGIN_DIR="$NATESCLAW_BUNDLED_PLUGIN_DIR" node scripts/prune-docker-plugin-dist.mjs && \
     node scripts/postinstall-bundled-plugins.mjs && \
     find dist -type f \( -name '*.d.ts' -o -name '*.d.mts' -o -name '*.d.cts' -o -name '*.map' \) -delete && \
-    if [ -L /app/node_modules/@natesclaw/ai ]; then \
-      ai_runtime_target="$(readlink -f /app/node_modules/@natesclaw/ai)" && \
+    if [ -L /app/node_modules/@openclaw/ai ]; then \
+      ai_runtime_target="$(readlink -f /app/node_modules/@openclaw/ai)" && \
       ai_runtime_tmp="$(mktemp -d)" && \
       cp -a "$ai_runtime_target" "$ai_runtime_tmp/ai" && \
-      rm /app/node_modules/@natesclaw/ai && \
-      mv "$ai_runtime_tmp/ai" /app/node_modules/@natesclaw/ai && \
+      rm /app/node_modules/@openclaw/ai && \
+      mv "$ai_runtime_tmp/ai" /app/node_modules/@openclaw/ai && \
       rmdir "$ai_runtime_tmp"; \
     fi && \
     rm -rf \
@@ -206,10 +206,10 @@ ARG NATESCLAW_BUNDLED_PLUGIN_DIR
 # OCI base-image metadata for downstream image consumers.
 # If you change these annotations, also update:
 # - docs/install/docker.md ("Base image metadata" section)
-# - https://docs.natesclaw.ai/install/docker
-LABEL org.opencontainers.image.source="https://github.com/natesclaw/natesclaw" \
-  org.opencontainers.image.url="https://natesclaw.ai" \
-  org.opencontainers.image.documentation="https://docs.natesclaw.ai/install/docker" \
+# - https://docs.openclaw.ai/install/docker
+LABEL org.opencontainers.image.source="https://github.com/openclaw/natesclaw" \
+  org.opencontainers.image.url="https://openclaw.ai" \
+  org.opencontainers.image.documentation="https://docs.openclaw.ai/install/docker" \
   org.opencontainers.image.licenses="MIT" \
   org.opencontainers.image.title="Natesclaw" \
   org.opencontainers.image.description="Natesclaw gateway and CLI runtime container image"

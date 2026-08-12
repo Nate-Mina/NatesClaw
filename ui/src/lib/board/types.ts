@@ -1,1 +1,1 @@
-export type { BoardOp, BoardSnapshot, BoardTab, BoardWidget } from "@natesclaw/gateway-protocol";
+export type { BoardOp, BoardSnapshot, BoardTab, BoardWidget } from "@openclaw/gateway-protocol";

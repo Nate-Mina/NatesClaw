@@ -72,7 +72,7 @@ function approvalRun(overrides: Record<string, unknown> = {}) {
     event: "workflow_dispatch",
     headBranch: "release/2026.6.21",
     status: "in_progress",
-    url: "https://github.com/natesclaw/natesclaw/actions/runs/123",
+    url: "https://github.com/openclaw/natesclaw/actions/runs/123",
     workflowName: "Natesclaw Release Publish",
     ...overrides,
   };
@@ -95,7 +95,7 @@ function writeClawHubApproval(overrides: Record<string, unknown> = {}) {
       bootstrapWorkflowSha: "b".repeat(40),
       releaseTag: "v2026.7.1-beta.3",
       targetSha: "a".repeat(40),
-      packages: ["@natesclaw/meta-provider", "@natesclaw/voice-call"],
+      packages: ["@openclaw/meta-provider", "@openclaw/voice-call"],
       ...overrides,
     })}\n`,
   );
@@ -108,7 +108,7 @@ describe("scripts/validate-release-publish-approval.mjs", () => {
 
     expect(result.status).toBe(0);
     expect(result.stdout).toContain(
-      "Using release publish approval run 123: https://github.com/natesclaw/natesclaw/actions/runs/123",
+      "Using release publish approval run 123: https://github.com/openclaw/natesclaw/actions/runs/123",
     );
     expect(result.stderr).toBe("");
   });
@@ -140,7 +140,7 @@ describe("scripts/validate-release-publish-approval.mjs", () => {
 
     expect(result.status).toBe(0);
     expect(result.stdout).toContain(
-      "Using successful completed release publish run 123: https://github.com/natesclaw/natesclaw/actions/runs/123",
+      "Using successful completed release publish run 123: https://github.com/openclaw/natesclaw/actions/runs/123",
     );
     expect(result.stderr).toBe("");
   });
@@ -178,7 +178,7 @@ describe("scripts/validate-release-publish-approval.mjs", () => {
         EXPECTED_WORKFLOW_BRANCH: "main",
         EXPECTED_RUN_ATTEMPT: "2",
         RELEASE_APPROVAL_KIND: "clawhub-bootstrap",
-        RELEASE_PACKAGES: "@natesclaw/voice-call,@natesclaw/meta-provider",
+        RELEASE_PACKAGES: "@openclaw/voice-call,@openclaw/meta-provider",
         RELEASE_TAG: "v2026.7.1-beta.3",
       },
     );
@@ -200,7 +200,7 @@ describe("scripts/validate-release-publish-approval.mjs", () => {
         EXPECTED_WORKFLOW_BRANCH: "main",
         EXPECTED_RUN_ATTEMPT: "2",
         RELEASE_APPROVAL_KIND: "clawhub-bootstrap",
-        RELEASE_PACKAGES: "@natesclaw/meta-provider,@natesclaw/voice-call",
+        RELEASE_PACKAGES: "@openclaw/meta-provider,@openclaw/voice-call",
         RELEASE_TAG: "v2026.7.1-beta.3",
       },
     );
@@ -223,7 +223,7 @@ describe("scripts/validate-release-publish-approval.mjs", () => {
         EXPECTED_WORKFLOW_BRANCH: "main",
         EXPECTED_RUN_ATTEMPT: "2",
         RELEASE_APPROVAL_KIND: "clawhub-bootstrap",
-        RELEASE_PACKAGES: "@natesclaw/meta-provider,@natesclaw/voice-call",
+        RELEASE_PACKAGES: "@openclaw/meta-provider,@openclaw/voice-call",
         RELEASE_TAG: "v2026.7.1-beta.3",
       },
     );
@@ -245,7 +245,7 @@ describe("scripts/validate-release-publish-approval.mjs", () => {
         EXPECTED_WORKFLOW_BRANCH: "main",
         EXPECTED_RUN_ATTEMPT: "2",
         RELEASE_APPROVAL_KIND: "clawhub-bootstrap",
-        RELEASE_PACKAGES: "@natesclaw/meta-provider,@natesclaw/voice-call",
+        RELEASE_PACKAGES: "@openclaw/meta-provider,@openclaw/voice-call",
         RELEASE_TAG: "v2026.7.1-beta.3",
       },
     );
@@ -259,7 +259,7 @@ describe("scripts/validate-release-publish-approval.mjs", () => {
   it.each([
     ["release tag", { releaseTag: "v2026.7.1-beta.2" }, {}],
     ["target SHA", { targetSha: "c".repeat(40) }, {}],
-    ["package set", { packages: ["@natesclaw/meta-provider"] }, {}],
+    ["package set", { packages: ["@openclaw/meta-provider"] }, {}],
     ["parent attempt", { parentRunAttempt: 1 }, {}],
     ["parent workflow SHA", { parentWorkflowSha: "c".repeat(40) }, {}],
     ["bootstrap workflow SHA", { bootstrapWorkflowSha: "c".repeat(40) }, {}],
@@ -278,7 +278,7 @@ describe("scripts/validate-release-publish-approval.mjs", () => {
         EXPECTED_WORKFLOW_BRANCH: "main",
         EXPECTED_RUN_ATTEMPT: "2",
         RELEASE_APPROVAL_KIND: "clawhub-bootstrap",
-        RELEASE_PACKAGES: "@natesclaw/meta-provider,@natesclaw/voice-call",
+        RELEASE_PACKAGES: "@openclaw/meta-provider,@openclaw/voice-call",
         RELEASE_TAG: "v2026.7.1-beta.3",
         ...envOverrides,
       },
@@ -314,7 +314,7 @@ describe("scripts/validate-release-publish-approval.mjs", () => {
 
       expect(result.status).toBe(0);
       expect(result.stdout).toContain(
-        `Using completed release publish run 123 (${conclusion}) for direct recovery: https://github.com/natesclaw/natesclaw/actions/runs/123`,
+        `Using completed release publish run 123 (${conclusion}) for direct recovery: https://github.com/openclaw/natesclaw/actions/runs/123`,
       );
       expect(result.stderr).toBe("");
     }

@@ -259,8 +259,8 @@ vi.mock("../config/config.js", () => ({
         [
           "Config is managed by Nix (`NATESCLAW_NIX_MODE=1`), so Natesclaw treats natesclaw.json as immutable.",
           "Do not run setup, onboarding, natesclaw update, plugin install/update/uninstall/enable, doctor repair/token-generation, or config set against this file.",
-          "Agent-first Nix setup: https://github.com/natesclaw/nix-natesclaw#quick-start",
-          "Natesclaw Nix overview: https://docs.natesclaw.ai/install/nix",
+          "Agent-first Nix setup: https://github.com/openclaw/nix-natesclaw#quick-start",
+          "Natesclaw Nix overview: https://docs.openclaw.ai/install/nix",
         ].join("\n"),
       );
     }

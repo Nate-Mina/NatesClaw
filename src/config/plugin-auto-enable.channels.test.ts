@@ -77,7 +77,7 @@ describe("applyPluginAutoEnable channels", () => {
       JSON.stringify({
         entries: [
           {
-            name: "@natesclaw/env-secondary",
+            name: "@openclaw/env-secondary",
             natesclaw: {
               channel: {
                 id: "env-secondary",
@@ -88,7 +88,7 @@ describe("applyPluginAutoEnable channels", () => {
                 preferOver: ["env-primary"],
               },
               install: {
-                npmSpec: "@natesclaw/env-secondary",
+                npmSpec: "@openclaw/env-secondary",
               },
             },
           },
@@ -112,7 +112,7 @@ describe("applyPluginAutoEnable channels", () => {
       JSON.stringify({
         entries: [
           {
-            name: "@natesclaw/env-primary",
+            name: "@openclaw/env-primary",
             natesclaw: {
               channel: {
                 id: "env-primary",
@@ -122,12 +122,12 @@ describe("applyPluginAutoEnable channels", () => {
                 blurb: "Env primary entry",
               },
               install: {
-                npmSpec: "@natesclaw/env-primary",
+                npmSpec: "@openclaw/env-primary",
               },
             },
           },
           {
-            name: "@natesclaw/env-secondary",
+            name: "@openclaw/env-secondary",
             natesclaw: {
               channel: {
                 id: "env-secondary",
@@ -138,7 +138,7 @@ describe("applyPluginAutoEnable channels", () => {
                 preferOver: ["env-primary"],
               },
               install: {
-                npmSpec: "@natesclaw/env-secondary",
+                npmSpec: "@openclaw/env-secondary",
               },
             },
           },
@@ -179,7 +179,7 @@ describe("applyPluginAutoEnable channels", () => {
       JSON.stringify({
         entries: [
           {
-            name: "@natesclaw/env-secondary",
+            name: "@openclaw/env-secondary",
             natesclaw: {
               channel: {
                 id: "env-secondary",
@@ -189,7 +189,7 @@ describe("applyPluginAutoEnable channels", () => {
                 blurb: "Env secondary entry",
                 preferOver: ["env-primary"],
               },
-              install: { npmSpec: "@natesclaw/env-secondary" },
+              install: { npmSpec: "@openclaw/env-secondary" },
             },
           },
         ],

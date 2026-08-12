@@ -1,5 +1,5 @@
 // Single agent-turn command registration; delegates execution to the Gateway-backed agent command.
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import type { Command } from "commander";
 import { formatDocsLink } from "../../../packages/terminal-core/src/links.js";
 import { theme } from "../../../packages/terminal-core/src/theme.js";
@@ -104,7 +104,7 @@ ${formatHelpExamples([
   ],
 ])}
 
-${theme.muted("Docs:")} ${formatDocsLink("/cli/agent", "docs.natesclaw.ai/cli/agent")}`,
+${theme.muted("Docs:")} ${formatDocsLink("/cli/agent", "docs.openclaw.ai/cli/agent")}`,
     )
     .action(async (opts): Promise<void> => {
       const verboseLevel =
@@ -169,7 +169,7 @@ ${theme.muted("Docs:")} ${formatDocsLink("/cli/agent", "docs.natesclaw.ai/cli/ag
             'natesclaw agent exec "Inspect this repo" --model ollama/qwen3.5:9b --code-mode code --local-model-lean --json',
             "Force Code Mode with the lean local-model tool surface.",
           ],
-        ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/agent#agent-exec", "docs.natesclaw.ai/cli/agent#agent-exec")}`,
+        ])}\n\n${theme.muted("Docs:")} ${formatDocsLink("/cli/agent#agent-exec", "docs.openclaw.ai/cli/agent#agent-exec")}`,
     )
     .action(async (message: string | undefined, opts, command): Promise<void> => {
       const parentOpts = command.parent?.opts() as

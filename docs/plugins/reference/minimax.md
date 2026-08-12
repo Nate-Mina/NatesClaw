@@ -11,7 +11,7 @@ Adds MiniMax, MiniMax Portal model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/minimax-provider`
+- Package: `@openclaw/minimax-provider`
 - Install route: included in Natesclaw
 
 ## Surface

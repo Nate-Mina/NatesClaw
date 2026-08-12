@@ -11,7 +11,7 @@ Adds LiteLLM model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/litellm-provider`
+- Package: `@openclaw/litellm-provider`
 - Install route: included in Natesclaw
 
 ## Surface

@@ -2,8 +2,8 @@
 import {
   normalizeProviderId,
   normalizeProviderIdForAuth,
-} from "@natesclaw/model-catalog-core/provider-id";
-import { stripSelfProviderModelPrefix } from "@natesclaw/model-catalog-core/provider-model-id-normalization";
+} from "@openclaw/model-catalog-core/provider-id";
+import { stripSelfProviderModelPrefix } from "@openclaw/model-catalog-core/provider-model-id-normalization";
 import { DEFAULT_CONTEXT_TOKENS } from "../../agents/defaults.js";
 import {
   projectModelCatalogEntryForRoute,

@@ -13,7 +13,7 @@ Status: official plugin, installed separately. Direct messages only; text and UR
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/synology-chat
+natesclaw plugins install @openclaw/synology-chat
 ```
 
 Local checkout (when running from a git repo):

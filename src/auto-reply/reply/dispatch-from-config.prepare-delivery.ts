@@ -1,4 +1,4 @@
-import { isParentOwnedBackgroundAcpSession } from "@natesclaw/acp-core/session-interaction-mode";
+import { isParentOwnedBackgroundAcpSession } from "@openclaw/acp-core/session-interaction-mode";
 import { resolveSendableOutboundReplyParts } from "natesclaw/plugin-sdk/reply-payload";
 import { readAcpSessionMeta } from "../../acp/runtime/session-meta.js";
 import { logVerbose } from "../../globals.js";

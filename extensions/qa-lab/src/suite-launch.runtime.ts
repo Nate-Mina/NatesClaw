@@ -296,7 +296,7 @@ async function resolveQaFlowChannelGroups(
     isCrablineServerChannel,
     NATESCLAW_CRABLINE_DEFAULT_CHANNEL,
     resolveNatesclawCrablineChannelDriverSelection,
-  } = await import("@natesclaw/crabline");
+  } = await import("@openclaw/crabline");
   if (runParams.expandScenarioChannels) {
     const groups = groupQaScenariosByExecutionCell(
       scenarios,

@@ -1,5 +1,5 @@
 /** Helper predicates and gates used while streaming agent-runner payloads. */
-import { isAudioFileName } from "@natesclaw/media-core/mime";
+import { isAudioFileName } from "@openclaw/media-core/mime";
 import {
   hasOutboundReplyContent,
   resolveSendableOutboundReplyParts,

@@ -494,7 +494,7 @@ jobs:
 
           if [ "$config_status" -eq 0 ]; then
             set +e
-            npm exec --yes "@natesclaw/plugin-inspector@${NATESCLAW_PLUGIN_INSPECTOR_VERSION}" -- ci \
+            npm exec --yes "@openclaw/plugin-inspector@${NATESCLAW_PLUGIN_INSPECTOR_VERSION}" -- ci \
               --config plugin-inspector.config.json \
               --natesclaw "$PWD" \
               --out "$NATESCLAW_PLUGIN_INSPECTOR_ROOT/reports" \
@@ -523,7 +523,7 @@ jobs:
           const lines = [
             "## Plugin Inspector Advisory",
             "",
-            `Inspector: @natesclaw/plugin-inspector@${process.env.NATESCLAW_PLUGIN_INSPECTOR_VERSION}`,
+            `Inspector: @openclaw/plugin-inspector@${process.env.NATESCLAW_PLUGIN_INSPECTOR_VERSION}`,
             `Config exit code: ${configExitCode}`,
             `Exit code: ${exitCode}`,
           ];

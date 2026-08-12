@@ -1,5 +1,5 @@
-import type { UiCommand } from "@natesclaw/gateway-protocol";
-import { expectDefined, isRecord } from "@natesclaw/normalization-core";
+import type { UiCommand } from "@openclaw/gateway-protocol";
+import { expectDefined, isRecord } from "@openclaw/normalization-core";
 
 export type ChatSplitPane = { id: string; sessionKey: string };
 type ChatSplitColumn = { id: string; panes: ChatSplitPane[]; paneWeights: number[] };

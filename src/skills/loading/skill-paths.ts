@@ -1,7 +1,7 @@
 // Skill path helpers keep prompt and diagnostic paths compact without changing their meaning.
 import os from "node:os";
 import path from "node:path";
-import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import { resolveOsHomeDir } from "../../infra/home-dir.js";
 import { isPathInside } from "../../infra/path-guards.js";
 import { resolveConfigDir } from "../../utils.js";

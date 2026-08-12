@@ -1,4 +1,4 @@
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { describe, expect, it } from "vitest";
 import {
   collectHostedGateEvidence as collectHostedGateEvidenceRaw,
@@ -62,7 +62,7 @@ function successfulRun(name: string, id: number, updatedAt: string): WorkflowRun
     path: ".github/workflows/ci.yml",
     created_at: "2026-06-17T10:46:24Z",
     updated_at: updatedAt,
-    html_url: `https://github.com/natesclaw/natesclaw/actions/runs/${id}`,
+    html_url: `https://github.com/openclaw/natesclaw/actions/runs/${id}`,
   };
 }
 

@@ -1,6 +1,6 @@
 // Resolves diagnostics feature flags from config and environment.
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
-import { normalizeUniqueStringEntriesLower } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { normalizeUniqueStringEntriesLower } from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 
 const DIAGNOSTICS_ENV = "NATESCLAW_DIAGNOSTICS";

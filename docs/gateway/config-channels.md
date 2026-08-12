@@ -517,10 +517,10 @@ WhatsApp runs through the gateway's web channel (Baileys Web). It starts automat
 Mattermost installs as a separate plugin, the same way Discord, Slack, and WhatsApp do:
 
 ```bash
-natesclaw plugins install @natesclaw/mattermost
+natesclaw plugins install @openclaw/mattermost
 ```
 
-Check [npmjs.com/package/@natesclaw/mattermost](https://www.npmjs.com/package/@natesclaw/mattermost) for the current dist-tags before pinning a version.
+Check [npmjs.com/package/@openclaw/mattermost](https://www.npmjs.com/package/@openclaw/mattermost) for the current dist-tags before pinning a version.
 
 ```json5
 {

@@ -1,5 +1,5 @@
-import { canonicalizeMaxTokensParam, resolveMaxTokensParam } from "@natesclaw/ai/transports";
-import { detectOpenAICompletionsCompat } from "@natesclaw/ai/transports";
+import { canonicalizeMaxTokensParam, resolveMaxTokensParam } from "@openclaw/ai/transports";
+import { detectOpenAICompletionsCompat } from "@openclaw/ai/transports";
 import {
   type NativeWebSearchToolPolicyParams,
   isNativeWebSearchAllowedByToolPolicy,

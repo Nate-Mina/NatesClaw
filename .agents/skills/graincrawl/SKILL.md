@@ -3,7 +3,7 @@ name: graincrawl
 description: "Granola archive: search, sync freshness, notes, transcripts, panels, SQL counts, and Graincrawl repo work."
 metadata:
   natesclaw:
-    homepage: https://github.com/natesclaw/graincrawl
+    homepage: https://github.com/openclaw/graincrawl
     requires:
       bins:
         - graincrawl

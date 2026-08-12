@@ -23,9 +23,9 @@ const {
   runQaTestFileScenarios: vi.fn(),
 }));
 
-vi.mock("@natesclaw/crabline", async (importOriginal) => {
+vi.mock("@openclaw/crabline", async (importOriginal) => {
   crablineRuntimeLoads();
-  return await importOriginal<typeof import("@natesclaw/crabline")>();
+  return await importOriginal<typeof import("@openclaw/crabline")>();
 });
 
 vi.mock("./suite.js", async (importOriginal) => ({

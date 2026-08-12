@@ -4,7 +4,7 @@
  */
 import { v0_8 } from "@a2ui/lit";
 import { ContextProvider } from "@lit/context";
-import { themeContext } from "@natesclaw/a2ui-theme-context";
+import { themeContext } from "@openclaw/a2ui-theme-context";
 import { html, css, LitElement, unsafeCSS } from "lit";
 import "@a2ui/lit/ui";
 import { repeat } from "lit/directives/repeat.js";

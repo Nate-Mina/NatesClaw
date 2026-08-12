@@ -11,7 +11,7 @@ Anthropic models, Claude CLI, and native Claude session catalog.
 
 ## Distribution
 
-- Package: `@natesclaw/anthropic-provider`
+- Package: `@openclaw/anthropic-provider`
 - Install route: included in Natesclaw
 
 ## Surface

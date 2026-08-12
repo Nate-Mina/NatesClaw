@@ -203,20 +203,20 @@ describe("active-memory trigger recall", () => {
 
   it("requires every project on a mixed chunk to be active before trigger injection", () => {
     const mixed = result({
-      projectKey: "github.com/natesclaw/natesclaw; github.com/example/other",
+      projectKey: "github.com/openclaw/natesclaw; github.com/example/other",
     });
     expect(
       selectStrongTriggerMatches(
         "when booking a flight",
         [mixed],
-        ["github.com/natesclaw/natesclaw"],
+        ["github.com/openclaw/natesclaw"],
       ),
     ).toEqual([]);
     expect(
       selectStrongTriggerMatches(
         "when booking a flight",
         [mixed],
-        ["github.com/natesclaw/natesclaw", "github.com/example/other"],
+        ["github.com/openclaw/natesclaw", "github.com/example/other"],
       ),
     ).toHaveLength(1);
   });
@@ -229,14 +229,14 @@ describe("active-memory trigger recall", () => {
       agentId: "main",
       query: "flight booking",
       message: "Help when booking a flight",
-      activeProjectKeys: ["github.com/natesclaw/natesclaw"],
+      activeProjectKeys: ["github.com/openclaw/natesclaw"],
     });
     expect(hoisted.search).toHaveBeenCalledWith(
       "flight booking",
       expect.objectContaining({ lexicalOnly: true }),
     );
     expect(hoisted.listTriggerCandidates).toHaveBeenCalledWith({
-      activeProjectKeys: ["github.com/natesclaw/natesclaw"],
+      activeProjectKeys: ["github.com/openclaw/natesclaw"],
     });
   });
 

@@ -31,7 +31,7 @@ describe("WhatsApp QA transport boundary", () => {
     }
     expect(
       sources
-        .filter(([, source]) => source.includes("@natesclaw/whatsapp/api.js"))
+        .filter(([, source]) => source.includes("@openclaw/whatsapp/api.js"))
         .map(([file]) => path.relative(process.cwd(), file)),
     ).toContain("extensions/qa-lab/src/live-transports/whatsapp/adapter.runtime.ts");
   });

@@ -43,7 +43,7 @@ describe("clawhub packages", () => {
     let requestedUrl = "";
     await expect(
       fetchClawHubPackageArtifact({
-        name: "@natesclaw/diagnostics-otel",
+        name: "@openclaw/diagnostics-otel",
         version: "2026.3.22",
         fetchImpl: async (input) => {
           requestedUrl = input instanceof Request ? input.url : String(input);
@@ -52,7 +52,7 @@ describe("clawhub packages", () => {
               artifact: {
                 source: "clawhub",
                 artifactKind: "npm-pack",
-                packageName: "@natesclaw/diagnostics-otel",
+                packageName: "@openclaw/diagnostics-otel",
                 version: "2026.3.22",
                 downloadUrl: "https://clawhub.ai/api/v1/clawpacks/abc",
                 npmIntegrity: "sha512-demo",
@@ -67,7 +67,7 @@ describe("clawhub packages", () => {
       artifact: {
         source: "clawhub",
         artifactKind: "npm-pack",
-        packageName: "@natesclaw/diagnostics-otel",
+        packageName: "@openclaw/diagnostics-otel",
         version: "2026.3.22",
         downloadUrl: "https://clawhub.ai/api/v1/clawpacks/abc",
         npmIntegrity: "sha512-demo",
@@ -83,14 +83,14 @@ describe("clawhub packages", () => {
     let requestedUrl = "";
     await expect(
       fetchClawHubPackageSecurity({
-        name: "@natesclaw/diagnostics-otel",
+        name: "@openclaw/diagnostics-otel",
         version: "2026.3.22",
         fetchImpl: async (input) => {
           requestedUrl = input instanceof Request ? input.url : String(input);
           return new Response(
             JSON.stringify({
               package: {
-                name: "@natesclaw/diagnostics-otel",
+                name: "@openclaw/diagnostics-otel",
                 displayName: "Diagnostics",
                 family: "code-plugin",
               },
@@ -113,7 +113,7 @@ describe("clawhub packages", () => {
       }),
     ).resolves.toEqual({
       package: {
-        name: "@natesclaw/diagnostics-otel",
+        name: "@openclaw/diagnostics-otel",
         displayName: "Diagnostics",
         family: "code-plugin",
       },
@@ -138,7 +138,7 @@ describe("clawhub packages", () => {
   it("rejects malformed package security reports", async () => {
     await expect(
       fetchClawHubPackageSecurity({
-        name: "@natesclaw/diagnostics-otel",
+        name: "@openclaw/diagnostics-otel",
         version: "2026.3.22",
         fetchImpl: async () =>
           new Response(

@@ -433,7 +433,7 @@ jobs:
           fi
           codex_plugin_spec="$RELEASE_CODEX_PLUGIN_SPEC_INPUT"
           if [[ -z "${codex_plugin_spec// }" && "$RELEASE_PACKAGE_SPEC_INPUT" =~ ^natesclaw@(.+)$ ]]; then
-            codex_plugin_spec="npm:@natesclaw/codex@${BASH_REMATCH[1]}"
+            codex_plugin_spec="npm:@openclaw/codex@${BASH_REMATCH[1]}"
           fi
 
           qa_filter_seen=false

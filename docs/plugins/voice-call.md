@@ -29,7 +29,7 @@ Gateway, then restart the Gateway to load it.
     <Tabs>
       <Tab title="From npm">
         ```bash
-        natesclaw plugins install @natesclaw/voice-call
+        natesclaw plugins install @openclaw/voice-call
         ```
       </Tab>
       <Tab title="From a local folder (dev)">

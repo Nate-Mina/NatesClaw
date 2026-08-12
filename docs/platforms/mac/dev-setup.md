@@ -32,7 +32,7 @@ Outputs `dist/Natesclaw.app`. Without an Apple Developer ID certificate, the
 script falls back to ad-hoc signing.
 
 For dev run modes, signing flags, and Team ID troubleshooting, see
-[apps/macos/README.md](https://github.com/natesclaw/natesclaw/blob/main/apps/macos/README.md).
+[apps/macos/README.md](https://github.com/openclaw/natesclaw/blob/main/apps/macos/README.md).
 Fast dev loop from repo root: `scripts/restart-mac.sh` (add `--no-sign` for
 ad-hoc signing; TCC permissions do not stick with `--no-sign`).
 
@@ -82,7 +82,7 @@ If the app crashes when you try to allow **Speech Recognition** or
    ```
 
 2. If that fails, temporarily change `BUNDLE_ID` in
-   [`scripts/package-mac-app.sh`](https://github.com/natesclaw/natesclaw/blob/main/scripts/package-mac-app.sh)
+   [`scripts/package-mac-app.sh`](https://github.com/openclaw/natesclaw/blob/main/scripts/package-mac-app.sh)
    to force a clean slate from macOS.
 
 ### Gateway "Starting..." indefinitely

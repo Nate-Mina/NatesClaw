@@ -9,7 +9,7 @@ PORT="$(docker_e2e_read_tcp_port_env NATESCLAW_CODEX_MEDIA_PATH_PORT 18790)"
 TIMEOUT_SECONDS="$(docker_e2e_read_positive_int_env NATESCLAW_CODEX_MEDIA_PATH_TIMEOUT_SECONDS 180)"
 LOG_TAIL_MAX_BYTES="$(docker_e2e_read_positive_int_env NATESCLAW_CODEX_MEDIA_PATH_LOG_TAIL_MAX_BYTES 2097152)"
 TOKEN="codex-media-path-e2e-$$"
-CODEX_PLUGIN_SPEC="${NATESCLAW_CODEX_MEDIA_PATH_PLUGIN_SPEC:-npm:@natesclaw/codex}"
+CODEX_PLUGIN_SPEC="${NATESCLAW_CODEX_MEDIA_PATH_PLUGIN_SPEC:-npm:@openclaw/codex}"
 
 docker_e2e_build_or_reuse "$IMAGE_NAME" codex-media-path "$ROOT_DIR/scripts/e2e/Dockerfile" "$ROOT_DIR"
 NATESCLAW_TEST_STATE_SCRIPT_B64="$(docker_e2e_test_state_shell_b64 codex-media-path empty)"

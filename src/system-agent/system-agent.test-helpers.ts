@@ -225,7 +225,7 @@ export async function createSystemAgentVerifiedInferenceTestFixture(
         manifestPath: `/plugins/${pluginId}/natesclaw.plugin.json`,
         manifestHash: `${pluginId}-manifest-v1`,
         source: `/plugins/${pluginId}/index.js`,
-        packageName: `@natesclaw/${pluginId}`,
+        packageName: `@openclaw/${pluginId}`,
         packageVersion: "1.0.0",
         installRecordHash: `${pluginId}-install-v1`,
         packageJson: {

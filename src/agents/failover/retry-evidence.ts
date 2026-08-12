@@ -1,4 +1,4 @@
-import { parseRetryAfterHttpDateMs } from "@natesclaw/ai/internal/retry-after";
+import { parseRetryAfterHttpDateMs } from "@openclaw/ai/internal/retry-after";
 import milliseconds from "ms";
 import {
   extractErrorHttpStatus,

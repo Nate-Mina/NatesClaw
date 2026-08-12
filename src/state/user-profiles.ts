@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
 // Durable user profiles plus typed login identities in the shared state DB.
 import type { DatabaseSync } from "node:sqlite";
-import { err, ok, type Result } from "@natesclaw/normalization-core/result";
+import { err, ok, type Result } from "@openclaw/normalization-core/result";
 import { sql } from "kysely";
 import {
   executeSqliteQuerySync,

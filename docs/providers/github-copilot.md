@@ -49,12 +49,12 @@ provider or agent runtime in three different ways.
   </Tab>
 
   <Tab title="Copilot SDK harness plugin (copilot)">
-    Install the external `@natesclaw/copilot` plugin when you want GitHub's
+    Install the external `@openclaw/copilot` plugin when you want GitHub's
     Copilot CLI and SDK to own the low-level agent loop for selected
     `github-copilot/*` models.
 
     ```bash
-    natesclaw plugins install @natesclaw/copilot
+    natesclaw plugins install @openclaw/copilot
     ```
 
     Then opt a model or provider into the runtime:

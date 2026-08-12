@@ -11,7 +11,7 @@ Extract text and fallback page images from local document attachments.
 
 ## Distribution
 
-- Package: `@natesclaw/document-extract-plugin`
+- Package: `@openclaw/document-extract-plugin`
 - Install route: included in Natesclaw
 
 ## Surface

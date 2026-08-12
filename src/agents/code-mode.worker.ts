@@ -2,7 +2,7 @@
  * QuickJS worker for Code Mode guest execution and suspended VM snapshots.
  */
 import { parentPort, workerData } from "node:worker_threads";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { EvalFlags, JSException, QuickJS, type JSValueHandle } from "quickjs-wasi";
 import { CODE_MODE_CONTROLLER_SOURCE } from "./code-mode-controller-source.js";
 import { toCodeModeJsonSafe as toJsonSafe } from "./code-mode-json.js";

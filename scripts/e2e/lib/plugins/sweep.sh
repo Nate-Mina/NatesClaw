@@ -211,9 +211,9 @@ npm_registry_dir="$(mktemp -d "$NATESCLAW_PLUGINS_TMP_DIR/natesclaw-plugin-npm-r
 pack_fixture_plugin_with_cli_registry_dependency "$npm_pack_dir" "$NATESCLAW_PLUGINS_TMP_DIR/demo-plugin-npm.tgz" demo-plugin-npm 0.0.1 demo.npm "Demo Plugin NPM" demo-npm "demo-plugin-npm:pong"
 pack_fake_is_number_package "$npm_dep_pack_dir" "$NATESCLAW_PLUGINS_TMP_DIR/is-number-7.0.0.tgz"
 pack_fixture_plugin_with_invalid_extension_entry "$invalid_npm_pack_dir" "$NATESCLAW_PLUGINS_TMP_DIR/demo-plugin-invalid-metadata.tgz" demo-plugin-invalid-metadata 0.0.1 demo.invalid.metadata "Demo Plugin Invalid Metadata"
-start_npm_fixture_registry "@natesclaw/demo-plugin-npm" "0.0.1" "$NATESCLAW_PLUGINS_TMP_DIR/demo-plugin-npm.tgz" "$npm_registry_dir" "is-number" "7.0.0" "$NATESCLAW_PLUGINS_TMP_DIR/is-number-7.0.0.tgz" "@natesclaw/demo-plugin-invalid-metadata" "0.0.1" "$NATESCLAW_PLUGINS_TMP_DIR/demo-plugin-invalid-metadata.tgz"
+start_npm_fixture_registry "@openclaw/demo-plugin-npm" "0.0.1" "$NATESCLAW_PLUGINS_TMP_DIR/demo-plugin-npm.tgz" "$npm_registry_dir" "is-number" "7.0.0" "$NATESCLAW_PLUGINS_TMP_DIR/is-number-7.0.0.tgz" "@openclaw/demo-plugin-invalid-metadata" "0.0.1" "$NATESCLAW_PLUGINS_TMP_DIR/demo-plugin-invalid-metadata.tgz"
 
-run_plugins_natesclaw_logged install-npm plugins install "npm:@natesclaw/demo-plugin-npm@0.0.1" --force
+run_plugins_natesclaw_logged install-npm plugins install "npm:@openclaw/demo-plugin-npm@0.0.1" --force
 run_plugins_natesclaw_capture "$NATESCLAW_PLUGINS_TMP_DIR/plugins-npm.json" plugins list --json
 run_plugins_natesclaw_capture "$NATESCLAW_PLUGINS_TMP_DIR/plugins-npm-inspect.json" plugins inspect demo-plugin-npm --runtime --json
 run_plugins_shell_logged exec-npm-plugin-cli 'node "$NATESCLAW_ENTRY" demo-npm ping >"$NATESCLAW_PLUGINS_TMP_DIR/plugins-npm-cli.txt"'
@@ -227,7 +227,7 @@ run_plugins_natesclaw_logged uninstall-npm-retained plugins uninstall demo-plugi
 run_plugins_natesclaw_capture "$NATESCLAW_PLUGINS_TMP_DIR/plugins-npm-retained.json" plugins list --json
 node scripts/e2e/lib/plugins/assertions.mjs plugin-npm-retained
 
-run_plugins_natesclaw_logged reinstall-npm plugins install "npm:@natesclaw/demo-plugin-npm@0.0.1" --force
+run_plugins_natesclaw_logged reinstall-npm plugins install "npm:@openclaw/demo-plugin-npm@0.0.1" --force
 run_plugins_natesclaw_capture "$NATESCLAW_PLUGINS_TMP_DIR/plugins-npm.json" plugins list --json
 run_plugins_natesclaw_capture "$NATESCLAW_PLUGINS_TMP_DIR/plugins-npm-inspect.json" plugins inspect demo-plugin-npm --runtime --json
 run_plugins_shell_logged exec-reinstalled-npm-plugin-cli 'node "$NATESCLAW_ENTRY" demo-npm ping >"$NATESCLAW_PLUGINS_TMP_DIR/plugins-npm-cli.txt"'
@@ -238,7 +238,7 @@ run_plugins_natesclaw_capture "$NATESCLAW_PLUGINS_TMP_DIR/plugins-npm-uninstalle
 node scripts/e2e/lib/plugins/assertions.mjs plugin-npm-removed
 
 echo "Testing npm install rejects malformed package metadata..."
-if natesclaw_e2e_maybe_timeout "$NATESCLAW_PLUGINS_CLI_TIMEOUT" node "$NATESCLAW_ENTRY" plugins install "npm:@natesclaw/demo-plugin-invalid-metadata@0.0.1" --force >"$NATESCLAW_PLUGINS_TMP_DIR/plugins-invalid-natesclaw-extensions.log" 2>&1; then
+if natesclaw_e2e_maybe_timeout "$NATESCLAW_PLUGINS_CLI_TIMEOUT" node "$NATESCLAW_ENTRY" plugins install "npm:@openclaw/demo-plugin-invalid-metadata@0.0.1" --force >"$NATESCLAW_PLUGINS_TMP_DIR/plugins-invalid-natesclaw-extensions.log" 2>&1; then
   cat "$NATESCLAW_PLUGINS_TMP_DIR/plugins-invalid-natesclaw-extensions.log"
   echo "Expected malformed package metadata install to fail." >&2
   exit 1

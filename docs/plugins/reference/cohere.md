@@ -11,8 +11,8 @@ Natesclaw Cohere provider plugin.
 
 ## Distribution
 
-- Package: `@natesclaw/cohere-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/cohere-provider`
+- Package: `@openclaw/cohere-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/cohere-provider`
 
 ## Surface
 

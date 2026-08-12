@@ -251,12 +251,12 @@ jobs:
           invalid_scope="$(
             jq -r '
               (.bootstrapCandidates[]?, .missingTrustedPublisher[]?)
-              | select(.packageName | startswith("@natesclaw/") | not)
+              | select(.packageName | startswith("@openclaw/") | not)
               | "- \(.packageName)@\(.version)"
             ' .local/plugin-clawhub-release-plan.json
           )"
           if [[ -n "${invalid_scope}" ]]; then
-            echo "Plugin ClawHub bootstrap only supports @natesclaw/* packages." >&2
+            echo "Plugin ClawHub bootstrap only supports @openclaw/* packages." >&2
             printf '%s\n' "${invalid_scope}" >&2
             exit 1
           fi
@@ -534,7 +534,7 @@ jobs:
             package_dir="$(jq -r '.packageDir' <<< "${plugin}")"
             package_version="$(jq -r '.version' <<< "${plugin}")"
             package_tag="$(jq -r '.publishTag' <<< "${plugin}")"
-            package_slug="${package_name#@natesclaw/}"
+            package_slug="${package_name#@openclaw/}"
             output_dir="${artifact_root}/packages/${package_slug}"
             mkdir -p "${output_dir}"
             node --import tsx scripts/check-plugin-npm-runtime-builds.mts --package "${package_dir}"

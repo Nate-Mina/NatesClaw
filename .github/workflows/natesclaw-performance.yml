@@ -702,7 +702,7 @@ jobs:
           reports_root=".artifacts/clawgrit-baseline"
           mkdir -p "$reports_root"
           git -C "$reports_root" init -b main
-          git -C "$reports_root" remote add origin "https://github.com/natesclaw/clawgrit-reports.git"
+          git -C "$reports_root" remote add origin "https://github.com/openclaw/clawgrit-reports.git"
           if ! git -C "$reports_root" fetch --filter=blob:none --depth=1 origin main; then
             echo "No previous source performance baseline could be fetched." >> "$GITHUB_STEP_SUMMARY"
             exit 0
@@ -1177,7 +1177,7 @@ jobs:
 
           git -C "$reports_root" init -b main
           git -C "$reports_root" config core.hooksPath /dev/null
-          git -C "$reports_root" remote add origin "https://github.com/natesclaw/clawgrit-reports.git"
+          git -C "$reports_root" remote add origin "https://github.com/openclaw/clawgrit-reports.git"
           if ! timeout 120s git -C "$reports_root" fetch --depth=1 origin main; then
             echo "::${annotation}::Unable to fetch natesclaw/clawgrit-reports before publishing."
             exit 1
@@ -1191,7 +1191,7 @@ jobs:
           fi
           run_slug="${GITHUB_RUN_ID}-${PRODUCER_ATTEMPT}"
           dest_rel="natesclaw-performance/${ref_slug}/${run_slug}/${LANE_ID}"
-          report_url="https://github.com/natesclaw/clawgrit-reports/tree/main/${dest_rel}"
+          report_url="https://github.com/openclaw/clawgrit-reports/tree/main/${dest_rel}"
           if git -C "$reports_root" cat-file -e "HEAD:${dest_rel}/report.json" 2>/dev/null; then
             {
               echo "### Clawgrit report already published"
@@ -1310,7 +1310,7 @@ jobs:
             echo "::${annotation}::Prepared report metadata failed validation."
             exit 1
           fi
-          if [[ "$REPORT_URL" != "https://github.com/natesclaw/clawgrit-reports/tree/main/${DEST_REL}" ]]; then
+          if [[ "$REPORT_URL" != "https://github.com/openclaw/clawgrit-reports/tree/main/${DEST_REL}" ]]; then
             echo "::${annotation}::Prepared report URL failed validation."
             exit 1
           fi
@@ -1338,7 +1338,7 @@ jobs:
             echo "::${annotation}::Kova artifacts uploaded, but clawgrit report publish failed after $1 attempts."
           }
 
-          if [[ "$(git_local config --local --get core.hooksPath)" != "/dev/null" || "$(git_local remote get-url origin)" != "https://github.com/natesclaw/clawgrit-reports.git" ]]; then
+          if [[ "$(git_local config --local --get core.hooksPath)" != "/dev/null" || "$(git_local remote get-url origin)" != "https://github.com/openclaw/clawgrit-reports.git" ]]; then
             echo "::${annotation}::Prepared reports checkout failed integrity validation."
             exit 1
           fi

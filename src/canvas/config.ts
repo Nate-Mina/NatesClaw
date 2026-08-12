@@ -1,5 +1,5 @@
 /** Core Canvas host enablement from the shipped Canvas plugin configuration surface. */
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { isTruthyEnvValue } from "../infra/env.js";
 

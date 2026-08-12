@@ -3,7 +3,7 @@ import {
   identityHasStableSessionId,
   isSessionIdentityPending,
   resolveSessionIdentityFromMeta,
-} from "@natesclaw/acp-core/runtime/session-identity";
+} from "@openclaw/acp-core/runtime/session-identity";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { logVerbose } from "../../globals.js";
 import type {

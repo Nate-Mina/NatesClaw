@@ -1,5 +1,5 @@
 // Matrix setup module handles plugin onboarding behavior.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { OutputRuntimeEnv } from "natesclaw/plugin-sdk/runtime";
 import type { ChannelSetupWizardAdapter } from "natesclaw/plugin-sdk/setup";
 import { afterEach, vi } from "vitest";

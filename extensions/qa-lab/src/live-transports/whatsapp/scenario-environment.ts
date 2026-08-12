@@ -1,4 +1,4 @@
-import type { WhatsAppQaDriverSession } from "@natesclaw/whatsapp/api.js";
+import type { WhatsAppQaDriverSession } from "@openclaw/whatsapp/api.js";
 import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import type { QaRunnerCliRegistration } from "natesclaw/plugin-sdk/qa-runner-runtime";
 import { QaSuiteScenarioSkipError } from "../../errors.js";

@@ -15,7 +15,7 @@ Twitch ships as an official plugin; it is not part of the core install.
 <Tabs>
   <Tab title="npm registry">
     ```bash
-    natesclaw plugins install @natesclaw/twitch
+    natesclaw plugins install @openclaw/twitch
     ```
   </Tab>
   <Tab title="Local checkout">

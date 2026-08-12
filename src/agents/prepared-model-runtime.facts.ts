@@ -1,12 +1,12 @@
 import fs from "node:fs";
 import path from "node:path";
 import { performance } from "node:perf_hooks";
-import type { ConfiguredModelRef } from "@natesclaw/model-catalog-core/configured-model-refs";
+import type { ConfiguredModelRef } from "@openclaw/model-catalog-core/configured-model-refs";
 import {
   findNormalizedProviderValue,
   normalizeProviderId,
-} from "@natesclaw/model-catalog-core/provider-id";
-import { stableStringify } from "@natesclaw/normalization-core";
+} from "@openclaw/model-catalog-core/provider-id";
+import { stableStringify } from "@openclaw/normalization-core";
 import { sha256Base64Url } from "../infra/crypto-digest.js";
 import { prepareMediaCapabilityProviders } from "../plugins/capability-provider-runtime.js";
 import {

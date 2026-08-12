@@ -11,7 +11,7 @@ Adds LM Studio model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/lmstudio-provider`
+- Package: `@openclaw/lmstudio-provider`
 - Install route: included in Natesclaw
 
 ## Surface

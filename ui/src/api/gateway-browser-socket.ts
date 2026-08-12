@@ -2,7 +2,7 @@ import {
   DEFAULT_PREAUTH_HANDSHAKE_TIMEOUT_MS,
   type GatewayProtocolSocket,
   type GatewayProtocolSocketHandlers,
-} from "@natesclaw/gateway-client/browser";
+} from "@openclaw/gateway-client/browser";
 
 export function createBrowserGatewaySocket(
   url: string,

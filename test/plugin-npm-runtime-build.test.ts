@@ -47,7 +47,7 @@ describe("plugin npm runtime build planning", () => {
     writeFileSync(
       path.join(packageDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/demo",
+        name: "@openclaw/demo",
         version: "1.0.0",
         natesclaw: {
           compat: { pluginApi: "1.0.0" },

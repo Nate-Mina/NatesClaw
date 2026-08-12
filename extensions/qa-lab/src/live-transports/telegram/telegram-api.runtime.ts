@@ -1,6 +1,6 @@
 import { setTimeout as sleep } from "node:timers/promises";
 // Qa Lab plugin module owns Telegram live adapter API and credential behavior.
-import type { TelegramBotMessage, TelegramBotUpdate } from "@natesclaw/telegram/api.js";
+import type { TelegramBotMessage, TelegramBotUpdate } from "@openclaw/telegram/api.js";
 import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { formatErrorMessage } from "natesclaw/plugin-sdk/error-runtime";
 import {

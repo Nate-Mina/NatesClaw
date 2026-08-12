@@ -17,19 +17,19 @@ handshake time.
 These packages ship with Natesclaw release trains. During the initial rollout,
 npm may return `E404` until the first package-bearing release is published.
 
-- [`@natesclaw/gateway-protocol`](https://www.npmjs.com/package/@natesclaw/gateway-protocol)
+- [`@openclaw/gateway-protocol`](https://www.npmjs.com/package/@openclaw/gateway-protocol)
   publishes the schemas, validators, TypeScript types, lightweight frame and error
   helpers, and version constants. Its tarball includes the generated
-  [`protocol.schema.json`](https://unpkg.com/@natesclaw/gateway-protocol@beta/protocol.schema.json)
+  [`protocol.schema.json`](https://unpkg.com/@openclaw/gateway-protocol@beta/protocol.schema.json)
   machine-readable contract.
-- [`@natesclaw/gateway-client`](https://www.npmjs.com/package/@natesclaw/gateway-client)
+- [`@openclaw/gateway-client`](https://www.npmjs.com/package/@openclaw/gateway-client)
   publishes the reference Node client and a browser-safe entry at
-  `@natesclaw/gateway-client/browser`.
+  `@openclaw/gateway-client/browser`.
 
 For application lifecycle guidance, see
-[Building a Gateway client](https://docs.natesclaw.ai/gateway/clients). For apps
+[Building a Gateway client](https://docs.openclaw.ai/gateway/clients). For apps
 that supervise the Gateway as a child process, see
-[Embedding Natesclaw](https://docs.natesclaw.ai/gateway/embedding).
+[Embedding Natesclaw](https://docs.openclaw.ai/gateway/embedding).
 
 ## Transport and framing
 
@@ -70,11 +70,11 @@ missing-scope details:
 
 Clients should read `details` first and use the legacy message only as a compatibility
 fallback. `readMissingScopeError` and `readMissingScopeErrorDetails` are exported from
-`@natesclaw/gateway-protocol/gateway-error-details`; the browser-safe gateway client
-re-exports them from `@natesclaw/gateway-client/browser`.
+`@openclaw/gateway-protocol/gateway-error-details`; the browser-safe gateway client
+re-exports them from `@openclaw/gateway-client/browser`.
 
 The schemas are exported as `GatewayErrorDetailsSchema`,
-`MissingScopeErrorDetailsSchema` from `@natesclaw/gateway-protocol/schema`.
+`MissingScopeErrorDetailsSchema` from `@openclaw/gateway-protocol/schema`.
 HTTP scope failures mirror the `MISSING_SCOPE` object under `error.details` and
 use HTTP status `403`.
 
@@ -1265,7 +1265,7 @@ the TypeBox schemas re-exported from `packages/gateway-protocol/src/schema.ts`.
 
 ## Related
 
-- [Building a Gateway client](https://docs.natesclaw.ai/gateway/clients)
-- [Embedding Natesclaw](https://docs.natesclaw.ai/gateway/embedding)
+- [Building a Gateway client](https://docs.openclaw.ai/gateway/clients)
+- [Embedding Natesclaw](https://docs.openclaw.ai/gateway/embedding)
 - [Bridge protocol](/gateway/bridge-protocol)
 - [Gateway runbook](/gateway)

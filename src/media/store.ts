@@ -7,15 +7,15 @@ import {
   basenameFromAnyPath,
   extnameFromAnyPath,
   nameFromAnyPath,
-} from "@natesclaw/media-core/file-name";
+} from "@openclaw/media-core/file-name";
 import {
   detectMime,
   extensionForMime,
   getFileExtension,
   normalizeMimeType,
-} from "@natesclaw/media-core/mime";
-import { hasHttpUrlPrefix } from "@natesclaw/net-policy/url-protocol";
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+} from "@openclaw/media-core/mime";
+import { hasHttpUrlPrefix } from "@openclaw/net-policy/url-protocol";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import { fileStore } from "../infra/file-store.js";
 import { sanitizeUntrustedFileName } from "../infra/fs-safe-advanced.js";
 import { isPathInside } from "../infra/fs-safe.js";

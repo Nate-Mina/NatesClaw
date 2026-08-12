@@ -11,8 +11,8 @@ Natesclaw PixVerse video generation provider plugin.
 
 ## Distribution
 
-- Package: `@natesclaw/pixverse-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/pixverse-provider`
+- Package: `@openclaw/pixverse-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/pixverse-provider`
 
 ## Surface
 

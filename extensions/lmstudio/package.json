@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/lmstudio-provider",
+  "name": "@openclaw/lmstudio-provider",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw LM Studio provider plugin",

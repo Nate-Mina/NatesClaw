@@ -41,7 +41,7 @@ existing Natesclaw channel conversations, use
 Yes, after installing the official ACP runtime plugin:
 
 ```bash
-natesclaw plugins install @natesclaw/acpx
+natesclaw plugins install @openclaw/acpx
 natesclaw config set plugins.entries.acpx.enabled true
 ```
 
@@ -239,7 +239,7 @@ See also [Sub-agents](/tools/subagents).
 For Claude Code through ACP, the stack is:
 
 1. Natesclaw ACP session control plane.
-2. Official `@natesclaw/acpx` runtime plugin.
+2. Official `@openclaw/acpx` runtime plugin.
 3. Claude ACP adapter.
 4. Claude-side runtime/session machinery.
 

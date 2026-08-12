@@ -1,4 +1,4 @@
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { html, nothing, svg } from "lit";
 import { fnv1aUtf16 } from "../lib/fnv1a.ts";
 import { lobsterHonorific } from "./lobster-dex.ts";

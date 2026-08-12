@@ -11,7 +11,7 @@ Natesclaw QA lab plugin with private debugger UI and scenario runner.
 
 ## Distribution
 
-- Package: `@natesclaw/qa-lab`
+- Package: `@openclaw/qa-lab`
 - Install route: source checkout only
 
 ## Surface

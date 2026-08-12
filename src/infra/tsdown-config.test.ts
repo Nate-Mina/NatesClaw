@@ -341,8 +341,8 @@ describe("tsdown config", () => {
       throw new Error("expected unified graph alwaysBundle predicate");
     }
 
-    expect(alwaysBundle("@natesclaw/fs-safe")).toBe(true);
-    expect(alwaysBundle("@natesclaw/fs-safe/path")).toBe(true);
+    expect(alwaysBundle("@openclaw/fs-safe")).toBe(true);
+    expect(alwaysBundle("@openclaw/fs-safe/path")).toBe(true);
     expect(alwaysBundle("natesclaw/plugin-sdk/ssrf-runtime-internal")).toBe(true);
     expect(alwaysBundle("natesclaw/plugin-sdk/ssrf-runtime")).toBe(false);
     expect(alwaysBundle("zod")).toBe(true);

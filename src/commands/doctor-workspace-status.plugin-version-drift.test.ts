@@ -47,8 +47,8 @@ function detectCodexDrift(installedVersion: string, gatewayVersion: string) {
     installRecords: {
       codex: {
         source: "npm",
-        spec: `@natesclaw/codex@${installedVersion}`,
-        resolvedName: "@natesclaw/codex",
+        spec: `@openclaw/codex@${installedVersion}`,
+        resolvedName: "@openclaw/codex",
         resolvedVersion: installedVersion,
       },
     },
@@ -70,8 +70,8 @@ describe("official Codex plugin version drift doctor evidence", () => {
             installedVersion,
             gatewayVersion,
             source: "npm",
-            packageName: "@natesclaw/codex",
-            spec: `@natesclaw/codex@${installedVersion}`,
+            packageName: "@openclaw/codex",
+            spec: `@openclaw/codex@${installedVersion}`,
           },
         ],
       });
@@ -84,7 +84,7 @@ describe("official Codex plugin version drift doctor evidence", () => {
           path: "plugins.entries.codex",
           target: "codex",
           requirement: "plugin-version-drift",
-          fixHint: "natesclaw plugins update @natesclaw/codex@2026.6.1 && natesclaw gateway restart",
+          fixHint: "natesclaw plugins update @openclaw/codex@2026.6.1 && natesclaw gateway restart",
         },
       ]);
 
@@ -101,7 +101,7 @@ describe("official Codex plugin version drift doctor evidence", () => {
         expect(driftNotes[0]?.[0]).toContain(
           `codex: ${installedVersion} (npm) -> expected ${gatewayVersion}`,
         );
-        expect(driftNotes[0]?.[0]).toContain("natesclaw plugins update @natesclaw/codex@2026.6.1");
+        expect(driftNotes[0]?.[0]).toContain("natesclaw plugins update @openclaw/codex@2026.6.1");
         expect(driftNotes[0]?.[0]).toContain("natesclaw gateway restart");
       } finally {
         noteSpy.mockRestore();

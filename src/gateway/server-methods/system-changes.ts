@@ -1,5 +1,5 @@
 // Reads the bounded system/config journals as one admin-facing change history.
-import { parseDateStringTimestampMs } from "@natesclaw/normalization-core/number-coercion";
+import { parseDateStringTimestampMs } from "@openclaw/normalization-core/number-coercion";
 import {
   ErrorCodes,
   errorShape,

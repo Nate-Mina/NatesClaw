@@ -1,6 +1,6 @@
 import fs from "node:fs/promises";
 import { password } from "@clack/prompts";
-import { readByteStreamWithLimit } from "@natesclaw/media-core/read-byte-stream-with-limit";
+import { readByteStreamWithLimit } from "@openclaw/media-core/read-byte-stream-with-limit";
 import { readFileDescriptorBounded } from "../infra/boundary-file-read.js";
 import { parseSecretStoreDotEnvText } from "../secrets/store/dotenv.js";
 import {

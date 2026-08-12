@@ -396,7 +396,7 @@ compare restored legacy artifacts with the SQLite rows before importing.
 
 ## Notes
 
-- In Nix mode (`NATESCLAW_NIX_MODE=1`), read-only doctor checks still work, but `doctor --fix`, `doctor --repair`, `doctor --yes`, and `doctor --generate-gateway-token` are disabled because `natesclaw.json` is immutable. Edit the Nix source for this install instead; for nix-natesclaw, use the agent-first [Quick Start](https://github.com/natesclaw/nix-natesclaw#quick-start).
+- In Nix mode (`NATESCLAW_NIX_MODE=1`), read-only doctor checks still work, but `doctor --fix`, `doctor --repair`, `doctor --yes`, and `doctor --generate-gateway-token` are disabled because `natesclaw.json` is immutable. Edit the Nix source for this install instead; for nix-natesclaw, use the agent-first [Quick Start](https://github.com/openclaw/nix-natesclaw#quick-start).
 - Interactive prompts (keychain/OAuth fixes, etc.) only run when stdin is a TTY and `--non-interactive` is **not** set. Headless runs (cron, Telegram, no terminal) skip prompts.
 - Non-interactive `doctor` runs skip eager plugin loading so headless health checks stay fast. Interactive sessions still load the plugin surfaces needed by the legacy health/repair flow.
 - `--lint` is stricter than `--non-interactive`: always read-only, never prompts, never applies safe migrations. Use `doctor --fix` or `doctor --repair` when you want doctor to make changes.

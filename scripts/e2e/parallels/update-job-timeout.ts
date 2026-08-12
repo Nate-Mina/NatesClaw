@@ -1,5 +1,5 @@
 // Update Job Timeout script supports Natesclaw repository automation.
-import { resolveTimerTimeoutMs } from "@natesclaw/normalization-core/number-coercion";
+import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
 
 interface TimedUpdateJobOptions {
   abortSettleMs?: number;

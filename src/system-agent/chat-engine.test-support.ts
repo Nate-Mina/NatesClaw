@@ -400,13 +400,13 @@ export function fakeOverviewLoader(
       },
       gateway: { url: "ws://127.0.0.1:18789", source: "local", reachable: false },
       references: {
-        docsUrl: "https://docs.natesclaw.ai",
-        sourceUrl: "https://github.com/natesclaw/natesclaw",
+        docsUrl: "https://docs.openclaw.ai",
+        sourceUrl: "https://github.com/openclaw/natesclaw",
       },
     }) as never;
 }
 
-export { expectDefined } from "@natesclaw/normalization-core";
+export { expectDefined } from "@openclaw/normalization-core";
 export { hashSystemAgentOperation } from "../agents/tools/system-agent-tool.js";
 export type { NatesclawConfig } from "../config/types.natesclaw.js";
 export type { WizardPrompter } from "../wizard/prompts.js";

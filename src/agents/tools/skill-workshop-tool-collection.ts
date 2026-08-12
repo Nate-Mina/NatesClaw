@@ -1,5 +1,5 @@
 import path from "node:path";
-import { asNullableRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
 import { Type } from "typebox";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { sha256Hex } from "../../infra/crypto-digest.js";

@@ -11,7 +11,7 @@ Adds text-to-speech provider support.
 
 ## Distribution
 
-- Package: `@natesclaw/tts-local-cli`
+- Package: `@openclaw/tts-local-cli`
 - Install route: included in Natesclaw
 
 ## Surface

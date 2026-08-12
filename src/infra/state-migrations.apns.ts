@@ -1,7 +1,7 @@
 // Doctor-only import for the retired APNs registration JSON store.
 import path from "node:path";
-import { root, type Root } from "@natesclaw/fs-safe";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { root, type Root } from "@openclaw/fs-safe";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import { runNatesclawStateWriteTransaction } from "../state/natesclaw-state-db.js";
 import {

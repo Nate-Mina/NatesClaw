@@ -1,4 +1,4 @@
-import type { AssistantMessage, Context, Model, ProviderReplayState } from "@natesclaw/llm-core";
+import type { AssistantMessage, Context, Model, ProviderReplayState } from "@openclaw/llm-core";
 import type {
   ResponseCompactionItemParam,
   ResponseOutputItem,

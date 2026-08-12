@@ -3,9 +3,9 @@
  * Resolves plugin-owned or transport-aware stream functions and registers the
  * model API once a concrete stream implementation exists.
  */
-import type { ApiRegistry } from "@natesclaw/ai";
+import type { ApiRegistry } from "@openclaw/ai";
 import "./ai-transport-runtime-host.js";
-import { createTransportAwareStreamFnForModel } from "@natesclaw/ai/transports";
+import { createTransportAwareStreamFnForModel } from "@openclaw/ai/transports";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { getModelLlmRuntime } from "../llm/model-runtime-binding.js";
 import type { Api, Model } from "../llm/types.js";

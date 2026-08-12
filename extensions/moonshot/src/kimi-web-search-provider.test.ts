@@ -226,7 +226,7 @@ describe("kimi web search provider", () => {
   it("accepts final responses with search result citations", async () => {
     const fetchMock = vi.fn().mockResolvedValue(
       jsonResponse({
-        search_results: [{ title: "Natesclaw", url: "https://github.com/natesclaw/natesclaw" }],
+        search_results: [{ title: "Natesclaw", url: "https://github.com/openclaw/natesclaw" }],
         choices: [
           {
             finish_reason: "stop",
@@ -242,7 +242,7 @@ describe("kimi web search provider", () => {
 
       expect(result.provider).toBe("kimi");
       expectStringFieldContains(result, "content", "Natesclaw is on GitHub.");
-      expect(result.citations).toEqual(["https://github.com/natesclaw/natesclaw"]);
+      expect(result.citations).toEqual(["https://github.com/openclaw/natesclaw"]);
       expect(result).not.toHaveProperty("error");
     });
   });

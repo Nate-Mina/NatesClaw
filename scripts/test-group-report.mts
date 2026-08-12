@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import pMap from "p-map";
 import { coerceErrorMessage as formatSpawnError } from "./lib/error-format.mts";
 import { parsePositiveInt } from "./lib/numeric-options.mjs";

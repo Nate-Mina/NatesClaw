@@ -2,7 +2,7 @@
 import {
   setCurrentManifestModelIdNormalizationRecords,
   type ManifestModelIdNormalizationRecord,
-} from "@natesclaw/model-catalog-core/provider-model-id-normalization";
+} from "@openclaw/model-catalog-core/provider-model-id-normalization";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveGlobalSingleton } from "../shared/global-singleton.js";
 

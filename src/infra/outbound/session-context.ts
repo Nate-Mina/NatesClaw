@@ -1,6 +1,6 @@
 // Outbound session context carries canonical hook/session policy keys plus
 // requester metadata used by delivery policies and media roots.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { resolveSessionAgentId } from "../../agents/agent-scope.js";
 import { normalizeChatType } from "../../channels/chat-type.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";

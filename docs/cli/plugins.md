@@ -56,7 +56,7 @@ command with `NATESCLAW_PLUGIN_LIFECYCLE_TRACE=1`. The trace writes phase timing
 to stderr and keeps JSON output parseable. See [Debugging](/help/debugging#plugin-lifecycle-trace).
 
 <Note>
-In Nix mode (`NATESCLAW_NIX_MODE=1`), `natesclaw.json` is immutable. `install`, `update`, `uninstall`, `enable`, and `disable` all refuse to run. Edit the Nix source for this install instead (`programs.natesclaw.config` or `instances.<name>.config` for nix-natesclaw), then rebuild. See the agent-first [Quick Start](https://github.com/natesclaw/nix-natesclaw#quick-start).
+In Nix mode (`NATESCLAW_NIX_MODE=1`), `natesclaw.json` is immutable. `install`, `update`, `uninstall`, `enable`, and `disable` all refuse to run. Edit the Nix source for this install instead (`programs.natesclaw.config` or `instances.<name>.config` for nix-natesclaw), then rebuild. See the agent-first [Quick Start](https://github.com/openclaw/nix-natesclaw#quick-start).
 </Note>
 
 <Note>
@@ -122,7 +122,7 @@ generated README for first-time ClawHub publishing and trusted-publisher setup.
 
 ```bash
 natesclaw plugins search "calendar"                      # search ClawHub plugins
-natesclaw plugins install @natesclaw/<package>            # trusted official catalog
+natesclaw plugins install @openclaw/<package>            # trusted official catalog
 natesclaw plugins install <package>                       # arbitrary npm package
 natesclaw plugins install clawhub:<package>                # ClawHub only
 natesclaw plugins install npm:<package>                    # npm only
@@ -169,7 +169,7 @@ summary, and an install hint such as `natesclaw plugins install clawhub:<package
 <Note>
 ClawHub is the primary distribution and discovery surface for most plugins. Npm
 remains a supported fallback and direct-install path. Natesclaw-owned
-`@natesclaw/*` plugin packages are published on npm again; see the current list
+`@openclaw/*` plugin packages are published on npm again; see the current list
 on [npmjs.com/org/natesclaw](https://www.npmjs.com/org/natesclaw) or the
 [plugin inventory](/plugins/plugin-inventory). Stable installs use `latest`.
 Beta-channel installs and updates prefer the npm `beta` dist-tag when available,
@@ -218,7 +218,7 @@ non-npm sources are not rewritten.
 
     Use `npm:<package>` to make npm resolution explicit. Bare package specs also install directly from npm during the launch cutover unless they match an official plugin id.
 
-    Raw `@natesclaw/*` specs that match bundled plugins resolve to the image-owned bundled copy before npm fallback. For example, `natesclaw plugins install @natesclaw/discord@2026.5.20 --pin` uses the bundled Discord plugin from the current Natesclaw build instead of creating a managed npm override. To force the external npm package, use `natesclaw plugins install npm:@natesclaw/discord@2026.5.20 --pin`.
+    Raw `@openclaw/*` specs that match bundled plugins resolve to the image-owned bundled copy before npm fallback. For example, `natesclaw plugins install @openclaw/discord@2026.5.20 --pin` uses the bundled Discord plugin from the current Natesclaw build instead of creating a managed npm override. To force the external npm package, use `natesclaw plugins install npm:@openclaw/discord@2026.5.20 --pin`.
 
     Bare specs and `@latest` stay on the stable track. Natesclaw date-stamped correction versions such as `2026.5.3-1` count as stable for this check. If npm resolves either form to a prerelease, Natesclaw stops and asks you to opt in explicitly with a prerelease tag (`@beta`/`@rc`) or an exact prerelease version (`@1.2.3-beta.4`).
 
@@ -266,7 +266,7 @@ Use `npm:` to make npm-only resolution explicit:
 
 ```bash
 natesclaw plugins install npm:natesclaw-codex-app-server
-natesclaw plugins install npm:@natesclaw/discord@2026.5.20
+natesclaw plugins install npm:@openclaw/discord@2026.5.20
 natesclaw plugins install npm:@scope/plugin-name@1.0.1
 ```
 
@@ -435,7 +435,7 @@ natesclaw plugins uninstall <id> --force
 natesclaw plugins update <id-or-npm-spec>
 natesclaw plugins update --all
 natesclaw plugins update <id-or-npm-spec> --dry-run
-natesclaw plugins update @natesclaw/voice-call
+natesclaw plugins update @openclaw/voice-call
 natesclaw plugins update @acme/demo
 natesclaw plugins update natesclaw-codex-app-server --acknowledge-clawhub-risk
 natesclaw plugins update natesclaw-codex-app-server --dangerously-force-unsafe-install
@@ -534,7 +534,7 @@ The local plugin registry is Natesclaw's persisted cold read model for installed
 
 Use `plugins registry` to inspect whether the persisted registry is present, current, or stale. Use `--refresh` to rebuild it from the persisted plugin index, config policy, and manifest/package metadata. This is a repair path, not a runtime activation path.
 
-`natesclaw doctor --fix` also repairs registry-adjacent managed npm drift. If an orphaned or recovered `@natesclaw/*` package under a managed plugin npm project or the legacy flat managed npm root shadows a bundled plugin, doctor removes that stale package and rebuilds the registry so startup validates against the bundled manifest. When an authoritative install record selects one managed generation but older flat or generation directories remain, doctor retires those stale trees for pruning after the gateway restarts. Doctor also relinks the host `natesclaw` package into managed npm plugins that declare `peerDependencies.natesclaw`, so package-local runtime imports such as `natesclaw/plugin-sdk/*` resolve after updates or npm repairs.
+`natesclaw doctor --fix` also repairs registry-adjacent managed npm drift. If an orphaned or recovered `@openclaw/*` package under a managed plugin npm project or the legacy flat managed npm root shadows a bundled plugin, doctor removes that stale package and rebuilds the registry so startup validates against the bundled manifest. When an authoritative install record selects one managed generation but older flat or generation directories remain, doctor retires those stale trees for pruning after the gateway restarts. Doctor also relinks the host `natesclaw` package into managed npm plugins that declare `peerDependencies.natesclaw`, so package-local runtime imports such as `natesclaw/plugin-sdk/*` resolve after updates or npm repairs.
 
 ## Marketplace
 

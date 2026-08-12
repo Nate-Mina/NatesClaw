@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Installs Natesclaw from a prepared package tarball, installs @natesclaw/codex
+# Installs Natesclaw from a prepared package tarball, installs @openclaw/codex
 # from a registry/git/tarball spec, and verifies a live Codex app-server turn.
 set -Eeuo pipefail
 
@@ -104,7 +104,7 @@ configure_codex_plugin_registry_candidate() {
   CODEX_PLUGIN_REGISTRY_PACKAGE="$(
     node -e '
 const pkg = JSON.parse(process.argv[1]);
-if (pkg.name !== "@natesclaw/codex") {
+if (pkg.name !== "@openclaw/codex") {
   throw new Error(`unexpected Codex package name: ${String(pkg.name)}`);
 }
 process.stdout.write(pkg.name);

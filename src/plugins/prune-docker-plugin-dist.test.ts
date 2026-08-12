@@ -24,7 +24,7 @@ function writePluginSourcePackage(repoRoot: string, pluginId: string) {
   const pluginDir = path.join(repoRoot, "extensions", pluginId);
   fs.mkdirSync(pluginDir, { recursive: true });
   writeJsonFile(path.join(pluginDir, "package.json"), {
-    name: `@natesclaw/${pluginId}`,
+    name: `@openclaw/${pluginId}`,
     version: "0.0.0",
   });
 }
@@ -96,7 +96,7 @@ describe("pruneDockerPluginDist", () => {
     const pluginDir = path.join(repoRoot, "plugins", "acpx");
     fs.mkdirSync(pluginDir, { recursive: true });
     writeJsonFile(path.join(pluginDir, "package.json"), {
-      name: "@natesclaw/acpx",
+      name: "@openclaw/acpx",
       version: "0.0.0",
     });
 
@@ -120,7 +120,7 @@ describe("pruneDockerPluginDist", () => {
       },
     });
     writeJsonFile(path.join(repoRoot, "extensions", "acpx", "package.json"), {
-      name: "@natesclaw/acpx",
+      name: "@openclaw/acpx",
       version: "0.0.0",
       dependencies: {
         "@zed-industries/codex-acp": "0.0.0",
@@ -128,15 +128,15 @@ describe("pruneDockerPluginDist", () => {
       },
     });
     writeJsonFile(path.join(repoRoot, "extensions", "codex", "package.json"), {
-      name: "@natesclaw/codex",
+      name: "@openclaw/codex",
       version: "0.0.0",
       dependencies: {
         "@openai/codex": "0.0.0",
         zod: "0.0.0",
       },
     });
-    writeNodePackage(repoRoot, "@natesclaw/acpx");
-    writeNodePackage(repoRoot, "@natesclaw/codex");
+    writeNodePackage(repoRoot, "@openclaw/acpx");
+    writeNodePackage(repoRoot, "@openclaw/codex");
     writeNodePackage(repoRoot, "zod");
     writeNodePackage(repoRoot, "@openai/codex", {
       optionalDependencies: {
@@ -157,7 +157,7 @@ describe("pruneDockerPluginDist", () => {
     });
 
     expect(removed).toEqual([
-      "node_modules/@natesclaw/acpx",
+      "node_modules/@openclaw/acpx",
       "node_modules/@zed-industries/codex-acp",
       "node_modules/@zed-industries/codex-acp-linux-x64",
       "extensions/acpx",

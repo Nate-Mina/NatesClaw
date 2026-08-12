@@ -13,7 +13,7 @@ import {
   type WorkboardNotification,
   type WorkboardRunAttempt,
   type WorkboardStatus,
-} from "@natesclaw/workboard-contract";
+} from "@openclaw/workboard-contract";
 import { safeEqualSecret } from "natesclaw/plugin-sdk/security-runtime";
 import { normalizeOptionalString } from "natesclaw/plugin-sdk/string-coerce-runtime";
 import { truncateUtf16Safe } from "natesclaw/plugin-sdk/text-utility-runtime";

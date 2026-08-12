@@ -39,7 +39,7 @@ const pluginMethods = [
 const workboardDisabled = {
   id: "workboard",
   name: "Workboard",
-  packageName: "@natesclaw/workboard",
+  packageName: "@openclaw/workboard",
   description: "Dashboard workboard for agent-owned issues and sessions.",
   version: "2026.7.9",
   kind: ["productivity"],
@@ -70,7 +70,7 @@ const lobsterPlugin = {
   state: "not-installed",
   featured: true,
   order: 50,
-  install: { source: "clawhub", packageName: "@natesclaw/lobster" },
+  install: { source: "clawhub", packageName: "@openclaw/lobster" },
 } satisfies PluginCatalogItem;
 
 const remoteIconPlugin = {
@@ -85,7 +85,7 @@ const remoteIconPlugin = {
   featured: true,
   order: 60,
   hasIcon: true,
-  install: { source: "clawhub", packageName: "@natesclaw/firecrawl" },
+  install: { source: "clawhub", packageName: "@openclaw/firecrawl" },
 } satisfies PluginCatalogItem;
 
 const calendarPlugin = {
@@ -349,14 +349,14 @@ describeControlUiE2e("Control UI Plugins mocked Gateway E2E", () => {
           await workboardCard.waitFor({ state: "visible" });
         }
 
-        await page.getByRole("searchbox", { name: "Search plugins" }).fill("@natesclaw/workboard");
+        await page.getByRole("searchbox", { name: "Search plugins" }).fill("@openclaw/workboard");
         await workboardCard.waitFor({ state: "visible", timeout: 5_000 });
         await captureScreenshot(page, `08-scoped-package-${tab}.png`);
 
         if (tab === "discover") {
           const searchRequest = await gateway.waitForRequest("plugins.search");
           expect(requestParams(searchRequest)).toEqual({
-            query: "@natesclaw/workboard",
+            query: "@openclaw/workboard",
             limit: 20,
           });
         }

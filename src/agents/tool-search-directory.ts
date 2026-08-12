@@ -1,5 +1,5 @@
-import { normalizeStringEntries } from "@natesclaw/normalization-core/string-normalization";
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { normalizeStringEntries } from "@openclaw/normalization-core/string-normalization";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import {
   applyToolCatalogCompaction,
   collectUniqueCatalogToolNames,

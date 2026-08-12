@@ -26,7 +26,7 @@ export function createSessionSqliteGithubIssue(
     const url = String(result.stdout).trim().split(/\r?\n/).at(-1);
     return {
       ok: true,
-      url: url && url.length > 0 ? url : "https://github.com/natesclaw/natesclaw/issues",
+      url: url && url.length > 0 ? url : "https://github.com/openclaw/natesclaw/issues",
     };
   }
   const stderr = String(result.stderr).trim();

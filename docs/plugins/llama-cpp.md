@@ -16,7 +16,7 @@ embedding provider `local`, and owns the `node-llama-cpp` native runtime.
 Install it before using either local inference or local memory embeddings:
 
 ```bash
-natesclaw plugins install @natesclaw/llama-cpp-provider
+natesclaw plugins install @openclaw/llama-cpp-provider
 ```
 
 The main `natesclaw` npm package does not include `node-llama-cpp`. Keeping the
@@ -143,7 +143,7 @@ does not load a model just to collect diagnostics.
 If `node-llama-cpp` is missing or fails to load, Natesclaw reports the failure
 with:
 
-1. Install the plugin: `natesclaw plugins install @natesclaw/llama-cpp-provider`.
+1. Install the plugin: `natesclaw plugins install @openclaw/llama-cpp-provider`.
 2. Use Node 24 for native installs/updates.
 3. From a pnpm source checkout: `pnpm approve-builds`, then `pnpm rebuild node-llama-cpp`.
 

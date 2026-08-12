@@ -21,13 +21,13 @@ and ARM64 installers from its own release page.
 
 Windows Hub publishes independently from the Natesclaw CLI and Gateway. Download
 the latest stable Hub installer from the
-[Windows Hub releases page](https://github.com/natesclaw/natesclaw-windows-node/releases/latest)
+[Windows Hub releases page](https://github.com/openclaw/natesclaw-windows-node/releases/latest)
 or directly via `releases/latest/download`:
 
-- [NatesclawCompanion-Setup-x64.exe](https://github.com/natesclaw/natesclaw-windows-node/releases/latest/download/NatesclawCompanion-Setup-x64.exe)
-- [NatesclawCompanion-Setup-arm64.exe](https://github.com/natesclaw/natesclaw-windows-node/releases/latest/download/NatesclawCompanion-Setup-arm64.exe)
+- [NatesclawCompanion-Setup-x64.exe](https://github.com/openclaw/natesclaw-windows-node/releases/latest/download/NatesclawCompanion-Setup-x64.exe)
+- [NatesclawCompanion-Setup-arm64.exe](https://github.com/openclaw/natesclaw-windows-node/releases/latest/download/NatesclawCompanion-Setup-arm64.exe)
 
-If a link above 404s, visit the [Windows Hub releases page](https://github.com/natesclaw/natesclaw-windows-node/releases)
+If a link above 404s, visit the [Windows Hub releases page](https://github.com/openclaw/natesclaw-windows-node/releases)
 and open the newest stable Windows Hub release. Regular Natesclaw stable releases
 also mirror a pinned, release-validated Windows Hub build; that mirror can lag a
 newer standalone Hub release.
@@ -121,7 +121,7 @@ Mode matrix:
 For terminal-first use, install Natesclaw from PowerShell:
 
 ```powershell
-iwr -useb https://natesclaw.ai/install.ps1 | iex
+iwr -useb https://openclaw.ai/install.ps1 | iex
 ```
 
 Verify:
@@ -185,7 +185,7 @@ wsl --shutdown
 Then install Natesclaw inside WSL with the Linux quickstart:
 
 ```bash
-curl -fsSL https://natesclaw.ai/install.sh | bash
+curl -fsSL https://openclaw.ai/install.sh | bash
 natesclaw gateway status
 ```
 

@@ -1,6 +1,6 @@
 import { isDeepStrictEqual } from "node:util";
-import { expectDefined } from "@natesclaw/normalization-core";
-import { MAX_TIMER_TIMEOUT_MS } from "@natesclaw/normalization-core/number-coercion";
+import { expectDefined } from "@openclaw/normalization-core";
+import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
 import {
   type WorkerAdmissionHandshake,
   WORKER_RPC_SET_VERSION,

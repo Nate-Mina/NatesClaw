@@ -2,7 +2,7 @@
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 
 /** Parsed `/plugins` command variants accepted by auto-reply command handling. */
 type PluginsCommand =

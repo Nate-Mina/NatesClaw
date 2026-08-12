@@ -1,22 +1,22 @@
 {
-  "name": "@natesclaw/inworld-speech",
+  "name": "@openclaw/inworld-speech",
   "version": "2026.8.1",
   "description": "Natesclaw Inworld speech plugin.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/inworld-speech",
-      "npmSpec": "@natesclaw/inworld-speech",
+      "clawhubSpec": "clawhub:@openclaw/inworld-speech",
+      "npmSpec": "@openclaw/inworld-speech",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.8"
     },

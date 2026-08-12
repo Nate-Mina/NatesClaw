@@ -1,5 +1,5 @@
 // Control UI view renders agents utils screen content.
-import { formatByteSize } from "@natesclaw/normalization-core";
+import { formatByteSize } from "@openclaw/normalization-core";
 import { html, nothing } from "lit";
 import {
   expandToolGroups,

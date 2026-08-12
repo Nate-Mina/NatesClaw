@@ -2,7 +2,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { isCrablineServerChannel, NATESCLAW_CRABLINE_DEFAULT_CHANNEL } from "@natesclaw/crabline";
+import { isCrablineServerChannel, NATESCLAW_CRABLINE_DEFAULT_CHANNEL } from "@openclaw/crabline";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { readQaScenarioById, type QaScenarioPack } from "./scenario-catalog.js";
 

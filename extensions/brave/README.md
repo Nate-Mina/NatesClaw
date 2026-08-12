@@ -1,4 +1,4 @@
-# @natesclaw/brave-plugin
+# @openclaw/brave-plugin
 
 Official Brave Search provider plugin for Natesclaw.
 
@@ -7,7 +7,7 @@ This plugin registers Brave as a `web_search` provider. It supports normal Brave
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/brave-plugin
+natesclaw plugins install @openclaw/brave-plugin
 ```
 
 Restart the Gateway after installing or updating the plugin.
@@ -27,10 +27,10 @@ Provider-specific options live under `plugins.entries.brave.config.webSearch.*`.
 
 Full setup, config examples, search modes, and tool parameters:
 
-- https://docs.natesclaw.ai/tools/brave-search
+- https://docs.openclaw.ai/tools/brave-search
 
 ## Package
 
 - Plugin id: `brave`
-- Package: `@natesclaw/brave-plugin`
+- Package: `@openclaw/brave-plugin`
 - Minimum Natesclaw host: `2026.4.10`

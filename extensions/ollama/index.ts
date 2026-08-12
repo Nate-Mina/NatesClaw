@@ -1,6 +1,6 @@
 // Ollama plugin entrypoint registers its Natesclaw integration.
 import { createHash } from "node:crypto";
-import { collectConfiguredModelRefValues } from "@natesclaw/model-catalog-core/configured-model-refs";
+import { collectConfiguredModelRefValues } from "@openclaw/model-catalog-core/configured-model-refs";
 import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
 import { createLazyRuntimeModule } from "natesclaw/plugin-sdk/lazy-runtime";
 import type { MediaUnderstandingProvider } from "natesclaw/plugin-sdk/media-understanding";
@@ -987,7 +987,7 @@ export default definePluginEntry({
       buildUnknownModelHint: () =>
         "Ollama Cloud requires an API key. " +
         'Set OLLAMA_API_KEY or run "natesclaw onboard --auth-choice ollama-cloud". ' +
-        "See: https://docs.natesclaw.ai/providers/ollama",
+        "See: https://docs.openclaw.ai/providers/ollama",
     });
     api.registerProvider({
       id: OLLAMA_PROVIDER_ID,
@@ -1296,7 +1296,7 @@ export default definePluginEntry({
       buildUnknownModelHint: () =>
         "Ollama requires authentication to be registered as a provider. " +
         'Set OLLAMA_API_KEY="ollama-local" (any value works) or run "natesclaw configure". ' +
-        "See: https://docs.natesclaw.ai/providers/ollama",
+        "See: https://docs.openclaw.ai/providers/ollama",
     });
   },
 });

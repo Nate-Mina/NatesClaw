@@ -463,7 +463,7 @@ export function runCoercionHelperDeclarationGuard(
   }
   writeLine(
     io.stderr,
-    "Core/package/UI/workspace-script code: use the matching @natesclaw/normalization-core coercion subpath.",
+    "Core/package/UI/workspace-script code: use the matching @openclaw/normalization-core coercion subpath.",
   );
   writeLine(
     io.stderr,

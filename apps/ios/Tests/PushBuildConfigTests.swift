@@ -12,7 +12,7 @@ struct PushBuildConfigTests {
         #expect(config.mode == .appStore)
         #expect(config.transport == .relay)
         #expect(config.distribution == .official)
-        #expect(config.relayBaseURL?.absoluteString == "https://ios-push-relay.natesclaw.ai")
+        #expect(config.relayBaseURL?.absoluteString == "https://ios-push-relay.openclaw.ai")
         #expect(config.apnsEnvironment == .production)
         #expect(config.relayProfile == .production)
         #expect(config.proofPolicy == .appleStrict)
@@ -36,7 +36,7 @@ struct PushBuildConfigTests {
     @Test func `local release mode remains direct production push`() {
         let config = PushBuildConfig(infoDictionary: [
             "NatesclawPushMode": "localProduction",
-            "NatesclawPushRelayBaseURL": "https://ios-push-relay.natesclaw.ai",
+            "NatesclawPushRelayBaseURL": "https://ios-push-relay.openclaw.ai",
         ])
 
         #expect(config.mode == .localProduction)

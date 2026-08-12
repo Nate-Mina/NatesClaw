@@ -38,7 +38,7 @@ describe("plugin fixture commands", () => {
 
     expect(result.status).toBe(0);
     expect(readJson(path.join(pluginRoot, "package.json"))).toMatchObject({
-      name: "@natesclaw/demo-plugin",
+      name: "@openclaw/demo-plugin",
       version: "0.1.0",
       natesclaw: { extensions: ["./index.js"] },
     });

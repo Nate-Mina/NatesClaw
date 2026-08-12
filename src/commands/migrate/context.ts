@@ -1,7 +1,7 @@
 /** Migration provider context and report-directory helpers. */
 import path from "node:path";
-import { isValidAgentId, normalizeAgentId } from "@natesclaw/normalization-core/agent-id";
-import { timestampMsToIsoFileStamp } from "@natesclaw/normalization-core/number-coercion";
+import { isValidAgentId, normalizeAgentId } from "@openclaw/normalization-core/agent-id";
+import { timestampMsToIsoFileStamp } from "@openclaw/normalization-core/number-coercion";
 import { listAgentIds } from "../../agents/agent-scope.js";
 import { formatCliCommand } from "../../cli/command-format.js";
 import { getRuntimeConfig } from "../../config/config.js";

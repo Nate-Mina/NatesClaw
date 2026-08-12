@@ -4,7 +4,7 @@
  * Reports and updates session runtime state, model overrides, visibility, task status, and delivery context.
  */
 import { randomUUID } from "node:crypto";
-import { readStringValue } from "@natesclaw/normalization-core/string-coerce";
+import { readStringValue } from "@openclaw/normalization-core/string-coerce";
 import { Type } from "typebox";
 import type {
   ElevatedLevel,

@@ -8,9 +8,9 @@ import {
   isLegacyIpv4Literal,
   parseCanonicalIpAddress,
   parseLooseIpAddress,
-} from "@natesclaw/net-policy/ip";
-import { hasHttpUrlPrefix } from "@natesclaw/net-policy/url-protocol";
-import { expectDefined } from "@natesclaw/normalization-core";
+} from "@openclaw/net-policy/ip";
+import { hasHttpUrlPrefix } from "@openclaw/net-policy/url-protocol";
+import { expectDefined } from "@openclaw/normalization-core";
 import { parseFenceSpans } from "../../packages/markdown-core/src/fences.js";
 import { parseAudioTag } from "./audio-tags.js";
 

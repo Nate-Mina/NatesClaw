@@ -1,4 +1,4 @@
-import { clampOpenAIPromptCacheKey } from "@natesclaw/ai/providers";
+import { clampOpenAIPromptCacheKey } from "@openclaw/ai/providers";
 
 export function resolveSessionBoundaryPromptCacheKey(params: {
   api: string;

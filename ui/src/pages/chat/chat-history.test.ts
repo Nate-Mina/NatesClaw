@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { reduceSessionProjection } from "@natesclaw/gateway-client/browser";
+import { reduceSessionProjection } from "@openclaw/gateway-client/browser";
 import { describe, expect, it, vi } from "vitest";
 import { GatewayRequestError, type GatewayBrowserClient } from "../../api/gateway.ts";
 import {

@@ -277,7 +277,7 @@ describe("config io write", () => {
     });
 
     await expect(io.writeConfigFile({ gateway: { mode: "local", port: 19001 } })).rejects.toThrow(
-      "Agent-first Nix setup: https://github.com/natesclaw/nix-natesclaw#quick-start",
+      "Agent-first Nix setup: https://github.com/openclaw/nix-natesclaw#quick-start",
     );
 
     await expect(fs.readFile(configPath, "utf-8")).resolves.toBe(initialRaw);
@@ -476,12 +476,12 @@ describe("config io write", () => {
 
   itWithHome("preserves root $schema during partial writes", async (home) => {
     const { configPath } = await writeConfigFixture(home, {
-      $schema: "https://natesclaw.ai/config.json",
+      $schema: "https://openclaw.ai/config.json",
       gateway: { mode: "local" },
     });
 
     const persisted = await writeGatewayPortAndReadConfig(home, configPath);
-    expect(persisted.$schema).toBe("https://natesclaw.ai/config.json");
+    expect(persisted.$schema).toBe("https://openclaw.ai/config.json");
     expect(persisted.gateway).toEqual({ mode: "local", port: 18789 });
   });
 
@@ -1147,7 +1147,7 @@ describe("config io write", () => {
       const includePath = path.join(home, ".natesclaw", "extra.json5");
       await fs.mkdir(path.dirname(configPath), { recursive: true });
       await writeConfigJson(includePath, {
-        $schema: "https://natesclaw.ai/config-from-include.json",
+        $schema: "https://openclaw.ai/config-from-include.json",
       });
       await fs.writeFile(
         configPath,

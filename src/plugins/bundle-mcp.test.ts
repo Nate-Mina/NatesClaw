@@ -1,7 +1,7 @@
 // Verifies bundled MCP plugin metadata and package output.
 import fs from "node:fs/promises";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, describe, expect, it } from "vitest";
 import type { NatesclawConfig } from "../config/config.js";
 import { isRecord } from "../utils.js";

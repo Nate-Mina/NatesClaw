@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 import { writeFile } from "node:fs/promises";
 import path from "node:path";
 import zlib from "node:zlib";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { SessionSystemPromptReport } from "../../config/sessions/types.js";
 import { resolvePreferredNatesclawTmpDir } from "../../infra/tmp-natesclaw-dir.js";
 import { estimateTokensFromChars } from "../../utils/cjk-chars.js";

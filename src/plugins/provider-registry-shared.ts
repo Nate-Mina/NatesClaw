@@ -1,6 +1,6 @@
 // Shares provider registry normalization helpers across plugin paths.
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import { isBlockedObjectKey } from "../infra/prototype-keys.js";
 
 /** Normalizes provider ids used by capability-provider registries. */

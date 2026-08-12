@@ -1,11 +1,11 @@
 {
-  "name": "@natesclaw/canvas-plugin",
+  "name": "@openclaw/canvas-plugin",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw Canvas plugin",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "dependencies": {
     "@a2ui/lit": "0.10.2",

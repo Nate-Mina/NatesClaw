@@ -1,5 +1,5 @@
 // Shared compaction formatting and user-facing notice payload helpers.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { sanitizeForLog } from "../../../packages/terminal-core/src/ansi.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { ReplyPayload } from "../types.js";

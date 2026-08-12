@@ -56,7 +56,7 @@ describe("cli program (nodes push)", () => {
       status: 400,
       reason: "BadDeviceToken",
       tokenSuffix: "1234abcd",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
       transport: "direct",
     });
@@ -75,7 +75,7 @@ describe("cli program (nodes push)", () => {
       status: 410,
       reason: "Unregistered",
       tokenSuffix: "1234abcd",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "production",
       transport: "relay",
     };
@@ -98,7 +98,7 @@ describe("cli program (nodes push)", () => {
       status: 200,
       apnsId: "apns-id",
       tokenSuffix: "1234abcd",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
       transport: "direct",
     };

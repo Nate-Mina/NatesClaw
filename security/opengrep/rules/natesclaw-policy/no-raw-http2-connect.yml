@@ -7,7 +7,7 @@ rules:
     message: Use connectApnsHttp2Session() from src/infra/push-apns-http2.ts instead of raw http2.connect() so APNs HTTP/2 honors managed proxy policy.
     metadata:
       advisory-id: NATESCLAW-POLICY-RAW-HTTP2-CONNECT
-      advisory-url: https://github.com/natesclaw/natesclaw/pull/74905
+      advisory-url: https://github.com/openclaw/natesclaw/pull/74905
       cwe:
         - "CWE-441"
       category: security

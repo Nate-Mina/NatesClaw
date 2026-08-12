@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import { resolve } from "node:path";
 // Verifies schema hint metadata and sensitive path handling.
-import { isSensitiveUrlConfigPath } from "@natesclaw/net-policy/redact-sensitive-url";
+import { isSensitiveUrlConfigPath } from "@openclaw/net-policy/redact-sensitive-url";
 import { describe, expect, it } from "vitest";
 import { z } from "zod";
 import { buildSecretInputSchema } from "../plugin-sdk/secret-input-schema.js";
@@ -39,7 +39,7 @@ describe("section docs URLs", () => {
 
   it("maps every URL to an existing task-oriented docs page", () => {
     const hints = buildBaseHints();
-    const docsOrigin = "https://docs.natesclaw.ai";
+    const docsOrigin = "https://docs.openclaw.ai";
 
     for (const [path, docsUrl] of Object.entries(SECTION_DOCS_URLS)) {
       const docsPath = docsUrl.slice(docsOrigin.length).replace(/^\//u, "");

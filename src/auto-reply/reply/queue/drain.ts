@@ -1,7 +1,7 @@
 import { createHash } from "node:crypto";
-import { expectDefined } from "@natesclaw/normalization-core";
-import { stableStringify } from "@natesclaw/normalization-core";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { expectDefined } from "@openclaw/normalization-core";
+import { stableStringify } from "@openclaw/normalization-core";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { runAgentHarnessBeforeMessageWriteHook } from "../../../agents/harness/hook-helpers.js";
 import { normalizeChatType } from "../../../channels/chat-type.js";
 import { resolveSessionStorePathCore } from "../../../config/sessions.js";

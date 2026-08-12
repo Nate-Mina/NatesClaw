@@ -1,5 +1,5 @@
 // Checks web-search credential presence from config and plugin metadata.
-import { asOptionalObjectRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asOptionalObjectRecord } from "@openclaw/normalization-core/record-coerce";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { loadManifestMetadataSnapshot } from "./manifest-contract-eligibility.js";
 import type { PluginManifestRecord } from "./manifest-registry.js";

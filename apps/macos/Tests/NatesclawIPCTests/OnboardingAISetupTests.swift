@@ -1073,7 +1073,7 @@ struct OnboardingAISetupTests {
         #expect(OnboardingProviderAuthLink.safeURL("http://localhost:1455/callback") == nil)
         #expect(OnboardingProviderAuthLink.safeURL("file:///tmp/token") == nil)
         #expect(OnboardingProviderAuthLink.safeURL("https://user:secret@example.com") == nil)
-        #expect(OnboardingProviderAuthLink.safeURL("Read https://docs.natesclaw.ai/start/faq") == nil)
+        #expect(OnboardingProviderAuthLink.safeURL("Read https://docs.openclaw.ai/start/faq") == nil)
     }
 
     @Test func `terminal provider failure remains copyable and can dismiss`() {

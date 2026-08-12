@@ -30,7 +30,7 @@ install/configure it on that host, then restart the Gateway.
 ### From npm
 
 ```bash
-natesclaw plugins install @natesclaw/zalouser
+natesclaw plugins install @openclaw/zalouser
 ```
 
 Use the bare package to follow the current official release tag; pin an exact

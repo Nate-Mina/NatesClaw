@@ -1,4 +1,4 @@
-import type { RouteMatch, Router } from "@natesclaw/uirouter";
+import type { RouteMatch, Router } from "@openclaw/uirouter";
 import { html, nothing } from "lit";
 import type { ReactiveController, ReactiveControllerHost } from "lit";
 import { property } from "lit/decorators.js";

@@ -1,6 +1,6 @@
 // Resolves plugin-owned legacy session-key behavior from selected setup entries.
 import fs from "node:fs";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { shouldIncludeChannelSetupFeatureForConfig } from "../channels/plugins/bundled-setup-policy.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { describeRootFileOpenFailure, openRootFileSync } from "../infra/boundary-file-read.js";

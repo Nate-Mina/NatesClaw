@@ -1,5 +1,5 @@
 // Configured media size helpers resolve maximum byte limits by media kind.
-import { maxBytesForKind, type MediaKind } from "@natesclaw/media-core/constants";
+import { maxBytesForKind, type MediaKind } from "@openclaw/media-core/constants";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { MEDIA_MAX_BYTES } from "./store.js";
 

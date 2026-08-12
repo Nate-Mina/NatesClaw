@@ -14,7 +14,7 @@ function bundled(pluginId: string, localPath: string): BundledPluginSource {
   return {
     pluginId,
     localPath,
-    npmSpec: `@natesclaw/${pluginId}`,
+    npmSpec: `@openclaw/${pluginId}`,
   };
 }
 

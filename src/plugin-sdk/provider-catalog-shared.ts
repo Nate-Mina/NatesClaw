@@ -1,14 +1,14 @@
 // Provider catalog helpers normalize, hash, and expose model catalogs for provider plugins.
 import { createHash } from "node:crypto";
-import { normalizeModelCatalog } from "@natesclaw/model-catalog-core/model-catalog-normalize";
-import { buildModelCatalogRef } from "@natesclaw/model-catalog-core/model-catalog-refs";
+import { normalizeModelCatalog } from "@openclaw/model-catalog-core/model-catalog-normalize";
+import { buildModelCatalogRef } from "@openclaw/model-catalog-core/model-catalog-refs";
 import type {
   ModelCatalogCost,
   ModelCatalogMediaInputConfig,
   ModelCatalogModel,
   ModelCatalogTieredCost,
-} from "@natesclaw/model-catalog-core/model-catalog-types";
-import { findNormalizedProviderKey } from "@natesclaw/model-catalog-core/provider-id";
+} from "@openclaw/model-catalog-core/model-catalog-types";
+import { findNormalizedProviderKey } from "@openclaw/model-catalog-core/provider-id";
 import {
   isFutureDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,

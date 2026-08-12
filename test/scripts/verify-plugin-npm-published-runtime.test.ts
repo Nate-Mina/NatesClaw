@@ -15,9 +15,9 @@ import {
 describe("plugin npm publish verifier args", () => {
   it("parses help and package specs before npm calls", () => {
     expect(parseVerifyPublishedPluginRuntimeArgs(["--help"])).toEqual({ help: true, spec: "" });
-    expect(parseVerifyPublishedPluginRuntimeArgs(["--", "@natesclaw/discord@2026.5.2"])).toEqual({
+    expect(parseVerifyPublishedPluginRuntimeArgs(["--", "@openclaw/discord@2026.5.2"])).toEqual({
       help: false,
-      spec: "@natesclaw/discord@2026.5.2",
+      spec: "@openclaw/discord@2026.5.2",
     });
   });
 
@@ -27,7 +27,7 @@ describe("plugin npm publish verifier args", () => {
       "Unknown plugin npm verifier option: --wat",
     );
     expect(() =>
-      parseVerifyPublishedPluginRuntimeArgs(["@natesclaw/discord@2026.5.2", "extra"]),
+      parseVerifyPublishedPluginRuntimeArgs(["@openclaw/discord@2026.5.2", "extra"]),
     ).toThrow("Unexpected plugin npm verifier argument: extra");
   });
 });
@@ -99,7 +99,7 @@ describe("plugin npm publish verifier command limits", () => {
 
   it("runs npm metadata commands with bounded exec options", () => {
     const calls: unknown[] = [];
-    const output = runPluginNpmCommand(["view", "@natesclaw/discord", "readme"], {
+    const output = runPluginNpmCommand(["view", "@openclaw/discord", "readme"], {
       env: {
         NATESCLAW_PLUGIN_NPM_COMMAND_MAX_BUFFER_BYTES: "1024",
         NATESCLAW_PLUGIN_NPM_COMMAND_TIMEOUT_MS: "2500",
@@ -113,7 +113,7 @@ describe("plugin npm publish verifier command limits", () => {
     expect(output).toBe(JSON.stringify("# Discord"));
     expect(calls).toStrictEqual([
       {
-        args: ["view", "@natesclaw/discord", "readme"],
+        args: ["view", "@openclaw/discord", "readme"],
         command: "npm",
         options: {
           encoding: "utf8",
@@ -131,9 +131,9 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
   it("flags published plugin packages with TypeScript entries and no compiled runtime output", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
-        spec: "@natesclaw/discord@2026.5.2",
+        spec: "@openclaw/discord@2026.5.2",
         packageJson: {
-          name: "@natesclaw/discord",
+          name: "@openclaw/discord",
           version: "2026.5.2",
           natesclaw: {
             extensions: ["./index.ts"],
@@ -142,7 +142,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
         files: ["package.json", "natesclaw.plugin.json", "index.ts"],
       }),
     ).toEqual([
-      "@natesclaw/discord@2026.5.2 requires compiled runtime output for TypeScript entry ./index.ts: expected ./dist/index.js, ./dist/index.mjs, ./dist/index.cjs, ./index.js, ./index.mjs, ./index.cjs",
+      "@openclaw/discord@2026.5.2 requires compiled runtime output for TypeScript entry ./index.ts: expected ./dist/index.js, ./dist/index.mjs, ./dist/index.cjs, ./index.js, ./index.mjs, ./index.cjs",
     ]);
   });
 
@@ -150,7 +150,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
         packageJson: {
-          name: "@natesclaw/zalo",
+          name: "@openclaw/zalo",
           version: "2026.5.3",
           natesclaw: {
             extensions: ["./index.ts"],
@@ -166,7 +166,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
         packageJson: {
-          name: "@natesclaw/searxng-plugin",
+          name: "@openclaw/searxng-plugin",
           version: "2026.6.11",
           natesclaw: {
             extensions: ["./index.ts"],
@@ -176,7 +176,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
         files: ["package.json", "dist/index.js"],
       }),
     ).toEqual([
-      "@natesclaw/searxng-plugin@2026.6.11 plugin npm package must include natesclaw.plugin.json",
+      "@openclaw/searxng-plugin@2026.6.11 plugin npm package must include natesclaw.plugin.json",
     ]);
   });
 
@@ -184,14 +184,14 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
         packageJson: {
-          name: "@natesclaw/tavily-plugin",
+          name: "@openclaw/tavily-plugin",
           version: "0.0.0",
           description: "Bootstrap reservation",
         },
         files: ["package.json", "README.md"],
       }),
     ).toEqual([
-      "@natesclaw/tavily-plugin@0.0.0 plugin npm package must include natesclaw.plugin.json",
+      "@openclaw/tavily-plugin@0.0.0 plugin npm package must include natesclaw.plugin.json",
     ]);
   });
 
@@ -199,7 +199,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
         packageJson: {
-          name: "@natesclaw/line",
+          name: "@openclaw/line",
           version: "2026.5.3",
           natesclaw: {
             extensions: ["./src/index.ts"],
@@ -208,14 +208,14 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
         },
         files: ["package.json", "natesclaw.plugin.json", "src/index.ts"],
       }),
-    ).toEqual(["@natesclaw/line@2026.5.3 runtime extension entry not found: ./dist/index.js"]);
+    ).toEqual(["@openclaw/line@2026.5.3 runtime extension entry not found: ./dist/index.js"]);
   });
 
   it("flags runtimeExtensions length mismatches", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
         packageJson: {
-          name: "@natesclaw/acpx",
+          name: "@openclaw/acpx",
           version: "2026.5.3",
           natesclaw: {
             extensions: ["./index.ts", "./tools.ts"],
@@ -225,7 +225,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
         files: ["package.json", "natesclaw.plugin.json", "dist/index.js"],
       }),
     ).toEqual([
-      "@natesclaw/acpx@2026.5.3 package.json natesclaw.runtimeExtensions length (1) must match natesclaw.extensions length (2)",
+      "@openclaw/acpx@2026.5.3 package.json natesclaw.runtimeExtensions length (1) must match natesclaw.extensions length (2)",
     ]);
   });
 
@@ -233,7 +233,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
         packageJson: {
-          name: "@natesclaw/whatsapp",
+          name: "@openclaw/whatsapp",
           version: "2026.5.3",
           natesclaw: {
             extensions: ["./src/index.ts"],
@@ -243,7 +243,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
         files: ["package.json", "natesclaw.plugin.json", "src/index.ts", "dist/index.js"],
       }),
     ).toEqual([
-      "@natesclaw/whatsapp@2026.5.3 package.json natesclaw.runtimeExtensions[0] must be a non-empty string",
+      "@openclaw/whatsapp@2026.5.3 package.json natesclaw.runtimeExtensions[0] must be a non-empty string",
     ]);
   });
 
@@ -251,7 +251,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
         packageJson: {
-          name: "@natesclaw/line",
+          name: "@openclaw/line",
           version: "2026.5.3",
           natesclaw: {
             extensions: ["./index.ts"],
@@ -268,7 +268,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
         ],
       }),
     ).toEqual([
-      "@natesclaw/line@2026.5.3 requires compiled runtime output for TypeScript entry ./setup-entry.ts: expected ./dist/setup-entry.js, ./dist/setup-entry.mjs, ./dist/setup-entry.cjs, ./setup-entry.js, ./setup-entry.mjs, ./setup-entry.cjs",
+      "@openclaw/line@2026.5.3 requires compiled runtime output for TypeScript entry ./setup-entry.ts: expected ./dist/setup-entry.js, ./dist/setup-entry.mjs, ./dist/setup-entry.cjs, ./setup-entry.js, ./setup-entry.mjs, ./setup-entry.cjs",
     ]);
   });
 
@@ -276,7 +276,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
         packageJson: {
-          name: "@natesclaw/qqbot",
+          name: "@openclaw/qqbot",
           version: "2026.5.3",
           natesclaw: {
             extensions: ["./index.ts"],
@@ -294,7 +294,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
         packageJson: {
-          name: "@natesclaw/matrix",
+          name: "@openclaw/matrix",
           version: "2026.5.3",
           natesclaw: {
             extensions: ["./index.ts"],
@@ -305,14 +305,14 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
         },
         files: ["package.json", "natesclaw.plugin.json", "dist/index.js"],
       }),
-    ).toEqual(["@natesclaw/matrix@2026.5.3 runtime setup entry not found: ./dist/setup-entry.js"]);
+    ).toEqual(["@openclaw/matrix@2026.5.3 runtime setup entry not found: ./dist/setup-entry.js"]);
   });
 
   it("flags runtimeSetupEntry without setupEntry", () => {
     expect(
       collectPluginNpmPublishedRuntimeErrors({
         packageJson: {
-          name: "@natesclaw/twitch",
+          name: "@openclaw/twitch",
           version: "2026.5.3",
           natesclaw: {
             extensions: ["./index.ts"],
@@ -323,7 +323,7 @@ describe("collectPluginNpmPublishedRuntimeErrors", () => {
         files: ["package.json", "natesclaw.plugin.json", "dist/index.js", "dist/setup-entry.js"],
       }),
     ).toEqual([
-      "@natesclaw/twitch@2026.5.3 package.json natesclaw.runtimeSetupEntry requires natesclaw.setupEntry",
+      "@openclaw/twitch@2026.5.3 package.json natesclaw.runtimeSetupEntry requires natesclaw.setupEntry",
     ]);
   });
 });
@@ -332,7 +332,7 @@ describe("resolveNpmPackFilename", () => {
   it("uses the final tarball filename from plain npm pack output", () => {
     const noisyOutput = [
       "npm notice",
-      "npm notice package: @natesclaw/msteams@2026.5.24-beta.1",
+      "npm notice package: @openclaw/msteams@2026.5.24-beta.1",
       "natesclaw-msteams-2026.5.24-beta.1.tgz",
       "",
     ].join("\n");

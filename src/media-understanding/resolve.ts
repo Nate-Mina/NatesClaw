@@ -3,7 +3,7 @@
 import {
   MAX_TIMER_TIMEOUT_MS,
   resolveTimerTimeoutMs,
-} from "@natesclaw/normalization-core/number-coercion";
+} from "@openclaw/normalization-core/number-coercion";
 import type { MsgContext } from "../auto-reply/templating.js";
 import type { NatesclawConfig } from "../config/types.js";
 import type {

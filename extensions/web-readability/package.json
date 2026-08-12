@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/web-readability-plugin",
+  "name": "@openclaw/web-readability-plugin",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw local Readability web extraction plugin",
@@ -9,7 +9,7 @@
     "linkedom": "0.18.13"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

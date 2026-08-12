@@ -3,7 +3,7 @@
  *
  * Builds lightweight SDK-backed send adapters with chunking, sanitization, and media limits.
  */
-import { asOptionalRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asOptionalRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
 import { sendTextMediaPayload } from "natesclaw/plugin-sdk/reply-payload";
 import { chunkText } from "../../../auto-reply/chunk.js";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";

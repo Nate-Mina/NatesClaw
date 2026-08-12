@@ -1,4 +1,4 @@
-import { SYSTEM_PROMPT_CACHE_BOUNDARY } from "@natesclaw/ai/internal/shared";
+import { SYSTEM_PROMPT_CACHE_BOUNDARY } from "@openclaw/ai/internal/shared";
 // System prompt tests cover the main prompt facade, prompt-surface routing, and
 // user-visible sections for owners, tools, safety, skills, and subagents.
 import { describe, expect, it } from "vitest";
@@ -833,8 +833,8 @@ describe("buildAgentSystemPrompt", () => {
       workspaceDir: "/tmp/work",
     });
 
-    expect(prompt).toContain("Docs: https://docs.natesclaw.ai");
-    expect(prompt).toContain("Source: https://github.com/natesclaw/natesclaw");
+    expect(prompt).toContain("Docs: https://docs.openclaw.ai");
+    expect(prompt).toContain("Source: https://github.com/openclaw/natesclaw");
     expect(prompt).toContain(
       "Natesclaw behavior questions: docs mirror first when web exists. AGENTS/project/workspace/profile/memory = instructions/user memory, not product design truth.",
     );

@@ -1,6 +1,6 @@
 import { PassThrough, type Readable } from "node:stream";
 import { DAVESession } from "@discordjs/voice";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { VoiceOpcodes, type VoiceSendPayload } from "discord-api-types/voice/v8";
 import { createNatesclawCodingTools } from "natesclaw/plugin-sdk/agent-harness";
 import type {

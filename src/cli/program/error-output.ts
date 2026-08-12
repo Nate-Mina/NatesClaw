@@ -47,7 +47,7 @@ function formatHelpHint(
 }
 
 function formatDocsHint(): string {
-  return `${theme.muted("Docs:")} ${formatDocsLink("/cli", "docs.natesclaw.ai/cli")}`;
+  return `${theme.muted("Docs:")} ${formatDocsLink("/cli", "docs.openclaw.ai/cli")}`;
 }
 
 /** Convert Commander parse errors into Natesclaw-specific help and docs guidance. */

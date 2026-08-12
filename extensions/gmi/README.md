@@ -6,7 +6,7 @@ OpenAI-compatible API.
 Install from Natesclaw:
 
 ```bash
-natesclaw plugins install @natesclaw/gmi-provider
+natesclaw plugins install @openclaw/gmi-provider
 natesclaw gateway restart
 ```
 

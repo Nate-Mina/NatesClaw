@@ -548,15 +548,15 @@ describe("runGlobalPackageUpdateSteps", () => {
   it.each([
     {
       name: "full git url",
-      sourceSpec: "https://github.com/natesclaw/natesclaw.git#main",
+      sourceSpec: "https://github.com/openclaw/natesclaw.git#main",
     },
     {
       name: "hosted GitHub URL without git suffix",
-      sourceSpec: "https://github.com/natesclaw/natesclaw#main",
+      sourceSpec: "https://github.com/openclaw/natesclaw#main",
     },
     {
       name: "aliased hosted GitHub URL without git suffix",
-      sourceSpec: "natesclaw@https://github.com/natesclaw/natesclaw#main",
+      sourceSpec: "natesclaw@https://github.com/openclaw/natesclaw#main",
     },
     {
       name: "GitHub shorthand",

@@ -17,10 +17,10 @@ This is an unofficial integration and may result in account suspension or ban. U
 Zalo Personal is an official external plugin, not bundled in core. Install it before use:
 
 ```bash
-natesclaw plugins install @natesclaw/zalouser
+natesclaw plugins install @openclaw/zalouser
 ```
 
-- Pin a version: `natesclaw plugins install @natesclaw/zalouser@<version>`
+- Pin a version: `natesclaw plugins install @openclaw/zalouser@<version>`
 - From a source checkout: `natesclaw plugins install ./path/to/local/zalouser-plugin`
 - Details: [Plugins](/tools/plugin)
 

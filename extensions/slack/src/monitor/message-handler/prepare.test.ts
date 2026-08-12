@@ -1,6 +1,6 @@
 // Slack tests cover prepare plugin behavior.
 import fs from "node:fs/promises";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { App } from "@slack/bolt";
 import { expectChannelInboundContextContract as expectInboundContextContract } from "natesclaw/plugin-sdk/channel-contract-testing";
 import type { NatesclawConfig } from "natesclaw/plugin-sdk/config-contracts";
@@ -247,7 +247,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
         token: "token",
         channel: "C_DENIED",
         user: "U1",
-        text: "Personal Claw can’t reply here because this channel isn’t in its Natesclaw channel allowlist. Ask the Natesclaw owner to allow this channel. <https://docs.natesclaw.ai/channels/slack#access-control-and-routing|Learn how to configure Slack channel access.>",
+        text: "Personal Claw can’t reply here because this channel isn’t in its Natesclaw channel allowlist. Ask the Natesclaw owner to allow this channel. <https://docs.openclaw.ai/channels/slack#access-control-and-routing|Learn how to configure Slack channel access.>",
       });
       expect(enqueueSystemEventMock).not.toHaveBeenCalled();
     },
@@ -1368,7 +1368,7 @@ describe("slack prepareSlackMessage inbound contract", () => {
           channel: channelId,
           channel_type: "channel",
           user: userId,
-          text: implicit ? "and the time?" : "https://github.com/natesclaw/natesclaw/issues/50621",
+          text: implicit ? "and the time?" : "https://github.com/openclaw/natesclaw/issues/50621",
           ts: "1777244714.000100",
           thread_ts: rootTs,
         } as SlackMessageEvent,

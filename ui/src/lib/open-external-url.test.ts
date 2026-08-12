@@ -12,7 +12,7 @@ afterEach(() => {
 });
 
 describe("resolveSafeExternalUrl", () => {
-  const baseHref = "https://natesclaw.ai/chat";
+  const baseHref = "https://openclaw.ai/chat";
 
   it("allows absolute https URLs", () => {
     expect(resolveSafeExternalUrl("https://example.com/a.png?x=1#y", baseHref)).toBe(
@@ -22,13 +22,13 @@ describe("resolveSafeExternalUrl", () => {
 
   it("allows relative URLs resolved against the current origin", () => {
     expect(resolveSafeExternalUrl("/assets/pic.png", baseHref)).toBe(
-      "https://natesclaw.ai/assets/pic.png",
+      "https://openclaw.ai/assets/pic.png",
     );
   });
 
   it("allows blob URLs", () => {
-    expect(resolveSafeExternalUrl("blob:https://natesclaw.ai/abc-123", baseHref)).toBe(
-      "blob:https://natesclaw.ai/abc-123",
+    expect(resolveSafeExternalUrl("blob:https://openclaw.ai/abc-123", baseHref)).toBe(
+      "blob:https://openclaw.ai/abc-123",
     );
   });
 
@@ -99,7 +99,7 @@ describe("openExternalUrlSafe", () => {
       .mockImplementation(() => openedLikeProxy as unknown as Window);
 
     const opened = openExternalUrlSafe("https://example.com/safe.png", {
-      baseHref: "https://natesclaw.ai/chat",
+      baseHref: "https://openclaw.ai/chat",
     });
 
     expect(openMock).toHaveBeenCalledWith(

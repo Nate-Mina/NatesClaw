@@ -1,4 +1,4 @@
-import { buildControlUiCatalogSessionUrl } from "@natesclaw/session-url-contract";
+import { buildControlUiCatalogSessionUrl } from "@openclaw/session-url-contract";
 import { describe, expect, it } from "vitest";
 import type { ApplicationContext } from "../../app/context.ts";
 import { buildCatalogSessionKey } from "./catalog-key.ts";

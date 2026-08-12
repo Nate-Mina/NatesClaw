@@ -273,7 +273,7 @@ export function renderAgentChannels(params: {
                   ? html`
                       <a
                         class="settings-row__value"
-                        href="https://docs.natesclaw.ai/channels"
+                        href="https://docs.openclaw.ai/channels"
                         target="_blank"
                         rel="noopener"
                         >${t("agents.channels.setupGuide")}</a

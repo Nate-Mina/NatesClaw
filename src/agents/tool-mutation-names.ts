@@ -1,4 +1,4 @@
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import {
   AUTOMATIONS_TOOL_NAME,
   LEGACY_AUTOMATIONS_TOOL_NAMES,

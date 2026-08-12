@@ -1,5 +1,5 @@
 // Hooks CLI tests cover hook command registration and output behavior.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { Command } from "commander";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { HookStatusReport } from "../hooks/hooks-status.js";
@@ -36,7 +36,7 @@ const report: HookStatusReport = {
       handlerPath: "/tmp/hooks/session-memory/handler.js",
       hookKey: "session-memory",
       emoji: "💾",
-      homepage: "https://docs.natesclaw.ai/automation/hooks#session-memory",
+      homepage: "https://docs.openclaw.ai/automation/hooks#session-memory",
       events: ["command:new"],
       unknownEvents: [],
       always: false,

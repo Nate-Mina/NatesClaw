@@ -1,5 +1,5 @@
 // Canonical configured-channel enumeration for doctor flows with intentionally distinct policies.
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import { isChannelConfigMetadataKey } from "../../../channels/config-metadata.js";
 import {
   hasMeaningfulChannelConfig,

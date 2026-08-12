@@ -3,7 +3,7 @@
  *
  * Maps channel-specific direct/group/channel labels into Natesclaw chat types.
  */
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 
 /**
  * Normalized conversation kind shared by channel routing, sessions, and SDK helpers.

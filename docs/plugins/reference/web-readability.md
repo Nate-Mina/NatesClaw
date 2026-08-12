@@ -11,7 +11,7 @@ Extract readable article content from local HTML web fetch responses.
 
 ## Distribution
 
-- Package: `@natesclaw/web-readability-plugin`
+- Package: `@openclaw/web-readability-plugin`
 - Install route: included in Natesclaw
 
 ## Surface

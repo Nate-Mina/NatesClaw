@@ -1,5 +1,5 @@
 // Resolves the system-agent turn budget from manifest-owned provider metadata.
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 import { resolveAgentWorkspaceDir } from "../agents/agent-scope.js";
 import type { PluginManifestRecord } from "../plugins/manifest-registry.js";
 import { resolvePluginMetadataSnapshot } from "../plugins/plugin-metadata-snapshot.js";

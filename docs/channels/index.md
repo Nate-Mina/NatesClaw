@@ -11,7 +11,7 @@ Text is supported everywhere; media and reactions vary by channel.
 
 Entries marked "bundled plugin" or "included in core" ship with the core
 install. Channels marked "official plugin" install with one command
-(`natesclaw plugins install @natesclaw/<id>`) or on demand during
+(`natesclaw plugins install @openclaw/<id>`) or on demand during
 `natesclaw onboard` / `natesclaw channels add`, then need a Gateway restart.
 "External plugin" channels are maintained outside the Natesclaw repo.
 

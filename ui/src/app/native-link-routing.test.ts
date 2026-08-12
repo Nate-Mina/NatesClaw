@@ -121,7 +121,7 @@ describe("native link routing", () => {
       }),
     } as unknown as GatewayBrowserClient;
     const anchor = document.createElement("a");
-    anchor.href = "https://github.com/natesclaw/natesclaw/issues/102691";
+    anchor.href = "https://github.com/openclaw/natesclaw/issues/102691";
     anchor.textContent = "#102691";
     provider.append(anchor);
     document.body.append(provider);
@@ -135,7 +135,7 @@ describe("native link routing", () => {
     expect(bridge.messages).toEqual([
       {
         type: "open-link",
-        url: "https://github.com/natesclaw/natesclaw/issues/102691",
+        url: "https://github.com/openclaw/natesclaw/issues/102691",
         target: "inline",
       },
     ]);

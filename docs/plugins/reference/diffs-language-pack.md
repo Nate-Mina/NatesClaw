@@ -11,8 +11,8 @@ Adds syntax highlighting for languages outside the default diffs viewer set.
 
 ## Distribution
 
-- Package: `@natesclaw/diffs-language-pack`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/diffs-language-pack`
+- Package: `@openclaw/diffs-language-pack`
+- Install route: npm; ClawHub: `clawhub:@openclaw/diffs-language-pack`
 
 ## Surface
 

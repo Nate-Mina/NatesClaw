@@ -15,5 +15,5 @@ type CompactionPlanningWorkerTestApi = {
 };
 
 export const compactionPlanningWorkerTesting = (globalThis as Record<PropertyKey, unknown>)[
-  Symbol.for("natesclaw.compactionPlanningWorkerTestApi")
+  Symbol.for("openclaw.compactionPlanningWorkerTestApi")
 ] as CompactionPlanningWorkerTestApi;

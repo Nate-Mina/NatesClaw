@@ -92,8 +92,8 @@ function makeSnapshot(overrides: Partial<ConfigFileSnapshot> = {}): ConfigFileSn
 
 describe("loadConfigForInstall", () => {
   const discordNpmRequest = {
-    rawSpec: "@natesclaw/discord",
-    normalizedSpec: "@natesclaw/discord",
+    rawSpec: "@openclaw/discord",
+    normalizedSpec: "@openclaw/discord",
     installKind: "plugin",
     bundledPluginId: "discord",
     allowInvalidConfigRecovery: true,
@@ -195,7 +195,7 @@ describe("loadConfigForInstall", () => {
     );
 
     const request = resolvePluginInstallRequestContext({
-      rawSpec: "npm:@natesclaw/discord@2026.5.22",
+      rawSpec: "npm:@openclaw/discord@2026.5.22",
     });
     if (!request.ok) {
       throw new Error(request.error);
@@ -213,7 +213,7 @@ describe("loadConfigForInstall", () => {
     });
   });
 
-  it.each(["file:@natesclaw/discord", "FILE:@natesclaw/discord"])(
+  it.each(["file:@openclaw/discord", "FILE:@openclaw/discord"])(
     "does not treat %s as an official plugin recovery request",
     (rawSpec) => {
       const request = resolvePluginInstallRequestContext({ rawSpec });
@@ -258,7 +258,7 @@ describe("loadConfigForInstall", () => {
     );
 
     const request = resolvePluginInstallRequestContext({
-      rawSpec: "@natesclaw/discord@2026.5.22",
+      rawSpec: "@openclaw/discord@2026.5.22",
     });
     if (!request.ok) {
       throw new Error(request.error);
@@ -442,7 +442,7 @@ describe("loadConfigForInstall", () => {
     );
 
     const request = resolvePluginInstallRequestContext({
-      rawSpec: "npm:@natesclaw/discord",
+      rawSpec: "npm:@openclaw/discord",
     });
     if (!request.ok) {
       throw new Error(request.error);
@@ -477,7 +477,7 @@ describe("loadConfigForInstall", () => {
     );
 
     const request = resolvePluginInstallRequestContext({
-      rawSpec: "@natesclaw/brave-plugin",
+      rawSpec: "@openclaw/brave-plugin",
     });
     if (!request.ok) {
       throw new Error(request.error);

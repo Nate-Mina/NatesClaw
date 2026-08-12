@@ -9,8 +9,8 @@ import {
   type AssistantMessageEventStreamContract,
   type SimpleStreamOptions,
   type StreamFunction,
-} from "@natesclaw/ai";
-import { prepareModelForSimpleCompletion } from "@natesclaw/ai/transports";
+} from "@openclaw/ai";
+import { prepareModelForSimpleCompletion } from "@openclaw/ai/transports";
 import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
 import { streamSimple, type Context, type Model } from "natesclaw/plugin-sdk/llm";
 import { capturePluginRegistration } from "natesclaw/plugin-sdk/plugin-test-runtime";

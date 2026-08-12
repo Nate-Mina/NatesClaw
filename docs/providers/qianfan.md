@@ -6,7 +6,7 @@ read_when:
 title: "Qianfan"
 ---
 
-Qianfan is Baidu's MaaS platform: a unified, OpenAI-compatible API that routes requests to many models behind a single endpoint and API key. Natesclaw ships it as the official external plugin `@natesclaw/qianfan-provider`.
+Qianfan is Baidu's MaaS platform: a unified, OpenAI-compatible API that routes requests to many models behind a single endpoint and API key. Natesclaw ships it as the official external plugin `@openclaw/qianfan-provider`.
 
 | Property      | Value                                    |
 | ------------- | ---------------------------------------- |
@@ -21,7 +21,7 @@ Qianfan is Baidu's MaaS platform: a unified, OpenAI-compatible API that routes r
 Install the official plugin, then restart Gateway:
 
 ```bash
-natesclaw plugins install @natesclaw/qianfan-provider
+natesclaw plugins install @openclaw/qianfan-provider
 natesclaw gateway restart
 ```
 

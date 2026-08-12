@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/file-transfer",
+  "name": "@openclaw/file-transfer",
   "version": "2026.8.1",
   "description": "Natesclaw file transfer plugin (file_fetch, dir_list, dir_fetch, file_write)",
   "type": "module",
@@ -8,7 +8,7 @@
     "typebox": "1.3.6"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

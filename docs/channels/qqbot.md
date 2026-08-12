@@ -19,7 +19,7 @@ Status: official downloadable plugin.
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/qqbot
+natesclaw plugins install @openclaw/qqbot
 ```
 
 ## Setup

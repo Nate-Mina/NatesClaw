@@ -3,7 +3,7 @@
  *
  * Combines live registry runs and persisted session metadata for sessions_list/subagents views.
  */
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import {
   resolveSubagentLabel,
   sortSubagentRuns,

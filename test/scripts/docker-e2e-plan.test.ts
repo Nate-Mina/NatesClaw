@@ -1659,9 +1659,9 @@ describe("scripts/lib/docker-e2e-plan", () => {
     ]) {
       const plan = planFor({ selectedLaneNames: [laneName] });
       expect(plan.requiredPrepublishPluginPackages).toEqual([
-        "@natesclaw/codex",
-        "@natesclaw/discord",
-        "@natesclaw/whatsapp",
+        "@openclaw/codex",
+        "@openclaw/discord",
+        "@openclaw/whatsapp",
       ]);
       expect(plan.needs.prepublishPluginRegistry).toBe(true);
     }
@@ -1672,10 +1672,10 @@ describe("scripts/lib/docker-e2e-plan", () => {
       upgradeSurvivorScenarios: "base feishu-channel",
     });
     expect(feishuPlan.requiredPrepublishPluginPackages).toEqual([
-      "@natesclaw/codex",
-      "@natesclaw/discord",
-      "@natesclaw/feishu",
-      "@natesclaw/whatsapp",
+      "@openclaw/codex",
+      "@openclaw/discord",
+      "@openclaw/feishu",
+      "@openclaw/whatsapp",
     ]);
     const legacyFeishuPlan = planFor({
       selectedLaneNames: ["published-upgrade-survivor"],
@@ -1683,9 +1683,9 @@ describe("scripts/lib/docker-e2e-plan", () => {
       upgradeSurvivorScenarios: "feishu-channel",
     });
     expect(legacyFeishuPlan.requiredPrepublishPluginPackages).toEqual([
-      "@natesclaw/codex",
-      "@natesclaw/discord",
-      "@natesclaw/whatsapp",
+      "@openclaw/codex",
+      "@openclaw/discord",
+      "@openclaw/whatsapp",
     ]);
     const selfUpgradeLane = findLaneByName("update-run-package-self-upgrade");
     expect(selfUpgradeLane).toBeDefined();

@@ -3,8 +3,8 @@
  */
 import crypto from "node:crypto";
 import path from "node:path";
-import { sanitizeSurrogates } from "@natesclaw/ai/internal/shared";
-import { stableStringify } from "@natesclaw/normalization-core";
+import { sanitizeSurrogates } from "@openclaw/ai/internal/shared";
+import { stableStringify } from "@openclaw/normalization-core";
 import { resolveStateDir } from "../config/paths.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveUserPath } from "../utils.js";

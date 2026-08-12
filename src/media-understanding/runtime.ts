@@ -1,8 +1,8 @@
 // Public file-oriented media-understanding runtime for image, audio, video, and
 // structured extraction calls outside normal channel message handling.
 import path from "node:path";
-import { detectMime, kindFromMime, mimeTypeFromFilePath } from "@natesclaw/media-core/mime";
-import { hasHttpUrlPrefix } from "@natesclaw/net-policy/url-protocol";
+import { detectMime, kindFromMime, mimeTypeFromFilePath } from "@openclaw/media-core/mime";
+import { hasHttpUrlPrefix } from "@openclaw/net-policy/url-protocol";
 import { resolveAgentDir, resolveDefaultAgentDir } from "../agents/agent-scope.js";
 import type { NatesclawConfig } from "../config/types.js";
 import { readLocalFileSafely } from "../infra/fs-safe.js";

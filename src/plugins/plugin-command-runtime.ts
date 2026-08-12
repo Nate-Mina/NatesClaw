@@ -1,5 +1,5 @@
 /** Registry-bound plugin command selection and execution for native/channel surfaces. */
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type { RegisteredPluginCommand } from "./command-registry-state.js";
 import { retainPluginCommandCatalogForCurrentAccount } from "./plugin-command-account-start-scope.js";

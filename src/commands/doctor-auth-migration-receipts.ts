@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from "node:crypto";
 import fs from "node:fs";
 import path from "node:path";
-import { isStringRecord as isRecordOfStrings } from "@natesclaw/normalization-core/record-coerce";
+import { isStringRecord as isRecordOfStrings } from "@openclaw/normalization-core/record-coerce";
 import { acquireFileLockSyncWithRetry } from "../infra/file-lock-sync.js";
 import {
   executeSqliteQuerySync,

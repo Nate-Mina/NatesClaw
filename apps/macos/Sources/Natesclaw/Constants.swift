@@ -42,7 +42,7 @@ let remoteCliPathKey = "natesclaw.remoteCliPath"
 let canvasEnabledKey = "natesclaw.canvasEnabled"
 let quickChatEnabledKey = "natesclaw.quickChatEnabled"
 let cameraEnabledKey = "natesclaw.cameraEnabled"
-let computerControlEnabledKey = "natesclaw.computerControlEnabled"
+let computerControlEnabledKey = "openclaw.computerControlEnabled"
 
 func isComputerControlEnabled(defaults: UserDefaults = AppDefaults.standard) -> Bool {
     // object(forKey:) preserves an explicit false; bool(forKey:) would conflate it with an unset default.

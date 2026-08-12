@@ -651,7 +651,7 @@ describe("memory index", () => {
     );
     await fs.writeFile(
       path.join(memoryDir, "2026-01-12.md"),
-      "- Daily note. <!-- trigger: should not inject --> <!-- importance: 10 --> <!-- project: github.com/natesclaw/natesclaw -->\n",
+      "- Daily note. <!-- trigger: should not inject --> <!-- importance: 10 --> <!-- project: github.com/openclaw/natesclaw -->\n",
     );
     await fs.writeFile(
       path.join(memoryDir, "2026-01-13.md"),
@@ -722,7 +722,7 @@ describe("memory index", () => {
       expect(rows.find((row) => row.path === "memory/2026-01-12.md")).toMatchObject({
         importance: null,
         triggers: null,
-        projectKey: "github.com/natesclaw/natesclaw",
+        projectKey: "github.com/openclaw/natesclaw",
         originClass: "agent",
       });
       expect(rows.find((row) => row.path === "memory/2026-01-13.md")).toMatchObject({

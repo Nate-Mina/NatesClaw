@@ -1,8 +1,8 @@
 /** TLS helpers for ChatGPT OAuth provider discovery in plugin runtime code. */
 import path from "node:path";
-import { inspectTlsCertificateError } from "@natesclaw/ai/internal/shared";
-import { resolveTimerTimeoutMs } from "@natesclaw/normalization-core/number-coercion";
-import { asNullableObjectRecord } from "@natesclaw/normalization-core/record-coerce";
+import { inspectTlsCertificateError } from "@openclaw/ai/internal/shared";
+import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
+import { asNullableObjectRecord } from "@openclaw/normalization-core/record-coerce";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { formatCliCommand } from "../cli/command-format.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

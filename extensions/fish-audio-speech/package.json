@@ -1,22 +1,22 @@
 {
-  "name": "@natesclaw/fish-audio-speech",
+  "name": "@openclaw/fish-audio-speech",
   "version": "2026.8.1",
   "description": "Natesclaw Fish Audio speech plugin.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/fish-audio-speech",
-      "npmSpec": "@natesclaw/fish-audio-speech",
+      "clawhubSpec": "clawhub:@openclaw/fish-audio-speech",
+      "npmSpec": "@openclaw/fish-audio-speech",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.7.2"
     },

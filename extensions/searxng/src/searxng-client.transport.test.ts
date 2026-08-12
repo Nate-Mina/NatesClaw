@@ -42,7 +42,7 @@ describe("searxng real transport", () => {
           results: [
             {
               title: "Natesclaw",
-              url: "https://docs.natesclaw.ai/",
+              url: "https://docs.openclaw.ai/",
               content: "Natesclaw documentation",
             },
           ],
@@ -60,7 +60,7 @@ describe("searxng real transport", () => {
     ).resolves.toMatchObject({
       provider: "searxng",
       count: 1,
-      results: [{ url: "https://docs.natesclaw.ai/" }],
+      results: [{ url: "https://docs.openclaw.ai/" }],
     });
   });
 

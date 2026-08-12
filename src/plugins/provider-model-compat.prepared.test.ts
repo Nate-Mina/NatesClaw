@@ -15,7 +15,7 @@ vi.mock("../agents/provider-attribution.js", () => ({
   resolveProviderRequestCapabilities,
 }));
 
-vi.mock("@natesclaw/ai/transports", () => ({
+vi.mock("@openclaw/ai/transports", () => ({
   resolveOpenAICompletionsCompat: (
     model: Model,
     resolveCapabilities: (input: Model) => {

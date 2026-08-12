@@ -1,4 +1,4 @@
-import type { Model } from "@natesclaw/llm-core";
+import type { Model } from "@openclaw/llm-core";
 import { describe, expect, it } from "vitest";
 import { resolveAgentReasoningOption } from "./reasoning.js";
 

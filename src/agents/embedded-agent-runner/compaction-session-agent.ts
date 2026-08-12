@@ -1,4 +1,4 @@
-import type { LlmRuntime } from "@natesclaw/ai";
+import type { LlmRuntime } from "@openclaw/ai";
 import type { ThinkLevel } from "../../auto-reply/thinking.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { ProviderRuntimeModel } from "../../plugins/provider-runtime-model.types.js";

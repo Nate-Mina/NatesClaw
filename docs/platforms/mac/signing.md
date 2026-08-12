@@ -7,7 +7,7 @@ title: "macOS signing"
 
 # mac signing (debug builds)
 
-[`scripts/package-mac-app.sh`](https://github.com/natesclaw/natesclaw/blob/main/scripts/package-mac-app.sh) builds and packages the app to a fixed path (`dist/Natesclaw.app`), then calls [`scripts/codesign-mac-app.sh`](https://github.com/natesclaw/natesclaw/blob/main/scripts/codesign-mac-app.sh) to sign it. TCC permissions are tied to the bundle ID and code signature; keeping both stable (and the app at a fixed path) across rebuilds keeps macOS from forgetting TCC grants (notifications, accessibility, screen recording, mic, speech).
+[`scripts/package-mac-app.sh`](https://github.com/openclaw/natesclaw/blob/main/scripts/package-mac-app.sh) builds and packages the app to a fixed path (`dist/Natesclaw.app`), then calls [`scripts/codesign-mac-app.sh`](https://github.com/openclaw/natesclaw/blob/main/scripts/codesign-mac-app.sh) to sign it. TCC permissions are tied to the bundle ID and code signature; keeping both stable (and the app at a fixed path) across rebuilds keeps macOS from forgetting TCC grants (notifications, accessibility, screen recording, mic, speech).
 
 - Debug bundle identifier defaults to `ai.natesclaw.mac.debug` (override with `BUNDLE_ID=...`).
 - Node: `>=22.22.3 <23`, `>=24.15.0 <25`, or `>=25.9.0` (repo `package.json` `engines`). The packager also builds the Control UI (`pnpm ui:build`).

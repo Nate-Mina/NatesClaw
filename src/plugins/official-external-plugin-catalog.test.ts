@@ -265,19 +265,19 @@ describe("official external plugin catalog", () => {
     expect(entry.kind).toBe("plugin");
     expect(manifest?.providers).toBeUndefined();
     expect(resolveOfficialExternalPluginInstall(entry)).toMatchObject({
-      npmSpec: "@natesclaw/codex",
+      npmSpec: "@openclaw/codex",
       defaultChoice: "npm",
     });
   });
 
   it("keeps Fish Audio's legacy id migration-only across npm and ClawHub routes", () => {
-    const entry = getOfficialExternalPluginCatalogEntryForPackage("@natesclaw/fish-audio-speech");
+    const entry = getOfficialExternalPluginCatalogEntryForPackage("@openclaw/fish-audio-speech");
     expect(entry).toBeDefined();
     expect(resolveOfficialExternalPluginId(entry!)).toBe("fish-audio-speech");
     expect(resolveOfficialExternalPluginLegacyIds(entry!)).toEqual(["fish-audio"]);
     expect(resolveOfficialExternalPluginInstall(entry!)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/fish-audio-speech",
-      npmSpec: "@natesclaw/fish-audio-speech",
+      clawhubSpec: "clawhub:@openclaw/fish-audio-speech",
+      npmSpec: "@openclaw/fish-audio-speech",
       defaultChoice: "npm",
       minHostVersion: ">=2026.7.2",
     });
@@ -287,10 +287,10 @@ describe("official external plugin catalog", () => {
 
   it("curates featured external plugins with ClawHub install alternatives", () => {
     const featured = [
-      ["diffs", "@natesclaw/diffs", 40],
-      ["lobster", "@natesclaw/lobster", 50],
-      ["tokenjuice", "@natesclaw/tokenjuice", 60],
-      ["memory-lancedb", "@natesclaw/memory-lancedb", 70],
+      ["diffs", "@openclaw/diffs", 40],
+      ["lobster", "@openclaw/lobster", 50],
+      ["tokenjuice", "@openclaw/tokenjuice", 60],
+      ["memory-lancedb", "@openclaw/memory-lancedb", 70],
     ] as const;
 
     for (const [id, npmSpec, order] of featured) {
@@ -403,7 +403,7 @@ describe("official external plugin catalog", () => {
 
   it("verifies the default ClawHub profile with injected trust anchors", async () => {
     const feed = {
-      ...hostedCatalogFeed({ sequence: 12, pluginName: "@natesclaw/default-signed" }),
+      ...hostedCatalogFeed({ sequence: 12, pluginName: "@openclaw/default-signed" }),
       id: "clawhub-official",
     };
     const signed = signedHostedCatalogFeed({ feed });
@@ -440,7 +440,7 @@ describe("official external plugin catalog", () => {
 
   it("uses configured ClawHub trust when the built-in profile is customized", async () => {
     const feed = {
-      ...hostedCatalogFeed({ sequence: 12, pluginName: "@natesclaw/default-configured" }),
+      ...hostedCatalogFeed({ sequence: 12, pluginName: "@openclaw/default-configured" }),
       id: "clawhub-official",
     };
     const signed = signedHostedCatalogFeed({ feed });
@@ -467,7 +467,7 @@ describe("official external plugin catalog", () => {
 
   it("allows an explicit unsigned downgrade of the default ClawHub profile", async () => {
     const body = JSON.stringify({
-      ...hostedCatalogFeed({ sequence: 12, pluginName: "@natesclaw/default-unsigned" }),
+      ...hostedCatalogFeed({ sequence: 12, pluginName: "@openclaw/default-unsigned" }),
       id: "clawhub-official",
     });
     const result = await loadHostedCatalog({
@@ -490,7 +490,7 @@ describe("official external plugin catalog", () => {
 
   it("rejects a valid default-profile envelope for a different feed identity", async () => {
     const signed = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 12, pluginName: "@natesclaw/replayed" }),
+      feed: hostedCatalogFeed({ sequence: 12, pluginName: "@openclaw/replayed" }),
     });
 
     const result = await loadHostedCatalog({
@@ -705,10 +705,10 @@ describe("official external plugin catalog", () => {
     const stateDir = mkdtempSync(path.join(os.tmpdir(), "natesclaw-signed-snapshot-race-"));
     const url = "https://packages.acme.example/natesclaw/feed";
     const newer = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 10, pluginName: "@natesclaw/signed-v10" }),
+      feed: hostedCatalogFeed({ sequence: 10, pluginName: "@openclaw/signed-v10" }),
     });
     const older = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 9, pluginName: "@natesclaw/signed-v9" }),
+      feed: hostedCatalogFeed({ sequence: 9, pluginName: "@openclaw/signed-v9" }),
       privateKeyPem: newer.privateKeyPem,
     });
     const snapshotStore = createSqliteHostedOfficialExternalPluginCatalogSnapshotStore({
@@ -756,12 +756,12 @@ describe("official external plugin catalog", () => {
 
   it("rejects signed payload changes at the same sequence while allowing re-signing", async () => {
     const stateDir = mkdtempSync(path.join(os.tmpdir(), "natesclaw-signed-snapshot-equivocation-"));
-    const feed = hostedCatalogFeed({ sequence: 10, pluginName: "@natesclaw/signed-v10" });
+    const feed = hostedCatalogFeed({ sequence: 10, pluginName: "@openclaw/signed-v10" });
     const original = signedHostedCatalogFeed({ feed });
     const resigned = signedHostedCatalogFeed({ feed, keyId: "acme-rotated" });
     const conflictingFeed = hostedCatalogFeed({
       sequence: 10,
-      pluginName: "@natesclaw/conflicting-v10",
+      pluginName: "@openclaw/conflicting-v10",
     });
     const conflicting = signedHostedCatalogFeed({ feed: conflictingFeed });
     const snapshotStore = createSqliteHostedOfficialExternalPluginCatalogSnapshotStore({
@@ -807,13 +807,13 @@ describe("official external plugin catalog", () => {
     const url = "https://packages.acme.example/natesclaw/feed";
     const malformed = signedHostedCatalogFeed({
       feed: {
-        ...hostedCatalogFeed({ sequence: 10, pluginName: "@natesclaw/malformed-current" }),
+        ...hostedCatalogFeed({ sequence: 10, pluginName: "@openclaw/malformed-current" }),
         generatedAt: "2026-02-30T00:00:00.000Z",
       },
     });
     const validFeed = hostedCatalogFeed({
       sequence: 10,
-      pluginName: "@natesclaw/repaired-current",
+      pluginName: "@openclaw/repaired-current",
     });
     const valid = signedHostedCatalogFeed({
       feed: validFeed,
@@ -821,7 +821,7 @@ describe("official external plugin catalog", () => {
     });
     const lowerFeed = hostedCatalogFeed({
       sequence: 9,
-      pluginName: "@natesclaw/lower-current",
+      pluginName: "@openclaw/lower-current",
     });
     const lower = signedHostedCatalogFeed({
       feed: lowerFeed,
@@ -873,7 +873,7 @@ describe("official external plugin catalog", () => {
       '{"schemaVersion":1,"id":"natesclaw-official-external-plugins","generatedAt":"not-a-date","sequence":1e999,"entries":[]}';
     const validFeed = hostedCatalogFeed({
       sequence: 10,
-      pluginName: "@natesclaw/repaired-sequence",
+      pluginName: "@openclaw/repaired-sequence",
     });
     const valid = signedHostedCatalogFeed({ feed: validFeed });
     const snapshotStore = createSqliteHostedOfficialExternalPluginCatalogSnapshotStore({
@@ -906,10 +906,10 @@ describe("official external plugin catalog", () => {
 
   it("verifies signed hosted feeds and rejects rollback before replacing snapshots", async () => {
     const newer = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 10, pluginName: "@natesclaw/signed-v10" }),
+      feed: hostedCatalogFeed({ sequence: 10, pluginName: "@openclaw/signed-v10" }),
     });
     const older = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 9, pluginName: "@natesclaw/signed-v9" }),
+      feed: hostedCatalogFeed({ sequence: 9, pluginName: "@openclaw/signed-v9" }),
       privateKeyPem: newer.privateKeyPem,
     });
     const snapshotStore = createInMemoryHostedCatalogSnapshotStore();
@@ -924,7 +924,7 @@ describe("official external plugin catalog", () => {
     });
 
     expectHosted(accepted);
-    expect(accepted.entries.map((entry) => entry.name)).toEqual(["@natesclaw/signed-v10"]);
+    expect(accepted.entries.map((entry) => entry.name)).toEqual(["@openclaw/signed-v10"]);
     if (accepted.source === "hosted") {
       expect(accepted.trust).toMatchObject({
         mode: "signed",
@@ -944,7 +944,7 @@ describe("official external plugin catalog", () => {
     });
 
     expectHostedSnapshot(rolledBack);
-    expect(rolledBack.entries.map((entry) => entry.name)).toEqual(["@natesclaw/signed-v10"]);
+    expect(rolledBack.entries.map((entry) => entry.name)).toEqual(["@openclaw/signed-v10"]);
     if (rolledBack.source === "hosted-snapshot") {
       expect(rolledBack.error).toContain("signed feed sequence is older");
     }
@@ -954,11 +954,11 @@ describe("official external plugin catalog", () => {
   it("retains the accepted snapshot when a signed payload changes at the same sequence", async () => {
     const acceptedFeed = hostedCatalogFeed({
       sequence: 10,
-      pluginName: "@natesclaw/signed-v10",
+      pluginName: "@openclaw/signed-v10",
     });
     const accepted = signedHostedCatalogFeed({ feed: acceptedFeed });
     const conflicting = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 10, pluginName: "@natesclaw/conflicting-v10" }),
+      feed: hostedCatalogFeed({ sequence: 10, pluginName: "@openclaw/conflicting-v10" }),
       privateKeyPem: accepted.privateKeyPem,
     });
     const stateDir = mkdtempSync(path.join(os.tmpdir(), "natesclaw-signed-equivocation-load-"));
@@ -984,7 +984,7 @@ describe("official external plugin catalog", () => {
       });
 
       expectHostedSnapshot(result);
-      expect(result.entries.map((entry) => entry.name)).toEqual(["@natesclaw/signed-v10"]);
+      expect(result.entries.map((entry) => entry.name)).toEqual(["@openclaw/signed-v10"]);
       if (result.source === "hosted-snapshot") {
         expect(result.error).toContain("payload changed without a sequence increment");
       }
@@ -1000,7 +1000,7 @@ describe("official external plugin catalog", () => {
   it("rejects malformed feed timestamps before rollback handling", async () => {
     const malformed = signedHostedCatalogFeed({
       feed: {
-        ...hostedCatalogFeed({ sequence: 11, pluginName: "@natesclaw/malformed-date" }),
+        ...hostedCatalogFeed({ sequence: 11, pluginName: "@openclaw/malformed-date" }),
         generatedAt: "not-a-date",
       },
     });
@@ -1021,16 +1021,16 @@ describe("official external plugin catalog", () => {
   it("replaces a signed snapshot with an invalid timestamp using a valid feed", async () => {
     const malformed = signedHostedCatalogFeed({
       feed: {
-        ...hostedCatalogFeed({ sequence: 10, pluginName: "@natesclaw/malformed-current" }),
+        ...hostedCatalogFeed({ sequence: 10, pluginName: "@openclaw/malformed-current" }),
         generatedAt: "not-a-date",
       },
     });
     const valid = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 10, pluginName: "@natesclaw/repaired-current" }),
+      feed: hostedCatalogFeed({ sequence: 10, pluginName: "@openclaw/repaired-current" }),
       privateKeyPem: malformed.privateKeyPem,
     });
     const lower = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 9, pluginName: "@natesclaw/lower-current" }),
+      feed: hostedCatalogFeed({ sequence: 9, pluginName: "@openclaw/lower-current" }),
       privateKeyPem: malformed.privateKeyPem,
     });
     const url = "https://packages.acme.example/natesclaw/feed";
@@ -1056,16 +1056,16 @@ describe("official external plugin catalog", () => {
     });
 
     expectHosted(result);
-    expect(result.entries.map((entry) => entry.name)).toEqual(["@natesclaw/repaired-current"]);
+    expect(result.entries.map((entry) => entry.name)).toEqual(["@openclaw/repaired-current"]);
     await expect(snapshotStore.read(url)).resolves.toMatchObject({ body: valid.body });
   });
 
   it("does not replace a signed snapshot that fails current trust verification", async () => {
     const current = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 10, pluginName: "@natesclaw/current-key" }),
+      feed: hostedCatalogFeed({ sequence: 10, pluginName: "@openclaw/current-key" }),
     });
     const candidate = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 9, pluginName: "@natesclaw/new-key" }),
+      feed: hostedCatalogFeed({ sequence: 9, pluginName: "@openclaw/new-key" }),
     });
     const url = "https://packages.acme.example/natesclaw/feed";
     const snapshotStore = createInMemoryHostedCatalogSnapshotStore([
@@ -1090,11 +1090,11 @@ describe("official external plugin catalog", () => {
 
   it("uses accepted monotonic metadata when trusted signing keys rotate", async () => {
     const previous = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 8, pluginName: "@natesclaw/signed-v8" }),
+      feed: hostedCatalogFeed({ sequence: 8, pluginName: "@openclaw/signed-v8" }),
       keyId: "acme-root-2026-q2",
     });
     const current = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 9, pluginName: "@natesclaw/signed-v9" }),
+      feed: hostedCatalogFeed({ sequence: 9, pluginName: "@openclaw/signed-v9" }),
       keyId: "acme-root-2026-q3",
     });
     const stateDir = mkdtempSync(path.join(os.tmpdir(), "natesclaw-signed-key-rotation-"));
@@ -1121,13 +1121,13 @@ describe("official external plugin catalog", () => {
       });
 
       expect(acceptedCurrent.source, JSON.stringify(acceptedCurrent)).toBe("hosted");
-      expect(acceptedCurrent.entries.map((entry) => entry.name)).toEqual(["@natesclaw/signed-v9"]);
+      expect(acceptedCurrent.entries.map((entry) => entry.name)).toEqual(["@openclaw/signed-v9"]);
       if (acceptedCurrent.source === "hosted") {
         expect(acceptedCurrent.trust?.signedBy).toBe("acme-root-2026-q3");
       }
 
       const rolledBack = signedHostedCatalogFeed({
-        feed: hostedCatalogFeed({ sequence: 7, pluginName: "@natesclaw/signed-v7" }),
+        feed: hostedCatalogFeed({ sequence: 7, pluginName: "@openclaw/signed-v7" }),
         keyId: "acme-root-2026-q4",
       });
       const rejectedRollback = await loadHostedCatalog({
@@ -1152,7 +1152,7 @@ describe("official external plugin catalog", () => {
         snapshotStore,
       });
       expectHostedSnapshot(retainedCurrent);
-      expect(retainedCurrent.entries.map((entry) => entry.name)).toEqual(["@natesclaw/signed-v9"]);
+      expect(retainedCurrent.entries.map((entry) => entry.name)).toEqual(["@openclaw/signed-v9"]);
     } finally {
       closeNatesclawStateDatabaseForTest();
       rmSync(stateDir, { recursive: true, force: true });
@@ -1162,14 +1162,14 @@ describe("official external plugin catalog", () => {
   it("repairs malformed timestamp snapshots after trusted signing keys rotate", async () => {
     const malformed = signedHostedCatalogFeed({
       feed: {
-        ...hostedCatalogFeed({ sequence: 10, pluginName: "@natesclaw/malformed-current" }),
+        ...hostedCatalogFeed({ sequence: 10, pluginName: "@openclaw/malformed-current" }),
         generatedAt: "not-a-date",
       },
       keyId: "acme-root-2026-q2",
     });
     const repairedFeed = hostedCatalogFeed({
       sequence: 10,
-      pluginName: "@natesclaw/repaired-current",
+      pluginName: "@openclaw/repaired-current",
     });
     const repaired = signedHostedCatalogFeed({
       feed: repairedFeed,
@@ -1201,7 +1201,7 @@ describe("official external plugin catalog", () => {
       });
 
       expect(result.source, JSON.stringify(result)).toBe("hosted");
-      expect(result.entries.map((entry) => entry.name)).toEqual(["@natesclaw/repaired-current"]);
+      expect(result.entries.map((entry) => entry.name)).toEqual(["@openclaw/repaired-current"]);
       await expect(
         snapshotStore.read("https://packages.acme.example/natesclaw/feed"),
       ).resolves.toMatchObject({ body: repaired.body });
@@ -1213,11 +1213,11 @@ describe("official external plugin catalog", () => {
 
   it("fails closed for unsigned signed-profile responses and re-verifies offline snapshots", async () => {
     const signed = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 8, pluginName: "@natesclaw/signed-offline" }),
+      feed: hostedCatalogFeed({ sequence: 8, pluginName: "@openclaw/signed-offline" }),
     });
     const catalogConfig = signedCatalogConfig(signed.publicKeyPem);
     const unsignedBody = JSON.stringify(
-      hostedCatalogFeed({ sequence: 8, pluginName: "@natesclaw/unsigned" }),
+      hostedCatalogFeed({ sequence: 8, pluginName: "@openclaw/unsigned" }),
     );
 
     const unsigned = await loadHostedCatalog({
@@ -1247,7 +1247,7 @@ describe("official external plugin catalog", () => {
     });
 
     expectHostedSnapshot(offline);
-    expect(offline.entries.map((entry) => entry.name)).toEqual(["@natesclaw/signed-offline"]);
+    expect(offline.entries.map((entry) => entry.name)).toEqual(["@openclaw/signed-offline"]);
 
     const unsignedSnapshot = createInMemoryHostedCatalogSnapshotStore([
       {
@@ -1275,7 +1275,7 @@ describe("official external plugin catalog", () => {
 
   it("accepts beta envelopes only from persisted snapshots", async () => {
     const signed = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 8, pluginName: "@natesclaw/legacy-snapshot" }),
+      feed: hostedCatalogFeed({ sequence: 8, pluginName: "@openclaw/legacy-snapshot" }),
     });
     const legacyBody = toLegacyBetaSignedEnvelope(signed.body);
     const catalogConfig = signedCatalogConfig(signed.publicKeyPem);
@@ -1302,12 +1302,12 @@ describe("official external plugin catalog", () => {
     });
 
     expectHostedSnapshot(offline);
-    expect(offline.entries.map((entry) => entry.name)).toEqual(["@natesclaw/legacy-snapshot"]);
+    expect(offline.entries.map((entry) => entry.name)).toEqual(["@openclaw/legacy-snapshot"]);
   });
 
   it("fails closed when a signed feed response does not use the DSSE media type", async () => {
     const signed = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 8, pluginName: "@natesclaw/wrong-media-type" }),
+      feed: hostedCatalogFeed({ sequence: 8, pluginName: "@openclaw/wrong-media-type" }),
     });
     const result = await loadHostedCatalog({
       feedProfile: "acme",
@@ -1331,19 +1331,19 @@ describe("official external plugin catalog", () => {
     const feed = {
       ...hostedCatalogFeed({
         sequence: 8,
-        pluginName: "@natesclaw/expiring",
+        pluginName: "@openclaw/expiring",
         expiresAt: "2026-06-22T00:01:00.000Z",
       }),
       entries: [
         {
-          id: "@natesclaw/expiring",
-          name: "@natesclaw/expiring",
+          id: "@openclaw/expiring",
+          name: "@openclaw/expiring",
           type: "plugin",
           state: "available",
           publisher: { id: "natesclaw", trust: "official" },
           install: {
             candidates: [
-              { sourceRef: "acme-npm", package: "@natesclaw/expiring", version: "1.0.0" },
+              { sourceRef: "acme-npm", package: "@openclaw/expiring", version: "1.0.0" },
             ],
           },
         },
@@ -1390,7 +1390,7 @@ describe("official external plugin catalog", () => {
     expectHostedSnapshot(expiredSnapshot);
     expect(expiredSnapshot.entries).toHaveLength(1);
     expect(expiredSnapshot.entries[0]).toMatchObject({
-      id: "@natesclaw/expiring",
+      id: "@openclaw/expiring",
       state: "unavailable",
     });
     expect(expiredSnapshot.entries[0]?.install).toBeUndefined();
@@ -1427,7 +1427,7 @@ describe("official external plugin catalog", () => {
     const signed = signedHostedCatalogFeed({
       feed: hostedCatalogFeed({
         sequence: 8,
-        pluginName: "@natesclaw/invalid-expiry",
+        pluginName: "@openclaw/invalid-expiry",
         expiresAt: "2026-06-21T23:59:59.000Z",
       }),
     });
@@ -1448,7 +1448,7 @@ describe("official external plugin catalog", () => {
     const signed = signedHostedCatalogFeed({
       feed: hostedCatalogFeed({
         sequence: 8,
-        pluginName: "@natesclaw/invalid-expiry-date",
+        pluginName: "@openclaw/invalid-expiry-date",
         expiresAt: "2026-02-30T00:00:00.000Z",
       }),
     });
@@ -1465,11 +1465,11 @@ describe("official external plugin catalog", () => {
   });
 
   it("uses legacy signed snapshots for rollback state without preserving install authority", async () => {
-    const legacyFeed = hostedCatalogFeed({ sequence: 8, pluginName: "@natesclaw/legacy" });
+    const legacyFeed = hostedCatalogFeed({ sequence: 8, pluginName: "@openclaw/legacy" });
     delete legacyFeed.expiresAt;
     const legacy = signedHostedCatalogFeed({ feed: legacyFeed });
     const newer = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 9, pluginName: "@natesclaw/current" }),
+      feed: hostedCatalogFeed({ sequence: 9, pluginName: "@openclaw/current" }),
       privateKeyPem: legacy.privateKeyPem,
     });
     const url = "https://packages.acme.example/natesclaw/feed";
@@ -1500,7 +1500,7 @@ describe("official external plugin catalog", () => {
       snapshotStore,
     });
     expectHostedSnapshot(stale);
-    expect(stale.entries[0]).toMatchObject({ name: "@natesclaw/legacy", state: "unavailable" });
+    expect(stale.entries[0]).toMatchObject({ name: "@openclaw/legacy", state: "unavailable" });
     expect(resolveOfficialExternalPluginInstall(stale.entries[0]!, { catalogConfig })).toBeNull();
     expect(stale.error).toContain("has no expiresAt");
 
@@ -1512,7 +1512,7 @@ describe("official external plugin catalog", () => {
       snapshotStore,
     });
     expectHosted(updated);
-    expect(updated.entries.map((entry) => entry.name)).toEqual(["@natesclaw/current"]);
+    expect(updated.entries.map((entry) => entry.name)).toEqual(["@openclaw/current"]);
   });
 
   it.each([
@@ -1552,7 +1552,7 @@ describe("official external plugin catalog", () => {
     ["direct feed URL override", { feedUrl: "https://clawhub.ai/v1/feeds/plugins" }],
   ])("keeps a legacy signed profile without feedId usable via %s", async (_label, options) => {
     const signed = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 8, pluginName: "@natesclaw/legacy-profile" }),
+      feed: hostedCatalogFeed({ sequence: 8, pluginName: "@openclaw/legacy-profile" }),
     });
     const catalogConfig = signedCatalogConfig(signed.publicKeyPem);
     delete catalogConfig.feeds?.acme?.feedId;
@@ -1572,10 +1572,10 @@ describe("official external plugin catalog", () => {
 
   it("preserves signed profile verification for direct feed URL overrides", async () => {
     const signed = signedHostedCatalogFeed({
-      feed: hostedCatalogFeed({ sequence: 8, pluginName: "@natesclaw/signed-override" }),
+      feed: hostedCatalogFeed({ sequence: 8, pluginName: "@openclaw/signed-override" }),
     });
     const unsignedBody = JSON.stringify(
-      hostedCatalogFeed({ sequence: 8, pluginName: "@natesclaw/unsigned-override" }),
+      hostedCatalogFeed({ sequence: 8, pluginName: "@openclaw/unsigned-override" }),
     );
     const result = await loadHostedCatalog({
       feedProfile: "acme",
@@ -1728,7 +1728,7 @@ describe("official external plugin catalog", () => {
           candidates: [
             {
               sourceRef: "public-clawhub",
-              package: "@natesclaw/candidate-package",
+              package: "@openclaw/candidate-package",
               version: "1.2.3",
               integrity: "sha256:b355dda04403becaab8bbab069fd1e7b0578262e7459e598cc5b19615b5bdab9",
             },
@@ -1745,7 +1745,7 @@ describe("official external plugin catalog", () => {
         },
       }),
     ).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/candidate-package@1.2.3",
+      clawhubSpec: "clawhub:@openclaw/candidate-package@1.2.3",
       defaultChoice: "clawhub",
       expectedIntegrity: "sha256-s1XdoEQDvsqri7qwaf0eewV4Ji50WeWYzFsZYVtb2rk=",
       minHostVersion: ">=2026.6.1",
@@ -1841,43 +1841,43 @@ describe("official external plugin catalog", () => {
 
   it("lists the externalized provider and capability plugins with install metadata", () => {
     const providers = [
-      ["arcee", "@natesclaw/arcee-provider"],
-      ["cerebras", "@natesclaw/cerebras-provider"],
-      ["chutes", "@natesclaw/chutes-provider"],
-      ["cloudflare-ai-gateway", "@natesclaw/cloudflare-ai-gateway-provider"],
-      ["deepinfra", "@natesclaw/deepinfra-provider"],
-      ["deepseek", "@natesclaw/deepseek-provider"],
-      ["groq", "@natesclaw/groq-provider"],
-      ["longcat", "@natesclaw/longcat-provider"],
-      ["kilocode", "@natesclaw/kilocode-provider"],
-      ["kimi", "@natesclaw/kimi-provider"],
-      ["qianfan", "@natesclaw/qianfan-provider"],
-      ["qwen", "@natesclaw/qwen-provider"],
+      ["arcee", "@openclaw/arcee-provider"],
+      ["cerebras", "@openclaw/cerebras-provider"],
+      ["chutes", "@openclaw/chutes-provider"],
+      ["cloudflare-ai-gateway", "@openclaw/cloudflare-ai-gateway-provider"],
+      ["deepinfra", "@openclaw/deepinfra-provider"],
+      ["deepseek", "@openclaw/deepseek-provider"],
+      ["groq", "@openclaw/groq-provider"],
+      ["longcat", "@openclaw/longcat-provider"],
+      ["kilocode", "@openclaw/kilocode-provider"],
+      ["kimi", "@openclaw/kimi-provider"],
+      ["qianfan", "@openclaw/qianfan-provider"],
+      ["qwen", "@openclaw/qwen-provider"],
     ] as const;
     const plugins = [
-      ["exa", "@natesclaw/exa-plugin"],
-      ["firecrawl", "@natesclaw/firecrawl-plugin"],
-      ["gradium", "@natesclaw/gradium-speech"],
-      ["inworld", "@natesclaw/inworld-speech"],
-      ["parallel", "@natesclaw/parallel-plugin"],
-      ["perplexity", "@natesclaw/perplexity-plugin"],
+      ["exa", "@openclaw/exa-plugin"],
+      ["firecrawl", "@openclaw/firecrawl-plugin"],
+      ["gradium", "@openclaw/gradium-speech"],
+      ["inworld", "@openclaw/inworld-speech"],
+      ["parallel", "@openclaw/parallel-plugin"],
+      ["perplexity", "@openclaw/perplexity-plugin"],
     ] as const;
     const newlyExternalized = [
-      ["clickclack", "@natesclaw/clickclack"],
-      ["fireworks", "@natesclaw/fireworks-provider"],
-      ["irc", "@natesclaw/irc"],
-      ["mattermost", "@natesclaw/mattermost"],
-      ["moonshot", "@natesclaw/moonshot-provider"],
-      ["searxng", "@natesclaw/searxng-plugin"],
-      ["signal", "@natesclaw/signal"],
-      ["sms", "@natesclaw/sms"],
-      ["tavily", "@natesclaw/tavily-plugin"],
-      ["tencent", "@natesclaw/tencent-provider"],
-      ["venice", "@natesclaw/venice-provider"],
-      ["vercel-ai-gateway", "@natesclaw/vercel-ai-gateway-provider"],
-      ["zai", "@natesclaw/zai-provider"],
+      ["clickclack", "@openclaw/clickclack"],
+      ["fireworks", "@openclaw/fireworks-provider"],
+      ["irc", "@openclaw/irc"],
+      ["mattermost", "@openclaw/mattermost"],
+      ["moonshot", "@openclaw/moonshot-provider"],
+      ["searxng", "@openclaw/searxng-plugin"],
+      ["signal", "@openclaw/signal"],
+      ["sms", "@openclaw/sms"],
+      ["tavily", "@openclaw/tavily-plugin"],
+      ["tencent", "@openclaw/tencent-provider"],
+      ["venice", "@openclaw/venice-provider"],
+      ["vercel-ai-gateway", "@openclaw/vercel-ai-gateway-provider"],
+      ["zai", "@openclaw/zai-provider"],
     ] as const;
-    const currentExternalized = [["featherless", "@natesclaw/featherless-provider"]] as const;
+    const currentExternalized = [["featherless", "@openclaw/featherless-provider"]] as const;
 
     for (const [id, npmSpec] of [...providers, ...plugins]) {
       expect(resolveOfficialExternalPluginInstall(expectCatalogEntry(id))).toEqual({
@@ -1907,8 +1907,8 @@ describe("official external plugin catalog", () => {
 
   it("advertises StepFun with its ClawHub package and plugin API floor", () => {
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("stepfun"))).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/stepfun-provider",
-      npmSpec: "@natesclaw/stepfun-provider",
+      clawhubSpec: "clawhub:@openclaw/stepfun-provider",
+      npmSpec: "@openclaw/stepfun-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.6.9",
     });
@@ -1932,24 +1932,24 @@ describe("official external plugin catalog", () => {
 
   it("keeps official launch package specs on the production package names", () => {
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("acpx"))?.npmSpec).toBe(
-      "@natesclaw/acpx",
+      "@openclaw/acpx",
     );
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("googlechat"))?.npmSpec).toBe(
-      "@natesclaw/googlechat",
+      "@openclaw/googlechat",
     );
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("line"))?.npmSpec).toBe(
-      "@natesclaw/line",
+      "@openclaw/line",
     );
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("diffs-language-pack"))).toEqual(
       {
-        npmSpec: "@natesclaw/diffs-language-pack",
-        clawhubSpec: "clawhub:@natesclaw/diffs-language-pack",
+        npmSpec: "@openclaw/diffs-language-pack",
+        clawhubSpec: "clawhub:@openclaw/diffs-language-pack",
         defaultChoice: "npm",
         minHostVersion: ">=2026.5.27",
       },
     );
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("llama-cpp"))?.npmSpec).toBe(
-      "@natesclaw/llama-cpp-provider",
+      "@openclaw/llama-cpp-provider",
     );
   });
 
@@ -1959,8 +1959,8 @@ describe("official external plugin catalog", () => {
     expect(resolveOfficialExternalPluginId(gmi)).toBe("gmi");
     expect(getOfficialExternalPluginCatalogEntry("gmi-cloud")).toBe(gmi);
     expect(resolveOfficialExternalPluginInstall(gmi)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/gmi-provider",
-      npmSpec: "@natesclaw/gmi-provider",
+      clawhubSpec: "clawhub:@openclaw/gmi-provider",
+      npmSpec: "@openclaw/gmi-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.6.8",
     });
@@ -1971,8 +1971,8 @@ describe("official external plugin catalog", () => {
 
     expect(resolveOfficialExternalPluginId(cohere)).toBe("cohere");
     expect(resolveOfficialExternalPluginInstall(cohere)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/cohere-provider",
-      npmSpec: "@natesclaw/cohere-provider",
+      clawhubSpec: "clawhub:@openclaw/cohere-provider",
+      npmSpec: "@openclaw/cohere-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.6.8",
     });
@@ -1984,8 +1984,8 @@ describe("official external plugin catalog", () => {
 
     expect(resolveOfficialExternalPluginId(opencode)).toBe("opencode");
     expect(resolveOfficialExternalPluginInstall(opencode)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/opencode-provider",
-      npmSpec: "@natesclaw/opencode-provider",
+      clawhubSpec: "clawhub:@openclaw/opencode-provider",
+      npmSpec: "@openclaw/opencode-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.7.2",
     });
@@ -2005,8 +2005,8 @@ describe("official external plugin catalog", () => {
 
     expect(resolveOfficialExternalPluginId(opencodeGo)).toBe("opencode-go");
     expect(resolveOfficialExternalPluginInstall(opencodeGo)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/opencode-go-provider",
-      npmSpec: "@natesclaw/opencode-go-provider",
+      clawhubSpec: "clawhub:@openclaw/opencode-go-provider",
+      npmSpec: "@openclaw/opencode-go-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.7.2",
     });
@@ -2025,8 +2025,8 @@ describe("official external plugin catalog", () => {
 
     expect(resolveOfficialExternalPluginId(synthetic)).toBe("synthetic");
     expect(resolveOfficialExternalPluginInstall(synthetic)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/synthetic-provider",
-      npmSpec: "@natesclaw/synthetic-provider",
+      clawhubSpec: "clawhub:@openclaw/synthetic-provider",
+      npmSpec: "@openclaw/synthetic-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.7.2",
     });
@@ -2037,8 +2037,8 @@ describe("official external plugin catalog", () => {
     const manifest = getOfficialExternalPluginCatalogManifest(duckduckgo);
 
     expect(resolveOfficialExternalPluginInstall(duckduckgo)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/duckduckgo-plugin",
-      npmSpec: "@natesclaw/duckduckgo-plugin",
+      clawhubSpec: "clawhub:@openclaw/duckduckgo-plugin",
+      npmSpec: "@openclaw/duckduckgo-plugin",
       defaultChoice: "npm",
       minHostVersion: ">=2026.7.2",
     });
@@ -2053,7 +2053,7 @@ describe("official external plugin catalog", () => {
         envVars: [],
         placeholder: "(no key needed)",
         signupUrl: "https://duckduckgo.com/",
-        docsUrl: "https://docs.natesclaw.ai/tools/duckduckgo-search",
+        docsUrl: "https://docs.openclaw.ai/tools/duckduckgo-search",
         credentialPath: "",
         autoDetectOrder: 100,
       },
@@ -2066,8 +2066,8 @@ describe("official external plugin catalog", () => {
 
     expect(resolveOfficialExternalPluginId(voyage)).toBe("voyage");
     expect(resolveOfficialExternalPluginInstall(voyage)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/voyage-provider",
-      npmSpec: "@natesclaw/voyage-provider",
+      clawhubSpec: "clawhub:@openclaw/voyage-provider",
+      npmSpec: "@openclaw/voyage-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.7.2",
     });
@@ -2086,8 +2086,8 @@ describe("official external plugin catalog", () => {
 
     expect(resolveOfficialExternalPluginId(vydra)).toBe("vydra");
     expect(resolveOfficialExternalPluginInstall(vydra)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/vydra-provider",
-      npmSpec: "@natesclaw/vydra-provider",
+      clawhubSpec: "clawhub:@openclaw/vydra-provider",
+      npmSpec: "@openclaw/vydra-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.7.2",
     });
@@ -2107,8 +2107,8 @@ describe("official external plugin catalog", () => {
     expect(resolveOfficialExternalPluginId(entry)).toBe("volcengine");
     expect(getOfficialExternalPluginCatalogEntry("volcengine-plan")).toBe(entry);
     expect(resolveOfficialExternalPluginInstall(entry)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/volcengine-provider",
-      npmSpec: "@natesclaw/volcengine-provider",
+      clawhubSpec: "clawhub:@openclaw/volcengine-provider",
+      npmSpec: "@openclaw/volcengine-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.7.2",
     });
@@ -2132,8 +2132,8 @@ describe("official external plugin catalog", () => {
     expect(resolveOfficialExternalPluginId(xiaomi)).toBe("xiaomi");
     expect(getOfficialExternalPluginCatalogEntry("xiaomi-token-plan")).toBe(xiaomi);
     expect(resolveOfficialExternalPluginInstall(xiaomi)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/xiaomi-provider",
-      npmSpec: "@natesclaw/xiaomi-provider",
+      clawhubSpec: "clawhub:@openclaw/xiaomi-provider",
+      npmSpec: "@openclaw/xiaomi-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.7.2",
     });
@@ -2172,8 +2172,8 @@ describe("official external plugin catalog", () => {
 
     expect(getOfficialExternalPluginCatalogEntry("byteplus-plan")).toBe(byteplus);
     expect(resolveOfficialExternalPluginInstall(byteplus)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/byteplus-provider",
-      npmSpec: "@natesclaw/byteplus-provider",
+      clawhubSpec: "clawhub:@openclaw/byteplus-provider",
+      npmSpec: "@openclaw/byteplus-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.7.2",
     });
@@ -2195,8 +2195,8 @@ describe("official external plugin catalog", () => {
 
     expect(resolveOfficialExternalPluginId(comfy)).toBe("comfy");
     expect(resolveOfficialExternalPluginInstall(comfy)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/comfy-provider",
-      npmSpec: "@natesclaw/comfy-provider",
+      clawhubSpec: "clawhub:@openclaw/comfy-provider",
+      npmSpec: "@openclaw/comfy-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.7.2",
     });
@@ -2213,8 +2213,8 @@ describe("official external plugin catalog", () => {
 
     expect(resolveOfficialExternalPluginId(mistral)).toBe("mistral");
     expect(resolveOfficialExternalPluginInstall(mistral)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/mistral-provider",
-      npmSpec: "@natesclaw/mistral-provider",
+      clawhubSpec: "clawhub:@openclaw/mistral-provider",
+      npmSpec: "@openclaw/mistral-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.7.2",
     });
@@ -2255,8 +2255,8 @@ describe("official external plugin catalog", () => {
       docsPath: "/channels/imessage",
     });
     expect(resolveOfficialExternalPluginInstall(imessage)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/imessage",
-      npmSpec: "@natesclaw/imessage",
+      clawhubSpec: "clawhub:@openclaw/imessage",
+      npmSpec: "@openclaw/imessage",
       defaultChoice: "npm",
       minHostVersion: ">=2026.7.2",
       allowInvalidConfigRecovery: true,
@@ -2273,8 +2273,8 @@ describe("official external plugin catalog", () => {
   });
 
   it.each([
-    ["teams-meetings", "@natesclaw/teams-meetings", "teams_meetings", "teams"],
-    ["zoom-meetings", "@natesclaw/zoom-meetings", "zoom_meetings", "zoom"],
+    ["teams-meetings", "@openclaw/teams-meetings", "teams_meetings", "teams"],
+    ["zoom-meetings", "@openclaw/zoom-meetings", "zoom_meetings", "zoom"],
   ] as const)(
     "lists %s as an official external meeting plugin",
     (id, npmSpec, toolId, transcriptSourceProviderId) => {
@@ -2298,8 +2298,8 @@ describe("official external plugin catalog", () => {
     expect(resolveOfficialExternalPluginId(longcat)).toBe("longcat");
     expect(getOfficialExternalPluginCatalogEntry("meituan-longcat")).toBe(longcat);
     expect(resolveOfficialExternalPluginInstall(longcat)).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/longcat-provider",
-      npmSpec: "@natesclaw/longcat-provider",
+      clawhubSpec: "clawhub:@openclaw/longcat-provider",
+      npmSpec: "@openclaw/longcat-provider",
       defaultChoice: "npm",
       minHostVersion: ">=2026.6.8",
     });
@@ -2467,23 +2467,23 @@ describe("official external plugin catalog", () => {
 
   it("allows invalid-config recovery for externalized stock plugins", () => {
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("brave"))).toMatchObject({
-      npmSpec: "@natesclaw/brave-plugin",
+      npmSpec: "@openclaw/brave-plugin",
       allowInvalidConfigRecovery: true,
     });
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("slack"))).toMatchObject({
-      npmSpec: "@natesclaw/slack",
+      npmSpec: "@openclaw/slack",
       allowInvalidConfigRecovery: true,
     });
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("discord"))).toMatchObject({
-      npmSpec: "@natesclaw/discord",
+      npmSpec: "@openclaw/discord",
       allowInvalidConfigRecovery: true,
     });
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("mattermost"))).toMatchObject({
-      npmSpec: "@natesclaw/mattermost",
+      npmSpec: "@openclaw/mattermost",
       allowInvalidConfigRecovery: true,
     });
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("tavily"))).toMatchObject({
-      npmSpec: "@natesclaw/tavily-plugin",
+      npmSpec: "@openclaw/tavily-plugin",
       allowInvalidConfigRecovery: true,
     });
   });
@@ -2500,8 +2500,8 @@ describe("official external plugin catalog", () => {
     expect(ids.has("matrix")).toBe(true);
     expect(ids.has("mattermost")).toBe(true);
     expect(resolveOfficialExternalPluginInstall(expectCatalogEntry("matrix"))).toEqual({
-      clawhubSpec: "clawhub:@natesclaw/matrix",
-      npmSpec: "@natesclaw/matrix",
+      clawhubSpec: "clawhub:@openclaw/matrix",
+      npmSpec: "@openclaw/matrix",
       defaultChoice: "clawhub",
       minHostVersion: ">=2026.4.10",
       allowInvalidConfigRecovery: true,

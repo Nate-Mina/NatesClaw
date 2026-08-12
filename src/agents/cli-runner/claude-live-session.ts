@@ -3,7 +3,7 @@ import crypto from "node:crypto";
 import {
   splitSystemPromptCacheBoundary,
   stripSystemPromptCacheBoundary,
-} from "@natesclaw/ai/internal/shared";
+} from "@openclaw/ai/internal/shared";
 import type { ReplyBackendHandle } from "../../auto-reply/reply/reply-run-registry.js";
 import { createAbortError as createNamedAbortError } from "../../infra/abort-signal.js";
 import { sha256Hex } from "../../infra/crypto-digest.js";

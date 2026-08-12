@@ -1,4 +1,4 @@
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { registerContextEngineInRegistry } from "../context-engine/registry.js";
 import { registerPluginInteractiveHandlerInRegistry } from "./interactive-registry.js";
 import type { PluginRegistryState } from "./registry-state.js";

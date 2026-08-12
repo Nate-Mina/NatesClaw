@@ -2,7 +2,7 @@
 import type {
   UnifiedModelCatalogEntry,
   UnifiedModelCatalogSource,
-} from "@natesclaw/model-catalog-core/model-catalog-types";
+} from "@openclaw/model-catalog-core/model-catalog-types";
 import {
   synthesizeMediaGenerationCatalogEntries,
   type MediaGenerationCatalogKind,

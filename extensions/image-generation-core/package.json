@@ -1,10 +1,10 @@
 {
-  "name": "@natesclaw/image-generation-core",
+  "name": "@openclaw/image-generation-core",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw image generation runtime package",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   }
 }

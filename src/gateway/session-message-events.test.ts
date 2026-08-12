@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { rawDataToString } from "@natesclaw/gateway-client/websocket-data";
+import { rawDataToString } from "@openclaw/gateway-client/websocket-data";
 /**
  * Session message event indexing and broadcast tests.
  */

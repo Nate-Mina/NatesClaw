@@ -11,7 +11,7 @@ Natesclaw Nostr channel plugin for NIP-04 encrypted direct messages.
 
 ## Distribution
 
-- Package: `@natesclaw/nostr`
+- Package: `@openclaw/nostr`
 - Install route: npm; ClawHub
 
 ## Surface

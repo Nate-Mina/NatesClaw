@@ -6,7 +6,7 @@ import {
   isFutureDateTimestampMs,
   resolveDateTimestampMs,
   resolveExpiresAtMsFromDurationMs,
-} from "@natesclaw/normalization-core/number-coercion";
+} from "@openclaw/normalization-core/number-coercion";
 import { sha256Base64Url } from "../infra/crypto-digest.js";
 import { resolveGlobalMap } from "../shared/global-singleton.js";
 import { recordTalkObservabilityEvent } from "../talk/observability.js";

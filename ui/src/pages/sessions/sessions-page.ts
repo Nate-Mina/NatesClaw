@@ -73,7 +73,7 @@ import { rememberSessionCustomGroup, sessionCategoryNames } from "./custom-group
 import { loadStoredGroupBy, parseFilterInteger, saveStoredGroupBy } from "./page-state.ts";
 import { renderSessions, type SessionsProps, type TranscriptSearchState } from "./view.ts";
 
-const SESSIONS_DOCS_URL = "https://docs.natesclaw.ai/concepts/session";
+const SESSIONS_DOCS_URL = "https://docs.openclaw.ai/concepts/session";
 
 export type SessionsRouteData = {
   // Client identity alone cannot distinguish provider replacement or reconnect epochs.

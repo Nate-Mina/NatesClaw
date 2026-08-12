@@ -1,4 +1,4 @@
-import { toErrorObject } from "@natesclaw/normalization-core/error-coercion";
+import { toErrorObject } from "@openclaw/normalization-core/error-coercion";
 import { errorBackoffMs } from "../cron/service/jobs-scheduling.js";
 import { cronStreamScheduleKey } from "../cron/stream-schedule.js";
 import type { CronJob, CronJobState } from "../cron/types.js";

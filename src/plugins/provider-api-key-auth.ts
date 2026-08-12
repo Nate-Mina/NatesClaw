@@ -1,6 +1,6 @@
 /** Builds API-key provider auth methods that write profiles and config updates. */
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
-import { normalizeUniqueStringEntries } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { normalizeUniqueStringEntries } from "@openclaw/normalization-core/string-normalization";
 import { upsertAuthProfileWithLockOrThrow } from "../agents/auth-profiles/profiles.js";
 import { resolveAgentModelPrimaryValue } from "../config/model-input.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

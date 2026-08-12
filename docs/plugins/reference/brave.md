@@ -11,7 +11,7 @@ Natesclaw Brave Search provider plugin for web search.
 
 ## Distribution
 
-- Package: `@natesclaw/brave-plugin`
+- Package: `@openclaw/brave-plugin`
 - Install route: npm; ClawHub
 
 ## Surface

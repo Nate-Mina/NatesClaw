@@ -1,4 +1,4 @@
-import { asNullableRecord as asRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asNullableRecord as asRecord } from "@openclaw/normalization-core/record-coerce";
 import type { ChatItem, MessageGroup, NormalizedMessage } from "../../lib/chat/chat-types.ts";
 import { normalizeMessage, normalizeRoleForGrouping } from "../../lib/chat/message-normalizer.ts";
 

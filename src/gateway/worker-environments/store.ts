@@ -1,7 +1,7 @@
 import { isAbsolute } from "node:path";
 import type { DatabaseSync } from "node:sqlite";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeSortedUniqueTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeSortedUniqueTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
 import type { Insertable, Selectable, Updateable } from "kysely";
 import {
   type WorkerAdmissionHandshake,

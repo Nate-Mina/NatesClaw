@@ -107,11 +107,11 @@ const VIRTUAL_MODULES: Record<string, unknown> = {
   "@sinclair/typebox/format": bundledTypeboxFormat,
   "@sinclair/typebox/value": bundledTypeboxValue,
   "natesclaw/plugin-sdk/agent-core": bundledAgentCore,
-  "@natesclaw/plugin-sdk/agent-core": bundledAgentCore,
+  "@openclaw/plugin-sdk/agent-core": bundledAgentCore,
   "natesclaw/plugin-sdk/llm": bundledLlm,
-  "@natesclaw/plugin-sdk/llm": bundledLlm,
+  "@openclaw/plugin-sdk/llm": bundledLlm,
   "natesclaw/plugin-sdk/agent-sessions": bundledAgentSessions,
-  "@natesclaw/plugin-sdk/agent-sessions": bundledAgentSessions,
+  "@openclaw/plugin-sdk/agent-sessions": bundledAgentSessions,
 };
 
 const require = createRequire(import.meta.url);
@@ -165,7 +165,7 @@ function getExtensionLoaderAliases(): Record<string, string> {
     // The public agent-sessions export includes the resource loader. Extensions
     // load through the resource loader, so use the cycle-safe SDK barrel here.
     "natesclaw/plugin-sdk/agent-sessions": agentSessionsEntry,
-    "@natesclaw/plugin-sdk/agent-sessions": agentSessionsEntry,
+    "@openclaw/plugin-sdk/agent-sessions": agentSessionsEntry,
     typebox: typeboxEntry,
     "typebox/compile": typeboxCompileEntry,
     "typebox/format": typeboxFormatEntry,

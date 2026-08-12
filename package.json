@@ -1,5 +1,5 @@
 {
-  "name": "natesclaw",
+  "name": "openclaw",
   "version": "2026.8.1",
   "natesclaw": {
     "schemaVersions": {
@@ -9,15 +9,15 @@
   },
   "description": "Multi-channel AI gateway with extensible messaging integrations",
   "keywords": [],
-  "homepage": "https://github.com/natesclaw/natesclaw#readme",
+  "homepage": "https://github.com/openclaw/natesclaw#readme",
   "bugs": {
-    "url": "https://github.com/natesclaw/natesclaw/issues"
+    "url": "https://github.com/openclaw/natesclaw/issues"
   },
   "license": "MIT",
-  "author": "Natesclaw Foundation (https://natesclaw.org)",
+  "author": "Natesclaw Foundation (https://openclaw.org)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/natesclaw/natesclaw.git"
+    "url": "git+https://github.com/openclaw/natesclaw.git"
   },
   "bin": {
     "natesclaw": "natesclaw.mjs"
@@ -2025,9 +2025,9 @@
     "@mistralai/mistralai": "2.5.0",
     "@modelcontextprotocol/sdk": "1.30.0",
     "@mozilla/readability": "0.6.0",
-    "@natesclaw/ai": "workspace:*",
-    "@natesclaw/fs-safe": "0.5.4",
-    "@natesclaw/proxyline": "0.3.4",
+    "@openclaw/ai": "workspace:*",
+    "@openclaw/fs-safe": "0.5.4",
+    "@openclaw/proxyline": "0.3.4",
     "@silvia-odwyer/photon-node": "0.3.4",
     "@trycua/cua-driver": "0.14.1",
     "acorn": "8.17.0",
@@ -2084,7 +2084,7 @@
     "@lit/context": "1.1.6",
     "@lit/task": "1.0.3",
     "@mdx-js/mdx": "3.1.1",
-    "@natesclaw/session-url-contract": "workspace:*",
+    "@openclaw/session-url-contract": "workspace:*",
     "@opentelemetry/sdk-node": "0.221.0",
     "@shikijs/core": "4.3.1",
     "@shikijs/engine-javascript": "4.3.1",

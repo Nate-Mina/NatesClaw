@@ -1,7 +1,7 @@
 // Real native image results must retain a bounded, truthful visual context.
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { describe, expect, it } from "vitest";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { encodePngRgba, fillPixel } from "../../media/png-encode.js";

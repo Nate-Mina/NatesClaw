@@ -4,7 +4,7 @@
 import fs from "node:fs";
 import process from "node:process";
 import { pathToFileURL } from "node:url";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 
 const RUNTIME_IDS = ["natesclaw", "codex"];
 const HARD_RUNTIME_ERROR_CLASSES = new Set([

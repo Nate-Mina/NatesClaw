@@ -48,7 +48,7 @@ async function writeLocalizedCommandPlugin(params: { repoRoot: string; workspace
     path.join(pluginDir, "package.json"),
     `${JSON.stringify(
       {
-        name: `@natesclaw/${LOCALIZED_PLUGIN_ID}`,
+        name: `@openclaw/${LOCALIZED_PLUGIN_ID}`,
         version: "0.0.0",
         type: "module",
         natesclaw: { extensions: ["./index.js"] },

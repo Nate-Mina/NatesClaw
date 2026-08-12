@@ -252,7 +252,7 @@ Set up an Azure Linux VM with the Azure CLI, apply Network Security Group (NSG) 
 
   <Step title="Install Natesclaw (in the VM shell)">
     ```bash
-    curl -fsSL https://natesclaw.ai/install.sh -o /tmp/install.sh
+    curl -fsSL https://openclaw.ai/install.sh -o /tmp/install.sh
     bash /tmp/install.sh
     rm -f /tmp/install.sh
     ```

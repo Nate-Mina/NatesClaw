@@ -128,7 +128,7 @@ describe("worker bundle producer", () => {
           version: "1.2.3",
           type: "module",
           files: ["dist/"],
-          dependencies: { json5: "2.2.3", "@natesclaw/gateway-protocol": "workspace:*" },
+          dependencies: { json5: "2.2.3", "@openclaw/gateway-protocol": "workspace:*" },
           devDependencies: { vitest: "4.0.0" },
           scripts: { prepare: "node scripts/prepare.mjs" },
           pnpm: { patchedDependencies: {} },
@@ -158,7 +158,7 @@ describe("worker bundle producer", () => {
     await withTestDir({ prefix: "natesclaw-worker-bundle-vendor-" }, async (root) => {
       const packageRoot = path.join(root, "package");
       await writeFixture(packageRoot, [
-        ["dist/entry.js", 'import { fake } from "@natesclaw/fake-pkg";\nexport { fake };\n'],
+        ["dist/entry.js", 'import { fake } from "@openclaw/fake-pkg";\nexport { fake };\n'],
       ]);
       await fs.writeFile(
         path.join(packageRoot, "package.json"),
@@ -169,18 +169,18 @@ describe("worker bundle producer", () => {
           files: ["dist/"],
           dependencies: {
             json5: "2.2.3",
-            "@natesclaw/fake-pkg": "workspace:*",
-            "@natesclaw/gateway-protocol": "workspace:*",
+            "@openclaw/fake-pkg": "workspace:*",
+            "@openclaw/gateway-protocol": "workspace:*",
           },
         })}\n`,
         "utf8",
       );
-      const vendorSource = path.join(packageRoot, "node_modules/@natesclaw/fake-pkg");
+      const vendorSource = path.join(packageRoot, "node_modules/@openclaw/fake-pkg");
       await fs.mkdir(path.join(vendorSource, "dist"), { recursive: true });
       await fs.writeFile(
         path.join(vendorSource, "package.json"),
         `${JSON.stringify({
-          name: "@natesclaw/fake-pkg",
+          name: "@openclaw/fake-pkg",
           version: "1.2.3",
           type: "module",
           main: "./dist/index.js",
@@ -217,7 +217,7 @@ describe("worker bundle producer", () => {
       ) as Record<string, unknown>;
       expect(staged.dependencies).toEqual({
         json5: "2.2.3",
-        "@natesclaw/fake-pkg": "file:./vendor/natesclaw-fake-pkg",
+        "@openclaw/fake-pkg": "file:./vendor/natesclaw-fake-pkg",
       });
       const vendored = JSON.parse(
         await fs.readFile(path.join(extractRoot, "vendor/natesclaw-fake-pkg/package.json"), "utf8"),
@@ -232,7 +232,7 @@ describe("worker bundle producer", () => {
     await withTestDir({ prefix: "natesclaw-worker-bundle-vendor-missing-" }, async (root) => {
       const packageRoot = path.join(root, "package");
       await writeFixture(packageRoot, [
-        ["dist/entry.js", 'import "@natesclaw/fake-pkg";\nexport {};\n'],
+        ["dist/entry.js", 'import "@openclaw/fake-pkg";\nexport {};\n'],
       ]);
       await fs.writeFile(
         path.join(packageRoot, "package.json"),
@@ -241,7 +241,7 @@ describe("worker bundle producer", () => {
           version: "1.2.3",
           type: "module",
           files: ["dist/"],
-          dependencies: { "@natesclaw/fake-pkg": "workspace:*" },
+          dependencies: { "@openclaw/fake-pkg": "workspace:*" },
         })}\n`,
         "utf8",
       );
@@ -252,7 +252,7 @@ describe("worker bundle producer", () => {
           cacheDir: path.join(root, "cache"),
           natesclawVersion: "1.2.3",
         }).prepare(),
-      ).rejects.toThrow("cannot resolve workspace dependency @natesclaw/fake-pkg");
+      ).rejects.toThrow("cannot resolve workspace dependency @openclaw/fake-pkg");
     });
   });
 

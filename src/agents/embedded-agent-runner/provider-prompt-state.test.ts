@@ -1,4 +1,4 @@
-import { responsesPromptObserver } from "@natesclaw/ai/internal/openai";
+import { responsesPromptObserver } from "@openclaw/ai/internal/openai";
 import type { StreamFn } from "natesclaw/plugin-sdk/agent-core";
 import {
   createAssistantMessageEventStream,

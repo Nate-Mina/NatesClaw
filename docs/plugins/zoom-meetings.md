@@ -13,7 +13,7 @@ The `zoom-meetings` plugin joins Zoom meeting links as a guest through the Zoom 
 Talk-back uses the shared [meeting-plugin audio setup](/plugins/meeting-plugins#prepare-chrome-and-audio): `BlackHole 2ch` plus SoX on macOS, or PipeWire-Pulse plus `pactl`/`pacat`/`parec` on Linux.
 
 ```bash
-natesclaw plugins install @natesclaw/zoom-meetings
+natesclaw plugins install @openclaw/zoom-meetings
 natesclaw gateway restart
 brew install blackhole-2ch sox
 sudo reboot

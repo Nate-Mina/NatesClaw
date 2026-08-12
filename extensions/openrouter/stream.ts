@@ -65,7 +65,7 @@ function mergeOpenRouterAuthHeaders(options: Parameters<StreamFn>[2]): Parameter
     headers.set("Authorization", `Bearer ${apiKey}`);
   }
   if (!headers.has("http-referer")) {
-    headers.set("HTTP-Referer", "https://natesclaw.ai");
+    headers.set("HTTP-Referer", "https://openclaw.ai");
   }
   if (!headers.has("x-openrouter-title")) {
     headers.set("X-OpenRouter-Title", "Natesclaw");

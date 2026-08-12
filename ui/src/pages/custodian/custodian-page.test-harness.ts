@@ -1,4 +1,4 @@
-import { GATEWAY_SERVER_CAPS } from "@natesclaw/gateway-protocol";
+import { GATEWAY_SERVER_CAPS } from "@openclaw/gateway-protocol";
 import { vi } from "vitest";
 import type {
   GatewayBrowserClient,

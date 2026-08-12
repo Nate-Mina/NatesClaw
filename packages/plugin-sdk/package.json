@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/plugin-sdk",
+  "name": "@openclaw/plugin-sdk",
   "version": "0.0.0-private",
   "private": true,
   "type": "module",

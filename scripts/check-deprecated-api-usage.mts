@@ -153,7 +153,7 @@ const internalFacadeImportPatterns = [
 
 // Maps any import form (package specifier or relative path) to an extension-less
 // repo module path so banned facades cannot be reached through any spelling.
-// tsconfig aliases both natesclaw/plugin-sdk/* and @natesclaw/plugin-sdk/* to src/plugin-sdk/*.
+// tsconfig aliases both natesclaw/plugin-sdk/* and @openclaw/plugin-sdk/* to src/plugin-sdk/*.
 function resolveInternalFacadeModulePath(repoPath: string, specifier: string) {
   const stripped = specifier.replace(/\.[cm]?[jt]sx?$/u, "");
   const packageSubpath = stripped.replace(/^@?natesclaw\/plugin-sdk\//u, "");

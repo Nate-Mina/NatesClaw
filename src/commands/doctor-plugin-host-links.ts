@@ -1,5 +1,5 @@
 import path from "node:path";
-import { coerceErrorMessage as formatPackageReadFailure } from "@natesclaw/normalization-core/error-coercion";
+import { coerceErrorMessage as formatPackageReadFailure } from "@openclaw/normalization-core/error-coercion";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { formatCliCommand } from "../cli/command-format.js";
 import {

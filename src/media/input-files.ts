@@ -2,15 +2,15 @@
 import {
   classifyAttachmentBytes,
   type AttachmentClassification,
-} from "@natesclaw/media-core/attachment-classify";
-import { canonicalizeBase64, estimateBase64DecodedBytes } from "@natesclaw/media-core/base64";
-import { parseMediaContentLength } from "@natesclaw/media-core/content-length";
-import { detectMime, normalizeMimeType } from "@natesclaw/media-core/mime";
+} from "@openclaw/media-core/attachment-classify";
+import { canonicalizeBase64, estimateBase64DecodedBytes } from "@openclaw/media-core/base64";
+import { parseMediaContentLength } from "@openclaw/media-core/content-length";
+import { detectMime, normalizeMimeType } from "@openclaw/media-core/mime";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+} from "@openclaw/normalization-core/string-coerce";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { readResponseWithLimit } from "../infra/http-body.js";
 import { fetchWithSsrFGuard } from "../infra/net/fetch-guard.js";

@@ -1,4 +1,4 @@
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 /**
  * Enforces source-managed provider secret ownership rules.
  */

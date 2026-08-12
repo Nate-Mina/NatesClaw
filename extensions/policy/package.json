@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/policy",
+  "name": "@openclaw/policy",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw policy doctor checks for workspace conformance",
@@ -8,7 +8,7 @@
     "json5": "2.2.3"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*",
+    "@openclaw/plugin-sdk": "workspace:*",
     "natesclaw": "workspace:*"
   },
   "peerDependencies": {

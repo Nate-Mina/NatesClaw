@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/llm-core",
+  "name": "@openclaw/llm-core",
   "version": "0.0.0-private",
   "private": true,
   "files": [

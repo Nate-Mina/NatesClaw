@@ -126,7 +126,7 @@ const UPGRADE_SURVIVOR_SCENARIO_ALIASES = new Map([
 
 // Upgrade recipes select an OpenAI model whose runtime is supplied by the
 // version-matched Codex companion after the candidate replaces the baseline.
-const UPGRADE_SURVIVOR_RUNTIME_COMPANION_PACKAGES = ["@natesclaw/codex"];
+const UPGRADE_SURVIVOR_RUNTIME_COMPANION_PACKAGES = ["@openclaw/codex"];
 
 // Pre-protocol catalogs are content-addressed. Unknown legacy blocks fail
 // closed instead of requiring a dependency or reimplementing a JavaScript parser.

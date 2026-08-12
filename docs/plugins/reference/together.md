@@ -11,7 +11,7 @@ Adds Together model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/together-provider`
+- Package: `@openclaw/together-provider`
 - Install route: included in Natesclaw
 
 ## Surface

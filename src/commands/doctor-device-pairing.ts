@@ -1,5 +1,5 @@
 /** Doctor diagnostics for pending, paired, and locally cached device auth state. */
-import { normalizeUniqueSingleOrTrimmedStringList } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeUniqueSingleOrTrimmedStringList } from "@openclaw/normalization-core/string-normalization";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { sanitizeTerminalText } from "../../packages/terminal-core/src/safe-text.js";
 import { formatCliCommand } from "../cli/command-format.js";

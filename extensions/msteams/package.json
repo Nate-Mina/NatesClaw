@@ -1,10 +1,10 @@
 {
-  "name": "@natesclaw/msteams",
+  "name": "@openclaw/msteams",
   "version": "2026.8.1",
   "description": "Natesclaw Microsoft Teams channel plugin for bot conversations.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -17,7 +17,7 @@
   },
   "devDependencies": {
     "@microsoft/teams.common": "2.0.14",
-    "@natesclaw/plugin-sdk": "workspace:*",
+    "@openclaw/plugin-sdk": "workspace:*",
     "jose": "6.2.4",
     "natesclaw": "workspace:*"
   },
@@ -65,7 +65,7 @@
       }
     },
     "install": {
-      "npmSpec": "@natesclaw/msteams",
+      "npmSpec": "@openclaw/msteams",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.10"
     },

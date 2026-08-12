@@ -1,6 +1,6 @@
 import { createHash } from "node:crypto";
 import path from "node:path";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { resolveSessionStorePathCore } from "../../config/sessions/paths.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {

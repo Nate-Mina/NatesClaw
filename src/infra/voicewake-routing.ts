@@ -1,5 +1,5 @@
 // Persists and resolves voice wake routing rules.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { normalizeAgentId } from "../routing/session-key.js";
 import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import { openNatesclawStateDatabase } from "../state/natesclaw-state-db.js";

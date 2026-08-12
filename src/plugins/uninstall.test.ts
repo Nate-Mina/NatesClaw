@@ -1102,7 +1102,7 @@ describe("uninstallPlugin", () => {
         {
           private: true,
           dependencies: {
-            "@natesclaw/kitchen-sink": "1.0.0",
+            "@openclaw/kitchen-sink": "1.0.0",
             "is-number": "7.0.0",
           },
         },
@@ -1119,7 +1119,7 @@ describe("uninstallPlugin", () => {
         installs: {
           "natesclaw-kitchen-sink-fixture": {
             source: "npm",
-            spec: "@natesclaw/kitchen-sink@1.0.0",
+            spec: "@openclaw/kitchen-sink@1.0.0",
             installPath: pluginDir,
           },
         },
@@ -1138,14 +1138,14 @@ describe("uninstallPlugin", () => {
       cleanup: {
         kind: "npm",
         npmRoot,
-        packageName: "@natesclaw/kitchen-sink",
+        packageName: "@openclaw/kitchen-sink",
       },
     });
 
     const applied = await applyPluginUninstallDirectoryRemoval(plan.directoryRemoval);
 
     expect(applied).toEqual({ directoryRemoved: true, warnings: [] });
-    expectNpmUninstallCommand({ packageName: "@natesclaw/kitchen-sink", npmRoot });
+    expectNpmUninstallCommand({ packageName: "@openclaw/kitchen-sink", npmRoot });
     await expectPathAccessState(pluginDir, "missing");
   });
 
@@ -1155,7 +1155,7 @@ describe("uninstallPlugin", () => {
     const npmBaseDir = path.join(stateDir, "npm");
     const npmRoot = resolvePluginNpmProjectDir({
       npmDir: npmBaseDir,
-      packageName: "@natesclaw/kitchen-sink",
+      packageName: "@openclaw/kitchen-sink",
     });
     const pluginDir = path.join(npmRoot, "node_modules", "@natesclaw", "kitchen-sink");
     const hoistedDir = path.join(npmRoot, "node_modules", "is-number");
@@ -1167,7 +1167,7 @@ describe("uninstallPlugin", () => {
         {
           private: true,
           dependencies: {
-            "@natesclaw/kitchen-sink": "1.0.0",
+            "@openclaw/kitchen-sink": "1.0.0",
             "is-number": "7.0.0",
           },
         },
@@ -1184,7 +1184,7 @@ describe("uninstallPlugin", () => {
         installs: {
           "natesclaw-kitchen-sink-fixture": {
             source: "npm",
-            spec: "@natesclaw/kitchen-sink@1.0.0",
+            spec: "@openclaw/kitchen-sink@1.0.0",
             installPath: pluginDir,
           },
         },
@@ -1203,14 +1203,14 @@ describe("uninstallPlugin", () => {
       cleanup: {
         kind: "npm",
         npmRoot,
-        packageName: "@natesclaw/kitchen-sink",
+        packageName: "@openclaw/kitchen-sink",
       },
     });
 
     const applied = await applyPluginUninstallDirectoryRemoval(plan.directoryRemoval);
 
     expect(applied).toEqual({ directoryRemoved: true, warnings: [] });
-    expectNpmUninstallCommand({ packageName: "@natesclaw/kitchen-sink", npmRoot });
+    expectNpmUninstallCommand({ packageName: "@openclaw/kitchen-sink", npmRoot });
     await expectPathAccessState(pluginDir, "missing");
   });
 
@@ -1505,7 +1505,7 @@ describe("uninstallPlugin", () => {
     await expect(
       pruneManagedNpmPeerDependenciesAfterUninstall({
         npmRoot,
-        packageName: "@natesclaw/kitchen-sink",
+        packageName: "@openclaw/kitchen-sink",
         managedOverrides: {
           axios: "1.18.1",
           hono: "4.12.32",
@@ -1580,12 +1580,12 @@ describe("uninstallPlugin", () => {
     await expect(
       pruneManagedNpmPeerDependenciesAfterUninstall({
         npmRoot,
-        packageName: "@natesclaw/kitchen-sink",
+        packageName: "@openclaw/kitchen-sink",
         managedOverrides: { axios: "1.18.1" },
         runCommand,
       }),
     ).resolves.toContain(
-      "Failed to prune managed peer dependencies after uninstalling @natesclaw/kitchen-sink: npm error code EINVALIDTAGNAME",
+      "Failed to prune managed peer dependencies after uninstalling @openclaw/kitchen-sink: npm error code EINVALIDTAGNAME",
     );
     expect(cleanupAttempts).toBe(2);
   });

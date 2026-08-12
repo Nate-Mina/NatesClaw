@@ -19,10 +19,10 @@ Tlon ships bundled in current Natesclaw releases; packaged builds do not need a 
 On an older build or custom install that excludes it, install from npm:
 
 ```bash
-natesclaw plugins install @natesclaw/tlon
+natesclaw plugins install @openclaw/tlon
 ```
 
-Use the bare package name to track the current release tag. Pin a version (`@natesclaw/tlon@x.y.z`)
+Use the bare package name to track the current release tag. Pin a version (`@openclaw/tlon@x.y.z`)
 only for reproducible installs.
 
 From a local checkout:

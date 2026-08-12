@@ -577,5 +577,5 @@ export function printDaemonStatus(status: DaemonStatus, opts: { json: boolean; d
   }
 
   defaultRuntime.log(`${label("Troubles:")} run ${formatCliCommand("natesclaw status")}`);
-  defaultRuntime.log(`${label("Troubleshooting:")} https://docs.natesclaw.ai/troubleshooting`);
+  defaultRuntime.log(`${label("Troubleshooting:")} https://docs.openclaw.ai/troubleshooting`);
 }

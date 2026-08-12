@@ -5446,7 +5446,7 @@ extension NodeAppModel {
 
         let payload = SharedContentPayload(
             title: "Natesclaw Share Self-Test",
-            url: URL(string: "https://natesclaw.ai/share-self-test"),
+            url: URL(string: "https://openclaw.ai/share-self-test"),
             text: "Validate iOS share->deep-link->gateway forwarding.")
         guard let deepLink = ShareToAgentDeepLink.buildURL(
             from: payload,

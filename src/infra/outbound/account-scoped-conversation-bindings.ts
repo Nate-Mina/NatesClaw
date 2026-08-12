@@ -1,4 +1,4 @@
-import { isFutureDateTimestampMs } from "@natesclaw/normalization-core/number-coercion";
+import { isFutureDateTimestampMs } from "@openclaw/normalization-core/number-coercion";
 import { resolveDefaultAgentId } from "../../agents/agent-scope-config.js";
 // Account-scoped conversation binding managers adapt channel-local thread maps
 // into the shared session binding service.

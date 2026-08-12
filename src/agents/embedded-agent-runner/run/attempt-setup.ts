@@ -4,7 +4,7 @@
  */
 import fs from "node:fs/promises";
 import path from "node:path";
-import { MAX_IMAGE_BYTES } from "@natesclaw/media-core/constants";
+import { MAX_IMAGE_BYTES } from "@openclaw/media-core/constants";
 import { NATESCLAW_EMBEDDED_CONTEXT_ENGINE_HOST } from "../../../context-engine/host-compat.js";
 import { buildContextEngineRuntimeSettings } from "../../../context-engine/runtime-settings.js";
 import type { ContextEngine } from "../../../context-engine/types.js";

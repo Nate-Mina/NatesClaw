@@ -1,4 +1,4 @@
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import { z } from "zod";
 import {
   SESSION_OBSERVER_HEALTH_VALUES,

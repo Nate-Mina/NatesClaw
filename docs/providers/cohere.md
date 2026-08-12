@@ -11,7 +11,7 @@ read_when:
 | Property        | Value                                    |
 | --------------- | ---------------------------------------- |
 | Provider id     | `cohere`                                 |
-| Plugin          | `@natesclaw/cohere-provider`              |
+| Plugin          | `@openclaw/cohere-provider`              |
 | Auth env var    | `COHERE_API_KEY`                         |
 | Onboarding flag | `--auth-choice cohere-api-key`           |
 | Direct CLI flag | `--cohere-api-key <key>`                 |
@@ -37,7 +37,7 @@ Reasoning-capable Cohere models support two Compatibility API reasoning modes. N
 1. Install the official plugin and restart the Gateway:
 
 ```bash
-natesclaw plugins install @natesclaw/cohere-provider
+natesclaw plugins install @openclaw/cohere-provider
 natesclaw gateway restart
 ```
 

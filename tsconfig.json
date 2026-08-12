@@ -26,243 +26,243 @@
     "verbatimModuleSyntax": true,
     "paths": {
       "natesclaw/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
-      "@natesclaw/ai": ["./packages/ai/src/index.ts"],
-      "@natesclaw/ai/diagnostics": ["./packages/ai/src/utils/diagnostics.ts"],
-      "@natesclaw/ai/event-stream": ["./packages/ai/src/utils/event-stream.ts"],
-      "@natesclaw/ai/providers": ["./packages/ai/src/providers.ts"],
-      "@natesclaw/ai/transports": ["./packages/ai/src/transports.ts"],
-      "@natesclaw/ai/types": ["./packages/ai/src/types.ts"],
-      "@natesclaw/ai/validation": ["./packages/ai/src/validation.ts"],
-      "@natesclaw/ai/internal/anthropic": ["./packages/ai/src/internal/anthropic.ts"],
-      "@natesclaw/ai/internal/openai": ["./packages/ai/src/internal/openai.ts"],
-      "@natesclaw/ai/internal/retry-after": ["./packages/ai/src/internal/retry-after.ts"],
-      "@natesclaw/ai/internal/runtime": ["./packages/ai/src/internal/runtime.ts"],
-      "@natesclaw/ai/internal/shared": ["./packages/ai/src/internal/shared.ts"],
-      "@natesclaw/agent-core": ["./packages/agent-core/src/index.ts"],
-      "@natesclaw/agent-core/*": ["./packages/agent-core/src/*"],
-      "@natesclaw/llm-core": ["./packages/llm-core/src/index.ts"],
-      "@natesclaw/llm-core/diagnostics": ["./packages/llm-core/src/utils/diagnostics.ts"],
-      "@natesclaw/llm-core/event-stream": ["./packages/llm-core/src/utils/event-stream.ts"],
-      "@natesclaw/llm-core/validation": ["./packages/llm-core/src/validation.ts"],
-      "@natesclaw/llm-core/*": ["./packages/llm-core/src/*"],
-      "@natesclaw/model-catalog-core": ["./packages/model-catalog-core/src/index.ts"],
-      "@natesclaw/model-catalog-core/configured-model-refs": [
+      "@openclaw/ai": ["./packages/ai/src/index.ts"],
+      "@openclaw/ai/diagnostics": ["./packages/ai/src/utils/diagnostics.ts"],
+      "@openclaw/ai/event-stream": ["./packages/ai/src/utils/event-stream.ts"],
+      "@openclaw/ai/providers": ["./packages/ai/src/providers.ts"],
+      "@openclaw/ai/transports": ["./packages/ai/src/transports.ts"],
+      "@openclaw/ai/types": ["./packages/ai/src/types.ts"],
+      "@openclaw/ai/validation": ["./packages/ai/src/validation.ts"],
+      "@openclaw/ai/internal/anthropic": ["./packages/ai/src/internal/anthropic.ts"],
+      "@openclaw/ai/internal/openai": ["./packages/ai/src/internal/openai.ts"],
+      "@openclaw/ai/internal/retry-after": ["./packages/ai/src/internal/retry-after.ts"],
+      "@openclaw/ai/internal/runtime": ["./packages/ai/src/internal/runtime.ts"],
+      "@openclaw/ai/internal/shared": ["./packages/ai/src/internal/shared.ts"],
+      "@openclaw/agent-core": ["./packages/agent-core/src/index.ts"],
+      "@openclaw/agent-core/*": ["./packages/agent-core/src/*"],
+      "@openclaw/llm-core": ["./packages/llm-core/src/index.ts"],
+      "@openclaw/llm-core/diagnostics": ["./packages/llm-core/src/utils/diagnostics.ts"],
+      "@openclaw/llm-core/event-stream": ["./packages/llm-core/src/utils/event-stream.ts"],
+      "@openclaw/llm-core/validation": ["./packages/llm-core/src/validation.ts"],
+      "@openclaw/llm-core/*": ["./packages/llm-core/src/*"],
+      "@openclaw/model-catalog-core": ["./packages/model-catalog-core/src/index.ts"],
+      "@openclaw/model-catalog-core/configured-model-refs": [
         "./packages/model-catalog-core/src/configured-model-refs.ts"
       ],
-      "@natesclaw/model-catalog-core/model-catalog-normalize": [
+      "@openclaw/model-catalog-core/model-catalog-normalize": [
         "./packages/model-catalog-core/src/model-catalog-normalize.ts"
       ],
-      "@natesclaw/model-catalog-core/model-catalog-refs": [
+      "@openclaw/model-catalog-core/model-catalog-refs": [
         "./packages/model-catalog-core/src/model-catalog-refs.ts"
       ],
-      "@natesclaw/model-catalog-core/model-catalog-types": [
+      "@openclaw/model-catalog-core/model-catalog-types": [
         "./packages/model-catalog-core/src/model-catalog-types.ts"
       ],
-      "@natesclaw/model-catalog-core/provider-id": [
+      "@openclaw/model-catalog-core/provider-id": [
         "./packages/model-catalog-core/src/provider-id.ts"
       ],
-      "@natesclaw/model-catalog-core/provider-model-id-normalization": [
+      "@openclaw/model-catalog-core/provider-model-id-normalization": [
         "./packages/model-catalog-core/src/provider-model-id-normalization.ts"
       ],
-      "@natesclaw/model-catalog-core/provider-model-id-normalize": [
+      "@openclaw/model-catalog-core/provider-model-id-normalize": [
         "./packages/model-catalog-core/src/provider-model-id-normalize.ts"
       ],
-      "@natesclaw/model-catalog-core/*": ["./packages/model-catalog-core/src/*"],
-      "@natesclaw/gateway-client": ["./packages/gateway-client/src/index.ts"],
-      "@natesclaw/gateway-client/browser": ["./packages/gateway-client/src/browser.ts"],
-      "@natesclaw/gateway-client/websocket-data": [
+      "@openclaw/model-catalog-core/*": ["./packages/model-catalog-core/src/*"],
+      "@openclaw/gateway-client": ["./packages/gateway-client/src/index.ts"],
+      "@openclaw/gateway-client/browser": ["./packages/gateway-client/src/browser.ts"],
+      "@openclaw/gateway-client/websocket-data": [
         "./packages/gateway-client/src/websocket-data.ts"
       ],
-      "@natesclaw/gateway-client/*": ["./packages/gateway-client/src/*"],
-      "@natesclaw/gateway-protocol": ["./packages/gateway-protocol/src/index.ts"],
-      "@natesclaw/gateway-protocol/client-info": [
+      "@openclaw/gateway-client/*": ["./packages/gateway-client/src/*"],
+      "@openclaw/gateway-protocol": ["./packages/gateway-protocol/src/index.ts"],
+      "@openclaw/gateway-protocol/client-info": [
         "./packages/gateway-protocol/src/client-info.ts"
       ],
-      "@natesclaw/gateway-protocol/connect-error-details": [
+      "@openclaw/gateway-protocol/connect-error-details": [
         "./packages/gateway-protocol/src/connect-error-details.ts"
       ],
-      "@natesclaw/gateway-protocol/gateway-error-details": [
+      "@openclaw/gateway-protocol/gateway-error-details": [
         "./packages/gateway-protocol/src/gateway-error-details.ts"
       ],
-      "@natesclaw/gateway-protocol/frame-guards": [
+      "@openclaw/gateway-protocol/frame-guards": [
         "./packages/gateway-protocol/src/frame-guards.ts"
       ],
-      "@natesclaw/gateway-protocol/schema": ["./packages/gateway-protocol/src/schema.ts"],
-      "@natesclaw/gateway-protocol/startup-unavailable": [
+      "@openclaw/gateway-protocol/schema": ["./packages/gateway-protocol/src/schema.ts"],
+      "@openclaw/gateway-protocol/startup-unavailable": [
         "./packages/gateway-protocol/src/startup-unavailable.ts"
       ],
-      "@natesclaw/gateway-protocol/version": ["./packages/gateway-protocol/src/version.ts"],
-      "@natesclaw/gateway-protocol/*": ["./packages/gateway-protocol/src/*"],
-      "@natesclaw/media-generation-core": ["./packages/media-generation-core/src/index.ts"],
-      "@natesclaw/media-generation-core/capability-model-ref": [
+      "@openclaw/gateway-protocol/version": ["./packages/gateway-protocol/src/version.ts"],
+      "@openclaw/gateway-protocol/*": ["./packages/gateway-protocol/src/*"],
+      "@openclaw/media-generation-core": ["./packages/media-generation-core/src/index.ts"],
+      "@openclaw/media-generation-core/capability-model-ref": [
         "./packages/media-generation-core/src/capability-model-ref.ts"
       ],
-      "@natesclaw/media-generation-core/catalog": [
+      "@openclaw/media-generation-core/catalog": [
         "./packages/media-generation-core/src/catalog.ts"
       ],
-      "@natesclaw/media-generation-core/model-ref": [
+      "@openclaw/media-generation-core/model-ref": [
         "./packages/media-generation-core/src/model-ref.ts"
       ],
-      "@natesclaw/media-generation-core/normalization": [
+      "@openclaw/media-generation-core/normalization": [
         "./packages/media-generation-core/src/normalization.ts"
       ],
-      "@natesclaw/media-generation-core/*": ["./packages/media-generation-core/src/*"],
-      "@natesclaw/media-core": ["./packages/media-core/src/index.ts"],
-      "@natesclaw/media-core/attachment-classify": [
+      "@openclaw/media-generation-core/*": ["./packages/media-generation-core/src/*"],
+      "@openclaw/media-core": ["./packages/media-core/src/index.ts"],
+      "@openclaw/media-core/attachment-classify": [
         "./packages/media-core/src/attachment-classify.ts"
       ],
-      "@natesclaw/media-core/base64": ["./packages/media-core/src/base64.ts"],
-      "@natesclaw/media-core/constants": ["./packages/media-core/src/constants.ts"],
-      "@natesclaw/media-core/content-length": ["./packages/media-core/src/content-length.ts"],
-      "@natesclaw/media-core/file-name": ["./packages/media-core/src/file-name.ts"],
-      "@natesclaw/media-core/inbound-path-policy": [
+      "@openclaw/media-core/base64": ["./packages/media-core/src/base64.ts"],
+      "@openclaw/media-core/constants": ["./packages/media-core/src/constants.ts"],
+      "@openclaw/media-core/content-length": ["./packages/media-core/src/content-length.ts"],
+      "@openclaw/media-core/file-name": ["./packages/media-core/src/file-name.ts"],
+      "@openclaw/media-core/inbound-path-policy": [
         "./packages/media-core/src/inbound-path-policy.ts"
       ],
-      "@natesclaw/media-core/inline-image-data-url": [
+      "@openclaw/media-core/inline-image-data-url": [
         "./packages/media-core/src/inline-image-data-url.ts"
       ],
-      "@natesclaw/media-core/media-source-url": [
+      "@openclaw/media-core/media-source-url": [
         "./packages/media-core/src/media-source-url.ts"
       ],
-      "@natesclaw/media-core/mime": ["./packages/media-core/src/mime.ts"],
-      "@natesclaw/media-core/read-byte-stream-with-limit": [
+      "@openclaw/media-core/mime": ["./packages/media-core/src/mime.ts"],
+      "@openclaw/media-core/read-byte-stream-with-limit": [
         "./packages/media-core/src/read-byte-stream-with-limit.ts"
       ],
-      "@natesclaw/media-core/*": ["./packages/media-core/src/*"],
-      "@natesclaw/media-understanding-common/*": [
+      "@openclaw/media-core/*": ["./packages/media-core/src/*"],
+      "@openclaw/media-understanding-common/*": [
         "./packages/media-understanding-common/src/*"
       ],
-      "@natesclaw/markdown-core": ["./packages/markdown-core/src/index.ts"],
-      "@natesclaw/markdown-core/code-spans": ["./packages/markdown-core/src/code-spans.ts"],
-      "@natesclaw/markdown-core/fences": ["./packages/markdown-core/src/fences.ts"],
-      "@natesclaw/markdown-core/frontmatter": ["./packages/markdown-core/src/frontmatter.ts"],
-      "@natesclaw/markdown-core/ir": ["./packages/markdown-core/src/ir.ts"],
-      "@natesclaw/markdown-core/render": ["./packages/markdown-core/src/render.ts"],
-      "@natesclaw/markdown-core/render-aware-chunking": [
+      "@openclaw/markdown-core": ["./packages/markdown-core/src/index.ts"],
+      "@openclaw/markdown-core/code-spans": ["./packages/markdown-core/src/code-spans.ts"],
+      "@openclaw/markdown-core/fences": ["./packages/markdown-core/src/fences.ts"],
+      "@openclaw/markdown-core/frontmatter": ["./packages/markdown-core/src/frontmatter.ts"],
+      "@openclaw/markdown-core/ir": ["./packages/markdown-core/src/ir.ts"],
+      "@openclaw/markdown-core/render": ["./packages/markdown-core/src/render.ts"],
+      "@openclaw/markdown-core/render-aware-chunking": [
         "./packages/markdown-core/src/render-aware-chunking.ts"
       ],
-      "@natesclaw/markdown-core/tables": ["./packages/markdown-core/src/tables.ts"],
-      "@natesclaw/markdown-core/types": ["./packages/markdown-core/src/types.ts"],
-      "@natesclaw/markdown-core/*": ["./packages/markdown-core/src/*"],
-      "@natesclaw/normalization-core": ["./packages/normalization-core/src/index.ts"],
-      "@natesclaw/normalization-core/agent-id": [
+      "@openclaw/markdown-core/tables": ["./packages/markdown-core/src/tables.ts"],
+      "@openclaw/markdown-core/types": ["./packages/markdown-core/src/types.ts"],
+      "@openclaw/markdown-core/*": ["./packages/markdown-core/src/*"],
+      "@openclaw/normalization-core": ["./packages/normalization-core/src/index.ts"],
+      "@openclaw/normalization-core/agent-id": [
         "./packages/normalization-core/src/agent-id.ts"
       ],
-      "@natesclaw/normalization-core/boolean-coercion": [
+      "@openclaw/normalization-core/boolean-coercion": [
         "./packages/normalization-core/src/boolean-coercion.ts"
       ],
-      "@natesclaw/normalization-core/cjk-chars": [
+      "@openclaw/normalization-core/cjk-chars": [
         "./packages/normalization-core/src/cjk-chars.ts"
       ],
-      "@natesclaw/normalization-core/error-coercion": [
+      "@openclaw/normalization-core/error-coercion": [
         "./packages/normalization-core/src/error-coercion.ts"
       ],
-      "@natesclaw/normalization-core/expect": ["./packages/normalization-core/src/expect.ts"],
-      "@natesclaw/normalization-core/json-schema": [
+      "@openclaw/normalization-core/expect": ["./packages/normalization-core/src/expect.ts"],
+      "@openclaw/normalization-core/json-schema": [
         "./packages/normalization-core/src/json-schema.ts"
       ],
-      "@natesclaw/normalization-core/number-coercion": [
+      "@openclaw/normalization-core/number-coercion": [
         "./packages/normalization-core/src/number-coercion.ts"
       ],
-      "@natesclaw/normalization-core/phone-presentation": [
+      "@openclaw/normalization-core/phone-presentation": [
         "./packages/normalization-core/src/phone-presentation.ts"
       ],
-      "@natesclaw/normalization-core/promise-like": [
+      "@openclaw/normalization-core/promise-like": [
         "./packages/normalization-core/src/promise-like.ts"
       ],
-      "@natesclaw/normalization-core/record-coerce": [
+      "@openclaw/normalization-core/record-coerce": [
         "./packages/normalization-core/src/record-coerce.ts"
       ],
-      "@natesclaw/normalization-core/result": [
+      "@openclaw/normalization-core/result": [
         "./packages/normalization-core/src/result.ts"
       ],
-      "@natesclaw/normalization-core/stable-node-path": [
+      "@openclaw/normalization-core/stable-node-path": [
         "./packages/normalization-core/src/stable-node-path.ts"
       ],
-      "@natesclaw/normalization-core/string-coerce": [
+      "@openclaw/normalization-core/string-coerce": [
         "./packages/normalization-core/src/string-coerce.ts"
       ],
-      "@natesclaw/normalization-core/string-normalization": [
+      "@openclaw/normalization-core/string-normalization": [
         "./packages/normalization-core/src/string-normalization.ts"
       ],
-      "@natesclaw/normalization-core/utf16-slice": [
+      "@openclaw/normalization-core/utf16-slice": [
         "./packages/normalization-core/src/utf16-slice.ts"
       ],
-      "@natesclaw/normalization-core/*": ["./packages/normalization-core/src/*"],
-      "@natesclaw/retry": ["./packages/retry/src/index.ts"],
-      "@natesclaw/session-url-contract": ["./packages/session-url-contract/src/index.ts"],
-      "@natesclaw/session-url-contract/*": ["./packages/session-url-contract/src/*"],
-      "@natesclaw/workboard-contract": ["./packages/workboard-contract/src/index.ts"],
-      "@natesclaw/acp-core": ["./packages/acp-core/src/index.ts"],
-      "@natesclaw/acp-core/meta": ["./packages/acp-core/src/meta.ts"],
-      "@natesclaw/acp-core/session": ["./packages/acp-core/src/session.ts"],
-      "@natesclaw/acp-core/session-interaction-mode": [
+      "@openclaw/normalization-core/*": ["./packages/normalization-core/src/*"],
+      "@openclaw/retry": ["./packages/retry/src/index.ts"],
+      "@openclaw/session-url-contract": ["./packages/session-url-contract/src/index.ts"],
+      "@openclaw/session-url-contract/*": ["./packages/session-url-contract/src/*"],
+      "@openclaw/workboard-contract": ["./packages/workboard-contract/src/index.ts"],
+      "@openclaw/acp-core": ["./packages/acp-core/src/index.ts"],
+      "@openclaw/acp-core/meta": ["./packages/acp-core/src/meta.ts"],
+      "@openclaw/acp-core/session": ["./packages/acp-core/src/session.ts"],
+      "@openclaw/acp-core/session-interaction-mode": [
         "./packages/acp-core/src/session-interaction-mode.ts"
       ],
-      "@natesclaw/acp-core/session-lineage-meta": [
+      "@openclaw/acp-core/session-lineage-meta": [
         "./packages/acp-core/src/session-lineage-meta.ts"
       ],
-      "@natesclaw/acp-core/types": ["./packages/acp-core/src/types.ts"],
-      "@natesclaw/acp-core/runtime/error-text": [
+      "@openclaw/acp-core/types": ["./packages/acp-core/src/types.ts"],
+      "@openclaw/acp-core/runtime/error-text": [
         "./packages/acp-core/src/runtime/error-text.ts"
       ],
-      "@natesclaw/acp-core/runtime/errors": ["./packages/acp-core/src/runtime/errors.ts"],
-      "@natesclaw/acp-core/runtime/session-identifiers": [
+      "@openclaw/acp-core/runtime/errors": ["./packages/acp-core/src/runtime/errors.ts"],
+      "@openclaw/acp-core/runtime/session-identifiers": [
         "./packages/acp-core/src/runtime/session-identifiers.ts"
       ],
-      "@natesclaw/acp-core/runtime/session-identity": [
+      "@openclaw/acp-core/runtime/session-identity": [
         "./packages/acp-core/src/runtime/session-identity.ts"
       ],
-      "@natesclaw/acp-core/runtime/types": ["./packages/acp-core/src/runtime/types.ts"],
-      "@natesclaw/acp-core/*": ["./packages/acp-core/src/*"],
-      "@natesclaw/terminal-core": ["./packages/terminal-core/src/index.ts"],
-      "@natesclaw/terminal-core/ansi": ["./packages/terminal-core/src/ansi.ts"],
-      "@natesclaw/terminal-core/decorative-emoji": [
+      "@openclaw/acp-core/runtime/types": ["./packages/acp-core/src/runtime/types.ts"],
+      "@openclaw/acp-core/*": ["./packages/acp-core/src/*"],
+      "@openclaw/terminal-core": ["./packages/terminal-core/src/index.ts"],
+      "@openclaw/terminal-core/ansi": ["./packages/terminal-core/src/ansi.ts"],
+      "@openclaw/terminal-core/decorative-emoji": [
         "./packages/terminal-core/src/decorative-emoji.ts"
       ],
-      "@natesclaw/terminal-core/health-style": [
+      "@openclaw/terminal-core/health-style": [
         "./packages/terminal-core/src/health-style.ts"
       ],
-      "@natesclaw/terminal-core/links": ["./packages/terminal-core/src/links.ts"],
-      "@natesclaw/terminal-core/note": ["./packages/terminal-core/src/note.ts"],
-      "@natesclaw/terminal-core/osc-progress": ["./packages/terminal-core/src/osc-progress.ts"],
-      "@natesclaw/terminal-core/palette": ["./packages/terminal-core/src/palette.ts"],
-      "@natesclaw/terminal-core/progress-line": [
+      "@openclaw/terminal-core/links": ["./packages/terminal-core/src/links.ts"],
+      "@openclaw/terminal-core/note": ["./packages/terminal-core/src/note.ts"],
+      "@openclaw/terminal-core/osc-progress": ["./packages/terminal-core/src/osc-progress.ts"],
+      "@openclaw/terminal-core/palette": ["./packages/terminal-core/src/palette.ts"],
+      "@openclaw/terminal-core/progress-line": [
         "./packages/terminal-core/src/progress-line.ts"
       ],
-      "@natesclaw/terminal-core/prompt-select-styled": [
+      "@openclaw/terminal-core/prompt-select-styled": [
         "./packages/terminal-core/src/prompt-select-styled.ts"
       ],
-      "@natesclaw/terminal-core/prompt-select-styled-params": [
+      "@openclaw/terminal-core/prompt-select-styled-params": [
         "./packages/terminal-core/src/prompt-select-styled-params.ts"
       ],
-      "@natesclaw/terminal-core/prompt-style": [
+      "@openclaw/terminal-core/prompt-style": [
         "./packages/terminal-core/src/prompt-style.ts"
       ],
-      "@natesclaw/terminal-core/restore": ["./packages/terminal-core/src/restore.ts"],
-      "@natesclaw/terminal-core/safe-text": ["./packages/terminal-core/src/safe-text.ts"],
-      "@natesclaw/terminal-core/stream-writer": [
+      "@openclaw/terminal-core/restore": ["./packages/terminal-core/src/restore.ts"],
+      "@openclaw/terminal-core/safe-text": ["./packages/terminal-core/src/safe-text.ts"],
+      "@openclaw/terminal-core/stream-writer": [
         "./packages/terminal-core/src/stream-writer.ts"
       ],
-      "@natesclaw/terminal-core/table": ["./packages/terminal-core/src/table.ts"],
-      "@natesclaw/terminal-core/terminal-link": [
+      "@openclaw/terminal-core/table": ["./packages/terminal-core/src/table.ts"],
+      "@openclaw/terminal-core/terminal-link": [
         "./packages/terminal-core/src/terminal-link.ts"
       ],
-      "@natesclaw/terminal-core/theme": ["./packages/terminal-core/src/theme.ts"],
-      "@natesclaw/terminal-core/*": ["./packages/terminal-core/src/*"],
-      "@natesclaw/net-policy": ["./packages/net-policy/src/index.ts"],
-      "@natesclaw/net-policy/ip": ["./packages/net-policy/src/ip.ts"],
-      "@natesclaw/net-policy/ipv4": ["./packages/net-policy/src/ipv4.ts"],
-      "@natesclaw/net-policy/redact-sensitive-url": [
+      "@openclaw/terminal-core/theme": ["./packages/terminal-core/src/theme.ts"],
+      "@openclaw/terminal-core/*": ["./packages/terminal-core/src/*"],
+      "@openclaw/net-policy": ["./packages/net-policy/src/index.ts"],
+      "@openclaw/net-policy/ip": ["./packages/net-policy/src/ip.ts"],
+      "@openclaw/net-policy/ipv4": ["./packages/net-policy/src/ipv4.ts"],
+      "@openclaw/net-policy/redact-sensitive-url": [
         "./packages/net-policy/src/redact-sensitive-url.ts"
       ],
-      "@natesclaw/net-policy/url-protocol": ["./packages/net-policy/src/url-protocol.ts"],
-      "@natesclaw/net-policy/url-userinfo": ["./packages/net-policy/src/url-userinfo.ts"],
-      "@natesclaw/net-policy/*": ["./packages/net-policy/src/*"],
-      "@natesclaw/sdk": ["./packages/sdk/src/index.ts"],
-      "@natesclaw/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
+      "@openclaw/net-policy/url-protocol": ["./packages/net-policy/src/url-protocol.ts"],
+      "@openclaw/net-policy/url-userinfo": ["./packages/net-policy/src/url-userinfo.ts"],
+      "@openclaw/net-policy/*": ["./packages/net-policy/src/*"],
+      "@openclaw/sdk": ["./packages/sdk/src/index.ts"],
+      "@openclaw/plugin-sdk/*": ["./src/plugin-sdk/*.ts"],
       "natesclaw/plugin-sdk/account-id": ["./src/plugin-sdk/account-id.ts"],
-      "@natesclaw/*": ["./extensions/*"]
+      "@openclaw/*": ["./extensions/*"]
     }
   },
   "include": ["src/**/*", "ui/**/*", "extensions/**/*", "packages/**/*"],

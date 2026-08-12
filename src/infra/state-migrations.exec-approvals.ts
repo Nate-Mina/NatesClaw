@@ -1,6 +1,6 @@
 // Doctor-only import for the retired exec approvals JSON store.
 import { isDeepStrictEqual } from "node:util";
-import { root, type Root } from "@natesclaw/fs-safe";
+import { root, type Root } from "@openclaw/fs-safe";
 import { runNatesclawStateWriteTransaction } from "../state/natesclaw-state-db.js";
 import {
   resolveExecApprovalsPath,

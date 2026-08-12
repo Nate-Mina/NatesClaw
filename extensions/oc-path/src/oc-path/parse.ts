@@ -8,7 +8,7 @@
  *
  * Byte-fidelity: `emitMd(parse(raw)) === raw`.
  *
- * @module @natesclaw/oc-path/parse
+ * @module @openclaw/oc-path/parse
  */
 
 import MarkdownIt from "markdown-it";

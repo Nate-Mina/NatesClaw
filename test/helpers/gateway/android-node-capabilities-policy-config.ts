@@ -1,5 +1,5 @@
 // Android node capability policy config fixture describes gateway policy config.
-import { asRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asRecord } from "@openclaw/normalization-core/record-coerce";
 import type { NatesclawConfig } from "../../../src/config/config.js";
 
 // Test helper for unwrapping gateway config.get response shapes.

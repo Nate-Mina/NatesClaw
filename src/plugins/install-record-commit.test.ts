@@ -465,14 +465,14 @@ describe("commitConfigWithPendingPluginInstalls", () => {
           previousInstallRecords: {
             codex: {
               source: "npm",
-              spec: "@natesclaw/codex@1.0.0",
+              spec: "@openclaw/codex@1.0.0",
               installPath: previousInstallPath,
             },
           },
           nextInstallRecords: {
             codex: {
               source: "npm",
-              spec: "@natesclaw/codex@2.0.0",
+              spec: "@openclaw/codex@2.0.0",
               installPath: nextInstallPath,
             },
           },
@@ -490,14 +490,14 @@ describe("commitConfigWithPendingPluginInstalls", () => {
     const stateDir = retentionTempDirs.make("natesclaw-record-commit-");
     const installPath = writeManagedNpmPlugin({
       stateDir,
-      packageName: "@natesclaw/retained-rollback",
+      packageName: "@openclaw/retained-rollback",
       pluginId: "retained-rollback",
       version: "1.0.0",
     });
     const previousInstallRecords: Record<string, PluginInstallRecord> = {
       "retained-rollback": {
         source: "npm",
-        spec: "@natesclaw/retained-rollback@1.0.0",
+        spec: "@openclaw/retained-rollback@1.0.0",
         installPath,
       },
     };
@@ -559,14 +559,14 @@ describe("commitConfigWithPendingPluginInstalls", () => {
           previousInstallRecords: {
             codex: {
               source: "npm",
-              spec: "@natesclaw/codex@1.0.0",
+              spec: "@openclaw/codex@1.0.0",
               installPath: previousInstallPath,
             },
           },
           nextInstallRecords: {
             codex: {
               source: "npm",
-              spec: "@natesclaw/codex@2.0.0",
+              spec: "@openclaw/codex@2.0.0",
               installPath: nextInstallPath,
             },
           },
@@ -610,14 +610,14 @@ describe("commitConfigWithPendingPluginInstalls", () => {
           previousInstallRecords: {
             "voice-call": {
               source: "npm",
-              spec: "@natesclaw/voice-call@1.0.0",
+              spec: "@openclaw/voice-call@1.0.0",
               installPath: previousInstallPath,
             },
           },
           nextInstallRecords: {
-            "@natesclaw/voice-call": {
+            "@openclaw/voice-call": {
               source: "npm",
-              spec: "@natesclaw/voice-call@2.0.0",
+              spec: "@openclaw/voice-call@2.0.0",
               installPath: nextInstallPath,
             },
           },
@@ -662,14 +662,14 @@ describe("commitConfigWithPendingPluginInstalls", () => {
             previousInstallRecords: {
               codex: {
                 source: "npm",
-                spec: "@natesclaw/codex@1.0.0",
+                spec: "@openclaw/codex@1.0.0",
                 installPath: previousInstallPath,
               },
             },
             nextInstallRecords: {
               codex: {
                 source: "npm",
-                spec: "@natesclaw/codex@2.0.0",
+                spec: "@openclaw/codex@2.0.0",
                 installPath: nextInstallPath,
               },
             },
@@ -739,24 +739,24 @@ describe("commitConfigWithPendingPluginInstalls", () => {
             previousInstallRecords: {
               codex: {
                 source: "npm",
-                spec: "@natesclaw/codex@1.0.0",
+                spec: "@openclaw/codex@1.0.0",
                 installPath: firstPreviousInstallPath,
               },
               "voice-call": {
                 source: "npm",
-                spec: "@natesclaw/voice-call@1.0.0",
+                spec: "@openclaw/voice-call@1.0.0",
                 installPath: secondPreviousInstallPath,
               },
             },
             nextInstallRecords: {
               codex: {
                 source: "npm",
-                spec: "@natesclaw/codex@2.0.0",
+                spec: "@openclaw/codex@2.0.0",
                 installPath: firstNextInstallPath,
               },
               "voice-call": {
                 source: "npm",
-                spec: "@natesclaw/voice-call@2.0.0",
+                spec: "@openclaw/voice-call@2.0.0",
                 installPath: secondNextInstallPath,
               },
             },
@@ -797,7 +797,7 @@ describe("commitConfigWithPendingPluginInstalls", () => {
           nextInstallRecords: {
             codex: {
               source: "npm",
-              spec: "@natesclaw/codex@2.0.0",
+              spec: "@openclaw/codex@2.0.0",
               installPath,
             },
           },
@@ -839,7 +839,7 @@ describe("commitConfigWithPendingPluginInstalls", () => {
             nextInstallRecords: {
               codex: {
                 source: "npm",
-                spec: "@natesclaw/codex@2.0.0",
+                spec: "@openclaw/codex@2.0.0",
                 installPath,
               },
             },
@@ -898,7 +898,7 @@ describe("commitConfigWithPendingPluginInstalls", () => {
                 pluginId,
                 {
                   source: "npm",
-                  spec: `@natesclaw/${pluginId}@2.0.0`,
+                  spec: `@openclaw/${pluginId}@2.0.0`,
                   installPath,
                 },
               ];
@@ -1003,7 +1003,7 @@ describe("commitConfigWithPendingPluginInstalls", () => {
           nextInstallRecords: {
             codex: {
               source: "npm",
-              spec: "@natesclaw/codex@2.0.0",
+              spec: "@openclaw/codex@2.0.0",
               installPath,
             },
           },

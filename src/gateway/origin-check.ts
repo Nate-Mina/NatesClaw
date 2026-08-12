@@ -1,11 +1,11 @@
 // Browser Origin validator for gateway HTTP and websocket requests.
 import type { IncomingMessage } from "node:http";
 import net from "node:net";
-import { isPrivateOrLoopbackIpAddress } from "@natesclaw/net-policy/ip";
+import { isPrivateOrLoopbackIpAddress } from "@openclaw/net-policy/ip";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {
   isLocalDirectRequest,

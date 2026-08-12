@@ -67,7 +67,7 @@ describe("plugin install root context", () => {
 
 describe("managed npm plugin install paths", () => {
   it("keeps generation project names compact for nested Windows runtime binaries", () => {
-    const packageName = "@natesclaw/codex";
+    const packageName = "@openclaw/codex";
     const generationKey = [
       packageName,
       "2026.6.10",
@@ -105,7 +105,7 @@ describe("managed npm plugin install paths", () => {
   });
 
   it("keeps generation project names under the recoverable package prefix", () => {
-    const packageName = "@natesclaw/codex";
+    const packageName = "@openclaw/codex";
     const projectDir = resolvePluginNpmGenerationProjectDir({
       npmDir: "/tmp/natesclaw/npm",
       packageName,

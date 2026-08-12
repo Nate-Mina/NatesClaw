@@ -1,5 +1,5 @@
 // Natesclaw SDK module implements transport behavior.
-import { GatewayClient } from "@natesclaw/gateway-client";
+import { GatewayClient } from "@openclaw/gateway-client";
 import { EventHub } from "./event-hub.js";
 import type {
   ConnectableNatesclawTransport,
@@ -69,7 +69,7 @@ function toGatewayEvent(event: unknown): GatewayEvent {
   };
 }
 
-/** Connectable SDK transport backed by @natesclaw/gateway-client. */
+/** Connectable SDK transport backed by @openclaw/gateway-client. */
 export class GatewayClientTransport implements ConnectableNatesclawTransport {
   private readonly eventsHub = new EventHub<GatewayEvent>({
     replayLimit: RAW_EVENT_REPLAY_LIMIT,

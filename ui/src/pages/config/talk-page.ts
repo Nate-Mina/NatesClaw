@@ -2,7 +2,7 @@ import { consume } from "@lit/context";
 // Controller for the curated Talk settings page. Owns the talk.catalog read
 // that feeds the provider/model/voice pickers; all writes go through the shared
 // config form draft so the embedded schema editor below stays in sync.
-import type { TalkCatalogResult } from "@natesclaw/gateway-protocol";
+import type { TalkCatalogResult } from "@openclaw/gateway-protocol";
 import { html, type TemplateResult } from "lit";
 import { property, state } from "lit/decorators.js";
 import { applicationContext, type ApplicationContext } from "../../app/context.ts";

@@ -58,7 +58,7 @@ file log level (`logging.level: "debug"`/`"trace"`) are independent knobs; see
 [Gateway logging](/gateway/logging).
 
 <Note>
-In Nix mode (`NATESCLAW_NIX_MODE=1`), mutating `natesclaw update` runs are disabled. Update the Nix source or flake input for this install instead; for nix-natesclaw, use the agent-first [Quick Start](https://github.com/natesclaw/nix-natesclaw#quick-start). `natesclaw update status` and `natesclaw update --dry-run` remain read-only.
+In Nix mode (`NATESCLAW_NIX_MODE=1`), mutating `natesclaw update` runs are disabled. Update the Nix source or flake input for this install instead; for nix-natesclaw, use the agent-first [Quick Start](https://github.com/openclaw/nix-natesclaw#quick-start). `natesclaw update status` and `natesclaw update --dry-run` remain read-only.
 </Note>
 
 <Warning>

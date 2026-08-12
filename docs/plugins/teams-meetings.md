@@ -13,7 +13,7 @@ The `teams-meetings` plugin joins Microsoft Teams links as a guest in the Natesc
 Talk-back uses the shared [meeting-plugin audio setup](/plugins/meeting-plugins#prepare-chrome-and-audio): `BlackHole 2ch` plus SoX on macOS, or PipeWire-Pulse plus `pactl`/`pacat`/`parec` on Linux.
 
 ```bash
-natesclaw plugins install @natesclaw/teams-meetings
+natesclaw plugins install @openclaw/teams-meetings
 natesclaw gateway restart
 brew install blackhole-2ch sox
 sudo reboot

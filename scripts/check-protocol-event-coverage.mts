@@ -19,7 +19,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 
 const GATEWAY_EVENTS_FILE = "src/gateway/server-methods-list.ts";
 const GATEWAY_EVENT_CONSTANTS_FILE = "src/gateway/events.ts";

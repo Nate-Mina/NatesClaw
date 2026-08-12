@@ -44,7 +44,7 @@ It does not dump secrets or load plugin CLI commands just to start.
 
 Use `status` for the detailed inventory: config path, docs/source paths, local CLI probes, key/token presence, agents, model, and Gateway details.
 
-Natesclaw uses the same reference discovery as regular agents: in a Git checkout it points at local `docs/` and the source tree; in an npm install it uses bundled docs and links to [https://github.com/natesclaw/natesclaw](https://github.com/natesclaw/natesclaw), with guidance to check source when docs are not enough.
+Natesclaw uses the same reference discovery as regular agents: in a Git checkout it points at local `docs/` and the source tree; in an npm install it uses bundled docs and links to [https://github.com/openclaw/natesclaw](https://github.com/openclaw/natesclaw), with guidance to check source when docs are not enough.
 
 ## Examples
 

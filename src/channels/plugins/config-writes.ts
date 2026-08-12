@@ -3,7 +3,7 @@
  *
  * Applies shared config write authorization to concrete Natesclaw channel config.
  */
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   authorizeConfigWriteShared,

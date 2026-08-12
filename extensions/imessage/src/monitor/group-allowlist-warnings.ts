@@ -5,7 +5,7 @@
 // an empty groups map (senderFilterBypass in src/config/group-policy.ts).
 // Without these warnings the drop-all case is invisible at default log level
 // during iMessage config migration. See
-// https://github.com/natesclaw/natesclaw/issues/78749.
+// https://github.com/openclaw/natesclaw/issues/78749.
 
 import { createDedupeCache } from "natesclaw/plugin-sdk/dedupe-runtime";
 

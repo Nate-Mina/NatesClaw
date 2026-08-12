@@ -29,7 +29,7 @@ import {
   resolveSafeTimeoutDelayMs,
   MIN_CLIENT_PROTOCOL_VERSION,
   PROTOCOL_VERSION,
-} from "@natesclaw/gateway-client/browser";
+} from "@openclaw/gateway-client/browser";
 // Control UI module implements gateway behavior.
 import {
   CONTROL_UI_OWNER_BOOTSTRAP_PROFILE_HINT,

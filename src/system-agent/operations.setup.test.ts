@@ -141,8 +141,8 @@ vi.mock("./overview.js", () => ({
       error: "offline",
     },
     references: {
-      docsUrl: "https://docs.natesclaw.ai",
-      sourceUrl: "https://github.com/natesclaw/natesclaw",
+      docsUrl: "https://docs.openclaw.ai",
+      sourceUrl: "https://github.com/openclaw/natesclaw",
     },
   })),
 }));

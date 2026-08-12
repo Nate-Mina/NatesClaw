@@ -1,5 +1,5 @@
 /** Provider auth-pin policy for credentials discovered outside Natesclaw storage. */
-import { findNormalizedProviderValue } from "@natesclaw/model-catalog-core/provider-id";
+import { findNormalizedProviderValue } from "@openclaw/model-catalog-core/provider-id";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   type ProviderAuthAliasLookupParams,

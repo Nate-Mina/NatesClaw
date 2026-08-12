@@ -91,7 +91,7 @@ Run a persistent, always-on Natesclaw Gateway on a Raspberry Pi. Since the Pi is
 
   <Step title="Install Natesclaw">
     ```bash
-    curl -fsSL https://natesclaw.ai/install.sh | bash
+    curl -fsSL https://openclaw.ai/install.sh | bash
     ```
   </Step>
 

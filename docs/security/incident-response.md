@@ -53,5 +53,5 @@ After shipping the fix:
 
 ## Related
 
-- [Security policy](https://github.com/natesclaw/natesclaw/blob/main/SECURITY.md) — report scope and trust model.
+- [Security policy](https://github.com/openclaw/natesclaw/blob/main/SECURITY.md) — report scope and trust model.
 - [Threat model](/security/THREAT-MODEL-ATLAS)

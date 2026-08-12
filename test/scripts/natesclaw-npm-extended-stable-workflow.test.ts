@@ -335,7 +335,7 @@ describe("minimal npm extended-stable workflow", () => {
     expect(preflightPack.env?.CORE_PACKAGE_DIRS).toBe(
       "packages/ai packages/gateway-protocol packages/gateway-client",
     );
-    expect(readFileSync(workflowPath, "utf8")).toContain('packageName: "@natesclaw/gateway-client"');
+    expect(readFileSync(workflowPath, "utf8")).toContain('packageName: "@openclaw/gateway-client"');
     expect(publish.run).toContain("(.corePackageTarballs // [])[]");
     expect(publish.run).toContain(
       'bash scripts/natesclaw-npm-publish.sh --publish "${publish_target}"',

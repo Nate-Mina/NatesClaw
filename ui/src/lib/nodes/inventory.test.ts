@@ -1,5 +1,5 @@
 // @vitest-environment node
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { describe, expect, it } from "vitest";
 import type { PairedDevice } from "./index.ts";
 import {

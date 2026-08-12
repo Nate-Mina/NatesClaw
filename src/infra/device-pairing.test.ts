@@ -2300,7 +2300,7 @@ describe("device pairing tokens", () => {
       nodeId: "device-1",
       transport: "direct",
       token: "ABCD1234ABCD1234ABCD1234ABCD1234",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
       baseDir,
     });
@@ -2326,7 +2326,7 @@ describe("device pairing tokens", () => {
       nodeId: "node-1",
       transport: "direct",
       token: "ABCD1234ABCD1234ABCD1234ABCD1234",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
       baseDir,
     });

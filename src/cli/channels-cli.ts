@@ -170,7 +170,7 @@ export async function registerChannelsCli(
           ["natesclaw channels login --channel whatsapp", "Link a WhatsApp Web account."],
         ])}\n\n${theme.muted("Docs:")} ${formatDocsLink(
           "/cli/channels",
-          "docs.natesclaw.ai/cli/channels",
+          "docs.openclaw.ai/cli/channels",
         )}\n`,
     );
 

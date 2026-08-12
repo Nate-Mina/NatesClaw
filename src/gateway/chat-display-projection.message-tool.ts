@@ -1,6 +1,6 @@
-import { asPositiveSafeInteger } from "@natesclaw/normalization-core/number-coercion";
-import { asOptionalRecord as readRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { asPositiveSafeInteger } from "@openclaw/normalization-core/number-coercion";
+import { asOptionalRecord as readRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { isNatesclawDeliveryMirrorAssistantMessage } from "../shared/transcript-only-natesclaw-assistant.js";
 import { stripInlineDirectiveTagsForDisplay } from "../utils/directive-tags.js";
 import {

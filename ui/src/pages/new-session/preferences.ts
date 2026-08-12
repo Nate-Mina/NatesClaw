@@ -1,4 +1,4 @@
-import { gatewayOriginScope } from "@natesclaw/gateway-client/browser";
+import { gatewayOriginScope } from "@openclaw/gateway-client/browser";
 import { normalizeAgentId } from "../../lib/sessions/session-key.ts";
 import { normalizeOptionalString } from "../../lib/string-coerce.ts";
 import { getSafeLocalStorage } from "../../local-storage.ts";

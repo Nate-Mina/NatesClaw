@@ -359,7 +359,7 @@ describe("collectMissingPluginInstallPayloads", () => {
     );
     try {
       await fs.mkdir(presentDir, { recursive: true });
-      await fs.writeFile(path.join(presentDir, "package.json"), '{"name":"@natesclaw/present"}\n');
+      await fs.writeFile(path.join(presentDir, "package.json"), '{"name":"@openclaw/present"}\n');
       await fs.mkdir(noPackageJsonDir, { recursive: true });
 
       await expect(
@@ -368,22 +368,22 @@ describe("collectMissingPluginInstallPayloads", () => {
           records: {
             present: {
               source: "npm",
-              spec: "@natesclaw/present@beta",
+              spec: "@openclaw/present@beta",
               installPath: presentDir,
             },
             missing: {
               source: "npm",
-              spec: "@natesclaw/missing@beta",
+              spec: "@openclaw/missing@beta",
               installPath: missingDir,
             },
             "no-package-json": {
               source: "npm",
-              spec: "@natesclaw/no-package-json@beta",
+              spec: "@openclaw/no-package-json@beta",
               installPath: noPackageJsonDir,
             },
             "missing-install-path": {
               source: "npm",
-              spec: "@natesclaw/missing-install-path@beta",
+              spec: "@openclaw/missing-install-path@beta",
             },
             local: {
               source: "path",
@@ -553,7 +553,7 @@ describe("collectMissingPluginInstallPayloads", () => {
           records: {
             missing: {
               source: "npm",
-              spec: "@natesclaw/missing@beta",
+              spec: "@openclaw/missing@beta",
               installPath: missingDir,
             },
           },
@@ -585,9 +585,9 @@ describe("collectMissingPluginInstallPayloads", () => {
           records: {
             codex: {
               source: "npm",
-              spec: "@natesclaw/codex@2026.5.3",
-              resolvedName: "@natesclaw/codex",
-              resolvedSpec: "@natesclaw/codex@2026.5.3",
+              spec: "@openclaw/codex@2026.5.3",
+              resolvedName: "@openclaw/codex",
+              resolvedSpec: "@openclaw/codex@2026.5.3",
               installPath: missingDir,
             },
           },
@@ -625,7 +625,7 @@ describe("collectMissingPluginInstallPayloads", () => {
           records: {
             "diagnostics-otel": {
               source: "clawhub",
-              spec: "clawhub:@natesclaw/diagnostics-otel@2026.5.3",
+              spec: "clawhub:@openclaw/diagnostics-otel@2026.5.3",
               installPath: missingDir,
             },
           },

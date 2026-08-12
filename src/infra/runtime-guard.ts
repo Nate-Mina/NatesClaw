@@ -1,7 +1,7 @@
 // Validates the current runtime against Natesclaw's Node engine floor.
 import process from "node:process";
 import { format } from "node:util";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { formatConsoleDiagnosticBlock } from "../logging/json-console-line.js";
 import type { RuntimeEnv } from "../runtime.js";
 

@@ -11,7 +11,7 @@ Fetch, list, and write files on paired nodes via dedicated node commands. Bypass
 
 ## Distribution
 
-- Package: `@natesclaw/file-transfer`
+- Package: `@openclaw/file-transfer`
 - Install route: included in Natesclaw
 
 ## Surface

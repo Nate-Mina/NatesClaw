@@ -1,8 +1,8 @@
 // Covers TUI slash command handlers and backend call wiring.
 
 import type { OverlayHandle } from "@earendil-works/pi-tui";
-import { expectDefined } from "@natesclaw/normalization-core";
-import type { Result } from "@natesclaw/normalization-core/result";
+import { expectDefined } from "@openclaw/normalization-core";
+import type { Result } from "@openclaw/normalization-core/result";
 import { describe, expect, it, vi } from "vitest";
 import {
   createSessionProjection,

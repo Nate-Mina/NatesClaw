@@ -1,18 +1,18 @@
 {
-  "name": "@natesclaw/searxng-plugin",
+  "name": "@openclaw/searxng-plugin",
   "version": "2026.8.1",
   "description": "Natesclaw SearXNG plugin",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/searxng-plugin",
-      "npmSpec": "@natesclaw/searxng-plugin",
+      "clawhubSpec": "clawhub:@openclaw/searxng-plugin",
+      "npmSpec": "@openclaw/searxng-plugin",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.9",
       "allowInvalidConfigRecovery": true
@@ -31,6 +31,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   }
 }

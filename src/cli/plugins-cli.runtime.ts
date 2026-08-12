@@ -515,7 +515,7 @@ export async function runPluginsDoctorCommand(opts: PluginDoctorOptions = {}): P
     }
     lines.push("No plugin install-tree issues detected; configuration warnings remain.");
   }
-  const docs = formatDocsLink("/plugin", "docs.natesclaw.ai/plugin");
+  const docs = formatDocsLink("/plugin", "docs.openclaw.ai/plugin");
   lines.push("");
   lines.push(`${theme.muted("Docs:")} ${docs}`);
   defaultRuntime.log(lines.join("\n"));

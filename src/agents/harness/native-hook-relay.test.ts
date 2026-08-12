@@ -4,7 +4,7 @@ import { createServer, request as httpRequest } from "node:http";
 import { tmpdir } from "node:os";
 import path from "node:path";
 // Covers native hook relay registration, bridge invocation, and approval state.
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { SessionEntry } from "../../config/sessions.js";
@@ -2896,7 +2896,7 @@ describe("native hook relay registry", () => {
         tool_use_id: "mcp-call-2",
         tool_input: { path: "/repo/package.json" },
         tool_response: {
-          content: [{ type: "text", text: '{ "name": "natesclaw" }' }],
+          content: [{ type: "text", text: '{ "name": "openclaw" }' }],
           structuredContent: { bytes: 22 },
         },
       },
@@ -2910,7 +2910,7 @@ describe("native hook relay registry", () => {
       runId: "run-1",
       toolCallId: "mcp-call-2",
       result: {
-        content: [{ type: "text", text: '{ "name": "natesclaw" }' }],
+        content: [{ type: "text", text: '{ "name": "openclaw" }' }],
         structuredContent: { bytes: 22 },
       },
     });

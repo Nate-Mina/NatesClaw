@@ -126,7 +126,7 @@ const defaultOptions = (): LinuxOptions => ({
   hostIp: undefined,
   hostPort: 18427,
   hostPortExplicit: false,
-  installUrl: "https://natesclaw.ai/install.sh",
+  installUrl: "https://openclaw.ai/install.sh",
   installVersion: "",
   json: false,
   keepServer: false,
@@ -154,7 +154,7 @@ Options:
   --model <provider/model>    Override the model used for the agent-turn smoke.
   --api-key-env <var>        Host env var name for provider API key.
   --openai-api-key-env <var> Alias for --api-key-env (backward compatible)
-  --install-url <url>        Installer URL for latest release. Default: https://natesclaw.ai/install.sh
+  --install-url <url>        Installer URL for latest release. Default: https://openclaw.ai/install.sh
   --host-port <port>         Host HTTP port for current-main tgz. Default: 18427
   --host-ip <ip>             Override Parallels host IP.
   --latest-version <ver>     Override npm latest version lookup.
@@ -607,7 +607,7 @@ fi`);
 plugin_dir=/root/.natesclaw/test-bad-plugin
 mkdir -p "$plugin_dir"
 cat >"$plugin_dir/package.json" <<'JSON'
-{"name":"@natesclaw/test-bad-plugin","version":"1.0.0","natesclaw":{"extensions":["./index.cjs"],"setupEntry":"./setup-entry.cjs"}}
+{"name":"@openclaw/test-bad-plugin","version":"1.0.0","natesclaw":{"extensions":["./index.cjs"],"setupEntry":"./setup-entry.cjs"}}
 JSON
 cat >"$plugin_dir/natesclaw.plugin.json" <<'JSON'
 {"id":"test-bad-plugin","configSchema":{"type":"object","additionalProperties":false,"properties":{}},"channels":["test-bad-plugin"]}

@@ -1,5 +1,5 @@
 /** ACP protocol helpers and Natesclaw agent identity metadata. */
-export { normalizeAcpProvenanceMode } from "@natesclaw/acp-core/types";
+export { normalizeAcpProvenanceMode } from "@openclaw/acp-core/types";
 import { VERSION } from "../version.js";
 
 /** ACP agent identity advertised during protocol initialization. */

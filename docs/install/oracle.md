@@ -73,7 +73,7 @@ Run a persistent Natesclaw Gateway on Oracle Cloud's **Always Free** ARM tier (u
 
   <Step title="Install Natesclaw">
     ```bash
-    curl -fsSL https://natesclaw.ai/install.sh | bash
+    curl -fsSL https://openclaw.ai/install.sh | bash
     source ~/.bashrc
     ```
 

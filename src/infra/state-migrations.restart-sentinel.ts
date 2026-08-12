@@ -1,7 +1,7 @@
 // Startup/Doctor migration for the retired restart-sentinel JSON file.
 import path from "node:path";
 import { isDeepStrictEqual } from "node:util";
-import { root, type Root } from "@natesclaw/fs-safe";
+import { root, type Root } from "@openclaw/fs-safe";
 import { runNatesclawStateWriteTransaction } from "../state/natesclaw-state-db.js";
 import {
   parseRestartSentinelEnvelope,

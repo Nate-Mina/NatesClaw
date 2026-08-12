@@ -16,8 +16,8 @@ describe("normalizeBrowserUrlDraft", () => {
   });
   it("prefixes bare hosts with https", () => {
     expect(normalizeBrowserUrlDraft("example.com")).toBe("https://example.com/");
-    expect(normalizeBrowserUrlDraft("  github.com/natesclaw/natesclaw ")).toBe(
-      "https://github.com/natesclaw/natesclaw",
+    expect(normalizeBrowserUrlDraft("  github.com/openclaw/natesclaw ")).toBe(
+      "https://github.com/openclaw/natesclaw",
     );
   });
 

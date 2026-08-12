@@ -39,9 +39,9 @@ The initial release deliberately keeps ownership narrow:
 
 ## Before you begin
 
-- Install the official `@natesclaw/codex` plugin on the Gateway. The Natesclaw
+- Install the official `@openclaw/codex` plugin on the Gateway. The Natesclaw
   macOS app can install it when you enable Codex features; CLI installations can
-  run `natesclaw plugins install @natesclaw/codex`.
+  run `natesclaw plugins install @openclaw/codex`.
 - Install and sign in to Codex Desktop or the Codex CLI on each computer whose
   sessions you want to list.
 - Pair remote computers as Natesclaw nodes. Each computer must opt in locally;
@@ -400,7 +400,7 @@ For every supervision config field, see
 
 ## Troubleshooting
 
-**No sessions appear:** verify that `@natesclaw/codex` is installed, both the
+**No sessions appear:** verify that `@openclaw/codex` is installed, both the
 plugin and `supervision.enabled` are true, the current plugin allowlist permits
 `codex`, and the sessions are not archived. Restart the Gateway or node after
 changing activation.

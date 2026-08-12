@@ -1,22 +1,22 @@
 {
-  "name": "@natesclaw/novita-provider",
+  "name": "@openclaw/novita-provider",
   "version": "2026.8.1",
   "description": "Natesclaw NovitaAI provider plugin",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/novita-provider",
-      "npmSpec": "@natesclaw/novita-provider",
+      "clawhubSpec": "clawhub:@openclaw/novita-provider",
+      "npmSpec": "@openclaw/novita-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.7.2"
     },

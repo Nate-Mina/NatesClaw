@@ -1,5 +1,5 @@
 // Migrates plugin install config entries into canonical config shape.
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import {
   inspectPluginInstallRecordMap,
   type PluginInstallRecordMapState,

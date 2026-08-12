@@ -2,7 +2,7 @@ import { createHash } from "node:crypto";
 import {
   normalizeOptionalLowercaseString,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import { normalizeAccountId } from "../../routing/account-id.js";
 import { isInternalMessageChannel } from "../../utils/message-channel.js";
 

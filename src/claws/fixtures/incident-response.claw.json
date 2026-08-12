@@ -32,7 +32,7 @@
     {
       "kind": "plugin",
       "source": "clawhub",
-      "ref": "@natesclaw/plugin-pager-duty",
+      "ref": "@openclaw/plugin-pager-duty",
       "version": "2.4.0"
     }
   ],

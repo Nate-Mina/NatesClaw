@@ -672,7 +672,7 @@ describe("runConfigureWizard", () => {
       [
         "Remote Gateway:",
         "wss://gateway.example.test",
-        "Docs: https://docs.natesclaw.ai/gateway/remote",
+        "Docs: https://docs.openclaw.ai/gateway/remote",
       ].join("\n"),
       "Gateway",
     );
@@ -786,7 +786,7 @@ describe("runConfigureWizard", () => {
       [
         "No web search providers are currently available under this plugin policy.",
         "Enable plugins or remove deny rules, then rerun configure.",
-        "Docs: https://docs.natesclaw.ai/tools/web",
+        "Docs: https://docs.openclaw.ai/tools/web",
       ].join("\n"),
       "Web search",
     );
@@ -840,7 +840,7 @@ describe("runConfigureWizard", () => {
         envVars: [],
         placeholder: "(no key needed)",
         signupUrl: "https://duckduckgo.com/",
-        docsUrl: "https://docs.natesclaw.ai/tools/web",
+        docsUrl: "https://docs.openclaw.ai/tools/web",
         credentialPath: "",
       }),
     ]);
@@ -890,7 +890,7 @@ describe("runConfigureWizard", () => {
         "Web search lets your agent look things up online using the `web_search` tool.",
         "Codex-capable models can use native Codex web search.",
         "Other models use a separate web search provider, which you can configure here.",
-        "Docs: https://docs.natesclaw.ai/tools/web",
+        "Docs: https://docs.openclaw.ai/tools/web",
       ].join("\n"),
       "Web search",
     );

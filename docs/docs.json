@@ -36,12 +36,12 @@
     "links": [
       {
         "label": "GitHub",
-        "href": "https://github.com/natesclaw/natesclaw",
+        "href": "https://github.com/openclaw/natesclaw",
         "icon": "github"
       },
       {
         "label": "Releases",
-        "href": "https://github.com/natesclaw/natesclaw/releases",
+        "href": "https://github.com/openclaw/natesclaw/releases",
         "icon": "package"
       },
       {

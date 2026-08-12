@@ -1,8 +1,8 @@
 /**
  * Collects configured native harness runtime ids from model provider config.
  */
-import { listModelRefsFromConfigValue } from "@natesclaw/model-catalog-core/configured-model-refs";
-import { parseModelCatalogRef } from "@natesclaw/model-catalog-core/model-catalog-refs";
+import { listModelRefsFromConfigValue } from "@openclaw/model-catalog-core/configured-model-refs";
+import { parseModelCatalogRef } from "@openclaw/model-catalog-core/model-catalog-refs";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { isRecord } from "../utils.js";
 import { NATESCLAW_AGENT_RUNTIME_ID, isDefaultAgentRuntimeId } from "./agent-runtime-id.js";

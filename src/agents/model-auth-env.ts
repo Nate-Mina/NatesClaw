@@ -1,7 +1,7 @@
 /**
  * Resolves model provider API keys from explicit environment variables.
  */
-import { normalizeProviderIdForAuth } from "@natesclaw/model-catalog-core/provider-id";
+import { normalizeProviderIdForAuth } from "@openclaw/model-catalog-core/provider-id";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { getShellEnvAppliedKeys } from "../infra/shell-env.js";
 import { resolvePluginSetupProviderCore } from "../plugins/setup-registry.js";

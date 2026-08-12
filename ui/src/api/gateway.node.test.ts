@@ -5,7 +5,7 @@ import {
   GATEWAY_CLIENT_CAPS,
   MIN_CLIENT_PROTOCOL_VERSION,
   PROTOCOL_VERSION,
-} from "@natesclaw/gateway-client/browser";
+} from "@openclaw/gateway-client/browser";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createDeferred } from "../../../test/helpers/promise.js";
 import {
@@ -39,7 +39,7 @@ vi.mock("../lib/sessions/cloud-recovery-migration.runtime.ts", async (importOrig
 });
 
 const DEFAULT_GATEWAY_URL = "ws://127.0.0.1:18789";
-const LEGACY_DEVICE_AUTH_STORAGE_KEY = "natesclaw.device.auth.v1";
+const LEGACY_DEVICE_AUTH_STORAGE_KEY = "openclaw.device.auth.v1";
 const DEFAULT_DEVICE_AUTH_STORAGE_KEY = `${LEGACY_DEVICE_AUTH_STORAGE_KEY}:${DEFAULT_GATEWAY_URL}`;
 const STORED_CRED = "stored-device-token";
 const ROSITA_CRED = "rosita-device-token";

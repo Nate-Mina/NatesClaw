@@ -11,7 +11,7 @@ Adds text-to-speech provider support.
 
 ## Distribution
 
-- Package: `@natesclaw/microsoft-speech`
+- Package: `@openclaw/microsoft-speech`
 - Install route: included in Natesclaw
 
 ## Surface

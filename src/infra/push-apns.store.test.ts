@@ -40,7 +40,7 @@ async function registerDirectApnsRegistration(params: {
 }) {
   return await registerApnsRegistration({
     [APNS_DEVICE_FIELD]: APNS_DEVICE_IDENTIFIER,
-    topic: "ai.natesclaw.ios",
+    topic: "ai.openclaw.ios",
     ...params,
     transport: "direct",
   });
@@ -82,7 +82,7 @@ describe("push APNs registration store", () => {
           "legacy-node": {
             nodeId: "legacy-node",
             [APNS_DEVICE_FIELD]: APNS_DEVICE_IDENTIFIER,
-            topic: "ai.natesclaw.ios",
+            topic: "ai.openclaw.ios",
             environment: "sandbox",
             updatedAtMs: 1,
           },
@@ -103,17 +103,17 @@ describe("push APNs registration store", () => {
       relayHandle: "relay-handle-123",
       sendGrant: "send-grant-123",
       installationId: "install-123",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
       distribution: "official",
-      relayOrigin: "https://ios-push-relay-sandbox.natesclaw.ai/",
+      relayOrigin: "https://ios-push-relay-sandbox.openclaw.ai/",
       tokenDebugSuffix: " abcd-1234 ",
       baseDir,
     });
 
     await expect(loadApnsRegistration("ios-node-relay", baseDir)).resolves.toEqual({
       ...relay,
-      relayOrigin: "https://ios-push-relay-sandbox.natesclaw.ai",
+      relayOrigin: "https://ios-push-relay-sandbox.openclaw.ai",
       tokenDebugSuffix: "abcd1234",
     });
   });
@@ -127,7 +127,7 @@ describe("push APNs registration store", () => {
       relayHandle: "relay-handle-123",
       sendGrant: "send-grant-123",
       installationId: "install-123",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "production",
       distribution: "official",
       baseDir,
@@ -175,7 +175,7 @@ describe("push APNs registration store", () => {
               send_grant: null,
               installation_id: null,
               relay_origin: null,
-              topic: "ai.natesclaw.ios",
+              topic: "ai.openclaw.ios",
               environment: "sandbox",
               distribution: null,
               token_debug_suffix: null,
@@ -360,7 +360,7 @@ describe("push APNs registration store", () => {
         relayHandle: "relay-handle-123",
         sendGrant: "send-grant-123",
         installationId: "install-123",
-        topic: "ai.natesclaw.ios",
+        topic: "ai.openclaw.ios",
         environment: "staging",
         distribution: "official",
         baseDir,
@@ -373,7 +373,7 @@ describe("push APNs registration store", () => {
         relayHandle: oversized,
         sendGrant: "send-grant-123",
         installationId: "install-123",
-        topic: "ai.natesclaw.ios",
+        topic: "ai.openclaw.ios",
         environment: "production",
         distribution: "official",
         baseDir,
@@ -390,7 +390,7 @@ describe("push APNs registration store", () => {
           `INSERT INTO apns_registrations (
              node_id, transport, topic, environment, updated_at_ms
            ) VALUES (?, ?, ?, ?, ?)`,
-        ).run("corrupt-node", "unknown", "ai.natesclaw.ios", "sandbox", 1);
+        ).run("corrupt-node", "unknown", "ai.openclaw.ios", "sandbox", 1);
       },
       { env },
     );

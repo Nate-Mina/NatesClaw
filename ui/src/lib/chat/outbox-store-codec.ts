@@ -1,4 +1,4 @@
-import { readNonBlankString as normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { readNonBlankString as normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { normalizeAgentId } from "../sessions/session-key.ts";
 import type { ChatAttachment, ChatQueueItem } from "./chat-types.ts";
 import { normalizeSenderIdentity } from "./sender-label.ts";

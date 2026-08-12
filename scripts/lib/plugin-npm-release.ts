@@ -116,7 +116,7 @@ type PublishablePluginPackageCandidate<TPackageJson extends PluginPackageJson = 
     readmeText?: string;
   };
 
-export const NATESCLAW_PLUGIN_NPM_REPOSITORY_URL = "https://github.com/natesclaw/natesclaw";
+export const NATESCLAW_PLUGIN_NPM_REPOSITORY_URL = "https://github.com/openclaw/natesclaw";
 const PLUGIN_NPM_VIEW_TIMEOUT_MS = 60_000;
 
 export function collectRequiredLatestDependencies(packageJson: PluginPackageJson): {
@@ -369,9 +369,9 @@ export function collectPublishablePluginPackageErrors(
   const extensions = packageJson.natesclaw?.extensions ?? [];
   const requiredLatestDependencies = collectRequiredLatestDependencies(packageJson);
 
-  if (!packageName.startsWith("@natesclaw/")) {
+  if (!packageName.startsWith("@openclaw/")) {
     errors.push(
-      `package name must start with "@natesclaw/"; found "${packageName || "<missing>"}".`,
+      `package name must start with "@openclaw/"; found "${packageName || "<missing>"}".`,
     );
   }
   if (packageJson.private === true) {

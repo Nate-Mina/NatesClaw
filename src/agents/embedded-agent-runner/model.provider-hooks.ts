@@ -1,4 +1,4 @@
-import { finiteSecondsToTimerSafeMilliseconds } from "@natesclaw/normalization-core/number-coercion";
+import { finiteSecondsToTimerSafeMilliseconds } from "@openclaw/normalization-core/number-coercion";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { Api, Model } from "../../llm/types.js";
 import type { ProviderRuntimeModel } from "../../plugins/provider-runtime-model.types.js";

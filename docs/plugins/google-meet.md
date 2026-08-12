@@ -21,7 +21,7 @@ The `google-meet` plugin joins explicit Meet URLs on behalf of an Natesclaw agen
 Install the plugin and the native audio dependencies for the Chrome host, then set a realtime provider key. OpenAI is the default transcription provider for `agent` mode; Google Gemini Live is available as the `bidi`-mode voice provider. On macOS:
 
 ```bash
-natesclaw plugins install npm:@natesclaw/google-meet
+natesclaw plugins install npm:@openclaw/google-meet
 brew install blackhole-2ch sox
 export OPENAI_API_KEY=sk-...
 # only needed when realtime.voiceProvider is "google" for bidi mode
@@ -184,7 +184,7 @@ command -v sox
 Install the plugin in the VM, where it is enabled by default, and start the node host:
 
 ```bash
-natesclaw plugins install npm:@natesclaw/google-meet
+natesclaw plugins install npm:@openclaw/google-meet
 natesclaw node run --host <gateway-host> --port 18789 --display-name parallels-macos
 ```
 
@@ -262,7 +262,7 @@ If `chromeNode.node` is omitted, Natesclaw auto-selects only when exactly one co
 | Symptom                                                  | Fix                                                                                                                                                                                                                                                                                   |
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `Configured Google Meet node ... is not usable: offline` | The pinned node is known but unavailable. Report the setup blocker; do not silently fall back to another transport unless asked.                                                                                                                                                      |
-| `No connected Google Meet-capable node`                  | Install `npm:@natesclaw/google-meet` in the VM, run `natesclaw plugins enable browser`, start `natesclaw node run`, and approve pairing. If Google Meet was explicitly disabled, enable it too. Confirm `gateway.nodes.commands.allow` includes `googlemeet.chrome` and `browser.proxy`. |
+| `No connected Google Meet-capable node`                  | Install `npm:@openclaw/google-meet` in the VM, run `natesclaw plugins enable browser`, start `natesclaw node run`, and approve pairing. If Google Meet was explicitly disabled, enable it too. Confirm `gateway.nodes.commands.allow` includes `googlemeet.chrome` and `browser.proxy`. |
 | `BlackHole 2ch audio device not found`                   | On macOS, install `blackhole-2ch` on the host being checked and reboot.                                                                                                                                                                                                               |
 | `PipeWire-Pulse is unavailable`                          | On Linux, start the desktop user's `pipewire-pulse` service and install `pulseaudio-utils`; do not run the node as root or outside the Chrome user's audio session.                                                                                                                   |
 | Chrome opens but cannot join                             | Sign in to the browser profile in the VM, or keep `chrome.guestName` set. Guest auto-join uses Natesclaw browser automation through the node browser proxy; point the node's `browser.defaultProfile` (or a named existing-session profile) at the profile you want.                   |
@@ -1041,7 +1041,7 @@ On Linux, local Chrome talk-back requires PipeWire-Pulse in the Chrome desktop u
 On the node host:
 
 ```bash
-natesclaw plugins install npm:@natesclaw/google-meet
+natesclaw plugins install npm:@openclaw/google-meet
 natesclaw plugins enable browser
 NATESCLAW_ALLOW_INSECURE_PRIVATE_WS=1 \
   natesclaw node run --host <gateway-lan-ip> --port 18789 --display-name parallels-macos

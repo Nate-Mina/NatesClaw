@@ -1,11 +1,11 @@
 {
-  "name": "@natesclaw/copilot-proxy",
+  "name": "@openclaw/copilot-proxy",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw Copilot Proxy provider plugin",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

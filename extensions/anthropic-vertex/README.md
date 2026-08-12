@@ -5,7 +5,7 @@ Official Natesclaw provider plugin for Claude models hosted through Google Verte
 Install from Natesclaw:
 
 ```bash
-natesclaw plugins install @natesclaw/anthropic-vertex-provider
+natesclaw plugins install @openclaw/anthropic-vertex-provider
 ```
 
 Configure Google Cloud credentials and the target Vertex project/region in Natesclaw, then select Claude models with the Anthropic Vertex provider.

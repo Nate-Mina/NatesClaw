@@ -694,7 +694,7 @@ describe("doctor repair sequencing", () => {
 
   it("auto-enables newly installed configured plugins after doctor repair", async () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValueOnce({
-      changes: ['Installed missing configured plugin "brave" from @natesclaw/brave-plugin.'],
+      changes: ['Installed missing configured plugin "brave" from @openclaw/brave-plugin.'],
       warnings: [],
     });
     mocks.applyPluginAutoEnable.mockImplementationOnce((params: { config: NatesclawConfig }) => ({
@@ -732,7 +732,7 @@ describe("doctor repair sequencing", () => {
     expect(result.state.candidate.plugins?.allow).toEqual(["telegram", "brave"]);
     expect(result.state.candidate.plugins?.entries?.brave?.enabled).toBe(true);
     expect(result.changeNotes).toStrictEqual([
-      'Installed missing configured plugin "brave" from @natesclaw/brave-plugin.',
+      'Installed missing configured plugin "brave" from @openclaw/brave-plugin.',
       "brave web search provider selected, enabled automatically.",
     ]);
   });
@@ -742,7 +742,7 @@ describe("doctor repair sequencing", () => {
     mocks.repairMissingConfiguredPluginInstalls.mockImplementationOnce(async () => {
       mistralInstalled = true;
       return {
-        changes: ['Installed missing configured plugin "mistral" from @natesclaw/mistral-provider.'],
+        changes: ['Installed missing configured plugin "mistral" from @openclaw/mistral-provider.'],
         warnings: [],
         repairedPluginIds: ["mistral"],
         pluginInventoryChanged: true,
@@ -800,7 +800,7 @@ describe("doctor repair sequencing", () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValueOnce({
       changes: [],
       warnings: [
-        'Failed to install missing configured plugin "mistral" from @natesclaw/mistral-provider: package install failed',
+        'Failed to install missing configured plugin "mistral" from @openclaw/mistral-provider: package install failed',
       ],
       failedPluginIds: ["mistral"],
     });
@@ -836,7 +836,7 @@ describe("doctor repair sequencing", () => {
 
   it("applies doctor contracts exposed by newly installed plugins", async () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValueOnce({
-      changes: ['Installed missing configured plugin "discord" from @natesclaw/discord.'],
+      changes: ['Installed missing configured plugin "discord" from @openclaw/discord.'],
       warnings: [],
       repairedPluginIds: ["discord"],
       pluginInventoryChanged: true,
@@ -913,7 +913,7 @@ describe("doctor repair sequencing", () => {
       dm: { enabled: true },
     });
     expect(result.changeNotes).toStrictEqual([
-      'Installed missing configured plugin "discord" from @natesclaw/discord.',
+      'Installed missing configured plugin "discord" from @openclaw/discord.',
       "discord installed for existing configuration, enabled automatically.",
       "Moved channels.discord.dm.policy → channels.discord.dmPolicy.\nMoved channels.discord.dm.allowFrom → channels.discord.allowFrom.",
       "channels.discord.allowFrom: converted 1 numeric ID to strings",
@@ -922,7 +922,7 @@ describe("doctor repair sequencing", () => {
 
   it("explicitly enables plugins repaired from env-only configuration", async () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValueOnce({
-      changes: ['Installed missing configured plugin "exa" from @natesclaw/exa-plugin.'],
+      changes: ['Installed missing configured plugin "exa" from @openclaw/exa-plugin.'],
       warnings: [],
       repairedPluginIds: ["exa"],
       pluginInventoryChanged: true,
@@ -962,7 +962,7 @@ describe("doctor repair sequencing", () => {
     expect(mocks.loadPluginMetadataSnapshot).toHaveBeenCalledTimes(1);
     expect(result.state.candidate.plugins?.entries?.exa).toEqual({ enabled: true });
     expect(result.changeNotes).toStrictEqual([
-      'Installed missing configured plugin "exa" from @natesclaw/exa-plugin.',
+      'Installed missing configured plugin "exa" from @openclaw/exa-plugin.',
       "exa installed for existing configuration, enabled automatically.",
     ]);
   });
@@ -1099,10 +1099,10 @@ describe("doctor repair sequencing", () => {
 
   it("surfaces ClawHub notices from successful missing configured plugin repair", async () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValueOnce({
-      changes: ['Installed missing configured plugin "brave" from @natesclaw/brave-plugin.'],
+      changes: ['Installed missing configured plugin "brave" from @openclaw/brave-plugin.'],
       warnings: [],
       notices: [
-        'ClawHub trust warning for "@natesclaw/brave-plugin@1.2.3": scan=pending; reasons=pending.',
+        'ClawHub trust warning for "@openclaw/brave-plugin@1.2.3": scan=pending; reasons=pending.',
       ],
     });
     mocks.maybeRepairStalePluginConfig.mockImplementationOnce((cfg: NatesclawConfig) => ({
@@ -1126,7 +1126,7 @@ describe("doctor repair sequencing", () => {
               brave: {
                 enabled: true,
                 source: "clawhub",
-                package: "@natesclaw/brave-plugin",
+                package: "@openclaw/brave-plugin",
               },
             },
           },
@@ -1138,7 +1138,7 @@ describe("doctor repair sequencing", () => {
               brave: {
                 enabled: true,
                 source: "clawhub",
-                package: "@natesclaw/brave-plugin",
+                package: "@openclaw/brave-plugin",
               },
             },
           },
@@ -1150,11 +1150,11 @@ describe("doctor repair sequencing", () => {
     });
 
     expect(result.changeNotes).toStrictEqual([
-      'Installed missing configured plugin "brave" from @natesclaw/brave-plugin.',
+      'Installed missing configured plugin "brave" from @openclaw/brave-plugin.',
       "- plugins.entries: removed 1 stale plugin entry (brave)",
     ]);
     expect(result.warningNotes).toStrictEqual([
-      'ClawHub trust warning for "@natesclaw/brave-plugin@1.2.3": scan=pending; reasons=pending.',
+      'ClawHub trust warning for "@openclaw/brave-plugin@1.2.3": scan=pending; reasons=pending.',
     ]);
     expect(mocks.maybeRepairStalePluginConfig).toHaveBeenCalledOnce();
     expect(result.state.pendingChanges).toBe(true);
@@ -1405,7 +1405,7 @@ describe("doctor repair sequencing", () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValueOnce({
       changes: [],
       warnings: [
-        'Failed to install missing configured plugin "brave" from @natesclaw/brave-plugin: package install failed',
+        'Failed to install missing configured plugin "brave" from @openclaw/brave-plugin: package install failed',
       ],
       failedPluginIds: ["brave"],
     });
@@ -1500,7 +1500,7 @@ describe("doctor repair sequencing", () => {
       "plugins.entries: removed 1 stale plugin entry (old-plugin)",
     );
     expect(result.warningNotes).toStrictEqual([
-      'Failed to install missing configured plugin "brave" from @natesclaw/brave-plugin: package install failed',
+      'Failed to install missing configured plugin "brave" from @openclaw/brave-plugin: package install failed',
     ]);
   });
 
@@ -1508,7 +1508,7 @@ describe("doctor repair sequencing", () => {
     mocks.repairMissingConfiguredPluginInstalls.mockResolvedValueOnce({
       changes: [],
       warnings: [
-        'Failed to install missing configured channel plugin "whatsapp" from @natesclaw/whatsapp: package install failed',
+        'Failed to install missing configured channel plugin "whatsapp" from @openclaw/whatsapp: package install failed',
       ],
       failedPluginIds: ["whatsapp"],
     });
@@ -1561,7 +1561,7 @@ describe("doctor repair sequencing", () => {
       allowFrom: ["+15555550123"],
     });
     expect(result.warningNotes).toStrictEqual([
-      'Failed to install missing configured channel plugin "whatsapp" from @natesclaw/whatsapp: package install failed',
+      'Failed to install missing configured channel plugin "whatsapp" from @openclaw/whatsapp: package install failed',
     ]);
   });
 });

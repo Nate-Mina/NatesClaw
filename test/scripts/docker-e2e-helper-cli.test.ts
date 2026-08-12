@@ -96,7 +96,7 @@ describe("Docker E2E helper CLIs", () => {
     writeFileSync(
       file,
       `${JSON.stringify({
-        requiredPrepublishPluginPackages: ["@natesclaw/discord", "@natesclaw/feishu"],
+        requiredPrepublishPluginPackages: ["@openclaw/discord", "@openclaw/feishu"],
         needs: { prepublishPluginRegistry: true },
       })}\n`,
     );
@@ -106,7 +106,7 @@ describe("Docker E2E helper CLIs", () => {
     expect(result.status).toBe(0);
     expect(result.stdout).toContain("needs_prepublish_plugin_registry=1");
     expect(result.stdout).toContain(
-      'required_prepublish_plugin_packages=["@natesclaw/discord","@natesclaw/feishu"]',
+      'required_prepublish_plugin_packages=["@openclaw/discord","@openclaw/feishu"]',
     );
   });
 
@@ -658,7 +658,7 @@ describe("Docker E2E helper CLIs", () => {
           "    headBranch: 'main',",
           "    headSha: 'abc123',",
           "    status: 'completed',",
-          "    url: 'https://github.com/natesclaw/natesclaw/actions/runs/12345',",
+          "    url: 'https://github.com/openclaw/natesclaw/actions/runs/12345',",
           "    workflowName: 'Natesclaw Live and E2E Checks',",
           "  }));",
           "  process.exit(0);",

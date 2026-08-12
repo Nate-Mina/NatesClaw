@@ -345,18 +345,18 @@ describe("scripts/natesclaw-cross-os-release-checks", () => {
 
   it("bounds public installer fetches on Windows and POSIX", () => {
     const windowsScript = buildInstallerSmokeScript({
-      installerUrl: "https://natesclaw.ai/install.ps1",
+      installerUrl: "https://openclaw.ai/install.ps1",
       installTarget: "2026.7.1",
       platform: "win32",
     });
     const posixScript = buildInstallerSmokeScript({
-      installerUrl: "https://natesclaw.ai/install.sh",
+      installerUrl: "https://openclaw.ai/install.sh",
       installTarget: "2026.7.1",
       platform: "linux",
     });
 
     expect(windowsScript).toContain(
-      "curl.exe -fsSL --connect-timeout 10 --max-time 120 -o $installerPath 'https://natesclaw.ai/install.ps1'",
+      "curl.exe -fsSL --connect-timeout 10 --max-time 120 -o $installerPath 'https://openclaw.ai/install.ps1'",
     );
     expect(windowsScript).toContain("natesclaw-installer-");
     expect(windowsScript).toContain("if ($LASTEXITCODE -ne 0)");
@@ -372,7 +372,7 @@ describe("scripts/natesclaw-cross-os-release-checks", () => {
     );
     expect(posixScript).toContain("trap 'rm -f \"$installer_path\"' EXIT");
     expect(posixScript).toContain(
-      "curl -fsSL --connect-timeout 10 --max-time 120 -o \"$installer_path\" 'https://natesclaw.ai/install.sh'",
+      "curl -fsSL --connect-timeout 10 --max-time 120 -o \"$installer_path\" 'https://openclaw.ai/install.sh'",
     );
     expect(posixScript).toContain("bash -- \"$installer_path\" --version '2026.7.1' --no-onboard");
     expect(posixScript).not.toContain("| bash");
@@ -967,7 +967,7 @@ describe("scripts/natesclaw-cross-os-release-checks", () => {
     ).toBe("openai/gpt-5.4-nano");
     expect(resolveProviderConfig("openai", {})?.model).toBe("openai/gpt-5.6-luna");
     expect(resolveProviderConfig("openai", {})?.requiredCompanionPackages).toEqual([
-      "@natesclaw/codex",
+      "@openclaw/codex",
     ]);
     expect(resolveProviderConfig("anthropic", {})?.requiredCompanionPackages).toEqual([]);
     expect(resolveProviderConfig("minimax", {})?.requiredCompanionPackages).toEqual([]);
@@ -1570,9 +1570,9 @@ describe("scripts/natesclaw-cross-os-release-checks", () => {
       decide: resolvePublishedInstallerUrl,
       inputs: ["darwin", "linux", "win32"] as const,
       expected: [
-        "https://natesclaw.ai/install.sh",
-        "https://natesclaw.ai/install.sh",
-        "https://natesclaw.ai/install.ps1",
+        "https://openclaw.ai/install.sh",
+        "https://openclaw.ai/install.sh",
+        "https://openclaw.ai/install.ps1",
       ],
     },
     {

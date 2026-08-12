@@ -11,7 +11,7 @@ Adds video generation provider support.
 
 ## Distribution
 
-- Package: `@natesclaw/runway-provider`
+- Package: `@openclaw/runway-provider`
 - Install route: included in Natesclaw
 
 ## Surface

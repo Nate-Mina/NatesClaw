@@ -1,22 +1,22 @@
 {
-  "name": "@natesclaw/diagnostics-prometheus",
+  "name": "@openclaw/diagnostics-prometheus",
   "version": "2026.8.1",
   "description": "Natesclaw diagnostics Prometheus exporter for runtime metrics.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/diagnostics-prometheus",
-      "npmSpec": "@natesclaw/diagnostics-prometheus",
+      "clawhubSpec": "clawhub:@openclaw/diagnostics-prometheus",
+      "npmSpec": "@openclaw/diagnostics-prometheus",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.25"
     },

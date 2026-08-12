@@ -1,8 +1,8 @@
 /** Resolves SecretRef values from env, file, exec, and store secret providers. */
 import fs from "node:fs/promises";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
-import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { expectDefined } from "@openclaw/normalization-core";
+import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import type {
   FileSecretProviderConfig,

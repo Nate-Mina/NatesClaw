@@ -1,4 +1,4 @@
-import type { WorkboardCard } from "@natesclaw/workboard-contract";
+import type { WorkboardCard } from "@openclaw/workboard-contract";
 // Workboard dispatch workspace helpers keep authority resolution outside the orchestration loop.
 import type { PluginRuntime } from "natesclaw/plugin-sdk/plugin-runtime";
 import { canonicalPathFromExistingAncestor } from "natesclaw/plugin-sdk/security-runtime";

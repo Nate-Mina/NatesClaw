@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/ai",
+  "name": "@openclaw/ai",
   "version": "2026.8.1",
   "description": "Reusable model provider adapters and streaming runtime from Natesclaw",
   "keywords": [
@@ -11,15 +11,15 @@
     "openai",
     "streaming"
   ],
-  "homepage": "https://github.com/natesclaw/natesclaw#readme",
+  "homepage": "https://github.com/openclaw/natesclaw#readme",
   "bugs": {
-    "url": "https://github.com/natesclaw/natesclaw/issues"
+    "url": "https://github.com/openclaw/natesclaw/issues"
   },
   "license": "MIT",
-  "author": "Natesclaw Foundation (https://natesclaw.org)",
+  "author": "Natesclaw Foundation (https://openclaw.org)",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/natesclaw/natesclaw.git",
+    "url": "git+https://github.com/openclaw/natesclaw.git",
     "directory": "packages/ai"
   },
   "files": [
@@ -101,7 +101,7 @@
     "@anthropic-ai/sdk": "0.115.0",
     "@google/genai": "2.13.0",
     "@mistralai/mistralai": "2.5.0",
-    "@natesclaw/normalization-core": "workspace:*",
+    "@openclaw/normalization-core": "workspace:*",
     "openai": "6.49.0",
     "partial-json": "0.1.7",
     "typebox": "1.3.6"

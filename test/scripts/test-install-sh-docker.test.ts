@@ -13,7 +13,7 @@ import {
 import { tmpdir } from "node:os";
 import path, { join } from "node:path";
 import { runInNewContext } from "node:vm";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, describe, expect, it } from "vitest";
 import { parse } from "yaml";
 import { createTempDirTracker } from "../helpers/temp-dir.js";
@@ -612,7 +612,7 @@ function runRestoreLocalDistFixture(
   }
   for (const [relativePath, contents] of [
     ["app/dist/root.txt", "new-root"],
-    ["app/node_modules/@natesclaw/ai/dist/ai.txt", "new-ai"],
+    ["app/node_modules/@openclaw/ai/dist/ai.txt", "new-ai"],
   ] as const) {
     const target = join(imageRoot, relativePath);
     mkdirSync(path.dirname(target), { recursive: true });
@@ -848,7 +848,7 @@ describe("test-install-sh-docker", () => {
     expect(packageHelper).toContain(
       'docker_e2e_docker_cmd cp "${container_id}:/app/dist" "$temp_dir/dist"',
     );
-    expect(packageHelper).toContain('"${container_id}:/app/node_modules/@natesclaw/ai/dist"');
+    expect(packageHelper).toContain('"${container_id}:/app/node_modules/@openclaw/ai/dist"');
     expect(packageHelper).toContain('"$temp_dir/ai-dist"');
     expect(packageHelper).toContain('mv "$temp_dir/ai-dist" "$ai_dist_dir"');
     expect(packageHelper).toContain("cleanup_restore_package_dist() {");
@@ -1727,7 +1727,7 @@ describe("bun global install smoke", () => {
     expect(packageHelper).toContain(
       'docker_e2e_docker_cmd cp "${container_id}:/app/dist" "$temp_dir/dist"',
     );
-    expect(packageHelper).toContain('"${container_id}:/app/node_modules/@natesclaw/ai/dist"');
+    expect(packageHelper).toContain('"${container_id}:/app/node_modules/@openclaw/ai/dist"');
     expect(packageHelper).toContain('"$temp_dir/ai-dist"');
     expect(packageHelper).toContain('mv "$temp_dir/ai-dist" "$ai_dist_dir"');
     expect(packageHelper).toContain("cleanup_restore_package_dist() {");
@@ -1770,10 +1770,10 @@ describe("bun global install smoke", () => {
 
     expect(script).toContain("assert-release-versions");
     expect(script).toContain('"$BUN_INSTALL/install/global/package.json"');
-    expect(script).toContain("package/node_modules/@natesclaw/ai");
+    expect(script).toContain("package/node_modules/@openclaw/ai");
     expect(script).toContain("--strip-components=4");
     expect(script).toContain('npm pack --ignore-scripts --silent --pack-destination "$PACK_DIR"');
-    expect(script).toContain('overrides: { "@natesclaw/ai": `file:${aiPackageTarball}` }');
+    expect(script).toContain('overrides: { "@openclaw/ai": `file:${aiPackageTarball}` }');
     expect(script).not.toContain("--registry");
     expect(script).not.toContain("@natesclaw:registry");
   });
@@ -1787,10 +1787,10 @@ describe("bun global install smoke", () => {
       JSON.stringify({
         name: "natesclaw",
         version: "2026.6.17",
-        dependencies: { "@natesclaw/ai": "2026.6.17" },
+        dependencies: { "@openclaw/ai": "2026.6.17" },
       }),
     );
-    writeFileSync(aiManifestPath, JSON.stringify({ name: "@natesclaw/ai", version: "2026.6.17" }));
+    writeFileSync(aiManifestPath, JSON.stringify({ name: "@openclaw/ai", version: "2026.6.17" }));
 
     const matching = spawnSync(
       process.execPath,
@@ -1799,7 +1799,7 @@ describe("bun global install smoke", () => {
     );
     expect(matching).toMatchObject({ status: 0, stdout: "2026.6.17" });
 
-    writeFileSync(aiManifestPath, JSON.stringify({ name: "@natesclaw/ai", version: "2026.6.18" }));
+    writeFileSync(aiManifestPath, JSON.stringify({ name: "@openclaw/ai", version: "2026.6.18" }));
     const mismatched = spawnSync(
       process.execPath,
       [BUN_GLOBAL_ASSERTIONS_PATH, "assert-release-versions", rootManifestPath, aiManifestPath],
@@ -1807,7 +1807,7 @@ describe("bun global install smoke", () => {
     );
     expect(mismatched.status).not.toBe(0);
     expect(mismatched.stderr).toContain(
-      "candidate version mismatch: natesclaw=2026.6.17, dependency=2026.6.17, @natesclaw/ai=2026.6.18",
+      "candidate version mismatch: natesclaw=2026.6.17, dependency=2026.6.17, @openclaw/ai=2026.6.18",
     );
   });
 
@@ -1825,13 +1825,13 @@ describe("bun global install smoke", () => {
         JSON.stringify({
           name: "natesclaw",
           version: "2026.6.17",
-          dependencies: { "@natesclaw/ai": "2026.6.17" },
-          bundleDependencies: ["@natesclaw/ai"],
+          dependencies: { "@openclaw/ai": "2026.6.17" },
+          bundleDependencies: ["@openclaw/ai"],
         }),
       );
       writeFileSync(
         join(aiDir, "package.json"),
-        JSON.stringify({ name: "@natesclaw/ai", version: "2026.6.17" }),
+        JSON.stringify({ name: "@openclaw/ai", version: "2026.6.17" }),
       );
       const packed = spawnSync(
         "tar",
@@ -1849,7 +1849,7 @@ if [ "\${1:-}" = "--version" ]; then
   echo "1.3.14"
   exit 0
 fi
-override="$(node -e 'const p=require(process.argv[1]);process.stdout.write(p.overrides["@natesclaw/ai"])' "$BUN_INSTALL/install/global/package.json")"
+override="$(node -e 'const p=require(process.argv[1]);process.stdout.write(p.overrides["@openclaw/ai"])' "$BUN_INSTALL/install/global/package.json")"
 case "\${override#file:}" in
   *.tgz) ;;
   *) exit 1 ;;

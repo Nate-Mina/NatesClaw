@@ -1,6 +1,6 @@
 import path from "node:path";
 import { APIError as AnthropicAPIError } from "@anthropic-ai/sdk/core/error.js";
-import type { AssistantMessageEventStreamLike, Context, Model } from "@natesclaw/llm-core";
+import type { AssistantMessageEventStreamLike, Context, Model } from "@openclaw/llm-core";
 import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from "vitest";
 import { configureAiTransportHost, getAiTransportHost } from "./host.js";
 

@@ -8,7 +8,7 @@
  * that need pre-existing detection opt in via
  * `acceptPreExistingSentinel: false`.
  *
- * @module @natesclaw/oc-path/jsonc/emit
+ * @module @openclaw/oc-path/jsonc/emit
  */
 
 import { OcEmitSentinelError, REDACTED_SENTINEL } from "../sentinel.js";

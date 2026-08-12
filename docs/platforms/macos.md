@@ -22,7 +22,7 @@ Only need the CLI and Gateway? Start with [Getting started](/start/getting-start
 
 ## Download
 
-Get macOS app builds from [Natesclaw GitHub releases](https://github.com/natesclaw/natesclaw/releases).
+Get macOS app builds from [Natesclaw GitHub releases](https://github.com/openclaw/natesclaw/releases).
 When a release ships macOS app assets, look for:
 
 - `Natesclaw-<version>.dmg` (preferred)

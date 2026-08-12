@@ -1,4 +1,4 @@
-import { readSessionMessageIdentity } from "@natesclaw/gateway-client/browser";
+import { readSessionMessageIdentity } from "@openclaw/gateway-client/browser";
 import { areUiSessionKeysEquivalent } from "../../lib/sessions/session-key.ts";
 
 const liveTerminalRunIds = new WeakMap<object, string>();

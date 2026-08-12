@@ -1,5 +1,5 @@
 /** Pure, non-resolving credential availability checks shared by status and route selection. */
-import { hasNonEmptyString as hasSecret } from "@natesclaw/normalization-core/string-coerce";
+import { hasNonEmptyString as hasSecret } from "@openclaw/normalization-core/string-coerce";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import {
   isSecretRef,

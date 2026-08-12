@@ -32,8 +32,8 @@ function overview(overrides: Partial<SystemAgentOverview["tools"]> = {}): System
       reachable: false,
     },
     references: {
-      docsUrl: "https://docs.natesclaw.ai",
-      sourceUrl: "https://github.com/natesclaw/natesclaw",
+      docsUrl: "https://docs.openclaw.ai",
+      sourceUrl: "https://github.com/openclaw/natesclaw",
     },
   };
 }
@@ -169,9 +169,9 @@ describe("Natesclaw assistant", () => {
         defaultModel: "openai/gpt-5.5",
         references: {
           docsPath: "/tmp/natesclaw/docs",
-          docsUrl: "https://docs.natesclaw.ai",
+          docsUrl: "https://docs.openclaw.ai",
           sourcePath: "/tmp/natesclaw",
-          sourceUrl: "https://github.com/natesclaw/natesclaw",
+          sourceUrl: "https://github.com/openclaw/natesclaw",
         },
       },
     });

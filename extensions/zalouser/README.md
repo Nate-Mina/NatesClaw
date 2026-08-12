@@ -1,4 +1,4 @@
-# @natesclaw/zalouser
+# @openclaw/zalouser
 
 Natesclaw extension for Zalo Personal Account messaging via native `zca-js` integration.
 
@@ -24,7 +24,7 @@ No external `zca`, `openzca`, or `zca-cli` binary is required.
 ### Option A: npm
 
 ```bash
-natesclaw plugins install @natesclaw/zalouser
+natesclaw plugins install @openclaw/zalouser
 ```
 
 ### Option B: local source checkout

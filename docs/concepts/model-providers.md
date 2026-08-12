@@ -335,7 +335,7 @@ Gateway model capability checks also read explicit `models.providers.<id>.models
 
 ### Moonshot AI (Kimi)
 
-Install `@natesclaw/moonshot-provider` before onboarding. Add an explicit `models.providers.moonshot` entry only when you need to override the base URL or model metadata:
+Install `@openclaw/moonshot-provider` before onboarding. Add an explicit `models.providers.moonshot` entry only when you need to override the base URL or model metadata:
 
 - Provider: `moonshot`
 - Auth: `MOONSHOT_API_KEY`
@@ -443,7 +443,7 @@ In onboarding/configure model pickers, the Volcengine auth choice prefers both `
 
 BytePlus ARK provides access to the same models as Volcano Engine for international users.
 
-- Plugin: `@natesclaw/byteplus-provider`
+- Plugin: `@openclaw/byteplus-provider`
 - Provider: `byteplus` (coding: `byteplus-plan`)
 - Auth: `BYTEPLUS_API_KEY`
 - Example model: `byteplus-plan/ark-code-latest`
@@ -452,7 +452,7 @@ BytePlus ARK provides access to the same models as Volcano Engine for internatio
 Install the official plugin and restart the Gateway:
 
 ```bash
-natesclaw plugins install @natesclaw/byteplus-provider
+natesclaw plugins install @openclaw/byteplus-provider
 natesclaw gateway restart
 ```
 

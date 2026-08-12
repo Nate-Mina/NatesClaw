@@ -25,7 +25,7 @@ For the common local setup, Natesclaw setup can offer a user-confirmed Homebrew 
 Install the official iMessage plugin on the Gateway host, then restart the Gateway:
 
 ```bash
-natesclaw plugins install @natesclaw/imessage
+natesclaw plugins install @openclaw/imessage
 ```
 
 <CardGroup cols={3}>

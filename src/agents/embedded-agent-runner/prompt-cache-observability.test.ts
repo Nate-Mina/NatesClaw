@@ -1,5 +1,5 @@
 // Coverage for prompt-cache diagnostic tracking across turns.
-import { SYSTEM_PROMPT_CACHE_BOUNDARY } from "@natesclaw/ai/internal/shared";
+import { SYSTEM_PROMPT_CACHE_BOUNDARY } from "@openclaw/ai/internal/shared";
 import { beforeEach, describe, expect, it } from "vitest";
 import {
   beginPromptCacheObservation,

@@ -455,7 +455,7 @@ describe("channel-auth", () => {
   it("installs a catalog-backed channel plugin on demand for login", async () => {
     const catalogEntry = {
       id: "whatsapp",
-      pluginId: "@natesclaw/whatsapp",
+      pluginId: "@openclaw/whatsapp",
       meta: {
         id: "whatsapp",
         label: "WhatsApp",
@@ -464,7 +464,7 @@ describe("channel-auth", () => {
         blurb: "wa",
       },
       install: {
-        npmSpec: "@natesclaw/whatsapp",
+        npmSpec: "@openclaw/whatsapp",
       },
     };
     mocks.getChannelPlugin.mockReturnValueOnce(undefined);
@@ -507,7 +507,7 @@ describe("channel-auth", () => {
   it("strips pending install records before persisting install-on-demand login config", async () => {
     const catalogEntry = {
       id: "whatsapp",
-      pluginId: "@natesclaw/whatsapp",
+      pluginId: "@openclaw/whatsapp",
       meta: {
         id: "whatsapp",
         label: "WhatsApp",
@@ -516,7 +516,7 @@ describe("channel-auth", () => {
         blurb: "wa",
       },
       install: {
-        npmSpec: "@natesclaw/whatsapp",
+        npmSpec: "@openclaw/whatsapp",
       },
     };
     mocks.getChannelPlugin.mockReturnValueOnce(undefined);
@@ -529,7 +529,7 @@ describe("channel-auth", () => {
           installs: {
             whatsapp: {
               source: "npm",
-              spec: "@natesclaw/whatsapp",
+              spec: "@openclaw/whatsapp",
             },
           },
         },
@@ -575,7 +575,7 @@ describe("channel-auth", () => {
     mocks.listChannelPluginCatalogEntries.mockReturnValueOnce([
       {
         id: "whatsapp",
-        pluginId: "@natesclaw/whatsapp",
+        pluginId: "@openclaw/whatsapp",
         meta: {
           id: "whatsapp",
           label: "WhatsApp",
@@ -584,7 +584,7 @@ describe("channel-auth", () => {
           blurb: "wa",
         },
         install: {
-          npmSpec: "@natesclaw/whatsapp",
+          npmSpec: "@openclaw/whatsapp",
         },
       },
     ]);

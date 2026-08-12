@@ -1065,7 +1065,7 @@ jobs:
 
           gh attestation verify "$archive_path" \
             --repo "$GITHUB_REPOSITORY" \
-            --cert-identity "https://github.com/natesclaw/natesclaw/.github/workflows/natesclaw-release-telegram-qa.yml@refs/heads/main" \
+            --cert-identity "https://github.com/openclaw/natesclaw/.github/workflows/natesclaw-release-telegram-qa.yml@refs/heads/main" \
             --signer-digest "$CALLED_WORKFLOW_SHA" \
             --source-ref "$GITHUB_REF" \
             --source-digest "$GITHUB_SHA" \

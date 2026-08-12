@@ -54,7 +54,7 @@ onboarding.
     <Steps>
       <Step title="Install the plugin">
         ```bash
-        natesclaw plugins install @natesclaw/moonshot-provider
+        natesclaw plugins install @openclaw/moonshot-provider
         natesclaw gateway restart
         ```
       </Step>
@@ -206,7 +206,7 @@ onboarding.
     <Steps>
       <Step title="Install the plugin">
         ```bash
-        natesclaw plugins install @natesclaw/kimi-provider
+        natesclaw plugins install @openclaw/kimi-provider
         natesclaw gateway restart
         ```
       </Step>

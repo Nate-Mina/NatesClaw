@@ -9,7 +9,7 @@ export {
   isPathInside,
   normalizeWindowsPathForComparison,
   safeStatSync,
-} from "@natesclaw/fs-safe/path";
+} from "@openclaw/fs-safe/path";
 
 /**
  * Normalize a Windows path for boundary math whose result is handed back to callers.

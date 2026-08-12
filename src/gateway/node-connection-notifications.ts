@@ -1,7 +1,7 @@
 // Routes node connection alerts to the Mac most recently used by the operator.
 import { randomUUID } from "node:crypto";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
-import { sliceUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
+import { sliceUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import type { NodeRegistry, NodeSession } from "./node-registry.js";
 
 type NotificationRegistry = Pick<

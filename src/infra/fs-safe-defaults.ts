@@ -1,5 +1,5 @@
 // Applies Natesclaw's default fs-safe runtime configuration.
-import { configureFsSafeNative } from "@natesclaw/fs-safe/config";
+import { configureFsSafeNative } from "@openclaw/fs-safe/config";
 
 // Natesclaw does not rely on native helpers for normal filesystem safety. Tests
 // and operators can still opt in with fs-safe's documented env override.

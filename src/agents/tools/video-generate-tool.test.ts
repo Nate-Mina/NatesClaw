@@ -1,6 +1,6 @@
 // video_generate tool tests cover provider/model selection, plugin metadata,
 // background task handling, input media, and saved video output.
-import { MAX_VIDEO_BYTES } from "@natesclaw/media-core/constants";
+import { MAX_VIDEO_BYTES } from "@openclaw/media-core/constants";
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from "vitest";
 import { parseReplyDirectives } from "../../auto-reply/reply/reply-directives.js";
 import type { NatesclawConfig } from "../../config/config.js";

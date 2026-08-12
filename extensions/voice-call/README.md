@@ -1,4 +1,4 @@
-# @natesclaw/voice-call
+# @openclaw/voice-call
 
 Official Voice Call plugin for **Natesclaw**.
 
@@ -9,13 +9,13 @@ Providers:
 - **Plivo** (Voice API + XML transfer + GetInput speech)
 - **Mock** (dev/no network)
 
-Docs: `https://docs.natesclaw.ai/plugins/voice-call`
-Plugin system: `https://docs.natesclaw.ai/tools/plugin`
+Docs: `https://docs.openclaw.ai/plugins/voice-call`
+Plugin system: `https://docs.openclaw.ai/tools/plugin`
 
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/voice-call
+natesclaw plugins install @openclaw/voice-call
 ```
 
 Restart the Gateway afterwards.
@@ -102,7 +102,7 @@ Notes:
 - `mock` is a local dev provider (no network calls).
 - Telnyx requires `telnyx.publicKey` (or `TELNYX_PUBLIC_KEY`) unless `skipSignatureVerification` is true.
 - Runtime accepts canonical config only. If older configs still use `provider: "log"`, `twilio.from`, or legacy `streaming.*` OpenAI keys, run `natesclaw doctor --fix` to rewrite them.
-- advanced webhook, streaming, and tunnel notes: `https://docs.natesclaw.ai/plugins/voice-call`
+- advanced webhook, streaming, and tunnel notes: `https://docs.openclaw.ai/plugins/voice-call`
 - `responseModel` is optional. When unset, voice responses use the runtime default model.
 - `sessionScope` defaults to `per-phone`, preserving caller memory across calls. Use `per-call` for reception, booking, IVR, and bridge flows where each carrier call should start fresh.
 - `realtime.consultThinkingLevel` is optional. When set, it overrides the thinking level used by the model behind realtime `natesclaw_agent_consult` calls.
@@ -111,13 +111,13 @@ Notes:
 ## Stale call reaper
 
 See the plugin docs for recommended ranges and production examples:
-`https://docs.natesclaw.ai/plugins/voice-call#stale-call-reaper`
+`https://docs.openclaw.ai/plugins/voice-call#stale-call-reaper`
 
 ## TTS for calls
 
 Voice Call uses the core `tts` configuration for
 streaming speech on calls. Override examples and provider caveats live here:
-`https://docs.natesclaw.ai/plugins/voice-call#tts-for-calls`
+`https://docs.openclaw.ai/plugins/voice-call#tts-for-calls`
 
 ## CLI
 

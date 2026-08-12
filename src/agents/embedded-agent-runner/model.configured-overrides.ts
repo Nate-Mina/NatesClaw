@@ -1,5 +1,5 @@
-import { asOptionalRecord as readModelParams } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
+import { asOptionalRecord as readModelParams } from "@openclaw/normalization-core/record-coerce";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
 import type { ModelCompatConfig, ModelMediaInputConfig } from "../../config/types.models.js";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { Api, Model } from "../../llm/types.js";

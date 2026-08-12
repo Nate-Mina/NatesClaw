@@ -25,7 +25,7 @@ const PROCESS_GROUP_EXIT_POLL_MS = 25;
 const POST_FORCE_KILL_WAIT_MS = 1_000;
 const DEFAULT_CAPTURED_STDOUT_MAX_BYTES = 1024 * 1024;
 const MAX_TIMER_TIMEOUT_MS = 2_147_000_000;
-const AI_RUNTIME_PACKAGE = "@natesclaw/ai";
+const AI_RUNTIME_PACKAGE = "@openclaw/ai";
 const AI_RUNTIME_BACKUP_DIR = ".natesclaw-ai-package-backup";
 
 function coercePackageError(value: unknown, fallbackMessage: string): Error {
@@ -680,10 +680,10 @@ export async function prepareBundledAiRuntimePackage(
     return async () => {};
   }
   if (!hasAiRuntimeWorkspace) {
-    throw new Error("@natesclaw/ai dependency requires the packages/ai workspace");
+    throw new Error("@openclaw/ai dependency requires the packages/ai workspace");
   }
   if (typeof aiRuntimeDependency !== "string") {
-    throw new Error("root package.json must declare @natesclaw/ai as a dependency");
+    throw new Error("root package.json must declare @openclaw/ai as a dependency");
   }
 
   try {
@@ -747,7 +747,7 @@ export async function prepareBundledAiRuntimePackage(
       .map((filename) => path.join(outputDir, filename));
     if (packedAiTarballs.length !== 1) {
       throw new Error(
-        `expected one packed @natesclaw/ai tarball in ${outputDir}, found ${packedAiTarballs.length}`,
+        `expected one packed @openclaw/ai tarball in ${outputDir}, found ${packedAiTarballs.length}`,
       );
     }
 
@@ -772,11 +772,11 @@ export async function prepareBundledAiRuntimePackage(
       version?: unknown;
     };
     if (typeof stagedPackageJson.version !== "string" || !stagedPackageJson.version) {
-      throw new Error("packed @natesclaw/ai package must declare a version");
+      throw new Error("packed @openclaw/ai package must declare a version");
     }
     for (const [name, version] of Object.entries(stagedPackageJson.dependencies ?? {})) {
       if (typeof version !== "string") {
-        throw new Error(`packed @natesclaw/ai dependency ${name} must declare a string version`);
+        throw new Error(`packed @openclaw/ai dependency ${name} must declare a string version`);
       }
       if (version === "0.0.0-private") {
         continue;
@@ -784,7 +784,7 @@ export async function prepareBundledAiRuntimePackage(
       const rootVersion = packageJson.dependencies?.[name];
       if (rootVersion !== version && rootVersion !== `workspace:${version}`) {
         throw new Error(
-          `root package.json must declare ${name}@${version} to bundle @natesclaw/ai without duplicate dependencies`,
+          `root package.json must declare ${name}@${version} to bundle @openclaw/ai without duplicate dependencies`,
         );
       }
       packageJson.dependencies![name] = version;

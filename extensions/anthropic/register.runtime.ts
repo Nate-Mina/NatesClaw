@@ -434,7 +434,7 @@ function resolveAnthropicModelGeneration(
 
 /**
  * Claude ids from a generation newer than anything this plugin encodes. Request
- * shaping is selected by version predicates in `@natesclaw/llm-core`, so such an
+ * shaping is selected by version predicates in `@openclaw/llm-core`, so such an
  * id would otherwise fall through to pre-4.6 shaping — manual `budget_tokens`
  * plus caller sampling params — which current models reject outright.
  */

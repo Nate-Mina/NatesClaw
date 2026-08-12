@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/oc-path",
+  "name": "@openclaw/oc-path",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw oc:// workspace path plugin",
@@ -10,7 +10,7 @@
     "yaml": "2.9.0"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*",
+    "@openclaw/plugin-sdk": "workspace:*",
     "natesclaw": "workspace:*"
   },
   "peerDependencies": {

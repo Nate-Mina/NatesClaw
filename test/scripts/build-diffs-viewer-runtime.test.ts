@@ -1,5 +1,5 @@
 // Build Diffs Viewer Runtime tests cover build diffs viewer runtime script behavior.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { describe, expect, it } from "vitest";
 import { createPierreDiffsSideEffectImportPlugin } from "../../scripts/build-diffs-viewer-runtime.mts";
 

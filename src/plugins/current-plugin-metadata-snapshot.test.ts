@@ -2,7 +2,7 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import { normalizeConfiguredProviderCatalogModelId } from "@natesclaw/model-catalog-core/provider-model-id-normalization";
+import { normalizeConfiguredProviderCatalogModelId } from "@openclaw/model-catalog-core/provider-model-id-normalization";
 import { describe, expect, it } from "vitest";
 import {
   getCurrentPluginMetadataSnapshot,

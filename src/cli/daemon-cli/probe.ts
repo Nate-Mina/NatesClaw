@@ -1,5 +1,5 @@
 // Gateway status probe helper used by `gateway status` service diagnostics.
-import { redactSensitiveUrlLikeString } from "@natesclaw/net-policy/redact-sensitive-url";
+import { redactSensitiveUrlLikeString } from "@openclaw/net-policy/redact-sensitive-url";
 import {
   classifyGatewayConnectFailure,
   ConnectErrorDetailCodes,

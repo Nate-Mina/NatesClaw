@@ -1,4 +1,4 @@
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 import { splitTrailingAuthProfile } from "../../../agents/model-ref-profile.js";
 import { ensureRecord, getRecord, type LegacyConfigRule } from "../../../config/legacy.shared.js";
 import { isModelThinkingFormat } from "../../../config/types.models.js";

@@ -49,7 +49,7 @@ export default {
     alias: {
       "@a2ui/lit": a2uiLitIndex,
       "@a2ui/lit/ui": a2uiLitUi,
-      "@natesclaw/a2ui-theme-context": a2uiThemeContext,
+      "@openclaw/a2ui-theme-context": a2uiThemeContext,
       "@lit/context": resolveUiDependency("@lit/context"),
       "@lit/context/": resolveUiDependency("@lit/context/"),
       "@lit-labs/signals": resolveUiDependency("@lit-labs/signals"),

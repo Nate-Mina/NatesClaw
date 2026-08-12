@@ -1,7 +1,7 @@
 // Control UI plugin-tab cookie auth lets an authenticated UI open gateway-auth plugin iframes.
 import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { asDateTimestampMs } from "@natesclaw/normalization-core/number-coercion";
+import { asDateTimestampMs } from "@openclaw/normalization-core/number-coercion";
 import {
   CONTROL_UI_PLUGIN_AUTH_GRANT_TTL_MS,
   CONTROL_UI_PLUGIN_AUTH_PROBE_MESSAGE,

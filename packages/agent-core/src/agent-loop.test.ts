@@ -1,5 +1,5 @@
 // Agent Core tests cover agent loop behavior.
-import { EventStream } from "@natesclaw/ai/event-stream";
+import { EventStream } from "@openclaw/ai/event-stream";
 import { Type } from "typebox";
 import { describe, expect, it, vi } from "vitest";
 import { createDeferred } from "../../../test/helpers/promise.js";

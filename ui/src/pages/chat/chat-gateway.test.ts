@@ -1,4 +1,4 @@
-import { reduceSessionProjection } from "@natesclaw/gateway-client/browser";
+import { reduceSessionProjection } from "@openclaw/gateway-client/browser";
 // @vitest-environment node
 // Control UI tests cover chat behavior.
 import { createRequireRecord } from "natesclaw/plugin-sdk/test-fixtures";

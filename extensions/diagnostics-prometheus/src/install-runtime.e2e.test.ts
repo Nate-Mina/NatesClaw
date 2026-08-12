@@ -14,7 +14,7 @@ import {
 import { afterEach, describe, expect, it } from "vitest";
 
 const execFileAsync = promisify(execFile);
-const packageName = "@natesclaw/diagnostics-prometheus";
+const packageName = "@openclaw/diagnostics-prometheus";
 const pluginId = "diagnostics-prometheus";
 const repoRoot = path.resolve(import.meta.dirname, "../../..");
 const pluginRoot = path.resolve(import.meta.dirname, "..");

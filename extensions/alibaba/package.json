@@ -1,11 +1,11 @@
 {
-  "name": "@natesclaw/alibaba-provider",
+  "name": "@openclaw/alibaba-provider",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw Alibaba Model Studio video provider plugin",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

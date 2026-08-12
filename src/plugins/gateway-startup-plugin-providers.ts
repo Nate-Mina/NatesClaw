@@ -1,15 +1,15 @@
 // Collects configured model, generation, voice, and memory provider ownership.
-import { listModelRefsFromConfigValue } from "@natesclaw/model-catalog-core/configured-model-refs";
+import { listModelRefsFromConfigValue } from "@openclaw/model-catalog-core/configured-model-refs";
 import {
   buildModelCatalogMergeKey,
   parseModelCatalogRef,
-} from "@natesclaw/model-catalog-core/model-catalog-refs";
+} from "@openclaw/model-catalog-core/model-catalog-refs";
 import {
   findNormalizedProviderValue,
   normalizeProviderId,
-} from "@natesclaw/model-catalog-core/provider-id";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/model-catalog-core/provider-id";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import { listAgentEntries } from "../agents/agent-scope-config.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { planEffectiveModelCatalogRows } from "../model-catalog/index.js";

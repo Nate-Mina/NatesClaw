@@ -1,6 +1,6 @@
 // Resolves the LAN host Natesclaw should advertise to nearby devices.
-import { isRfc1918Ipv4Address } from "@natesclaw/net-policy/ip";
-import { normalizeLowercaseStringOrEmpty as normalizeInterfaceName } from "@natesclaw/normalization-core/string-coerce";
+import { isRfc1918Ipv4Address } from "@openclaw/net-policy/ip";
+import { normalizeLowercaseStringOrEmpty as normalizeInterfaceName } from "@openclaw/normalization-core/string-coerce";
 import { runCommandWithTimeout as defaultRunCommandWithTimeout } from "../process/exec.js";
 import {
   listExternalInterfaceAddresses,

@@ -1,7 +1,7 @@
 import NatesclawChatUI
 import SwiftUI
 
-/// Onboarding hero mascot with the natesclaw.ai hero treatment: the animated
+/// Onboarding hero mascot with the openclaw.ai hero treatment: the animated
 /// mascot plus its coral silhouette glow (drop-shadow at ~10% of size).
 /// Interactive: it reacts to clicks and its eyes follow the pointer.
 struct GlowingNatesclawIcon: View {

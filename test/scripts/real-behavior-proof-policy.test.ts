@@ -1,6 +1,6 @@
 // PR Context And Evidence Policy tests cover GitHub PR-body policy behavior.
 import { readFileSync } from "node:fs";
-import { toErrorObject as toLintErrorObject } from "@natesclaw/normalization-core/error-coercion";
+import { toErrorObject as toLintErrorObject } from "@openclaw/normalization-core/error-coercion";
 import { describe, expect, it, vi } from "vitest";
 import {
   NEEDS_PR_CONTEXT_LABEL,
@@ -104,7 +104,7 @@ function chunkedResponse(chunks: Uint8Array[]) {
 describe("real-behavior-proof-policy", () => {
   it.each([
     "![after](https://github.com/user-attachments/assets/abc123)",
-    "Linked artifact: https://github.com/natesclaw/natesclaw/actions/runs/123456789/artifacts/987654321",
+    "Linked artifact: https://github.com/openclaw/natesclaw/actions/runs/123456789/artifacts/987654321",
     "Redacted runtime log: gateway connected Discord channel and delivered the reply.",
     ["Terminal transcript:", "```text", "$ natesclaw gateway status", "discord ready", "```"].join(
       "\n",

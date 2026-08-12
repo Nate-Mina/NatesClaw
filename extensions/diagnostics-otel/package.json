@@ -1,10 +1,10 @@
 {
-  "name": "@natesclaw/diagnostics-otel",
+  "name": "@openclaw/diagnostics-otel",
   "version": "2026.8.1",
   "description": "Natesclaw diagnostics OpenTelemetry exporter for metrics, traces, and logs.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "dependencies": {
@@ -24,15 +24,15 @@
     "@opentelemetry/semantic-conventions": "1.43.0"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/diagnostics-otel",
-      "npmSpec": "@natesclaw/diagnostics-otel",
+      "clawhubSpec": "clawhub:@openclaw/diagnostics-otel",
+      "npmSpec": "@openclaw/diagnostics-otel",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.4.25"
     },

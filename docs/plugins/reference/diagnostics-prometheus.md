@@ -11,8 +11,8 @@ Natesclaw diagnostics Prometheus exporter for runtime metrics.
 
 ## Distribution
 
-- Package: `@natesclaw/diagnostics-prometheus`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/diagnostics-prometheus`
+- Package: `@openclaw/diagnostics-prometheus`
+- Install route: npm; ClawHub: `clawhub:@openclaw/diagnostics-prometheus`
 
 ## Surface
 

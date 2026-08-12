@@ -1,5 +1,5 @@
-import { normalizeAgentId } from "@natesclaw/normalization-core/agent-id";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeAgentId } from "@openclaw/normalization-core/agent-id";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { resolveGlobalSingleton } from "../shared/global-singleton.js";
 
 type SystemEventOwnershipState = {

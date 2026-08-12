@@ -1,5 +1,5 @@
-import { isCloudModelRef } from "@natesclaw/model-catalog-core/model-catalog-refs";
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
+import { isCloudModelRef } from "@openclaw/model-catalog-core/model-catalog-refs";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
 import type { NatesclawConfig } from "./types.natesclaw.js";
 
 const AUTO_LOCAL_MODEL_LEAN_PROVIDER_IDS = new Set(["lmstudio", "ollama"]);

@@ -31,7 +31,7 @@ import {
   type SelectOptions,
   type TextOptions,
 } from "@clack/prompts";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { WizardPromptNavigation } from "./prompts.js";
 
 type NavigationPromptOptions = {

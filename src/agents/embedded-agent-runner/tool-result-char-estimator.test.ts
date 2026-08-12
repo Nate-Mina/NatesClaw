@@ -10,7 +10,7 @@ import {
 
 /**
  * Regression tests for malformed tool result content blocks.
- * See https://github.com/natesclaw/natesclaw/issues/34979
+ * See https://github.com/openclaw/natesclaw/issues/34979
  *
  * A plugin tool handler returning undefined produces {type: "text"} (no text
  * property) in the session JSONL. Without guards, this crashes the char

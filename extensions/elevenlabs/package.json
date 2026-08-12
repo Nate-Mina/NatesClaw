@@ -1,11 +1,11 @@
 {
-  "name": "@natesclaw/elevenlabs-speech",
+  "name": "@openclaw/elevenlabs-speech",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw ElevenLabs speech plugin",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

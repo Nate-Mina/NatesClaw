@@ -67,7 +67,7 @@ describe("Buzz message events", () => {
         content: "@@ -1 +1 @@\n-old\n+new",
         tags: [
           ["h", "7c4a6d2a-2ed9-4b4e-a5e2-4d705ee9b34c"],
-          ["repo", "https://github.com/natesclaw/natesclaw"],
+          ["repo", "https://github.com/openclaw/natesclaw"],
           ["commit", "abcdef1234567890"],
           ["file", "extensions/buzz/src/message-event.ts"],
           ["parent-commit", "1234567890abcdef"],
@@ -90,7 +90,7 @@ describe("Buzz message events", () => {
       threadId: "root-id",
       replyToId: "reply-id",
       diff: {
-        repoUrl: "https://github.com/natesclaw/natesclaw",
+        repoUrl: "https://github.com/openclaw/natesclaw",
         commitSha: "abcdef1234567890",
         filePath: "extensions/buzz/src/message-event.ts",
         parentCommitSha: "1234567890abcdef",
@@ -106,7 +106,7 @@ describe("Buzz message events", () => {
     expect(message && formatBuzzMessageForAgent(message)).toBe(
       [
         "[Buzz structured diff]",
-        "Repository: https://github.com/natesclaw/natesclaw",
+        "Repository: https://github.com/openclaw/natesclaw",
         "Commit: abcdef1234567890",
         "Parent commit: 1234567890abcdef",
         "File: extensions/buzz/src/message-event.ts",
@@ -155,7 +155,7 @@ describe("Buzz message events", () => {
       parseBuzzMessageEvent(
         sign(BUZZ_DIFF_MESSAGE_KIND, "diff", [
           room,
-          ["repo", "https://github.com/natesclaw/natesclaw"],
+          ["repo", "https://github.com/openclaw/natesclaw"],
         ]),
       ),
     ).toBeNull();
@@ -163,7 +163,7 @@ describe("Buzz message events", () => {
       parseBuzzMessageEvent(
         sign(BUZZ_DIFF_MESSAGE_KIND, "x".repeat(60 * 1024 + 1), [
           room,
-          ["repo", "https://github.com/natesclaw/natesclaw"],
+          ["repo", "https://github.com/openclaw/natesclaw"],
           ["commit", "abcdef1"],
         ]),
       ),

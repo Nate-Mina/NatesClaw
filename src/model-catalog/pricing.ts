@@ -1,6 +1,6 @@
 import { isIP } from "node:net";
-import type { RemoteModelCatalogPricing } from "@natesclaw/model-catalog-core";
-import type { ModelCatalogCost } from "@natesclaw/model-catalog-core/model-catalog-types";
+import type { RemoteModelCatalogPricing } from "@openclaw/model-catalog-core";
+import type { ModelCatalogCost } from "@openclaw/model-catalog-core/model-catalog-types";
 import { modelKey, normalizeModelRef } from "../agents/model-selection.js";
 import type { ModelDefinitionConfig } from "../config/types.models.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

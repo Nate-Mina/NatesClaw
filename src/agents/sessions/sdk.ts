@@ -5,7 +5,7 @@
  */
 import { randomUUID } from "node:crypto";
 import { join } from "node:path";
-import { clampThinkingLevel } from "@natesclaw/ai/internal/runtime";
+import { clampThinkingLevel } from "@openclaw/ai/internal/runtime";
 import {
   resolveThinkingDefaultForModel,
   type ThinkingCatalogEntry,
@@ -231,7 +231,7 @@ function getAttributionHeaders(
 
   if (model.provider === "openrouter" || baseUrl.includes("openrouter.ai")) {
     return {
-      "HTTP-Referer": "https://natesclaw.ai",
+      "HTTP-Referer": "https://openclaw.ai",
       "X-OpenRouter-Title": "Natesclaw",
       "X-OpenRouter-Categories": "cli-agent",
     };

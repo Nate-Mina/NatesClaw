@@ -1,5 +1,5 @@
 // Doctor preview warning aggregation for config that can surprise users before repair.
-import { isRecord as hasRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord as hasRecord } from "@openclaw/normalization-core/record-coerce";
 import { listAgentEntries, resolveAgentConfig } from "../../../agents/agent-scope-config.js";
 import {
   normalizeToolProviderPolicyKey,

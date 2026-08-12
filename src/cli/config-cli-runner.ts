@@ -1,4 +1,4 @@
-import { uniqueValues } from "@natesclaw/normalization-core/string-normalization";
+import { uniqueValues } from "@openclaw/normalization-core/string-normalization";
 import { replaceConfigFile } from "../config/config.js";
 import { AUTO_MANAGED_CONFIG_META_PATHS } from "../config/io.meta.js";
 import { formatConfigIssueLines } from "../config/issue-format.js";

@@ -93,7 +93,7 @@ the shipped npm package across release checks, Package Acceptance, cross-OS,
 release-path Docker, and package Telegram. Use `package_acceptance_package_spec`
 only when Package Acceptance should intentionally prove a different package.
 The Codex plugin live package lane follows the same state: published
-`release_package_spec` values derive `codex_plugin_spec=npm:@natesclaw/codex@<version>`;
+`release_package_spec` values derive `codex_plugin_spec=npm:@openclaw/codex@<version>`;
 SHA/artifact runs pack `extensions/codex` from the selected ref; and operators
 can set `codex_plugin_spec` directly for `npm:`, `npm-pack:`, or `git:` plugin
 sources. The lane grants the explicit Codex CLI install approval required by

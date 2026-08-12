@@ -1,7 +1,7 @@
 // Covers browser-safe importing of temp-dir helpers with fs shims.
 import { Buffer } from "node:buffer";
 import crypto from "node:crypto";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { build, type Plugin } from "esbuild";
 import { describe, expect, it } from "vitest";
 

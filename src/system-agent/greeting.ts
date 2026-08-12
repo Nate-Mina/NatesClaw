@@ -1,6 +1,6 @@
 // Cached, model-phrased caretaker greetings over deterministic gateway facts.
 import { createHash } from "node:crypto";
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import type { SystemAgentChatQuestion } from "../../packages/gateway-protocol/src/index.js";
 import {
   CONFIG_AUDIT_MAX_ENTRIES,

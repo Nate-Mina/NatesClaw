@@ -1,5 +1,5 @@
 // Provider-runtime mock used by model resolution tests.
-import { lowercasePreservingWhitespace } from "@natesclaw/normalization-core/string-coerce";
+import { lowercasePreservingWhitespace } from "@openclaw/normalization-core/string-coerce";
 
 type OpenRouterModelCapabilities = NonNullable<
   ReturnType<typeof import("./openrouter-model-capabilities.js").getOpenRouterModelCapabilities>
@@ -681,13 +681,13 @@ export function createProviderRuntimeTestMock(options: ProviderRuntimeTestMockOp
           return (
             "Ollama requires authentication to be registered as a provider. " +
             'Set OLLAMA_API_KEY="ollama-local" (any value works) or run "natesclaw configure". ' +
-            "See: https://docs.natesclaw.ai/providers/ollama"
+            "See: https://docs.openclaw.ai/providers/ollama"
           );
         case "vllm":
           return (
             "vLLM requires authentication to be registered as a provider. " +
             'Set VLLM_API_KEY (any value works) or run "natesclaw configure". ' +
-            "See: https://docs.natesclaw.ai/providers/vllm"
+            "See: https://docs.openclaw.ai/providers/vllm"
           );
         default:
           return undefined;

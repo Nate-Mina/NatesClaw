@@ -7,8 +7,8 @@ import {
   type SessionMessageEnvelope,
   type SessionProjectionScope,
   type SessionProjectionState,
-} from "@natesclaw/gateway-client/browser";
-import { asNullableRecord } from "@natesclaw/normalization-core/record-coerce";
+} from "@openclaw/gateway-client/browser";
+import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
 import type { ApplicationInitialUserMessageHandoff } from "../../app/initial-user-message-handoff.ts";
 
 const chatSessionProjections = new WeakMap<object, SessionProjectionState>();

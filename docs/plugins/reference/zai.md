@@ -11,8 +11,8 @@ Adds Z.AI model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/zai-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/zai-provider`
+- Package: `@openclaw/zai-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/zai-provider`
 
 ## Surface
 

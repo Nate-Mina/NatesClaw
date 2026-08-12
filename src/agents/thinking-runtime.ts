@@ -1,5 +1,5 @@
-import { normalizeProviderId } from "@natesclaw/model-catalog-core/provider-id";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeProviderId } from "@openclaw/model-catalog-core/provider-id";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import {
   isThinkingLevelSupported,
   resolveSupportedThinkingLevel,

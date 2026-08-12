@@ -231,7 +231,7 @@ export const PLUGIN_COMPAT_RECORDS = [
       "WhatsApp `WebInboundCallbackMessage` nested contexts: `event`, `payload`, `quote`, `group`, and `platform`",
     docsPath: "/plugins/compatibility",
     surfaces: [
-      "@natesclaw/whatsapp WebInboundMessage flat fields",
+      "@openclaw/whatsapp WebInboundMessage flat fields",
       "WhatsApp monitorWebInbox onMessage callback",
       "WhatsApp monitorWebChannel listenerFactory injected messages",
     ],
@@ -252,7 +252,7 @@ export const PLUGIN_COMPAT_RECORDS = [
       "WhatsApp `WebInboundMessage.admission` fields: `conversation.id`, `accountId`, `ingress.decision`, and `conversation.kind`",
     docsPath: "/plugins/compatibility",
     surfaces: [
-      "@natesclaw/whatsapp WebInboundMessage top-level admission fields",
+      "@openclaw/whatsapp WebInboundMessage top-level admission fields",
       "WhatsApp monitorWebInbox onMessage callback",
       "WhatsApp monitorWebChannel listenerFactory injected messages",
     ],

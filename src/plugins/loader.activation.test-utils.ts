@@ -1111,7 +1111,7 @@ describe("loadNatesclawPlugins", () => {
       path.join(pluginDir, "package.json"),
       JSON.stringify(
         {
-          name: "@natesclaw/nested-default-channel",
+          name: "@openclaw/nested-default-channel",
           natesclaw: {
             extensions: ["./index.cjs"],
           },
@@ -1650,7 +1650,7 @@ describe("loadNatesclawPlugins", () => {
         path.join(globalDir, "package.json"),
         JSON.stringify(
           {
-            name: "@natesclaw/untrusted-global-channel",
+            name: "@openclaw/untrusted-global-channel",
             version: "0.0.0-test",
             main: "./index.cjs",
             natesclaw: {

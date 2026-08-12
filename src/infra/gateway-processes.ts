@@ -1,6 +1,6 @@
 // Inspects local gateway processes for status and diagnostics.
 import fsSync from "node:fs";
-import { uniqueValues } from "@natesclaw/normalization-core/string-normalization";
+import { uniqueValues } from "@openclaw/normalization-core/string-normalization";
 import { isGatewayArgv, parseProcCmdline } from "./gateway-process-argv.js";
 import { findGatewayPidsOnPortSync as findUnixGatewayPidsOnPortSync } from "./restart-stale-pids.js";
 import { spawnPsSync } from "./spawn-ps.js";

@@ -9,7 +9,7 @@ describe("formatCliParseErrorOutput", () => {
     });
 
     expect(output).toBe(
-      'Natesclaw does not know the command "wat".\nTry: natesclaw --help\nPlugin command? natesclaw plugins list\nDocs: https://docs.natesclaw.ai/cli\n',
+      'Natesclaw does not know the command "wat".\nTry: natesclaw --help\nPlugin command? natesclaw plugins list\nDocs: https://docs.openclaw.ai/cli\n',
     );
   });
 
@@ -19,7 +19,7 @@ describe("formatCliParseErrorOutput", () => {
     });
 
     expect(output).toBe(
-      'Natesclaw does not know the command "upate".\nDid you mean this?\n  natesclaw update\nTry: natesclaw --help\nPlugin command? natesclaw plugins list\nDocs: https://docs.natesclaw.ai/cli\n',
+      'Natesclaw does not know the command "upate".\nDid you mean this?\n  natesclaw update\nTry: natesclaw --help\nPlugin command? natesclaw plugins list\nDocs: https://docs.openclaw.ai/cli\n',
     );
   });
 

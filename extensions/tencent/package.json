@@ -1,10 +1,10 @@
 {
-  "name": "@natesclaw/tencent-provider",
+  "name": "@openclaw/tencent-provider",
   "version": "2026.8.1",
   "description": "Natesclaw Tencent Cloud provider plugin (TokenHub + Token Plan)",
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
@@ -12,8 +12,8 @@
     ],
     "setupEntry": "./setup-api.ts",
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/tencent-provider",
-      "npmSpec": "@natesclaw/tencent-provider",
+      "clawhubSpec": "clawhub:@openclaw/tencent-provider",
+      "npmSpec": "@openclaw/tencent-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.9"
     },
@@ -31,6 +31,6 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   }
 }

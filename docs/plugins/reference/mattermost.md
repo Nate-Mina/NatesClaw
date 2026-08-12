@@ -11,8 +11,8 @@ Adds the Mattermost channel surface for sending and receiving Natesclaw messages
 
 ## Distribution
 
-- Package: `@natesclaw/mattermost`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/mattermost`
+- Package: `@openclaw/mattermost`
+- Install route: npm; ClawHub: `clawhub:@openclaw/mattermost`
 
 ## Surface
 

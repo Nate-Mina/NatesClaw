@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { DatabaseSync } from "node:sqlite";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { expect, it } from "vitest";
 import { NATESCLAW_AGENT_SCHEMA_VERSION } from "./natesclaw-agent-db-contract.js";
 import retirementManifest from "./natesclaw-schema-retirements.json" with { type: "json" };

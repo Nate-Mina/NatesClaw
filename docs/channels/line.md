@@ -20,7 +20,7 @@ Reactions and threads are not supported.
 Install LINE before configuring the channel:
 
 ```bash
-natesclaw plugins install @natesclaw/line
+natesclaw plugins install @openclaw/line
 ```
 
 Local checkout (when running from a git repo):

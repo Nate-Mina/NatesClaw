@@ -11,8 +11,8 @@ Adds Xiaomi, Xiaomi Token Plan model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/xiaomi-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/xiaomi-provider`
+- Package: `@openclaw/xiaomi-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/xiaomi-provider`
 
 ## Surface
 

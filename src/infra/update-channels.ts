@@ -1,5 +1,5 @@
 // Resolves Natesclaw update channels from config, tags, and versions.
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import { parse as parseSemver } from "semver";
 import { normalizeLegacyDotBetaVersion } from "./semver.js";
 

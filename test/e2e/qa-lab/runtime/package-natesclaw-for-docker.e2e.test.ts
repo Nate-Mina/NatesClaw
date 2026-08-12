@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { pathToFileURL } from "node:url";
-import { MAX_TIMER_TIMEOUT_MS } from "@natesclaw/normalization-core/number-coercion";
+import { MAX_TIMER_TIMEOUT_MS } from "@openclaw/normalization-core/number-coercion";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { DOCKER_SELECTED_PLUGIN_BUILD_IDS_ENV } from "../../../../scripts/lib/bundled-plugin-build-entries.mjs";
 import {
@@ -288,7 +288,7 @@ describe("package-natesclaw-for-docker", () => {
     fs.mkdirSync(path.join(sourceDir, "dist"), { recursive: true });
     fs.mkdirSync(path.join(sourceDir, "scripts"), { recursive: true });
     fs.mkdirSync(path.join(sourceDir, "node_modules", "tsx"), { recursive: true });
-    fs.writeFileSync(path.join(sourceDir, "package.json"), '{"name":"natesclaw"}\n');
+    fs.writeFileSync(path.join(sourceDir, "package.json"), '{"name": "openclaw"}\n');
     fs.writeFileSync(
       path.join(sourceDir, "node_modules", "tsx", "package.json"),
       '{"name":"tsx","exports":"./loader.mjs","type":"module"}\n',
@@ -472,8 +472,8 @@ describe("package-natesclaw-for-docker", () => {
     const packageJsonPath = path.join(sourceDir, "package.json");
     const originalPackageJson = `${JSON.stringify(
       {
-        dependencies: { "@natesclaw/ai": "workspace:*", "dep-a": "workspace:1.2.3" },
-        devDependencies: { "@natesclaw/session-url-contract": "workspace:*" },
+        dependencies: { "@openclaw/ai": "workspace:*", "dep-a": "workspace:1.2.3" },
+        devDependencies: { "@openclaw/session-url-contract": "workspace:*" },
         files: ["dist"],
         name: "natesclaw",
         version: "2026.6.17",
@@ -507,10 +507,10 @@ describe("package-natesclaw-for-docker", () => {
               path.join(destination, "package.json"),
               `${JSON.stringify({
                 dependencies: {
-                  "@natesclaw/private-runtime": "0.0.0-private",
+                  "@openclaw/private-runtime": "0.0.0-private",
                   "dep-a": "1.2.3",
                 },
-                name: "@natesclaw/ai",
+                name: "@openclaw/ai",
                 version: "2026.6.17",
               })}\n`,
             );
@@ -524,11 +524,11 @@ describe("package-natesclaw-for-docker", () => {
         dependencies: Record<string, string>;
         devDependencies?: Record<string, string>;
       };
-      expect(packageJson.dependencies["@natesclaw/ai"]).toBe("2026.6.17");
-      expect(packageJson.dependencies["@natesclaw/private-runtime"]).toBeUndefined();
+      expect(packageJson.dependencies["@openclaw/ai"]).toBe("2026.6.17");
+      expect(packageJson.dependencies["@openclaw/private-runtime"]).toBeUndefined();
       expect(packageJson.dependencies["dep-a"]).toBe("1.2.3");
-      expect(packageJson.devDependencies?.["@natesclaw/session-url-contract"]).toBe("workspace:*");
-      expect(packageJson.bundleDependencies).toContain("@natesclaw/ai");
+      expect(packageJson.devDependencies?.["@openclaw/session-url-contract"]).toBe("workspace:*");
+      expect(packageJson.bundleDependencies).toContain("@openclaw/ai");
       expect(fs.existsSync(path.join(installedAiPath, "original-marker"))).toBe(false);
       expect(fs.existsSync(path.join(installedAiPath, "runtime.js"))).toBe(true);
       const stagedAiPackageJson = JSON.parse(
@@ -556,7 +556,7 @@ describe("package-natesclaw-for-docker", () => {
     const originalPackageJson = `${JSON.stringify(
       {
         devDependencies: {
-          "@natesclaw/session-url-contract": "workspace:*",
+          "@openclaw/session-url-contract": "workspace:*",
           vitest: "4.1.10",
         },
         name: "natesclaw",
@@ -629,13 +629,13 @@ describe("package-natesclaw-for-docker", () => {
   it("rejects incomplete AI workspace package sources", async () => {
     const cases = [
       {
-        dependencies: { "@natesclaw/ai": "workspace:*" },
-        expected: "@natesclaw/ai dependency requires the packages/ai workspace",
+        dependencies: { "@openclaw/ai": "workspace:*" },
+        expected: "@openclaw/ai dependency requires the packages/ai workspace",
         withWorkspace: false,
       },
       {
         dependencies: {},
-        expected: "root package.json must declare @natesclaw/ai as a dependency",
+        expected: "root package.json must declare @openclaw/ai as a dependency",
         withWorkspace: true,
       },
     ];
@@ -760,7 +760,7 @@ describe("package-natesclaw-for-docker", () => {
     ].join("\n");
     fs.writeFileSync(
       path.join(sourceDir, "package.json"),
-      '{"name":"natesclaw","version":"2026.5.29"}\n',
+      '{"name": "openclaw","version":"2026.5.29"}\n',
     );
     fs.writeFileSync(path.join(sourceDir, "CHANGELOG.md"), sourceChangelog);
     fs.mkdirSync(path.join(sourceDir, "docs"));
@@ -808,7 +808,7 @@ describe("package-natesclaw-for-docker", () => {
     fs.mkdirSync(docsDir);
     fs.writeFileSync(
       path.join(sourceDir, "package.json"),
-      '{"name":"natesclaw","version":"2026.6.33"}\n',
+      '{"name": "openclaw","version":"2026.6.33"}\n',
     );
     fs.writeFileSync(
       path.join(docsDir, "index.md"),

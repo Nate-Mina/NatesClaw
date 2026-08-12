@@ -118,7 +118,7 @@ function setComfyFetchGuardForTesting(impl: typeof fetchWithSsrFGuard | null): v
 }
 
 if (process.env.VITEST === "true") {
-  Reflect.set(globalThis, Symbol.for("natesclaw.comfyTestApi"), {
+  Reflect.set(globalThis, Symbol.for("openclaw.comfyTestApi"), {
     getConfig: getComfyConfig,
     setFetchGuard: setComfyFetchGuardForTesting,
   });

@@ -21,7 +21,7 @@ import {
 } from "./managed-npm-retention.js";
 import { writeManagedNpmPlugin } from "./test-helpers/managed-npm-plugin.js";
 
-const PACKAGE_NAME = "@natesclaw/discord";
+const PACKAGE_NAME = "@openclaw/discord";
 const PLUGIN_ID = "discord";
 const tempDirs = useAutoCleanupTempDirTracker(afterEach);
 
@@ -299,7 +299,7 @@ describe("managed npm generation-dir loader precedence", () => {
     setInstallTimestamp(recentPackageDir, Date.UTC(2026, 0, 2));
     writeManagedNpmPlugin({
       stateDir,
-      packageName: "@natesclaw/unrelated",
+      packageName: "@openclaw/unrelated",
       pluginId: "unrelated",
       version: "1.0.0",
       layout: "legacy",

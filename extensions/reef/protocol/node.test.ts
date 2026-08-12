@@ -20,8 +20,8 @@ const durabilityTestState = vi.hoisted(() => ({
     | undefined,
 }));
 
-vi.mock("@natesclaw/fs-safe/durability", async (importOriginal) => {
-  const actual = await importOriginal<typeof import("@natesclaw/fs-safe/durability")>();
+vi.mock("@openclaw/fs-safe/durability", async (importOriginal) => {
+  const actual = await importOriginal<typeof import("@openclaw/fs-safe/durability")>();
   return {
     ...actual,
     ensureDurableDirectory: async (...args: Parameters<typeof actual.ensureDurableDirectory>) => {

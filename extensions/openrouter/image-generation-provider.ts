@@ -262,7 +262,7 @@ export function buildOpenRouterImageGenerationProvider(): ImageGenerationProvide
           allowPrivateNetwork: false,
           defaultHeaders: {
             Authorization: `Bearer ${auth.apiKey}`,
-            "HTTP-Referer": "https://natesclaw.ai",
+            "HTTP-Referer": "https://openclaw.ai",
             "X-OpenRouter-Title": "Natesclaw",
           },
           request: sanitizeConfiguredModelProviderRequest(

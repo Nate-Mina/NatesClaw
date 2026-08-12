@@ -1,7 +1,7 @@
 /** Trusted turn-level model-call diagnostics for the Claude Code CLI runtime. */
 import crypto from "node:crypto";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
-import { truncateUtf16Safe } from "@natesclaw/normalization-core/utf16-slice";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
+import { truncateUtf16Safe } from "@openclaw/normalization-core/utf16-slice";
 import {
   diagnosticErrorCategory,
   diagnosticErrorFailureKind,

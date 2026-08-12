@@ -11,7 +11,7 @@ Natesclaw Discord channel plugin for channels, DMs, commands, and app events.
 
 ## Distribution
 
-- Package: `@natesclaw/discord`
+- Package: `@openclaw/discord`
 - Install route: npm; ClawHub
 
 ## Surface

@@ -6,7 +6,7 @@
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import { Type } from "typebox";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import { bindModelLlmRuntime } from "../../llm/model-runtime-binding.js";

@@ -99,7 +99,7 @@ export const en = {
       websocketUrl: "Gateway WebSocket URL",
     },
     gatewayTailscale: {
-      docsNote: "Docs:\nhttps://docs.natesclaw.ai/gateway/tailscale\nhttps://docs.natesclaw.ai/web",
+      docsNote: "Docs:\nhttps://docs.openclaw.ai/gateway/tailscale\nhttps://docs.openclaw.ai/web",
       funnel: "Funnel",
       funnelHint: "Public HTTPS via Tailscale Funnel (internet)",
       missingBinNote:
@@ -465,7 +465,7 @@ export const en = {
       containerBrewManual:
         "Use a custom image with Homebrew preinstalled or install those dependencies manually.",
       containerInstallsTitle: "Container skill installs",
-      docsLine: "Docs: https://docs.natesclaw.ai/skills",
+      docsLine: "Docs: https://docs.openclaw.ai/skills",
       enterEnv: "Enter {env}",
       homebrewCommand: "Show Homebrew install command?",
       homebrewInstallTitle: "Homebrew install",
@@ -1095,7 +1095,7 @@ export const en = {
       codexNativeSearchOnly: "Used only for Codex-capable models.",
       codexNativeSearchTitle: "Codex native search",
       controlUiTitle: "Control UI",
-      controlUiDocs: "Docs: https://docs.natesclaw.ai/web/control-ui",
+      controlUiDocs: "Docs: https://docs.openclaw.ai/web/control-ui",
       dashboardCopyPaste: "Copy/paste this URL in a browser on this machine to control Natesclaw.",
       dashboardLinkWithToken: "Dashboard link (with token): {url}",
       dashboardOpened: "Opened in your browser. Keep that tab to control Natesclaw.",
@@ -1165,7 +1165,7 @@ export const en = {
       containerSystemdUnavailable:
         "Systemd user services are not available inside this container. Natesclaw is skipping only the background service install; run the Gateway in the foreground or use your container supervisor.",
       securityReminder:
-        "Running agents on your computer is risky — harden your setup: https://docs.natesclaw.ai/security",
+        "Running agents on your computer is risky — harden your setup: https://docs.openclaw.ai/security",
       secretRefAuthFailed: "Could not resolve {field} SecretRef for setup auth.",
       skipHealthNextTime: "Or skip this probe next time: {command}",
       skipControlUi: "Skipping Control UI/TUI prompts.",
@@ -1180,7 +1180,7 @@ export const en = {
       sessionGatewayStarted: "Session Gateway started.",
       sessionGatewayStartFailed: "Session Gateway failed to start.",
       terminalHatch: "Hatch in Terminal (recommended)",
-      webDocs: "Docs: https://docs.natesclaw.ai/tools/web",
+      webDocs: "Docs: https://docs.openclaw.ai/tools/web",
       webSearchAutoDetected: "Web search is available via {provider} (auto-detected).",
       webSearchDisabled: "Web search ({provider}) is configured but disabled.",
       webSearchEnabled:
@@ -1204,10 +1204,10 @@ export const en = {
         "web_search will not work until the provider is re-enabled or a different provider is selected.",
       webUiUrl: "Web UI: {url}",
       webUiWithTokenUrl: "Web UI (with token): {url}",
-      whatNow: 'What now: https://natesclaw.ai/showcase ("What People Are Building").',
+      whatNow: 'What now: https://openclaw.ai/showcase ("What People Are Building").',
       whatNowTitle: "What now",
       workspaceBackupTitle: "Workspace backup",
-      workspaceDocs: "Docs: https://docs.natesclaw.ai/concepts/agent-workspace",
+      workspaceDocs: "Docs: https://docs.openclaw.ai/concepts/agent-workspace",
       workspaceReady: "Your workspace is ready.",
     },
     gatewayNotes: {

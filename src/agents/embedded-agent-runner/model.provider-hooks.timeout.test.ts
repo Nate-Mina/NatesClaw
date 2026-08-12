@@ -1,5 +1,5 @@
 import { createServer, type Server } from "node:http";
-import { withFirstStreamEventTimeout } from "@natesclaw/ai/internal/runtime";
+import { withFirstStreamEventTimeout } from "@openclaw/ai/internal/runtime";
 import { describe, expect, it } from "vitest";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { ProviderRuntimeModel } from "../../plugins/provider-runtime-model.types.js";

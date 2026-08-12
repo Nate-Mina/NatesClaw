@@ -73,7 +73,7 @@ describe("persisted plugin registry Doctor contract freshness", () => {
     const pluginId = "doctor-replay";
     const pluginDir = writeManagedNpmPlugin({
       stateDir,
-      packageName: "@natesclaw/doctor-replay",
+      packageName: "@openclaw/doctor-replay",
       pluginId,
       version: "1.0.0",
     });

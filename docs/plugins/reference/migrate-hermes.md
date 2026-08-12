@@ -11,7 +11,7 @@ Imports Hermes configuration, memories, skills, and supported credentials into N
 
 ## Distribution
 
-- Package: `@natesclaw/migrate-hermes`
+- Package: `@openclaw/migrate-hermes`
 - Install route: included in Natesclaw
 
 ## Surface

@@ -114,7 +114,7 @@ describe("config doc baseline integration", () => {
     const msteamsEntry = requireEntry(byPath, "channels.msteams");
     expect(msteamsEntry.label).toBe("Microsoft Teams");
     expect(msteamsEntry.help).toBe("Teams SDK; enterprise support.");
-    expect(msteamsEntry.label).not.toContain("@natesclaw/");
+    expect(msteamsEntry.label).not.toContain("@openclaw/");
 
     const matrixEntry = requireEntry(byPath, "channels.matrix");
     expect(matrixEntry.label).toBe("Matrix");

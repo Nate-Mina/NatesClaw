@@ -31,7 +31,7 @@ one explicitly; neither is auto-detected.
 ## Install plugin
 
 ```bash
-natesclaw plugins install @natesclaw/parallel-plugin
+natesclaw plugins install @openclaw/parallel-plugin
 natesclaw gateway restart
 ```
 

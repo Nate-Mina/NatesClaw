@@ -15,7 +15,7 @@ import type {
   MatrixVerificationMethod,
   MatrixVerificationSummary,
   MessageEventContent,
-} from "@natesclaw/matrix/test-api.js";
+} from "@openclaw/matrix/test-api.js";
 import type {
   OpenKeyedStoreOptions,
   PluginStateEntry,
@@ -34,7 +34,7 @@ import { findMatrixQaObservedEventMatch, normalizeMatrixQaObservedEvent } from "
 import type { MatrixQaObservedEvent } from "./events.js";
 import type { MatrixQaRoomEventWaitResult } from "./sync.js";
 
-type MatrixQaE2eeRuntime = typeof import("@natesclaw/matrix/test-api.js");
+type MatrixQaE2eeRuntime = typeof import("@openclaw/matrix/test-api.js");
 
 type MatrixQaE2eeClientParams = {
   accessToken: string;

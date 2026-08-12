@@ -4,8 +4,8 @@
  * transport against the configured provider.
  */
 import http from "node:http";
-import { streamAnthropic } from "@natesclaw/ai/internal/anthropic";
-import { createAnthropicMessagesTransportStreamFn } from "@natesclaw/ai/transports";
+import { streamAnthropic } from "@openclaw/ai/internal/anthropic";
+import { createAnthropicMessagesTransportStreamFn } from "@openclaw/ai/transports";
 import type { Model } from "natesclaw/plugin-sdk/llm";
 import { describe, expect, it } from "vitest";
 import { isLiveTestEnabled } from "./live-test-helpers.js";

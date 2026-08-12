@@ -1,5 +1,5 @@
 // Gateway install auth policy used by service/install flows.
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { collectDurableServiceEnvVars } from "../config/state-dir-dotenv.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { hasConfiguredSecretInput } from "../config/types.secrets.js";

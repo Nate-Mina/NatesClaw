@@ -11,8 +11,8 @@ Natesclaw GMI Cloud provider plugin.
 
 ## Distribution
 
-- Package: `@natesclaw/gmi-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/gmi-provider`
+- Package: `@openclaw/gmi-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/gmi-provider`
 
 ## Surface
 

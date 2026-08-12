@@ -1,5 +1,5 @@
-import { ErrorCodes } from "@natesclaw/gateway-client/browser";
-import { asNullableRecord as asConfigRecord } from "@natesclaw/normalization-core/record-coerce";
+import { ErrorCodes } from "@openclaw/gateway-client/browser";
+import { asNullableRecord as asConfigRecord } from "@openclaw/normalization-core/record-coerce";
 import { GatewayRequestError, type GatewayBrowserClient } from "../../api/gateway.ts";
 import type { ConfigSchemaResponse, ConfigSnapshot } from "../../api/types.ts";
 import { copyToClipboard } from "../clipboard.ts";

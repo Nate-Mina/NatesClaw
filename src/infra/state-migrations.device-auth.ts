@@ -1,8 +1,8 @@
 // Doctor-only import for the retired device-auth JSON store.
 import fs from "node:fs";
 import path from "node:path";
-import { root } from "@natesclaw/fs-safe";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { root } from "@openclaw/fs-safe";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { normalizeDeviceAuthRole, normalizeDeviceAuthScopes } from "../shared/device-auth.js";
 import type { DB as NatesclawStateKyselyDatabase } from "../state/natesclaw-state-db.generated.js";
 import { runNatesclawStateWriteTransaction } from "../state/natesclaw-state-db.js";

@@ -1,5 +1,5 @@
 // Resolves effective exec approval policy from config and policy files.
-import { sortUniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { sortUniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import { listAgentEntries, resolveDefaultAgentId } from "../agents/agent-scope-config.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {

@@ -1,4 +1,4 @@
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import { executeSqliteQuerySync } from "../../infra/kysely-sync.js";
 import { openNatesclawAgentDatabase } from "../../state/natesclaw-agent-db.js";
 import type { NatesclawConfig } from "../types.natesclaw.js";

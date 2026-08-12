@@ -1,22 +1,22 @@
 {
-  "name": "@natesclaw/qianfan-provider",
+  "name": "@openclaw/qianfan-provider",
   "version": "2026.8.1",
   "description": "Natesclaw Qianfan provider plugin.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/natesclaw/natesclaw"
+    "url": "https://github.com/openclaw/natesclaw"
   },
   "type": "module",
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
       "./index.ts"
     ],
     "install": {
-      "clawhubSpec": "clawhub:@natesclaw/qianfan-provider",
-      "npmSpec": "@natesclaw/qianfan-provider",
+      "clawhubSpec": "clawhub:@openclaw/qianfan-provider",
+      "npmSpec": "@openclaw/qianfan-provider",
       "defaultChoice": "npm",
       "minHostVersion": ">=2026.6.8"
     },

@@ -201,7 +201,7 @@ describe("nextcloud-talk inbound behavior", () => {
 
   it("drops unmentioned group traffic before dispatch", async () => {
     installRuntime({
-      buildMentionRegexes: vi.fn(() => [/@natesclaw/i]),
+      buildMentionRegexes: vi.fn(() => [/@openclaw/i]),
       matchesMentionPatterns: vi.fn(() => false),
     });
     createChannelPairingControllerMock.mockReturnValue({
@@ -234,7 +234,7 @@ describe("nextcloud-talk inbound behavior", () => {
   });
 
   it("blocks unauthorized group text control commands even when room sender access allows chat", async () => {
-    const buildMentionRegexes = vi.fn(() => [/@natesclaw/i]);
+    const buildMentionRegexes = vi.fn(() => [/@openclaw/i]);
     const coreRuntime = installRuntime({
       buildMentionRegexes,
       hasControlCommand: vi.fn(() => true),

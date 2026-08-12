@@ -193,8 +193,8 @@ vi.mock("./overview.js", () => ({
       error: "offline",
     },
     references: {
-      docsUrl: "https://docs.natesclaw.ai",
-      sourceUrl: "https://github.com/natesclaw/natesclaw",
+      docsUrl: "https://docs.openclaw.ai",
+      sourceUrl: "https://github.com/openclaw/natesclaw",
     },
   })),
 }));
@@ -303,9 +303,9 @@ describe("parseSystemAgentOperation", () => {
       kind: "plugin-search",
       query: "calendar sync",
     });
-    expect(parseSystemAgentOperation("install npm plugin @natesclaw/discord")).toEqual({
+    expect(parseSystemAgentOperation("install npm plugin @openclaw/discord")).toEqual({
       kind: "plugin-install",
-      spec: "npm:@natesclaw/discord",
+      spec: "npm:@openclaw/discord",
     });
     expect(parseSystemAgentOperation("plugin install clawhub:natesclaw-demo")).toEqual({
       kind: "plugin-install",

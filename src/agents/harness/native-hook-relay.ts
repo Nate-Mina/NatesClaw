@@ -2,7 +2,7 @@
  * Bridges native harness hook events through registered relay processes.
  */
 import { randomUUID } from "node:crypto";
-import { resolveExpiresAtMsFromDurationMs } from "@natesclaw/normalization-core/number-coercion";
+import { resolveExpiresAtMsFromDurationMs } from "@openclaw/normalization-core/number-coercion";
 import { createSubsystemLogger } from "../../logging/subsystem.js";
 import { resolveNatesclawStateSqlitePath } from "../../state/natesclaw-state-db.paths.js";
 import {

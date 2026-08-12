@@ -10,7 +10,7 @@ Upgrade from the previous public `matrix` plugin to the current implementation.
 
 For most users, the upgrade is in place:
 
-- the plugin stays `@natesclaw/matrix`
+- the plugin stays `@openclaw/matrix`
 - the channel stays `matrix`
 - your config stays under `channels.matrix`
 - cached credentials move into the shared `state/natesclaw.sqlite` plugin state
@@ -20,7 +20,7 @@ You do not need to rename config keys or reinstall the plugin under a new name.
 The root `natesclaw` package no longer bundles Matrix runtime code or Matrix SDK
 dependencies. If `natesclaw channels status` shows Matrix is configured but the
 plugin is not installed, run `natesclaw doctor --fix` or
-`natesclaw plugins install @natesclaw/matrix`; do not install Matrix SDK packages
+`natesclaw plugins install @openclaw/matrix`; do not install Matrix SDK packages
 into the root Natesclaw package.
 
 ## What the migration does automatically
@@ -116,12 +116,12 @@ The previous public Matrix plugin did **not** automatically create Matrix room-k
 `Matrix is installed from a custom path: ...`
 
 - Meaning: Matrix is pinned to a path install, so mainline updates do not automatically replace it with the default Matrix package.
-- What to do: reinstall with `natesclaw plugins install @natesclaw/matrix` when you want to return to the default Matrix plugin.
+- What to do: reinstall with `natesclaw plugins install @openclaw/matrix` when you want to return to the default Matrix plugin.
 
 `Matrix is installed from a custom path that no longer exists: ...`
 
 - Meaning: your plugin install record points at a local path that is gone.
-- What to do: reinstall with `natesclaw plugins install @natesclaw/matrix`, or if you are running from a repo checkout, `natesclaw plugins install ./path/to/local/matrix-plugin`. `natesclaw doctor --fix` can also remove the stale Matrix plugin references for you.
+- What to do: reinstall with `natesclaw plugins install @openclaw/matrix`, or if you are running from a repo checkout, `natesclaw plugins install ./path/to/local/matrix-plugin`. `natesclaw doctor --fix` can also remove the stale Matrix plugin references for you.
 
 ### Manual recovery messages
 

@@ -1,5 +1,5 @@
 import crypto from "node:crypto";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import {
   resolveAgentConfig,
   resolveAgentDir,

@@ -1,6 +1,6 @@
 /** Loads plugin CLI registrations lazily for the command tree and plugin-owned subcommands. */
-import { normalizeLowercaseStringOrEmpty } from "@natesclaw/normalization-core/string-coerce";
-import { uniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeLowercaseStringOrEmpty } from "@openclaw/normalization-core/string-coerce";
+import { uniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import { collectUniqueCommandDescriptors } from "../cli/program/command-descriptor-utils.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { resolveManifestActivationPluginIds } from "./activation-planner.js";

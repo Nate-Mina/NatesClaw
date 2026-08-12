@@ -288,7 +288,7 @@ function writeBundledSetupChannelPlugin(
     path.join(pluginDir, "package.json"),
     JSON.stringify(
       {
-        name: `@natesclaw/${pluginId}`,
+        name: `@openclaw/${pluginId}`,
         version: "1.0.0",
         type: "commonjs",
         natesclaw: {

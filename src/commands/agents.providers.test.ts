@@ -349,11 +349,11 @@ describe("buildProviderStatusIndex", () => {
         channelId: "feishu",
         pluginId: "feishu",
         label: "Feishu",
-        installSpec: "@natesclaw/feishu",
-        installCommand: "natesclaw plugins install @natesclaw/feishu",
+        installSpec: "@openclaw/feishu",
+        installCommand: "natesclaw plugins install @openclaw/feishu",
         doctorFixCommand: "natesclaw doctor --fix",
         repairHint:
-          "Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
+          "Install the official external plugin with: natesclaw plugins install @openclaw/feishu, or run: natesclaw doctor --fix.",
       },
     ]);
 
@@ -368,7 +368,7 @@ describe("buildProviderStatusIndex", () => {
             defaultAccountId: "default",
             visibleInConfiguredLists: true,
             repairHint:
-              "Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
+              "Install the official external plugin with: natesclaw plugins install @openclaw/feishu, or run: natesclaw doctor --fix.",
           },
         ],
       ]),
@@ -410,14 +410,14 @@ describe("buildProviderStatusIndex", () => {
             defaultAccountId: "default",
             visibleInConfiguredLists: true,
             repairHint:
-              "Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
+              "Install the official external plugin with: natesclaw plugins install @openclaw/feishu, or run: natesclaw doctor --fix.",
           },
         ],
       ]),
     });
 
     expect(lines).toEqual([
-      "Feishu default: missing plugin - Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
+      "Feishu default: missing plugin - Install the official external plugin with: natesclaw plugins install @openclaw/feishu, or run: natesclaw doctor --fix.",
     ]);
   });
 
@@ -437,14 +437,14 @@ describe("buildProviderStatusIndex", () => {
             defaultAccountId: "default",
             visibleInConfiguredLists: true,
             repairHint:
-              "Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
+              "Install the official external plugin with: natesclaw plugins install @openclaw/feishu, or run: natesclaw doctor --fix.",
           },
         ],
       ]),
     });
 
     expect(lines).toEqual([
-      "Feishu default: missing plugin - Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
+      "Feishu default: missing plugin - Install the official external plugin with: natesclaw plugins install @openclaw/feishu, or run: natesclaw doctor --fix.",
     ]);
   });
 
@@ -462,14 +462,14 @@ describe("buildProviderStatusIndex", () => {
             defaultAccountId: "default",
             visibleInConfiguredLists: true,
             repairHint:
-              "Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
+              "Install the official external plugin with: natesclaw plugins install @openclaw/feishu, or run: natesclaw doctor --fix.",
           },
         ],
       ]),
     });
 
     expect(lines).toEqual([
-      "Feishu default: missing plugin - Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
+      "Feishu default: missing plugin - Install the official external plugin with: natesclaw plugins install @openclaw/feishu, or run: natesclaw doctor --fix.",
     ]);
   });
 

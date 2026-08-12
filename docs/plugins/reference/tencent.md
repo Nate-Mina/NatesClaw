@@ -11,8 +11,8 @@ Adds Tencent TokenHub, Tencent Tokenplan model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/tencent-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/tencent-provider`
+- Package: `@openclaw/tencent-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/tencent-provider`
 
 ## Surface
 

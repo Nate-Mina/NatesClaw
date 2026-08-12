@@ -49,7 +49,7 @@ function writePluginPackageJson(
   type: "commonjs" | "module" = "module",
 ): void {
   writeJsonFile(path.join(pluginDir, "package.json"), {
-    name: `@natesclaw/plugin-${name}`,
+    name: `@openclaw/plugin-${name}`,
     version: "0.0.0",
     type,
   });
@@ -546,7 +546,7 @@ describe("plugin-sdk facade runtime", () => {
     fs.writeFileSync(
       path.join(lineDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/line",
+        name: "@openclaw/line",
         version: "0.0.0",
         natesclaw: {
           extensions: ["./runtime-api.js"],
@@ -594,7 +594,7 @@ describe("plugin-sdk facade runtime", () => {
     fs.writeFileSync(
       path.join(lineDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/line",
+        name: "@openclaw/line",
         version: "0.0.0",
         type: "module",
         natesclaw: {
@@ -644,7 +644,7 @@ describe("plugin-sdk facade runtime", () => {
     fs.writeFileSync(
       path.join(encodedDir, "package.json"),
       JSON.stringify({
-        name: "@natesclaw/line",
+        name: "@openclaw/line",
         version: "0.0.0",
         natesclaw: {
           extensions: ["./runtime-api.js"],

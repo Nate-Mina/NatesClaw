@@ -13,7 +13,7 @@ it by switching the base URL.
 ## Install plugin
 
 ```bash
-natesclaw plugins install @natesclaw/deepinfra-provider
+natesclaw plugins install @openclaw/deepinfra-provider
 natesclaw gateway restart
 ```
 

@@ -17,7 +17,7 @@ Natesclaw uses the same `VYDRA_API_KEY` for all three capabilities.
 | Property        | Value                                                                     |
 | --------------- | ------------------------------------------------------------------------- |
 | Provider id     | `vydra`                                                                   |
-| Plugin          | `@natesclaw/vydra-provider`                                                |
+| Plugin          | `@openclaw/vydra-provider`                                                |
 | Auth env var    | `VYDRA_API_KEY`                                                           |
 | Onboarding flag | `--auth-choice vydra-api-key`                                             |
 | Direct CLI flag | `--vydra-api-key <key>`                                                   |
@@ -33,7 +33,7 @@ Use `https://www.vydra.ai/api/v1` as the base URL. Vydra's apex host (`https://v
 <Steps>
   <Step title="Install the plugin">
     ```bash
-    natesclaw plugins install @natesclaw/vydra-provider
+    natesclaw plugins install @openclaw/vydra-provider
     natesclaw gateway restart
     ```
 

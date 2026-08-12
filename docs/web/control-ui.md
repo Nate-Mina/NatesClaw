@@ -569,7 +569,7 @@ Override the VAPID keypair through env vars on the Gateway process when you want
 
 - `NATESCLAW_VAPID_PUBLIC_KEY`
 - `NATESCLAW_VAPID_PRIVATE_KEY`
-- `NATESCLAW_VAPID_SUBJECT` (defaults to `https://natesclaw.ai`)
+- `NATESCLAW_VAPID_SUBJECT` (defaults to `https://openclaw.ai`)
 
 The Control UI uses these scope-gated Gateway methods to register and test browser subscriptions:
 

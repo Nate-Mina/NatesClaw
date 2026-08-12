@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/xai-plugin",
+  "name": "@openclaw/xai-plugin",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw xAI plugin",
@@ -9,7 +9,7 @@
     "ws": "8.21.1"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [

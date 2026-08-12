@@ -13,7 +13,7 @@ Natesclaw posts to Inworld's streaming TTS endpoint, concatenates the returned b
 | Property      | Value                                                           |
 | ------------- | --------------------------------------------------------------- |
 | Provider id   | `inworld`                                                       |
-| Plugin        | official external package (`@natesclaw/inworld-speech`)          |
+| Plugin        | official external package (`@openclaw/inworld-speech`)          |
 | Contract      | `speechProviders` (TTS only)                                    |
 | Auth env var  | `INWORLD_API_KEY` (HTTP Basic, Base64 dashboard credential)     |
 | Base URL      | `https://api.inworld.ai`                                        |
@@ -26,7 +26,7 @@ Natesclaw posts to Inworld's streaming TTS endpoint, concatenates the returned b
 ## Install plugin
 
 ```bash
-natesclaw plugins install @natesclaw/inworld-speech
+natesclaw plugins install @openclaw/inworld-speech
 natesclaw gateway restart
 ```
 

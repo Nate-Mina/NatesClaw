@@ -11,7 +11,7 @@ Natesclaw Microsoft Teams channel plugin for bot conversations.
 
 ## Distribution
 
-- Package: `@natesclaw/msteams`
+- Package: `@openclaw/msteams`
 - Install route: npm; ClawHub
 
 ## Surface

@@ -5,7 +5,7 @@ Skills own workflows; root owns hard policy and routing. Product direction and m
 
 ## Start
 
-- Repo: `https://github.com/natesclaw/natesclaw`
+- Repo: `https://github.com/openclaw/natesclaw`
 - Replies: repo-root refs only: `extensions/telegram/src/index.ts:80`. No absolute paths, no `~/`.
 - Docs/user-visible work: `pnpm docs:list`, then read relevant docs only.
 - Existing-solutions preflight: before proposing or building a custom system, feature, workflow, tool, integration, or automation, do a lightweight check for open-source projects, maintained libraries, existing Natesclaw plugins, or free platforms that already solve it well enough. Prefer those when adequate. Build custom only when existing options are unsuitable, too expensive, unmaintained, unsafe, non-compliant, or the user explicitly asks for custom. Avoid paid-service recommendations unless the user explicitly approves spend. Keep this to a brief preflight gate, not a broad research assignment.
@@ -80,7 +80,7 @@ Skills own workflows; root owns hard policy and routing. Product direction and m
   backport, or a release blocker by itself.
 - Before landing any PR: read the latest ClawSweeper comment and its `Rank-up moves:` list. Apply each move, or state in the PR why it is skipped; never merge past them silently. A ClawSweeper review from the last 12 hours covers the PR even when the head moved afterward, provided every actionable finding from that review is addressed (or its skip stated in the PR) and exact-head CI is green. Request `@clawsweeper re-review` only when the latest review is older than 12 hours, still has unaddressed actionable findings, or the post-review pushes changed behavior beyond addressing findings and mechanical refreshes (rebase, format, merge-ref). A queued or late-publishing re-review refreshes the rating; never block landing on the review publisher.
 - Changelog findings: see Docs / Changelog.
-- Public ClawSweeper comments prefer `https://docs.natesclaw.ai/...` when a public docs page exists; structured evidence still cites repo files, lines, SHAs.
+- Public ClawSweeper comments prefer `https://docs.openclaw.ai/...` when a public docs page exists; structured evidence still cites repo files, lines, SHAs.
 - Findings need current source, shipped/current behavior, tests/CI evidence, and dependency contract proof when dependency-backed behavior is involved. Validation is judged against touched and sibling surfaces plus this file's commands; clear evidence matters for user-visible changes, with Telegram/Desktop proof for Telegram-visible behavior when feasible.
 - Real-behavior-proof gate: a mock-gateway harness run — mock channel API + mock provider + ephemeral gateway, with the verdict JSON in the PR body — satisfies it for channel-visible changes when it covers the changed path. Live-channel proof is always welcome and counts as stronger evidence.
 - Prefer findings for concrete behavior regressions, missing changed-surface proof, owner-boundary violations, security/API contract issues, or docs/config mismatches.
@@ -89,12 +89,12 @@ Skills own workflows; root owns hard policy and routing. Product direction and m
 ## Map
 
 - Core TS: `src/`, `ui/`, `packages/`; plugins: `extensions/`; SDK: `src/plugin-sdk/*`; channels: `src/channels/*`; loader: `src/plugins/*`; protocol: `packages/gateway-protocol/*`; docs/apps: `docs/`, `apps/`.
-- Installers: sibling `../natesclaw.ai`.
+- Installers: sibling `../openclaw.ai`.
 - Scoped guides: `extensions/`, `src/{plugin-sdk,channels,plugins,gateway,agents}/`, `test/helpers*/`, `docs/`, `ui/`, `scripts/`.
 
 ## Docs
 
-- Source docs: `docs/**`; publish repo: `natesclaw/docs`; host: `https://docs.natesclaw.ai`.
+- Source docs: `docs/**`; publish repo: `natesclaw/docs`; host: `https://docs.openclaw.ai`.
 - Flow: source -> `docs-sync-publish.yml` -> mirror build -> R2 -> Worker router.
 - Docs AI: `natesclaw/ask-molty`; see its `AGENTS.md`.
 
@@ -114,11 +114,11 @@ Skills own workflows; root owns hard policy and routing. Product direction and m
 - Config/env surface bar is high; `natesclaw.json` and environment variables are already large. Before adding a config option or env var, first prove existing product behavior, provider selection, defaults, or doctor migration cannot solve it. Prefer removing or consolidating config/env options when touching these surfaces. Core supports only the latest config shape; `natesclaw doctor --fix` migrates older shipped shapes into the current one.
 - CLI setup flows are public API when external docs, installers, or integrations can copy them. Changes to `natesclaw onboard`, `natesclaw configure`, their documented flags, non-interactive behavior, or generated config shape are compatibility-sensitive API contract changes; prefer additive flags/aliases, deprecation windows, and backward-preserving migrations over breaking existing snippets.
 - Fix shape: Repair Doctrine owns the default. Prefer coherent owner-boundary refactors; remove connected stale abstractions, duplicate policy, dead branches, wrappers, and fallback stacks.
-- New binary fallible-operation results use `Result` from `@natesclaw/normalization-core/result`; domain-rich outcomes keep named discriminated unions.
+- New binary fallible-operation results use `Result` from `@openclaw/normalization-core/result`; domain-rich outcomes keep named discriminated unions.
 - Tests may use observed examples, but prod literals need a short contract reason.
 - Compatibility is opt-in. "Shipped" means reachable from a release Git tag; main/GitHub/PR/unreleased code is not shipped.
 - Refactor default: one canonical path. Delete the old path unless user explicitly wants compat or the shipped public contract is obvious and cited.
-- Reuse the canonical non-array record guard instead of adding local `isRecord` copies. Core, UI, scripts with workspace package resolution, and packages that already depend on normalization-core import `@natesclaw/normalization-core/record-coerce`; plugins import `natesclaw/plugin-sdk/string-coerce-runtime`. Keep a local guard only when the semantics intentionally differ or the file must remain dependency-free, browser-serialized, generated, or runnable outside workspace package resolution.
+- Reuse the canonical non-array record guard instead of adding local `isRecord` copies. Core, UI, scripts with workspace package resolution, and packages that already depend on normalization-core import `@openclaw/normalization-core/record-coerce`; plugins import `natesclaw/plugin-sdk/string-coerce-runtime`. Keep a local guard only when the semantics intentionally differ or the file must remain dependency-free, browser-serialized, generated, or runnable outside workspace package resolution.
 - Core runtime consumes only current canonical shapes/config/data. Legacy or retired shapes normalize only in doctor/migration code before runtime; no runtime shims, aliases, or fallback readers.
 - State/storage migrations are database-first. Runtime reads/writes the canonical store only. Old file stores, sidecars, aliases, and fallback readers belong in `natesclaw doctor --fix` migration code only, never steady-state runtime.
 - Storage default: SQLite only. Do not add JSON/JSONL/TXT/sidecar files for Natesclaw-owned runtime state, caches, queues, registries, indexes, cursors, checkpoints, or plugin scratch data.
@@ -347,7 +347,7 @@ Mechanics only; policy lives above.
 
 - Use `$technical-documentation` for docs writing/review. Docs change with behavior/API.
 - Codex harness upgrade (`extensions/codex/package.json` `@openai/codex`): refresh `docs/plugins/codex-harness.md` model snapshot from the new harness `model/list`.
-- Docs final answers: include relevant full `https://docs.natesclaw.ai/...` URL(s). If issue/PR work too, GitHub URL last.
+- Docs final answers: include relevant full `https://docs.openclaw.ai/...` URL(s). If issue/PR work too, GitHub URL last.
 - `CHANGELOG.md`: release-only. Do not edit for normal PRs, direct `main` fixes, or `ship it`; release generation owns it. Do not ask contributors/agents for changelog edits.
 - User-facing `fix`/`feat`/`perf`: put release-note context in PR body, squash message, or direct commit: behavior, surface, issue/PR refs, credited human author/reporter.
 - Release generation: derive `CHANGELOG.md` from merged PRs + all direct `main` commits. Entries: active `### Changes`/`### Fixes`, single-line, thank credited humans; never thank bots/forbidden handles: `@natesclaw`, `@clawsweeper`, `@codex`, `@steipete`.

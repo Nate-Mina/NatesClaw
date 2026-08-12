@@ -27,7 +27,7 @@ title: "Natesclaw"
 <p align="center">
   <strong>Any OS gateway for AI agents across Discord, Google Chat, iMessage, Matrix, Microsoft Teams, Signal, Slack, Telegram, WhatsApp, Zalo, and more.</strong><br />
   Send a message, get an agent response from your pocket. Run one Gateway across channel plugins, WebChat, and mobile nodes.<br />
-  Developed in the open by the <a href="https://natesclaw.org">Natesclaw Foundation</a>, a non-profit.
+  Developed in the open by the <a href="https://openclaw.org">Natesclaw Foundation</a>, a non-profit.
 </p>
 
 <Columns>

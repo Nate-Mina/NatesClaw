@@ -6,7 +6,7 @@
 // enumeration cold-loads every declaring plugin's contract closure, so a
 // closure reaching this policy through the runtime graph paid for hundreds of
 // modules it never called.
-import { asNullableRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
 import type {
   ChannelDoctorConfigMutation,
   ChannelDoctorLegacyConfigRule,

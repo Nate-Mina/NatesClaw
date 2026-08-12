@@ -1,6 +1,6 @@
 /** Resolves ACP request metadata into Natesclaw Gateway session keys and reset behavior. */
-import { readBool, readMetadataString } from "@natesclaw/acp-core/meta";
-import type { AcpServerOptions } from "@natesclaw/acp-core/types";
+import { readBool, readMetadataString } from "@openclaw/acp-core/meta";
+import type { AcpServerOptions } from "@openclaw/acp-core/types";
 import type { GatewayClient } from "../gateway/client.js";
 
 type AcpSessionMeta = {

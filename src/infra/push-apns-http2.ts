@@ -2,9 +2,9 @@
 import { once } from "node:events";
 import http2 from "node:http2";
 import tls from "node:tls";
-import { decodeTextPrefix } from "@natesclaw/normalization-core";
-import { resolveTimerTimeoutMs } from "@natesclaw/normalization-core/number-coercion";
-import { openProxyConnectTunnel } from "@natesclaw/proxyline";
+import { decodeTextPrefix } from "@openclaw/normalization-core";
+import { resolveTimerTimeoutMs } from "@openclaw/normalization-core/number-coercion";
+import { openProxyConnectTunnel } from "@openclaw/proxyline";
 import { toErrorObject } from "./errors.js";
 import {
   getActiveManagedProxyUrl,
@@ -309,7 +309,7 @@ export async function probeApnsHttp2ReachabilityViaProxy(
         // APNs should reject this token with InvalidProviderToken. That failure
         // is the success signal that the proxy actually tunneled to Apple.
         authorization: "bearer intentionally.invalid.natesclaw.proxy.validation",
-        "apns-topic": "ai.natesclaw.ios",
+        "apns-topic": "ai.openclaw.ios",
         "apns-push-type": "alert",
         "apns-priority": "10",
       });

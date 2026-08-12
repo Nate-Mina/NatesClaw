@@ -11,8 +11,8 @@ Adds Moonshot model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/moonshot-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/moonshot-provider`
+- Package: `@openclaw/moonshot-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/moonshot-provider`
 
 ## Surface
 

@@ -46,7 +46,7 @@ import { PollController } from "../../lit/poll-controller.ts";
 import { SubscriptionsController } from "../../lit/subscriptions-controller.ts";
 import { renderDevices } from "./view.ts";
 
-const DEVICES_DOCS_URL = "https://docs.natesclaw.ai/nodes";
+const DEVICES_DOCS_URL = "https://docs.openclaw.ai/nodes";
 
 export type DevicesRouteData = {
   // Client identity alone cannot distinguish provider replacement or reconnect epochs.

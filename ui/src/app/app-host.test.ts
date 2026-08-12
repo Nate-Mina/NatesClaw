@@ -1,6 +1,6 @@
 /* @vitest-environment jsdom */
 
-import type { RouteLocation, RouterState } from "@natesclaw/uirouter";
+import type { RouteLocation, RouterState } from "@openclaw/uirouter";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { GatewayBrowserClient } from "../api/gateway.ts";
 import type { AgentsListResult, GatewayAgentRow } from "../api/types.ts";

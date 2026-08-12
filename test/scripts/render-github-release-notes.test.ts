@@ -145,7 +145,7 @@ describe("GitHub release-note rendering", () => {
     expect(rendered.body).toContain("- A grouped user-facing fix.");
     expect(rendered.body).toContain("### Complete contribution record");
     expect(rendered.body).toContain(
-      "https://github.com/natesclaw/natesclaw/blob/v2026.7.1-beta.3/CHANGELOG.md#complete-contribution-record",
+      "https://github.com/openclaw/natesclaw/blob/v2026.7.1-beta.3/CHANGELOG.md#complete-contribution-record",
     );
     expect(rendered.body).not.toContain("record-only-detail");
     expect(rendered.size.characters).toBeLessThanOrEqual(GITHUB_RELEASE_BODY_MAX_CHARACTERS);

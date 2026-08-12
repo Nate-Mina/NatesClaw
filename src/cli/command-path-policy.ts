@@ -1,4 +1,4 @@
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 // Resolves CLI command path policy from the declarative command catalog.
 import { resolveCliStartupCommandPath } from "./argv-invocation.js";
 import { getCommandPathWithRootOptions } from "./argv.js";

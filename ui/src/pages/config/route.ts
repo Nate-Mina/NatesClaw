@@ -1,5 +1,5 @@
-import type { RouteLocation } from "@natesclaw/uirouter";
-import { definePage, redirect } from "@natesclaw/uirouter";
+import type { RouteLocation } from "@openclaw/uirouter";
+import { definePage, redirect } from "@openclaw/uirouter";
 import { html, nothing } from "lit";
 import { pathForRoute, routePageSpec } from "../../app-route-paths.ts";
 import type { ApplicationContext } from "../../app/context.ts";

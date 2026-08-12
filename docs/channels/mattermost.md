@@ -14,7 +14,7 @@ Status: downloadable plugin (bot token + WebSocket events). Channels, private ch
 <Tabs>
   <Tab title="npm registry">
     ```bash
-    natesclaw plugins install @natesclaw/mattermost
+    natesclaw plugins install @openclaw/mattermost
     ```
   </Tab>
   <Tab title="Local checkout">
@@ -30,7 +30,7 @@ Details: [Plugins](/tools/plugin)
 
 <Steps>
   <Step title="Ensure plugin is available">
-    Install `@natesclaw/mattermost` with the command above, then restart the Gateway if it is already running.
+    Install `@openclaw/mattermost` with the command above, then restart the Gateway if it is already running.
   </Step>
   <Step title="Create a Mattermost bot">
     Create a Mattermost bot account, copy the **bot token**, and add the bot to the teams and channels it should read.
@@ -430,7 +430,7 @@ When a user clicks a button:
 
 ### Direct API integration (external scripts)
 
-External scripts and webhooks can post buttons directly via the Mattermost REST API instead of going through the agent's `message` tool. Prefer Natesclaw's `message` tool. For direct integrations, import `buildButtonAttachments` from `@natesclaw/mattermost/api.js`; if posting raw JSON, follow these rules:
+External scripts and webhooks can post buttons directly via the Mattermost REST API instead of going through the agent's `message` tool. Prefer Natesclaw's `message` tool. For direct integrations, import `buildButtonAttachments` from `@openclaw/mattermost/api.js`; if posting raw JSON, follow these rules:
 
 **Payload structure:**
 

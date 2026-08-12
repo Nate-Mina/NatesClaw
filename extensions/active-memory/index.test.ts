@@ -2,7 +2,7 @@
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { toErrorObject as toLintErrorObject } from "natesclaw/plugin-sdk/error-runtime";
 import type { NatesclawPluginApi } from "natesclaw/plugin-sdk/plugin-entry";
 import type { OpenKeyedStoreOptions } from "natesclaw/plugin-sdk/plugin-state-runtime";

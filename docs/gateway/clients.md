@@ -13,12 +13,12 @@ the wire contract: authentication, capabilities, reconnect recovery, history,
 subscriptions, and version upgrades.
 
 For frame shapes, the handshake, errors, and the complete method surface, read the
-[Gateway protocol specification](https://docs.natesclaw.ai/gateway/protocol).
+[Gateway protocol specification](https://docs.openclaw.ai/gateway/protocol).
 
 ## Install the packages
 
 ```bash
-npm install @natesclaw/gateway-client @natesclaw/gateway-protocol
+npm install @openclaw/gateway-client @openclaw/gateway-protocol
 ```
 
 <Note>
@@ -27,15 +27,15 @@ may return `E404` until the first package-bearing Natesclaw release is published
 install them only after the registry pages below resolve.
 </Note>
 
-- [`@natesclaw/gateway-protocol`](https://www.npmjs.com/package/@natesclaw/gateway-protocol)
+- [`@openclaw/gateway-protocol`](https://www.npmjs.com/package/@openclaw/gateway-protocol)
   provides schemas, runtime validators, TypeScript types, client identity and
   capability registries, structured error readers, and protocol version constants.
   Its npm tarball also includes the generated
-  [`protocol.schema.json`](https://unpkg.com/@natesclaw/gateway-protocol@beta/protocol.schema.json)
+  [`protocol.schema.json`](https://unpkg.com/@openclaw/gateway-protocol@beta/protocol.schema.json)
   machine-readable contract.
-- [`@natesclaw/gateway-client`](https://www.npmjs.com/package/@natesclaw/gateway-client)
+- [`@openclaw/gateway-client`](https://www.npmjs.com/package/@openclaw/gateway-client)
   is the reference connection implementation. Import the package root for the Node
-  client and `@natesclaw/gateway-client/browser` for the browser-safe protocol,
+  client and `@openclaw/gateway-client/browser` for the browser-safe protocol,
   device-auth, and reconnect helpers.
 
 The Node entry owns its WebSocket transport. A browser host supplies a WebSocket
@@ -56,7 +56,7 @@ A full interactive chat client that also renders approval prompts should request
 Add `operator.questions` only if the client handles interactive questions,
 `operator.pairing` only if it manages paired devices or nodes, and
 `operator.admin` only for administrative operations such as `config.patch`.
-The [operator scopes reference](https://docs.natesclaw.ai/gateway/operator-scopes)
+The [operator scopes reference](https://docs.openclaw.ai/gateway/operator-scopes)
 defines the complete method and approval-time rules.
 
 Do not create a per-client bearer token by hand-editing `natesclaw.json`. Configure
@@ -80,7 +80,7 @@ pairing mint the client token:
 
 Scope or role upgrades create a new pending pairing request. Token rotation cannot
 expand the approved pairing contract. See the
-[Devices CLI](https://docs.natesclaw.ai/cli/devices) for approval, rotation, and
+[Devices CLI](https://docs.openclaw.ai/cli/devices) for approval, rotation, and
 revocation commands.
 
 ## Advertise client capabilities
@@ -90,7 +90,7 @@ not grant authorization. Import names from `GATEWAY_CLIENT_CAPS` instead of
 duplicating string literals:
 
 ```ts
-import { GATEWAY_CLIENT_CAPS } from "@natesclaw/gateway-protocol/client-info";
+import { GATEWAY_CLIENT_CAPS } from "@openclaw/gateway-protocol/client-info";
 
 const caps = [GATEWAY_CLIENT_CAPS.TOOL_EVENTS];
 ```
@@ -239,12 +239,12 @@ release-vintage metadata and required scope metadata for core methods, but a wir
 version bump is still an explicit breaking event for third-party clients. Pin the
 package versions you test, upgrade the client and Gateway together when the wire
 version changes, and review the
-[Natesclaw changelog](https://github.com/natesclaw/natesclaw/blob/main/CHANGELOG.md)
+[Natesclaw changelog](https://github.com/openclaw/natesclaw/blob/main/CHANGELOG.md)
 before each upgrade.
 
 ## Related
 
-- [Gateway protocol](https://docs.natesclaw.ai/gateway/protocol)
-- [Embedding Natesclaw](https://docs.natesclaw.ai/gateway/embedding)
-- [Gateway RPC reference](https://docs.natesclaw.ai/reference/rpc)
-- [Gateway integrations for external apps](https://docs.natesclaw.ai/gateway/external-apps)
+- [Gateway protocol](https://docs.openclaw.ai/gateway/protocol)
+- [Embedding Natesclaw](https://docs.openclaw.ai/gateway/embedding)
+- [Gateway RPC reference](https://docs.openclaw.ai/reference/rpc)
+- [Gateway integrations for external apps](https://docs.openclaw.ai/gateway/external-apps)

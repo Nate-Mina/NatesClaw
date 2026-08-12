@@ -11,7 +11,7 @@ Adds Google, Google Gemini CLI, Google Vertex model provider support to Natescla
 
 ## Distribution
 
-- Package: `@natesclaw/google-plugin`
+- Package: `@openclaw/google-plugin`
 - Install route: included in Natesclaw
 
 ## Surface

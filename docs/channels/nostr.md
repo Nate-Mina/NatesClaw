@@ -6,12 +6,12 @@ read_when:
 title: "Nostr"
 ---
 
-Nostr is a downloadable channel plugin (`@natesclaw/nostr`) that lets Natesclaw receive and answer NIP-04 encrypted direct messages over Nostr relays. One account per gateway; DMs only.
+Nostr is a downloadable channel plugin (`@openclaw/nostr`) that lets Natesclaw receive and answer NIP-04 encrypted direct messages over Nostr relays. One account per gateway; DMs only.
 
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/nostr
+natesclaw plugins install @openclaw/nostr
 ```
 
 Use the bare package spec to follow the current official release tag. Pin an exact version only when you need a reproducible install.

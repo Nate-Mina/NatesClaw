@@ -1,4 +1,4 @@
-import { asOptionalRecord as asMutableRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asOptionalRecord as asMutableRecord } from "@openclaw/normalization-core/record-coerce";
 import type { NatesclawConfig } from "../../../config/types.natesclaw.js";
 import { normalizeAgentId } from "../../../routing/session-key.js";
 import type { MutableRecord } from "./codex-route-types.js";

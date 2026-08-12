@@ -5,8 +5,8 @@ import fs from "node:fs";
 import path from "node:path";
 import { resolveNatesclawPackageRoot } from "../infra/natesclaw-root.js";
 
-export const NATESCLAW_DOCS_URL = "https://docs.natesclaw.ai";
-export const NATESCLAW_SOURCE_URL = "https://github.com/natesclaw/natesclaw";
+export const NATESCLAW_DOCS_URL = "https://docs.openclaw.ai";
+export const NATESCLAW_SOURCE_URL = "https://github.com/openclaw/natesclaw";
 
 type ResolveNatesclawReferencePathParams = {
   workspaceDir?: string;

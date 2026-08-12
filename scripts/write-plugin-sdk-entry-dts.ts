@@ -14,13 +14,13 @@ const USE_CANONICAL_DECLARATIONS = process.env.NATESCLAW_PLUGIN_SDK_CANONICAL_DT
 
 function isBareImportSpecifier(id: string): boolean {
   if (
-    id === "@natesclaw/llm-core" ||
-    id.startsWith("@natesclaw/llm-core/") ||
-    id === "@natesclaw/model-catalog-core/model-catalog-types" ||
-    id === "@natesclaw/retry" ||
-    id.startsWith("@natesclaw/normalization-core/") ||
-    id.startsWith("@natesclaw/media-core/") ||
-    id.startsWith("@natesclaw/acp-core/")
+    id === "@openclaw/llm-core" ||
+    id.startsWith("@openclaw/llm-core/") ||
+    id === "@openclaw/model-catalog-core/model-catalog-types" ||
+    id === "@openclaw/retry" ||
+    id.startsWith("@openclaw/normalization-core/") ||
+    id.startsWith("@openclaw/media-core/") ||
+    id.startsWith("@openclaw/acp-core/")
   ) {
     return false;
   }

@@ -1,10 +1,10 @@
 /**
  * Resolves provider stream functions and API keys for embedded agents.
  */
-import type { LlmRuntime } from "@natesclaw/ai";
-import { stripSystemPromptCacheBoundary } from "@natesclaw/ai/internal/shared";
-import { createBoundaryAwareStreamFnForModel } from "@natesclaw/ai/transports";
-import { hasNonEmptyString as hasResolvedRuntimeApiKey } from "@natesclaw/normalization-core/string-coerce";
+import type { LlmRuntime } from "@openclaw/ai";
+import { stripSystemPromptCacheBoundary } from "@openclaw/ai/internal/shared";
+import { createBoundaryAwareStreamFnForModel } from "@openclaw/ai/transports";
+import { hasNonEmptyString as hasResolvedRuntimeApiKey } from "@openclaw/normalization-core/string-coerce";
 import { getStreamLlmRuntime } from "../../llm/model-runtime-binding.js";
 import "../ai-transport-runtime-host.js";
 import { createAnthropicVertexStreamFnForModel } from "../anthropic-vertex-stream.js";

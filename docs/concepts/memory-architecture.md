@@ -253,7 +253,7 @@ turn runs inside a Git repository, memory written by that work carries a
 trailing project annotation:
 
 ```markdown
-- Use the release helper for package validation. <!-- project: github.com/natesclaw/natesclaw -->
+- Use the release helper for package validation. <!-- project: github.com/openclaw/natesclaw -->
 ```
 
 The identity comes from the normalized `origin` remote, so ordinary clones and

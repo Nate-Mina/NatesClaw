@@ -1,5 +1,5 @@
 /** Collects agent-scoped sandbox SSH SecretRefs during runtime preparation. */
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
 import { listAgentEntriesWithSource, resolveDefaultAgentId } from "../agents/agent-scope-config.js";
 import { resolveSandboxScope } from "../agents/sandbox/config.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

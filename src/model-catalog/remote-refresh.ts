@@ -1,7 +1,7 @@
 import {
   validateAndSanitizeRemoteModelCatalogBundle,
   type RemoteModelCatalogBundle,
-} from "@natesclaw/model-catalog-core";
+} from "@openclaw/model-catalog-core";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import { compareNatesclawVersions } from "../config/version.js";
 import { readResponseWithLimit } from "../infra/http-body.js";
@@ -18,7 +18,7 @@ import {
   writeRemoteModelCatalog,
 } from "./remote-store.js";
 
-const DEFAULT_REMOTE_MODEL_CATALOG_URL = "https://catalog.natesclaw.ai/models/v1/catalog.json";
+const DEFAULT_REMOTE_MODEL_CATALOG_URL = "https://catalog.openclaw.ai/models/v1/catalog.json";
 export const REMOTE_MODEL_CATALOG_TTL_MS = 6 * 60 * 60_000;
 const REMOTE_MODEL_CATALOG_TIMEOUT_MS = 15_000;
 const REMOTE_MODEL_CATALOG_MAX_BYTES = 4 * 1024 * 1024;

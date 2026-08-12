@@ -1,6 +1,6 @@
 // Attachment policy tests guard the numbers advertised on `hello-ok` against the
 // ceilings the parser actually enforces.
-import { MAX_IMAGE_BYTES } from "@natesclaw/media-core/constants";
+import { MAX_IMAGE_BYTES } from "@openclaw/media-core/constants";
 import { describe, expect, it } from "vitest";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";
 import {

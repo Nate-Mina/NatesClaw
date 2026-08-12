@@ -11,8 +11,8 @@ Adds Arcee model provider support to Natesclaw.
 
 ## Distribution
 
-- Package: `@natesclaw/arcee-provider`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/arcee-provider`
+- Package: `@openclaw/arcee-provider`
+- Install route: npm; ClawHub: `clawhub:@openclaw/arcee-provider`
 
 ## Surface
 

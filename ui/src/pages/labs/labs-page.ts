@@ -157,7 +157,7 @@ class LabsPage extends NatesclawLightDomElement {
       {
         intro: html`${t("labsPage.intro")}
         ${renderDocsLink(
-          "https://docs.natesclaw.ai/concepts/experimental-features",
+          "https://docs.openclaw.ai/concepts/experimental-features",
           t("common.learnMore"),
         )}`,
       },

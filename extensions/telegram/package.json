@@ -1,5 +1,5 @@
 {
-  "name": "@natesclaw/telegram",
+  "name": "@openclaw/telegram",
   "version": "2026.8.1",
   "private": true,
   "description": "Natesclaw Telegram channel plugin",
@@ -13,7 +13,7 @@
     "zod": "4.4.3"
   },
   "devDependencies": {
-    "@natesclaw/plugin-sdk": "workspace:*"
+    "@openclaw/plugin-sdk": "workspace:*"
   },
   "natesclaw": {
     "extensions": [
@@ -45,7 +45,7 @@
       "selectionDocsPrefix": "",
       "selectionDocsOmitLabel": true,
       "selectionExtras": [
-        "https://natesclaw.ai"
+        "https://openclaw.ai"
       ],
       "markdownCapable": true,
       "setup": {

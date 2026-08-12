@@ -136,7 +136,7 @@ describe("pruneSupersededSilentPairingsAfterApproval", () => {
       nodeId: "node-stale",
       transport: "direct",
       token: "ABCD1234ABCD1234ABCD1234ABCD1234",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
       baseDir,
     });
@@ -209,7 +209,7 @@ describe("pruneSupersededSilentPairingsAfterApproval", () => {
       nodeId: "cli-stale",
       transport: "direct",
       token: "ABCD1234ABCD1234ABCD1234ABCD1234",
-      topic: "ai.natesclaw.ios",
+      topic: "ai.openclaw.ios",
       environment: "sandbox",
       baseDir,
     });

@@ -1,5 +1,5 @@
 /** Security warnings for gateway exposure, exec policy drift, channel DMs, and plaintext secrets. */
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { listReadOnlyChannelPluginsForConfig } from "../channels/plugins/read-only.js";
 import { formatCliCommand } from "../cli/command-format.js";
@@ -301,7 +301,7 @@ export async function collectSecurityWarnings(
   const saferRemoteAccessLines = [
     "  Safer remote access: keep bind loopback and use Tailscale Serve/Funnel or an SSH tunnel.",
     "  Example tunnel: ssh -N -L 18789:127.0.0.1:18789 user@gateway-host",
-    "  Docs: https://docs.natesclaw.ai/gateway/remote",
+    "  Docs: https://docs.openclaw.ai/gateway/remote",
   ];
 
   if (isExposed) {

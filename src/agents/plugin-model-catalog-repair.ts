@@ -1,5 +1,5 @@
 /** Pure repair rules for Natesclaw-generated plugin model catalogs. */
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 
 export const PLUGIN_MODEL_CATALOG_GENERATED_BY = "natesclaw-plugin-model-catalog-v1";
 

@@ -1,4 +1,4 @@
-import { normalizeNullableString as toOptionalTrimmedString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeNullableString as toOptionalTrimmedString } from "@openclaw/normalization-core/string-coerce";
 import { readProviderJsonResponse } from "../agents/provider-http-errors.js";
 import { runCommandWithTimeout } from "../process/exec.js";
 import {

@@ -1,7 +1,7 @@
 /**
  * Exec tool policy, host dispatch, and process lifecycle pipeline.
  */
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { createAbortError } from "../infra/abort-signal.js";
 import {
   type ExecHost,

@@ -1,5 +1,5 @@
 // Doctor deprecated CLI profile tests cover legacy auth profile migration and warnings.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AuthProfileStore } from "../agents/auth-profiles/types.js";
 import type { NatesclawConfig } from "../config/config.js";

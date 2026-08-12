@@ -1,5 +1,5 @@
 /** Covers bundled plugin source overlays and packaged load-path decisions. */
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { bundledPluginRootAt } from "natesclaw/plugin-sdk/test-fixtures";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
@@ -84,11 +84,11 @@ function setBundledLookupFixture() {
   setBundledDiscoveryCandidates([
     createBundledCandidate({
       rootDir: appBundledPluginRoot("feishu"),
-      packageName: "@natesclaw/feishu",
+      packageName: "@openclaw/feishu",
     }),
     createBundledCandidate({
       rootDir: appBundledPluginRoot("diffs"),
-      packageName: "@natesclaw/diffs",
+      packageName: "@openclaw/diffs",
     }),
   ]);
   setBundledManifestIdsByRoot({
@@ -107,7 +107,7 @@ function createResolvedBundledSource(params: {
   return {
     pluginId: params.pluginId,
     localPath: params.localPath,
-    npmSpec: params.npmSpec ?? `@natesclaw/${params.pluginId}`,
+    npmSpec: params.npmSpec ?? `@openclaw/${params.pluginId}`,
     ...(params.configSchema ? { configSchema: params.configSchema } : {}),
     requiresConfig: params.requiresConfig ?? false,
   };
@@ -165,19 +165,19 @@ describe("bundled plugin sources", () => {
       createBundledCandidate({
         origin: "global",
         rootDir: "/global/feishu",
-        packageName: "@natesclaw/feishu",
+        packageName: "@openclaw/feishu",
       }),
       createBundledCandidate({
         rootDir: appBundledPluginRoot("feishu"),
-        packageName: "@natesclaw/feishu",
+        packageName: "@openclaw/feishu",
       }),
       createBundledCandidate({
         rootDir: appBundledPluginRoot("feishu-dup"),
-        packageName: "@natesclaw/feishu",
+        packageName: "@openclaw/feishu",
       }),
       createBundledCandidate({
         rootDir: appBundledPluginRoot("msteams"),
-        packageName: "@natesclaw/msteams",
+        packageName: "@openclaw/msteams",
       }),
     ]);
     setBundledManifestIdsByRoot({
@@ -199,12 +199,12 @@ describe("bundled plugin sources", () => {
   it.each([
     [
       "finds bundled source by npm spec",
-      { kind: "npmSpec", value: "@natesclaw/feishu" } as const,
+      { kind: "npmSpec", value: "@openclaw/feishu" } as const,
       { pluginId: "feishu", localPath: appBundledPluginRoot("feishu") },
     ],
     [
       "returns undefined for missing npm spec",
-      { kind: "npmSpec", value: "@natesclaw/not-found" } as const,
+      { kind: "npmSpec", value: "@openclaw/not-found" } as const,
       undefined,
     ],
     [
@@ -255,7 +255,7 @@ describe("bundled plugin sources", () => {
     setBundledDiscoveryCandidates([
       createBundledCandidate({
         rootDir: appBundledPluginRoot("memory-lancedb"),
-        packageName: "@natesclaw/memory-lancedb",
+        packageName: "@openclaw/memory-lancedb",
       }),
     ]);
     setBundledManifestIdsByRoot({
@@ -303,7 +303,7 @@ describe("bundled plugin sources", () => {
     expect(
       findBundledPluginSourceInMap({
         bundled,
-        lookup: { kind: "npmSpec", value: "@natesclaw/feishu" },
+        lookup: { kind: "npmSpec", value: "@openclaw/feishu" },
       })?.pluginId,
     ).toBe("feishu");
   });

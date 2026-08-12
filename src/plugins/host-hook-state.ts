@@ -1,7 +1,7 @@
 // Tracks host hook state and scheduled turn identifiers.
 import { randomUUID } from "node:crypto";
-import { isPromiseLike } from "@natesclaw/normalization-core/promise-like";
-import { normalizeOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { isPromiseLike } from "@openclaw/normalization-core/promise-like";
+import { normalizeOptionalString } from "@openclaw/normalization-core/string-coerce";
 import type { SessionEntry } from "../config/sessions.js";
 import {
   resolveSessionEntryAccessTarget,

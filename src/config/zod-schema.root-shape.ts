@@ -1,4 +1,4 @@
-import { normalizeStringifiedOptionalString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeStringifiedOptionalString } from "@openclaw/normalization-core/string-coerce";
 import { z } from "zod";
 import { parseDurationMs } from "../cli/parse-duration.js";
 import { SilentReplyPolicyConfigSchema } from "./zod-schema.agent-defaults.js";

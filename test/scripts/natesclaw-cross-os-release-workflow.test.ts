@@ -467,7 +467,7 @@ describe("cross-OS release checks workflow", () => {
     );
     expect(run.run).not.toContain("--required-companion-packages-json");
     expect(run.run).not.toContain("NATESCLAW_PLUGIN_INSTALL_OVERRIDES");
-    expect(JSON.stringify(workflow)).not.toContain("@natesclaw/codex");
+    expect(JSON.stringify(workflow)).not.toContain("@openclaw/codex");
   });
 
   it("owns provider companion requirements and fails closed for direct candidates", () => {
@@ -503,7 +503,7 @@ describe("cross-OS release checks workflow", () => {
   });
 
   it.each([
-    ["openai", ["@natesclaw/codex"]],
+    ["openai", ["@openclaw/codex"]],
     ["anthropic", []],
     ["minimax", []],
   ])("resolves provider-owned companions for %s", (provider, expected) => {

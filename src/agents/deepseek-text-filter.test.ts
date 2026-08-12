@@ -1,4 +1,4 @@
-import { createDeepSeekTextFilter } from "@natesclaw/ai/transports";
+import { createDeepSeekTextFilter } from "@openclaw/ai/transports";
 /**
  * Regression coverage for DeepSeek DSML streamed text filtering.
  * Verifies complete, split, full-width, and unterminated DSML markup handling.

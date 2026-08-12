@@ -24,7 +24,7 @@ read_when:
 Install the official plugin, then restart Gateway:
 
 ```bash
-natesclaw plugins install @natesclaw/groq-provider
+natesclaw plugins install @openclaw/groq-provider
 natesclaw gateway restart
 ```
 

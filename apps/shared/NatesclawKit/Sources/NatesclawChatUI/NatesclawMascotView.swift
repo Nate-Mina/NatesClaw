@@ -8,8 +8,8 @@ public enum NatesclawMascotAccessory: Equatable, Sendable {
 
 /// Animated Natesclaw mascot. Redraws the canonical 120x120 vector from
 /// `ui/public/favicon.svg` so individual parts (claws, antennae, eyes) can
-/// animate like the natesclaw.ai hero mark; the bundled PNG asset cannot.
-/// Styling (palette, glow colors, float depth) follows the natesclaw.ai hero
+/// animate like the openclaw.ai hero mark; the bundled PNG asset cannot.
+/// Styling (palette, glow colors, float depth) follows the openclaw.ai hero
 /// (`src/pages/index.astro` + `Layout.astro` theme variables).
 ///
 /// Beyond the site's loop, an `NatesclawMascotAnimator` layers on moods
@@ -114,7 +114,7 @@ public struct NatesclawMascotView: View {
         Date().timeIntervalSinceReferenceDate
     }
 
-    /// natesclaw.ai hero drop-shadow color (`--logo-glow` / `--logo-glow-hover`).
+    /// openclaw.ai hero drop-shadow color (`--logo-glow` / `--logo-glow-hover`).
     /// Pair with a shadow radius of ~10% of the mascot size (15% while hovering)
     /// to match the site's `drop-shadow(0 0 20px)` on a 100px mark.
     public static func heroGlowColor(for colorScheme: ColorScheme, hovering: Bool = false) -> Color {
@@ -152,7 +152,7 @@ extension View {
     }
 }
 
-/// Body/antenna colors from the natesclaw.ai theme variables: `:root` (dark)
+/// Body/antenna colors from the openclaw.ai theme variables: `:root` (dark)
 /// and `html[data-theme='light']` in `Layout.astro`. Eye colors are fixed in
 /// the site markup and shared by both themes.
 struct NatesclawMascotPalette: Equatable {

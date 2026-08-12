@@ -1,8 +1,8 @@
-import { inspectTlsCertificateError } from "@natesclaw/ai/internal/shared";
+import { inspectTlsCertificateError } from "@openclaw/ai/internal/shared";
 import {
   normalizeLowercaseStringOrEmpty,
   normalizeOptionalLowercaseString,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import {
   extractLeadingHttpStatus,
   isGenericProviderInternalError,

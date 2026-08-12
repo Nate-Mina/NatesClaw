@@ -257,7 +257,7 @@
   },
   {
     "description": "",
-    "name": "natesclaw",
+    "name": "openclaw",
     "tools": [
       {
         "deferLoading": true,

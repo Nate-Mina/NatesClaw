@@ -1,5 +1,5 @@
 // Normalizes MCP config records into canonical runtime shape.
-import { normalizeLowercaseStringOrEmpty as normalizeMcpString } from "@natesclaw/normalization-core/string-coerce";
+import { normalizeLowercaseStringOrEmpty as normalizeMcpString } from "@openclaw/normalization-core/string-coerce";
 import { isRecord } from "../utils.js";
 
 type ConfigMcpServers = Record<string, Record<string, unknown>>;

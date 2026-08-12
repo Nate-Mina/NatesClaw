@@ -6,5 +6,5 @@ export {
   getFileExtension,
   mimeTypeFromFilePath,
   normalizeMimeType,
-} from "@natesclaw/media-core/mime";
-export { mediaKindFromMime, type MediaKind } from "@natesclaw/media-core/constants";
+} from "@openclaw/media-core/mime";
+export { mediaKindFromMime, type MediaKind } from "@openclaw/media-core/constants";

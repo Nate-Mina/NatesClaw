@@ -1,4 +1,4 @@
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { ProviderAuthMethod } from "natesclaw/plugin-sdk/plugin-entry";
 import { createTestPluginApi } from "natesclaw/plugin-sdk/plugin-test-api";
 import { clearLiveCatalogCacheForTests } from "natesclaw/plugin-sdk/provider-catalog-shared";

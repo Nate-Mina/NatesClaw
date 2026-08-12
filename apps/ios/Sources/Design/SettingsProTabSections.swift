@@ -926,17 +926,17 @@ extension SettingsProTab {
                     title: "Website",
                     icon: "globe",
                     color: .blue,
-                    url: URL(string: "https://natesclaw.ai")!)
+                    url: URL(string: "https://openclaw.ai")!)
                 self.aboutLinkRow(
                     title: "Docs",
                     icon: "book.fill",
                     color: .orange,
-                    url: URL(string: "https://docs.natesclaw.ai")!)
+                    url: URL(string: "https://docs.openclaw.ai")!)
                 self.aboutLinkRow(
                     title: "GitHub",
                     icon: "chevron.left.slash.chevron.right",
                     color: .gray,
-                    url: URL(string: "https://github.com/natesclaw/natesclaw")!)
+                    url: URL(string: "https://github.com/openclaw/natesclaw")!)
                 self.aboutLinkRow(
                     title: "Discord",
                     icon: "bubble.left.and.bubble.right.fill",

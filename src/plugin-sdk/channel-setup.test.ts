@@ -36,7 +36,7 @@ describe("createOptionalChannelSetupSurface", () => {
     const setup = createOptionalChannelSetupSurface({
       channel: "example",
       label: "Example",
-      npmSpec: "@natesclaw/example",
+      npmSpec: "@openclaw/example",
       docsPath: "/channels/example",
     });
 
@@ -48,11 +48,11 @@ describe("createOptionalChannelSetupSurface", () => {
         input: {},
       }),
     ).toBe(
-      "Example setup requires @natesclaw/example to be installed. Docs: https://docs.natesclaw.ai/channels/example",
+      "Example setup requires @openclaw/example to be installed. Docs: https://docs.openclaw.ai/channels/example",
     );
     expect(setup.setupWizard.channel).toBe("example");
     expect(setup.setupWizard.status.unconfiguredHint).toBe(
-      "Example setup requires @natesclaw/example to be installed. Docs: https://docs.natesclaw.ai/channels/example",
+      "Example setup requires @openclaw/example to be installed. Docs: https://docs.openclaw.ai/channels/example",
     );
     await expect(
       runSetupWizardFinalize({
@@ -63,6 +63,6 @@ describe("createOptionalChannelSetupSurface", () => {
           exit: async () => {},
         },
       }),
-    ).rejects.toThrow("@natesclaw/example");
+    ).rejects.toThrow("@openclaw/example");
   });
 });

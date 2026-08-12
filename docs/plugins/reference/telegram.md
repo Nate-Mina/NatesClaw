@@ -11,7 +11,7 @@ Adds the Telegram channel surface for sending and receiving Natesclaw messages.
 
 ## Distribution
 
-- Package: `@natesclaw/telegram`
+- Package: `@openclaw/telegram`
 - Install route: included in Natesclaw
 
 ## Surface

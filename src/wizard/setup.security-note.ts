@@ -38,6 +38,6 @@ export function getSecurityNoteMessage(): string {
     formatCliCommand("natesclaw security audit --deep"),
     formatCliCommand("natesclaw security audit --fix"),
     "",
-    `${t("wizard.security.learnMore")} https://docs.natesclaw.ai/gateway/security`,
+    `${t("wizard.security.learnMore")} https://docs.openclaw.ai/gateway/security`,
   ].join("\n");
 }

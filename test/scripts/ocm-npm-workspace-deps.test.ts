@@ -116,7 +116,7 @@ describe("OCM npm workspace dependency adapter", () => {
     mkdirSync(docsDir, { recursive: true });
     writeFileSync(join(docsDir, "page.md"), "# Package docs\n");
     writeFileSync(mapPath, sourceMap);
-    writeFileSync(join(root, "package.json"), '{"name":"natesclaw","version":"2026.8.1"}\n');
+    writeFileSync(join(root, "package.json"), '{"name": "openclaw","version":"2026.8.1"}\n');
     writeFileSync(join(root, "CHANGELOG.md"), sourceChangelog);
 
     try {
@@ -167,7 +167,7 @@ describe("OCM npm workspace dependency adapter", () => {
 - Previous release notes with enough detail for package validation.
 `;
     mkdirSync(scriptsDir, { recursive: true });
-    writeFileSync(join(root, "package.json"), '{"name":"natesclaw","version":"2026.8.1"}\n');
+    writeFileSync(join(root, "package.json"), '{"name": "openclaw","version":"2026.8.1"}\n');
     writeFileSync(join(root, "CHANGELOG.md"), sourceChangelog);
 
     try {
@@ -236,12 +236,12 @@ describe("OCM npm workspace dependency adapter", () => {
   it("builds a manifest with the root and local workspace tarballs", () => {
     expect(
       buildInstallManifest("/tmp/natesclaw.tgz", [
-        { name: "@natesclaw/ai", tarball: "/tmp/natesclaw-ai.tgz" },
+        { name: "@openclaw/ai", tarball: "/tmp/natesclaw-ai.tgz" },
       ]),
     ).toEqual({
       private: true,
       dependencies: {
-        "@natesclaw/ai": "file:///tmp/natesclaw-ai.tgz",
+        "@openclaw/ai": "file:///tmp/natesclaw-ai.tgz",
         natesclaw: "file:///tmp/natesclaw.tgz",
       },
     });
@@ -250,7 +250,7 @@ describe("OCM npm workspace dependency adapter", () => {
   it("rewrites packed workspace protocols to the local package version", () => {
     const packageJson = {
       dependencies: {
-        "@natesclaw/ai": "workspace:*",
+        "@openclaw/ai": "workspace:*",
         chalk: "5.6.2",
       },
     };
@@ -258,14 +258,14 @@ describe("OCM npm workspace dependency adapter", () => {
     expect(
       rewriteWorkspaceDependencyVersions(packageJson, [
         {
-          name: "@natesclaw/ai",
+          name: "@openclaw/ai",
           version: "2026.7.1-beta.3",
           tarball: "/tmp/natesclaw-ai.tgz",
         },
       ]),
     ).toBe(1);
     expect(packageJson.dependencies).toEqual({
-      "@natesclaw/ai": "2026.7.1-beta.3",
+      "@openclaw/ai": "2026.7.1-beta.3",
       chalk: "5.6.2",
     });
   });
@@ -285,13 +285,13 @@ describe("OCM npm workspace dependency adapter", () => {
         `${JSON.stringify({
           name: "natesclaw",
           version: "1.0.0",
-          dependencies: { "@natesclaw/ai": "workspace:*" },
+          dependencies: { "@openclaw/ai": "workspace:*" },
         })}\n`,
       );
       writeFileSync(
         join(workspaceDir, "package.json"),
         `${JSON.stringify({
-          name: "@natesclaw/ai",
+          name: "@openclaw/ai",
           version: "1.0.0",
           main: "index.js",
         })}\n`,
@@ -329,7 +329,7 @@ describe("OCM npm workspace dependency adapter", () => {
           .version,
       ).toBe("1.0.0");
       expect(
-        JSON.parse(readFileSync(join(installDir, "node_modules/@natesclaw/ai/package.json"), "utf8"))
+        JSON.parse(readFileSync(join(installDir, "node_modules/@openclaw/ai/package.json"), "utf8"))
           .version,
       ).toBe("1.0.0");
     } finally {

@@ -75,7 +75,7 @@ For OpenAI ChatGPT/Codex OAuth troubleshooting, `natesclaw models status`, `nate
 Updated rows apply to a running Gateway after its next restart. The command
 prints a clear disabled result when `models.catalogRefresh.enabled` is `false`.
 The catalog's public change history lives in
-[`natesclaw/catalog`](https://github.com/natesclaw/catalog), where each content
+[`natesclaw/catalog`](https://github.com/openclaw/catalog), where each content
 update is committed by the scheduled publisher.
 
 Options: `--all` (full catalog), `--local` (filter to local models), `--provider <id>`, `--json`, `--plain`.

@@ -1,4 +1,4 @@
-import { isContextOverflow } from "@natesclaw/ai/internal/runtime";
+import { isContextOverflow } from "@openclaw/ai/internal/runtime";
 import { InvalidSummaryOutputError } from "../../../packages/agent-core/src/harness/types.js";
 import type { AssistantMessage, Model } from "../../llm/types.js";
 import {

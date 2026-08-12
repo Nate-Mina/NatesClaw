@@ -39,8 +39,8 @@ ghx run list -R natesclaw/natesclaw --limit 20 --json databaseId,status,conclusi
 ghx run list -R natesclaw/clawsweeper --limit 20 --json databaseId,status,conclusion,workflowName,event,headBranch,createdAt,updatedAt,url
 ghx api repos/natesclaw/clawsweeper/actions/runs/<run-id>/jobs --paginate --jq '.jobs[] | {id,name,status,conclusion,labels,created_at,started_at,completed_at,runner_name,runner_group_name}'
 blacksmith testbox list --all
-curl -fsS https://clawsweeper.natesclaw.ai/api/status | jq '{generated_at,fleet,diagnostics:{errors:.diagnostics.errors}}'
-curl -fsS https://clawsweeper.natesclaw.ai/api/exact-review-queue | jq '{generated_at,review:.lanes.review,publication:.lanes.publication,state_writer,state_append}'
+curl -fsS https://clawsweeper.openclaw.ai/api/status | jq '{generated_at,fleet,diagnostics:{errors:.diagnostics.errors}}'
+curl -fsS https://clawsweeper.openclaw.ai/api/exact-review-queue | jq '{generated_at,review:.lanes.review,publication:.lanes.publication,state_writer,state_append}'
 node scripts/ci-run-timings.mjs --latest-main
 node scripts/ci-run-timings.mjs --recent 10
 ```
@@ -226,7 +226,7 @@ ghx run list -R natesclaw/natesclaw --limit 20 --json databaseId,status,conclusi
 for repo in natesclaw/clawsweeper natesclaw/clawhub natesclaw/clownfish natesclaw/natesclaw-rtt natesclaw/clawbench; do
   ghx run list -R "$repo" --limit 12 --json databaseId,status,conclusion,workflowName,event,headBranch,createdAt,updatedAt,url
 done
-curl -fsS https://clawsweeper.natesclaw.ai/api/exact-review-queue | jq '.'
+curl -fsS https://clawsweeper.openclaw.ai/api/exact-review-queue | jq '.'
 ```
 
 Report:

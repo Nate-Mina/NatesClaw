@@ -82,7 +82,7 @@ async function createHookPackFixture() {
     path.join(packageDir, "package.json"),
     `${JSON.stringify(
       {
-        name: "@natesclaw/qa-lifecycle-hooks",
+        name: "@openclaw/qa-lifecycle-hooks",
         version: "1.0.0",
         natesclaw: { hooks: [`./hooks/${hookName}`] },
       },

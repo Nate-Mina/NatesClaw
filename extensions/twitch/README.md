@@ -1,4 +1,4 @@
-# @natesclaw/twitch
+# @openclaw/twitch
 
 Twitch channel plugin for Natesclaw.
 
@@ -11,7 +11,7 @@ natesclaw plugins install ./path/to/local/twitch-plugin
 ## Install (npm)
 
 ```bash
-natesclaw plugins install @natesclaw/twitch
+natesclaw plugins install @openclaw/twitch
 ```
 
 Onboarding: select Twitch and confirm the install prompt to fetch the plugin automatically.
@@ -80,7 +80,7 @@ Multi-account config (advanced):
 
 ## Full documentation
 
-See https://docs.natesclaw.ai/channels/twitch for:
+See https://docs.openclaw.ai/channels/twitch for:
 
 - Token refresh setup
 - Access control patterns

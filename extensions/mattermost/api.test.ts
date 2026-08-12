@@ -2,7 +2,7 @@
 import { describe, expect, it } from "vitest";
 import { buildButtonAttachments } from "./api.js";
 
-describe("@natesclaw/mattermost api", () => {
+describe("@openclaw/mattermost api", () => {
   it("exports the interactive-button attachment builder", () => {
     expect(typeof buildButtonAttachments).toBe("function");
   });

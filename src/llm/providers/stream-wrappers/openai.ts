@@ -1,28 +1,28 @@
 import {
   resolveOpenAIReasoningEffortForModel,
   supportsOpenAIReasoningEffort,
-} from "@natesclaw/ai/internal/openai";
+} from "@openclaw/ai/internal/openai";
 import {
   filterCodeModePayloadTools,
   isCodeModeModelVisibleToolName,
   readCodeModePayloadToolName,
-} from "@natesclaw/ai/transports";
+} from "@openclaw/ai/transports";
 import {
   flattenCompletionMessagesToStringContent,
   stripCompletionMessagesToRoleContent,
-} from "@natesclaw/ai/transports";
+} from "@openclaw/ai/transports";
 import {
   applyOpenAIResponsesPayloadPolicy,
   resolveOpenAIResponsesPayloadPolicy,
-} from "@natesclaw/ai/transports";
-import { isPromiseLike } from "@natesclaw/normalization-core/promise-like";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+} from "@openclaw/ai/transports";
+import { isPromiseLike } from "@openclaw/normalization-core/promise-like";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 // OpenAI stream wrapper normalizes OpenAI-compatible streamed tool and text events.
 import {
   normalizeFastMode,
   normalizeOptionalLowercaseString,
   readStringValue,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import {
   patchCodexNativeWebSearchPayload,
   resolveCodexNativeSearchActivation,

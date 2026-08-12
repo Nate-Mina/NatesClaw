@@ -3,7 +3,7 @@ import {
   expectDefined,
   isRecord as isObject,
   parseStrictInteger,
-} from "@natesclaw/normalization-core";
+} from "@openclaw/normalization-core";
 export type UsageBarTemplate = Record<string, unknown>;
 export type UsageContract = Record<string, unknown>;
 type Vocab = Record<string, unknown>;

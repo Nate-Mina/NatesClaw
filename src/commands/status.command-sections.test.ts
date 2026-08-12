@@ -192,7 +192,7 @@ describe("status.command-sections", () => {
       "  Session selected: deepseek/deepseek-v4-flash",
       "  Reason: session override",
       "  Clear with: /model default",
-      "  Docs: https://docs.natesclaw.ai/concepts/models#selection-source-and-fallback-behavior",
+      "  Docs: https://docs.openclaw.ai/concepts/models#selection-source-and-fallback-behavior",
     ]);
   });
 
@@ -228,7 +228,7 @@ describe("status.command-sections", () => {
       "  Session selected: ollama/qwen3.6-blue:35b-a3b",
       "  Reason: fallback selected",
       "  Action: check provider availability or retry with /model",
-      "  Docs: https://docs.natesclaw.ai/concepts/models#selection-source-and-fallback-behavior",
+      "  Docs: https://docs.openclaw.ai/concepts/models#selection-source-and-fallback-behavior",
     ]);
   });
 
@@ -299,8 +299,8 @@ describe("status.command-sections", () => {
         gatewayReachable: false,
       }),
     ).toEqual([
-      "FAQ: https://docs.natesclaw.ai/faq",
-      "Troubleshooting: https://docs.natesclaw.ai/troubleshooting",
+      "FAQ: https://docs.openclaw.ai/faq",
+      "Troubleshooting: https://docs.openclaw.ai/troubleshooting",
       "",
       "warn(upgrade ready)",
       "Next steps:",

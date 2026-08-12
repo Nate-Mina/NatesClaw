@@ -11,8 +11,8 @@ Adds the Signal channel surface for sending and receiving Natesclaw messages.
 
 ## Distribution
 
-- Package: `@natesclaw/signal`
-- Install route: npm; ClawHub: `clawhub:@natesclaw/signal`
+- Package: `@openclaw/signal`
+- Install route: npm; ClawHub: `clawhub:@openclaw/signal`
 
 ## Surface
 

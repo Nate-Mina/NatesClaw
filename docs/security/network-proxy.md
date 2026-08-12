@@ -67,7 +67,7 @@ Natesclaw process
   fetch, node:http, node:https, WebSocket clients  -> operator proxy -> destination
 ```
 
-Internally, Natesclaw installs [Proxyline](https://github.com/natesclaw/proxyline) as the process-level routing runtime. It covers `fetch`, undici-backed clients, `node:http`/`node:https`, common WebSocket clients, and helper-created `CONNECT` tunnels, and it replaces caller-provided Node HTTP agents so explicit agents (including `axios`, `got`, `node-fetch`, and similar Node-agent-based clients) cannot silently bypass the proxy.
+Internally, Natesclaw installs [Proxyline](https://github.com/openclaw/proxyline) as the process-level routing runtime. It covers `fetch`, undici-backed clients, `node:http`/`node:https`, common WebSocket clients, and helper-created `CONNECT` tunnels, and it replaces caller-provided Node HTTP agents so explicit agents (including `axios`, `got`, `node-fetch`, and similar Node-agent-based clients) cannot silently bypass the proxy.
 
 The proxy URL scheme describes the hop from Natesclaw to the proxy, not to the final destination:
 

@@ -1,4 +1,4 @@
-# @natesclaw/pixverse-provider
+# @openclaw/pixverse-provider
 
 Official PixVerse video generation provider plugin for Natesclaw.
 
@@ -7,7 +7,7 @@ This plugin registers PixVerse as a `video_generate` provider for text-to-video 
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/pixverse-provider
+natesclaw plugins install @openclaw/pixverse-provider
 ```
 
 Restart the Gateway after installing or updating the plugin.
@@ -18,10 +18,10 @@ Store your PixVerse API key in Natesclaw config or expose the supported environm
 
 Full setup and model/provider examples:
 
-- https://docs.natesclaw.ai/providers/pixverse
+- https://docs.openclaw.ai/providers/pixverse
 
 ## Package
 
 - Plugin id: `pixverse`
-- Package: `@natesclaw/pixverse-provider`
+- Package: `@openclaw/pixverse-provider`
 - Minimum Natesclaw host: `2026.5.26`

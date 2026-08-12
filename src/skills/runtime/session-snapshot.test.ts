@@ -1,5 +1,5 @@
 // Session snapshot tests cover runtime skill state captured for agent sessions.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { NatesclawConfig } from "../../config/config.js";
 import { WORKSPACE_SKILLS_PROMPT_FORMAT_VERSION } from "../types.js";

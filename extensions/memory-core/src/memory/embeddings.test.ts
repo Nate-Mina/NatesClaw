@@ -415,7 +415,7 @@ describe("createEmbeddingProvider", () => {
 
   it("reports the llama.cpp plugin install command when local is unregistered", async () => {
     await expect(createEmbeddingProvider(createOptions("local"))).rejects.toThrow(
-      "natesclaw plugins install @natesclaw/llama-cpp-provider",
+      "natesclaw plugins install @openclaw/llama-cpp-provider",
     );
   });
 

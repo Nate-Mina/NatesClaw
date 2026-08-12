@@ -200,7 +200,7 @@
 
 - Version alignment with core Natesclaw release numbers.
 
-This file tracks Matrix-related release notes for the local `@natesclaw/matrix`
+This file tracks Matrix-related release notes for the local `@openclaw/matrix`
 plugin since the `matrix-js-sdk` migration. Source release notes live in
 `../../changelog.md`; exact repeated entries inside the same version are
 collapsed here.
@@ -369,7 +369,7 @@ collapsed here.
 
 ### Breaking
 
-- Plugins/Matrix: add a new Matrix plugin backed by the official `matrix-js-sdk`. If you are upgrading from the previous public Matrix plugin, follow the migration guide: https://docs.natesclaw.ai/install/migrating-matrix Thanks @gumadeiras.
+- Plugins/Matrix: add a new Matrix plugin backed by the official `matrix-js-sdk`. If you are upgrading from the previous public Matrix plugin, follow the migration guide: https://docs.openclaw.ai/install/migrating-matrix Thanks @gumadeiras.
 - Plugins/Matrix: stop mention-gated or otherwise dropped room chatter from refreshing focused thread bindings before the message is actually routed, so idle ACP and session bindings can still expire normally in mention-required rooms. Thanks @vincentkoc, @dinakars777 and @mvanhorn.
 - Plugins/Matrix: durably dedupe inbound room events across gateway restarts so previously handled Matrix messages are not replayed as new, while preserving clean-restart backlog delivery for unseen events. (#50922) thanks @gumadeiras
 

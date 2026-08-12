@@ -4,7 +4,7 @@ import fs from "node:fs";
 import {
   normalizeOptionalLowercaseString,
   resolvePrimaryStringValue,
-} from "@natesclaw/normalization-core/string-coerce";
+} from "@openclaw/normalization-core/string-coerce";
 import { note } from "../../packages/terminal-core/src/note.js";
 import { resolveModelAgentRuntimeMetadata } from "../agents/agent-runtime-metadata.js";
 import {

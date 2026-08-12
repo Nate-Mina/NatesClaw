@@ -516,7 +516,7 @@ describe("provider request config", () => {
     });
 
     expect(resolved).toEqual({
-      "HTTP-Referer": "https://natesclaw.ai",
+      "HTTP-Referer": "https://openclaw.ai",
       "X-OpenRouter-Title": "Natesclaw",
       "X-OpenRouter-Categories":
         "cli-agent,cloud-agent,programming-app,creative-writing,writing-assistant,general-chat,personal-agent",

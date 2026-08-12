@@ -1,5 +1,5 @@
-import { collectManifestModelIdNormalizationPolicies } from "@natesclaw/model-catalog-core/provider-model-id-normalization";
-import { expectDefined } from "@natesclaw/normalization-core";
+import { collectManifestModelIdNormalizationPolicies } from "@openclaw/model-catalog-core/provider-model-id-normalization";
+import { expectDefined } from "@openclaw/normalization-core";
 import { normalizeSubmittedConfigModelRefs } from "../config/model-input-normalization.js";
 import { normalizeAgentModelRefForConfig } from "../config/model-input.js";
 import type { NatesclawConfig } from "../config/types.natesclaw.js";

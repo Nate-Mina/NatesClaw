@@ -1709,7 +1709,7 @@ describe("runSetupWizard", () => {
         agents: { entries: { main: { default: true } } },
         plugins: {
           installs: {
-            demo: { source: "npm", spec: "@natesclaw/demo-plugin" },
+            demo: { source: "npm", spec: "@openclaw/demo-plugin" },
           },
         },
       },

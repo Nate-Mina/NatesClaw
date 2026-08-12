@@ -52,7 +52,7 @@ Every beta announcement must make beta status explicit and include:
   natesclaw --version
   ```
 - fresh install path:
-  `Install from https://natesclaw.ai`
+  `Install from https://openclaw.ai`
 - GitHub release link
 - concise validation note, without making CI the headline
 
@@ -67,7 +67,7 @@ natesclaw update --channel stable --yes
 natesclaw --version
 ```
 
-Fresh installs still point to `https://natesclaw.ai`.
+Fresh installs still point to `https://openclaw.ai`.
 
 For extended-stable, name the exact version and trailing month. Mention only
 observable backports, and use:

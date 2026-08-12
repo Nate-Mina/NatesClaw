@@ -1,5 +1,5 @@
 import path from "node:path";
-import type { NatesclawCrablineChannelDriverSelection } from "@natesclaw/crabline";
+import type { NatesclawCrablineChannelDriverSelection } from "@openclaw/crabline";
 import type { QaCliBackendAuthMode } from "./gateway-child.js";
 import type {
   QaLabLatestReport,

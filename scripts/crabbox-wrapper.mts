@@ -23,7 +23,7 @@ import { homedir, tmpdir } from "node:os";
 import { delimiter, dirname, extname, isAbsolute, relative, resolve } from "node:path";
 import { StringDecoder } from "node:string_decoder";
 import { fileURLToPath } from "node:url";
-import { isRecord } from "@natesclaw/normalization-core/record-coerce";
+import { isRecord } from "@openclaw/normalization-core/record-coerce";
 import { crabboxProviderChain, normalizeCrabboxWorkload } from "./crabbox-routing-policy.mts";
 import {
   canonicalProviderName,
@@ -867,7 +867,7 @@ function crabboxProviderReadiness(provider: string, version: string, context: Ta
     return {
       ready: false,
       reason: "managed Crabbox broker auth unavailable",
-      recovery: `run \`${recoveryCommand(["login", "--url", "https://crabbox.natesclaw.ai"])}\`, then retry`,
+      recovery: `run \`${recoveryCommand(["login", "--url", "https://crabbox.openclaw.ai"])}\`, then retry`,
     };
   }
   const doctorArgs = ["doctor", "--provider", canonicalProvider];
@@ -997,7 +997,7 @@ function enforceBrokeredCloud(
   const canonicalProvider = canonicalProviderName(provider);
   const instructions = [
     `[crabbox] provider=${canonicalProvider} requires a configured managed Crabbox broker for Natesclaw proof.`,
-    `[crabbox] run \`${recoveryCommand(["login", "--url", "https://crabbox.natesclaw.ai"])}\`, then retry.`,
+    `[crabbox] run \`${recoveryCommand(["login", "--url", "https://crabbox.openclaw.ai"])}\`, then retry.`,
   ];
   if (canonicalProvider !== "aws") {
     instructions.push(
@@ -2490,7 +2490,7 @@ function remoteGitBootstrapForChangedGate(changedGateBase: string, changedGateAl
     'rm -rf -- "$natesclaw_changed_gate_bundle" "$natesclaw_changed_gate_bundle".* || exit 2;',
     "rm -rf .git || exit 2;",
     "git init -q || exit 2;",
-    "git remote add origin https://github.com/natesclaw/natesclaw.git 2>/dev/null || git remote set-url origin https://github.com/natesclaw/natesclaw.git || exit 2;",
+    "git remote add origin https://github.com/openclaw/natesclaw.git 2>/dev/null || git remote set-url origin https://github.com/openclaw/natesclaw.git || exit 2;",
     'git fetch -q --depth=2 origin "$natesclaw_changed_gate_base:refs/remotes/origin/main" || exit 2;',
     'if [ -n "$natesclaw_changed_gate_alias" ]; then git update-ref "$natesclaw_changed_gate_alias" refs/remotes/origin/main || exit 2; fi;',
     'if [ ! -f "$natesclaw_changed_gate_bundle_tmp" ]; then echo "changed-gate bundle disappeared before import" >&2; exit 2; fi;',
@@ -3833,7 +3833,7 @@ if (canonicalProvider === "blacksmith-testbox") {
       [
         `[crabbox] provider=blacksmith-testbox requires Crabbox >= ${formatVersionTuple(minimumBlacksmithCrabboxVersion)} for current Testbox sync, queue, and cleanup behavior.`,
         `[crabbox] selected binary reported version=${version.text || "unknown"}.`,
-        "[crabbox] if using ../crabbox, rebuild it: version=$(git -C ../crabbox describe --tags --always --dirty | sed 's/^v//') && go build -C ../crabbox -trimpath -ldflags \"-s -w -X github.com/natesclaw/crabbox/internal/cli.version=${version}\" -o bin/crabbox ./cmd/crabbox",
+        "[crabbox] if using ../crabbox, rebuild it: version=$(git -C ../crabbox describe --tags --always --dirty | sed 's/^v//') && go build -C ../crabbox -trimpath -ldflags \"-s -w -X github.com/openclaw/crabbox/internal/cli.version=${version}\" -o bin/crabbox ./cmd/crabbox",
       ].join("\n"),
     );
     process.exit(2);

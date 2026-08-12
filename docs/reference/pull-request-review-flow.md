@@ -153,10 +153,10 @@ the last bot comment.
 
 Projects that want similar review automation can study or fork ClawSweeper:
 
-- [natesclaw/clawsweeper](https://github.com/natesclaw/clawsweeper)
+- [natesclaw/clawsweeper](https://github.com/openclaw/clawsweeper)
 - [ClawSweeper docs](https://clawsweeper.bot/)
 
 ## Related
 
-- [Contributing](https://github.com/natesclaw/natesclaw/blob/main/CONTRIBUTING.md)
+- [Contributing](https://github.com/openclaw/natesclaw/blob/main/CONTRIBUTING.md)
 - [CI pipeline](/ci)

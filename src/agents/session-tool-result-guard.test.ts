@@ -1,6 +1,6 @@
 // Verifies session tool-result guard inserts, truncates, and repairs tool results.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import type { AgentMessage } from "natesclaw/plugin-sdk/agent-core";
 import { SessionManager } from "natesclaw/plugin-sdk/agent-sessions";
 import { describe, expect, it } from "vitest";

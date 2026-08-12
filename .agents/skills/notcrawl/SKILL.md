@@ -3,7 +3,7 @@ name: notcrawl
 description: "Notion archive: search, sync freshness, pages/databases, Markdown exports, SQL counts, and Notcrawl repo work."
 metadata:
   natesclaw:
-    homepage: https://github.com/natesclaw/notcrawl
+    homepage: https://github.com/openclaw/notcrawl
     requires:
       bins:
         - notcrawl

@@ -1,4 +1,4 @@
-import type { Context, Model, StreamFn } from "@natesclaw/llm-core";
+import type { Context, Model, StreamFn } from "@openclaw/llm-core";
 import OpenAI from "openai";
 import { getEnvApiKey } from "../env-api-keys.js";
 import type { OpenAICompletionsOptions } from "../provider-options.js";

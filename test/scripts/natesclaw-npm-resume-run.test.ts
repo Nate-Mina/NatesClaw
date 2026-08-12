@@ -9,7 +9,7 @@ import type { NatesclawNpmResumeValidationInput } from "../../scripts/natesclaw-
 const SHA = "a".repeat(40);
 const TAG_OBJECT_SHA = "b".repeat(40);
 const BRANCH = `release-publish/${SHA.slice(0, 12)}-123`;
-const URL = "https://github.com/natesclaw/natesclaw/actions/runs/456";
+const URL = "https://github.com/openclaw/natesclaw/actions/runs/456";
 
 function fixture(
   overrides: Partial<NatesclawNpmResumeValidationInput> = {},

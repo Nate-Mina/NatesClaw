@@ -39,11 +39,11 @@ describe("resolveMissingOfficialExternalChannelPluginRepairHint", () => {
       pluginId: "feishu",
       channelId: "feishu",
       label: "Feishu",
-      installSpec: "@natesclaw/feishu",
-      installCommand: "natesclaw plugins install @natesclaw/feishu",
+      installSpec: "@openclaw/feishu",
+      installCommand: "natesclaw plugins install @openclaw/feishu",
       doctorFixCommand: "natesclaw doctor --fix",
       repairHint:
-        "Install the official external plugin with: natesclaw plugins install @natesclaw/feishu, or run: natesclaw doctor --fix.",
+        "Install the official external plugin with: natesclaw plugins install @openclaw/feishu, or run: natesclaw doctor --fix.",
     });
   });
 
@@ -104,8 +104,8 @@ describe("resolveMissingOfficialExternalChannelPluginRepairHint", () => {
       pluginId: "whatsapp",
       channelId: "whatsapp",
       label: "WhatsApp",
-      installSpec: "clawhub:@natesclaw/whatsapp",
-      installCommand: "natesclaw plugins install clawhub:@natesclaw/whatsapp",
+      installSpec: "clawhub:@openclaw/whatsapp",
+      installCommand: "natesclaw plugins install clawhub:@openclaw/whatsapp",
     });
   });
 

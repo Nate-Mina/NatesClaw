@@ -23,7 +23,7 @@ separate Fish Audio license. Hosted API use follows Fish Audio's service terms.
 Install the `fish-audio-speech` plugin:
 
 ```bash
-natesclaw plugins install @natesclaw/fish-audio-speech
+natesclaw plugins install @openclaw/fish-audio-speech
 ```
 
 The plugin id is `fish-audio-speech`. The provider and TTS configuration id

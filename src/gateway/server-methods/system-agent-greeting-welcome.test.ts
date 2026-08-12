@@ -1,7 +1,7 @@
 // Focused welcome-delivery tests for natesclaw.chat: caretaker greeting wiring,
 // audit-cursor acknowledgement, and the onboarding template path.
 
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { resetCommandQueueStateForTest } from "../../process/command-queue.test-support.js";
 import { systemAgentHandlers, type SystemAgentChatSession } from "./system-agent.js";

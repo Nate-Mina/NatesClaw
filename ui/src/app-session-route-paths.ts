@@ -1,7 +1,7 @@
 import {
   parseControlUiSessionPath,
   type ControlUiSessionPathTarget,
-} from "@natesclaw/session-url-contract/parse";
+} from "@openclaw/session-url-contract/parse";
 
 export type SessionPathTarget = ControlUiSessionPathTarget;
 

@@ -1,6 +1,6 @@
 // Resolves channel presence policy advertised by plugin metadata.
-import { normalizeOptionalLowercaseString } from "@natesclaw/normalization-core/string-coerce";
-import { sortUniqueStrings } from "@natesclaw/normalization-core/string-normalization";
+import { normalizeOptionalLowercaseString } from "@openclaw/normalization-core/string-coerce";
+import { sortUniqueStrings } from "@openclaw/normalization-core/string-normalization";
 import { resolveAgentWorkspaceDir, resolveDefaultAgentId } from "../agents/agent-scope.js";
 import { isChannelConfigMetadataKey } from "../channels/config-metadata.js";
 import {

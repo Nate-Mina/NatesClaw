@@ -6,7 +6,7 @@ type ComfyTestApi = {
 };
 
 function getComfyTestApi(): ComfyTestApi {
-  const api = Reflect.get(globalThis, Symbol.for("natesclaw.comfyTestApi"));
+  const api = Reflect.get(globalThis, Symbol.for("openclaw.comfyTestApi"));
   if (!api) {
     throw new Error("Comfy test API is unavailable");
   }

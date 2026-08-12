@@ -1,5 +1,5 @@
 // Workshop config helpers resolve skill workshop settings from Natesclaw config.
-import { asNullableRecord } from "@natesclaw/normalization-core/record-coerce";
+import { asNullableRecord } from "@openclaw/normalization-core/record-coerce";
 import type { NatesclawConfig } from "../../config/types.natesclaw.js";
 import type { SkillsWorkshopAutonomousMode } from "../../config/types.skills.js";
 

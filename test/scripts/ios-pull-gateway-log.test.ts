@@ -22,7 +22,7 @@ function runWithFakeXcrun(
   );
   chmodSync(xcrunPath, 0o755);
 
-  return spawnSync("bash", [scriptPath, "device-udid", "ai.natesclaw.ios.dev", destPath], {
+  return spawnSync("bash", [scriptPath, "device-udid", "ai.openclaw.ios.dev", destPath], {
     cwd: process.cwd(),
     encoding: "utf8",
     env: {

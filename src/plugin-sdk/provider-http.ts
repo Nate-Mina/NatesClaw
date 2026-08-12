@@ -5,7 +5,7 @@ export {
   inspectTlsCertificateError,
   type TlsCertificateErrorDetails,
   type TlsCertificateErrorKind,
-} from "@natesclaw/ai/internal/shared";
+} from "@openclaw/ai/internal/shared";
 export {
   assertOkOrThrowHttpError,
   assertOkOrThrowProviderError,

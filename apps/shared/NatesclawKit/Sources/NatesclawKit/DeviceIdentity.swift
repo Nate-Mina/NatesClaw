@@ -222,7 +222,7 @@ public enum DeviceIdentityStore {
 
     static func storageError(_ message: String) -> NSError {
         NSError(
-            domain: "ai.natesclaw.device-identity-store",
+            domain: "ai.openclaw.device-identity-store",
             code: 1,
             userInfo: [NSLocalizedDescriptionKey: message])
     }
@@ -286,7 +286,7 @@ public enum DeviceIdentityStore {
                 legacySources: DeviceIdentityPaths.legacyIdentitySources(profile: profile))
         } catch {
             throw NSError(
-                domain: "ai.natesclaw.device-identity-store",
+                domain: "ai.openclaw.device-identity-store",
                 code: 2,
                 userInfo: [
                     NSLocalizedDescriptionKey:

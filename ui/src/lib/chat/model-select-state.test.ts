@@ -1,6 +1,6 @@
 // @vitest-environment node
 // Control UI tests cover chat model select state behavior.
-import { expectDefined } from "@natesclaw/normalization-core";
+import { expectDefined } from "@openclaw/normalization-core";
 import { describe, expect, it } from "vitest";
 import {
   createModelCatalog,

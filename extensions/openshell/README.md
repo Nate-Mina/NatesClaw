@@ -1,4 +1,4 @@
-# @natesclaw/openshell-sandbox
+# @openclaw/openshell-sandbox
 
 Official NVIDIA OpenShell sandbox backend for Natesclaw.
 
@@ -15,7 +15,7 @@ fallback when no ambient selection exists.
 ## Install
 
 ```bash
-natesclaw plugins install @natesclaw/openshell-sandbox
+natesclaw plugins install @openclaw/openshell-sandbox
 ```
 
 Restart the Gateway after installing or updating the plugin.
@@ -24,10 +24,10 @@ Restart the Gateway after installing or updating the plugin.
 
 Use the OpenShell docs for credentials, workspace mirroring, runtime selection, and troubleshooting:
 
-- https://docs.natesclaw.ai/gateway/openshell
+- https://docs.openclaw.ai/gateway/openshell
 
 ## Package
 
 - Plugin id: `openshell`
-- Package: `@natesclaw/openshell-sandbox`
+- Package: `@openclaw/openshell-sandbox`
 - Minimum Natesclaw host: `2026.5.12-beta.1`

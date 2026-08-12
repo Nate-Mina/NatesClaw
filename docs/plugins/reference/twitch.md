@@ -11,7 +11,7 @@ Natesclaw Twitch channel plugin for chat and moderation workflows.
 
 ## Distribution
 
-- Package: `@natesclaw/twitch`
+- Package: `@openclaw/twitch`
 - Install route: npm; ClawHub
 
 ## Surface

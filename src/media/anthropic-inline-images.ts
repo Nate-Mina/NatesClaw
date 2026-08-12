@@ -1,5 +1,5 @@
-import { canonicalizeBase64, estimateBase64DecodedBytes } from "@natesclaw/media-core/base64";
-import { detectMime, normalizeMimeType } from "@natesclaw/media-core/mime";
+import { canonicalizeBase64, estimateBase64DecodedBytes } from "@openclaw/media-core/base64";
+import { detectMime, normalizeMimeType } from "@openclaw/media-core/mime";
 import { convertImageToJpeg, convertImageToPng } from "./image-ops.js";
 
 const ANTHROPIC_SUPPORTED_IMAGE_MIMES = [

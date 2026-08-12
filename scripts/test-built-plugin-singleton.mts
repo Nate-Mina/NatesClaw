@@ -49,7 +49,7 @@ fs.writeFileSync(
   path.join(distPluginDir, "package.json"),
   JSON.stringify(
     {
-      name: "@natesclaw/build-smoke-plugin",
+      name: "@openclaw/build-smoke-plugin",
       type: "module",
       natesclaw: {
         extensions: ["./index.js"],
